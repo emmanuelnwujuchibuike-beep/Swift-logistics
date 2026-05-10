@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swift freight</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="input.css">
+    <link rel="icon" type="image/png" href="./image/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="./output.css" rel="stylesheet">
+  </head>
+  <body class="font-['roboto'] overflow-x-hidden max-w-350 pt-20 scroll-smooth">
+
+    <header class="fixed z-50 top-0 left-0 right-0 bg-white">
+      <section class=" flex flex-col md:flex-row justify-between items-start md:items-center max-w-350 py-2 px-6 md:px-16 mx-auto">
+        <div class="flex justify-between items-center w-full md:w-fit">
+          <img src="./image/logo.png" alt="logo" class="w-15 h-15" />
+
+          <!-- <button id="Menu" class="flex items-center md: px-4">
+            <i class="fas fa-bars text-gray-700 text-2xl"></i>
+          </button> -->
+
+          <label for="ham-menu" id="menu" class="flex items-center md:hidden px-4">
+            <i class="fas fa-bars text-blue-950 text-2xl"></i>
+          </label>
+        </div>
+
+
+        
+        
+        <div class="md:flex gap-10 peer-checked">
+        <input type="checkbox" class="peer" id="ham-menu" hidden>
+        <nav id="navLinks" class=" hidden peer-checked:flex md:flex flex-col md:flex-row justify-between items-start md:items-center gap-5 md:gap-8 my-4 md:my-0 w-full md:w-fit">
+          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Home</a>
+          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">About</a>
+          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Services</a>
+          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Contact</a>
+        </nav>
+
+        <div id="navButtons" class="hidden peer-checked:flex md:flex flex-col md:flex-row gap-8 items-start md:items-center w-full md:w-fit">
+          <button class=" items-center px-4 py-2  bg-blue-950 text-white hover:bg-blue-600 rounded-full">
+            <a href="get-started.html" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+          </button>
+        </div>
+        </div>
+      </section>
+    </header>
+
+    <section class=" max-w-350 w-full py-2 px-2 gap-10 bg-white md:hidden">
+
+      <div class="animate__animated animate__rubberBand animate__slow animate__repeat-1 animate__delay-2s">
+      <h1 class="text-blue-950 text-5xl font-semibold w-full max-w-350 px-4 py-3 text-start leading-tight tracking-wide">Delivering More Than<br>Just freight</h1>
+      <p class="text-blue-900 text-[20px] w-full max-w-350 px-4 py-3 mb-8 text-start font-semibol">We prioritize reliability,precision,and strong partnerships in every shipment,ensuring a seamless and efficient logistics experience from start to finish.</p>
+      </div>
+
+      <div class="flex flex-col mb-10">
+        <button class="items-center w-50 px-3 py-4 mx-4 text-white bg-blue-950 hover:bg-blue-600 rounded-4xl">
+          <a href="get-started.html" class="flex items-center px-2 py-[4px] text-white text-[15px] hover:bg-blue-600 rounded-2xl">
+          Get a Free Quote<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i>
+          </a>
+        </button>
+
+        <button class=" items-center w-40 px-2 py-2 mx-4 mt-8 text-white bg-white hover:bg-blue-950 border border-blue-950 rounded-4xl">
+          <a href="about.html" class="flex items-center px-4 py-[4px] text-blue-950 rounded-2xl hover:text-white hover:bg-blue-950">
+            Learn more<i class="fas fa-arrow-right text-[10px] text-black bg-white border border-blue-950 rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i>
+          </a>
+        </button>
+      </div>
+    </section>
+
+    <!-- Medium device home -->
+    <section class="hidden md:block mt-2 items-center justify-center p-4 mx-auto bg-blue-950/50 bg-blend-multiply min-h-[90vh] bg-[url('./image/boximg.jpg')] bg-cover bg-center md:px-6">
+
+      <div class="flex flex-row justify-center overflow-hidden z-10">
+        <div class="px-4 py-3 bg-white rounded-3xl absolute left-250 right-17 top-30 text-center z-10">
+          <h1 class="text-blue-950 text-[13px] font-semibold">The port of Singapore</h1>
+        </div>
+
+        <div class="z-10 md:px-5 md:py-1 md:pl-[11px] pl-[11px] bg-white rounded-full absolute left-230 right-75 top-28 md:mt-3 text-center items-center">
+          <i class="fas fa-map-marker-alt text-red-500 text-[20px] items-center pr-4 mt-2 pb-1"></i>
+        </div>
+      </div>
+
+      <div class="">
+        <h1 class="text-white md:text-8xl md:font-semibold md:text-start md:mt-[70px] animate__animated animate__bounceIn animate__slow animate__repeat-1 animate__delay-1s">Delivering More<br> Than Just Freight</h1>
+        <p class="text-gray-200 text-[20px] md:max-w-350 md:px-2 md:py-3 md:mb-8 md:mt-6 md:text-start font-semibol">We prioritize reliability, precision, and strong partnerships in every shipment,<br> ensuring a seamless and efficient logistics experience from start to finish.</p>
+      </div>
+
+      <div class="md:flex flex-row md:pt-52">
+        <button class=" items-center px-6 py-2 bg-blue-950 text-white hover:bg-blue-600 rounded-4xl">
+          <a href="get-started.html" class="text-white hover:text-blue-200">Get a Free Quote<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square md:p-[3px] md:ml-3 md:justify-center items-center"></i></a>
+        </button>
+
+        <button class=" items-center px-4 py-2 ml-6 text-transparent bg-white hover:bg-blue-950 border border-blue-950 rounded-4xl">
+          <a href="get-started.html" class="flex items-center px-4 py-[4px] text-blue-950 hover:text-white">
+            Learn more<i class="fas fa-arrow-right text-[10px] text-black bg-white border border-blue-950 rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i>
+          </a>
+        </button>
+      </div>
+
+    <div class="overflow-hidden z-0">
+      <div class="md:flex flex-row absolute right-20 top-120 gap-3 items-center md:bg-white md:px-2 md:py-1 md:rounded-2xl shadow h-auto">
+          <div class=" relative md:flex flex-col gap-1 items-start px-1 py-0">
+            <h1>We <span class="text-red-500">Cover</span></h1>
+            <h2>Shipment Around</h2>
+            <h3>the <span class="text-red-500">globe</span></h3>
+          <!-- </div> -->
+            <div class="md:flex flex-row gap-2 items-center">
+              <i class="fab fa-phoenix-framework text-[30px] md:bg-white mr-2"></i>
+              <i class="fab fa-facebook-messenger text-[20px] md:bg-white md:border md:border-blue-950 md:rounded-full md:aspect-square md:p-[3px]"></i>
+            </div>
+          </div>
+        <div class="md:flex flex-row">
+          <img src="./image/bgimg.jpg" alt=" map" class="w-40 h-28 shadow-md rounded-xl">
+        </div>
+      </div>
+    </div>
+    </section>
+    
+    <!-- mobile home -->
+    <section class=" relative rounded-2xl md:hidden  bg-blue-950/50 bg-blend-multiply min-h-[90vh] bg-[url('./image/boximg.jpg')] bg-cover bg-center w-full">
+      
+      <div class="relative">
+        <div class="px-4 py-3 bg-white rounded-3xl absolute left-18 top-20 text-center z-10">
+          <h1 class="text-blue-950 text-[16px] font-bold">The port of Turkey</h1>
+        </div>
+
+        <div class="z-10 py-1 md:px-5 pl-[11px] bg-white rounded-full absolute left-5 top-20 md:mt-3 text-center items-center">
+          <i class="fas fa-map-marker-alt text-red-500 text-[20px] items-center text-center pr-4 pl-1 py-1 mt-2 mb-1 pb-1"></i>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="absolute right-8 top-110 left bg-white w-80 max-w-90 h-auto flex rounded-2xl px-1 py-2 gap-3 shadow-2xl"> 
+
+          <div class="p-2 flex flex-col gap-1 items-start"> 
+            <div class="gap-1 items-start">
+              <h1>We <span class="text-red-500">Cover</span></h1>
+              <h2>Shipment Around</h2>
+              <h3>the <span class="text-red-500">globe</span></h3>
+            </div>
+
+            <div class="flex gap-4 items-center">
+              <i class="fab fa-phoenix-framework text-[30px] md:bg-white "></i>
+              <i class="fab fa-facebook-messenger text-[20px] md:bg-white md:border border-blue-950 rounded-full aspect-square p-[3px]"></i>
+            </div>
+          </div>
+
+          <div class="">
+          <img src="./image/bgimg.jpg" alt=" map" class="w-38 h-32 shadow-md rounded-xl">
+          </div>
+          </div>
+        </div>
+      </div>
+
+
+  
+    </section>
+
+
+    <section class="bg-white mt-30 px-4 py-2 gap-10 md:mt-15 lg:flex">
+    
+      <div class="md:flex-col px-4">
+        <div class="mt-10 md:w-130">
+          <h1 class="text-[18px] font-sans uppercase w-full max-w-350 text-blue-950"><i class="fas fa-circle text-red-700"></i> Swift Logix at your service</h1>
+
+          <h2 class="mt-5 font-semibold text-4xl text-blue-950">We Provide <span class="text-red-700">End-to-end Logistics Services </span>for Timely, Secure Delivery.</h2>
+        </div>
+  
+
+        <div class="md:flex md:w-150 mt-10 md:gap-8 items-start">
+          <h1 class="text-red-600 text-2xl font-bold">01 Vision</h1>
+          <p class="text-blue-900 md:w-200">Our mission is to lead the global logistics industry by providing seamless, reliable, and innovative solutions thst not only meet but exceed client expectations, driving long-term success and growth for bussiness worldwide.</p>
+        </div>
+
+        <div class="md:flex md:w-150 mt-10 md:gap-8 items-start">
+          <h1 class="text-red-600 text-2xl font-bold">02 Mision</h1>
+          <p class="text-blue-900 md:w-200">We connect businesses to a syreamlined and efficient supply chain by offering innovative and responsible logistics solutions that enhance operational performance, reduce costs, and faster growth in a dynamic global market</p>
+        </div>.
+      </div>
+
+
+        <div class="animate__animated animate__backInLeft animate__slow animate__repeat-1 animate__delay-1s md:w-170 md:ml-5 md:mt-10">
+          <img src="./image/a-blue-truck-on-transparent-background-png.webp" alt="bg2" class="w-full md:h-300 md:w-300 object-cover">
+        </div>
+
+    </section>
+
+    <section class="items-center px-6 md:px-16 my-14 text-center">
+      <div class="flex justify-center">
+          <div class="bg-blue-950 p-8 rounded-2xl shadow-2xl shadow-blue-400 w-full max-w-150">
+
+            <h2 class="text-2xl font-bold text-center mb-6 text-white">
+              Track Your Package
+            </h2>
+
+            <div class="flex gap-2">
+              <input id="trackingInput"type="text"placeholder="Enter Tracking Code" required class="w-full p-3 border text-white rounded-lg focus:outline-none"onkeyup="if(event.key === 'Enter')checkTrack()">
+              <button onclick="checkTrack()"class=" bg-blue-600 text-white px-4 rounded-lg hover:bg-blue-700">
+                Track
+              </button>
+            </div>
+
+            <div id="resultBox" class="hidden mt-8 p-6 rounded-2xl bg-slate-900/50 border border-slate-700 backdrop-blur-md">
+              <h3 class="text-blue-400 font-bold mb-6">Shipment Progress</h3>
+
+            <div class="relative flex flex-col gap-8">
+        
+            <div class="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-700"></div>
+
+            <div class="relative flex items-start gap-4">
+            <div class="z-10 w-6 h-6 rounded-full bg-blue-600 border-4 border-slate-900"></div>
+            <div>
+                <p class="text-sm text-gray-400">Origin</p>
+                <p id="info1" class="text-white font-medium">Loaded at Lagos Airport</p>
+            </div>
+        </div>
+
+        <div class="relative flex items-start gap-4">
+            <div class="z-10 w-6 h-6 rounded-full bg-blue-600 border-4 border-slate-900"></div>
+            <div>
+                <p class="text-sm text-gray-400">Departure</p>
+                <p id="info2" class="text-white font-medium">Departed Lagos</p>
+            </div>
+        </div>
+
+        <div class="relative flex items-start gap-4">
+            <div id="dot3" class="z-10 w-6 h-6 rounded-full bg-slate-700 border-4 border-slate-900"></div>
+            <div>
+                <p class="text-sm text-gray-400">Status</p>
+                <p id="info3" class="text-white font-medium">On Transit</p>
+            </div>
+        </div>
+
+        <div class="relative flex items-start gap-4">
+            <div id="dot4" class="z-10 w-6 h-6 rounded-full bg-slate-700 border-4 border-slate-900"></div>
+            <div>
+                <p class="text-sm text-gray-400">Final Destination</p>
+                <p id="info4" class="text-white font-medium">Estimated Arrival</p>
+              </div>
+            </div>
+
+            </div>
+            </div>
+          </div>
+
+        </div>
+        
+    </section>
+
+
+    <section id="freightSolution" class="bg-white mb-20 items-center">
+      <h1 class=" px-4 uppercase text-[20px] text-blue-950 text-center pb-6"><i class="fas fa-circle text-red-700"></i> Our freight solution</h1>
+      <h2 class="px-6 text-center text-3xl lg:text-[40px]">Expertly Managing <span class="text-red-700">Every Steps From Transit to Warehousing</span></h2>
+
+      <div class="mt-10 flex flex-col gap-6 w-full justify-center md:justify-between md:w-full md:py-9 md:px-16 md:items-center lg:grid grid-cols-2">
+        <div class=" max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/bg3.jpg')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
+          <div class="rounded-full py-2 px-4 bg-white/50 bg-blend-normal w-fit shadow-2xl"><h1 class="text-blue-950 text-center text-[11px]">Sea Freight</h1></div>
+          <h2 class="text-white text-2xl py-6 md:pt-4">Cost-efffective solutions for bulk goods, with extensive port-to-port coverage.</h2>
+        </div>
+
+        <div class=" max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/bgg.jpg')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
+          <div class="rounded-full py-2 px-4 bg-white/50 bg-blend-normal w-fit shadow-2xl"><h1 class="text-blue-950 text-center text-[11px]">Road Freight</h1></div>
+          <h2 class="text-white text-2xl py-6 md:pt-4">Efficient transportation for regional shipments with flexible schedules.</h2>
+        </div>
+
+        <div class=" max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/Air-Freight.png')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
+          <div class="rounded-full py-2 px-4 bg-white/50 bg-blend-normal w-fit shadow-2xl"><h1 class="text-blue-950 text-center text-[11px]">Air Freight</h1></div>
+          <h2 class="text-white text-2xl py-6 md:pt-4">Fast, reliable shipping for high-priority items across the globe.</h2>
+        </div>
+
+        <div class="max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/rail.jpg')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
+          <div class="rounded-full py-2 px-4 bg-white/50 bg-blend-normal w-fit shadow-2xl"><h1 class="text-blue-950 text-center text-[11px]">Rail Freight</h1></div>
+          <h2 class="text-white text-2xl py-6 md:pt-4">Economical and friendly environmental,ideal for large volumes and long distances.</h2>
+        </div>
+      </div>
+    </section>
+
+    <section class="lg:flex flex-row md:items-center md:mx-6 md:justify-center mb-20 md:mb-0">
+      <div class="pl-4 lg:mb-160">
+        <h1 class="uppercase text-blue-950"><i class="fas fa-circle text-red-600 px-2"></i>core values</h1>
+        <h2 class="text-blue-950 text-3xl px-2 pt-6">Built on <span class="text-red-600"> Trust </span> and <span class="text-red-600">Excellence</span></h2>
+        <p class="text-blue-950 text-[18px] px-2 pt-5 md:max-w-140">We foster strong relationships by staying true to our values of integrity, quality, and accountability.</p>
+      </div>
+      
+      <div class="mt-16 md:mt-6 md:grid grid-cols-2 auto-rows-[450px] flex flex-col items-center justify-center md:gap-10 gap-6 md:">
+        <div class=" md:mb-40 md:mx-auto mt-6 md:ml-9 px-4 border border-gray-300 max-w-75 h-55 pt-2 rounded-2xl shadow-sm shadow-blue-400">
+          <div class="flex justify-between items-center">
+          <div class="rounded-full aspect-square w-11 h-11 bg-blue-200/50 text-center"><i class="fas fa-circle-check text-2xl text-slate-600 pt-[7px]"></i></div>
+          <div class=" mt-2 py-[4px] px-[10px] w-fit h-fit rounded-3xl bg-blue-200/50"><h1 class="text-blue-950 text-[12px] font-semibold">Reliability</h1></div>
+          </div>
+          <h1 class="pt-8 px-2 text-blue-950 font-semibold text-[20px]">We ensure every delivery meets our high standards,from start to finish</h1>
+        </div>
+
+        <div class=" mt-2  mr-3 px-4 border border-gray-300 max-w-75 h-95 rounded-2xl shadow-sm shadow-blue-400 pt-2">
+          <div class="flex justify-between items-center">
+          <div class="rounded-full aspect-square w-11 h-11 bg-blue-200/50 text-center"><i class="fas fa-lightbulb text-2xl text-slate-600 pt-[7px]"></i></div>
+          <div class="ml-40 mt-2 py-[4px] px-[10px] w-fit h-fit rounded-3xl bg-blue-200/50"><h1 class="text-blue-950 text-[12px] font-semibold">Innovation</h1></div>
+          </div>
+          <h1 class="pt-20 md:pt-38 px-2 text-blue-950 font-semibold text-[20px]">Embracing the latest technology for a seamless logistics experience.</h1>
+        </div>
+
+        <div class="md:ml-9 md:mb-100 items-center px-4 border border-gray-300 max-w-75 h-100 rounded-2xl shadow-sm shadow-blue-400 pt-2">
+          <div class="flex justify-between items-center ">
+          <div class="rounded-full aspect-square w-11 h-11 bg-blue-200/50 text-center"><i class="fas fa-people-roof text-2xl text-slate-600 pt-[7px]"></i></div>
+          <div class="mt-2 py-[4px] px-[10px] w-fit h-fit rounded-3xl bg-blue-200/50"><h1 class="text-blue-950 text-[12px] font-semibold text-nowrap">Customer Focus</h1></div>
+          </div>
+          <h1 class="pt-48 text-blue-950 font-semibold text-[20px]">Your needs are our priority-every mile of the journey.</h1>
+        </div>
+
+        <div class=" md:mb-65 mt-2 mr-3 px-4 border border-gray-300 max-w-75 min-h-60 rounded-2xl shadow-sm shadow-blue-400 pt-2">
+          <div class="flex justify-between items-center">
+          <div class="rounded-full aspect-square w-11 h-11 bg-blue-200/50 text-center"><i class="fas fa-seedling text-2xl text-slate-600 pt-[7px]"></i></div>
+          <div class="mt-2 py-[4px] px-[10px] w-fit h-fit rounded-3xl bg-blue-200/50"><h1 class="text-blue-950 text-[12px] font-semibold">Sustainability</h1></div>
+          </div>
+          <h1 class="pt-8 text-blue-950 font-semibold text-[20px]">Committed to eco-friendly practices in every aspect of our service.</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 md:px-16 mb-20">
+      <div class="text-center">
+        <h1 class="uppercase py-5 md:text-[20px] text-blue-950"><i class="fas fa-circle text-red-600"></i> logistics services</h1>
+        <p class="text-[32px] text-blue-950  text-wrap">Comprehensive<span class="text-red-600 ml-1 text-wrap">Swift Freight Services</span> to Meet Your Unique<span class="text-red-600 ml-1">Needs</span></p>
+      </div>
+
+    
+          <div class="md:flex mt-10 shadow-sm border border-blue-100  rounded-xl items-center justify-between">
+            <div class=" md:flex items-center md:gap-6 md:px-4 px-8 py-4 justify-between">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="fas fa-id-badge text-red-400 text-2xl"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Customs Brokerage</span>
+            </div>
+
+            <div class="md:flex justify-end items-center md:px-3 px-8">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Navigating customs with ease,ensuring your goods clear borders swiftly and compliantly.</p>
+              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="fas fa-arrow-right text-white"></i></div>
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden">Get a Quote <i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class="md:flex mt-10 shadow-sm border bg-blue-950 border-blue-100  rounded-xl items-center justify-between">
+            <div class=" md:flex items-center md:gap-6 md:px-4 px-8 py-4 justify-between">
+              <div class="mb-4 w-fit bg-blue-100 rounded-[6px] px-3 py-1">
+                <i class="fas fa-truck text-blue-950 text-2xl"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-white font-semibold">Warehousing & Distribution</span>
+            </div>
+
+            <div class="md:flex justify-end items-center md:px-3 px-8">
+              <p class="text-[16px] md:text-[18px] text-white max-w-120">Secure storage and efficient distribution and solutions to keep your inventory flowing smoothly</p>
+              <div class="bg-white text-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="fas fa-arrow-right text-blue-100"></i></div>
+              <button class="bg-blue-100 hover:bg-blue-550 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-blue-950 items-center md:hidden">Get a Quote <i class="fas fa-arrow-right text-white bg-blue-950 rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class="md:flex mt-10 shadow-sm border border-blue-100  rounded-xl items-center justify-between">
+            <div class=" md:flex items-center md:gap-6 md:px-4 px-8 py-4 justify-between">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="fas fa-network-wired text-red-400 text-2xl"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Supply Chain Management</span>
+            </div>
+
+            <div class="md:flex justify-end items-center md:px-3 px-8">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Optimizing every step of your supply chain for streamlined,cost-effective operations.</p>
+              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="fas fa-arrow-right text-white"></i></div>
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden">Get a Quote <i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class="md:flex mt-10 shadow-sm border border-blue-100  rounded-xl items-center justify-between">
+            <div class=" md:flex items-center md:gap-6 md:px-4 px-8 py-4 justify-between">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="fas fa-earth-americas text-red-400 text-2xl"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Cross-Border Solutions</span>
+            </div>
+
+            <div class="md:flex justify-end items-center md:px-3 px-8">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Seamless cross-border logistics to connect your business with international markets.</p>
+              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="fas fa-arrow-right text-white"></i></div>
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden">Get a Quote <i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class="md:flex mt-10 shadow-sm border border-blue-100  rounded-xl items-center justify-between">
+            <div class=" md:flex items-center md:gap-6 md:px-4 px-8 py-4 justify-between">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="fas fa-dolly text-red-400 text-2xl"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Last-Mile Delivery</span>
+            </div>
+
+            <div class="md:flex justify-end items-center md:px-3 px-8">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Reliable last-mile delivery that gets your products to customers doorsteps with precision.</p>
+              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="fas fa-arrow-right text-white"></i></div>
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden">Get a Quote <i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class="md:flex mt-10 shadow-sm border border-blue-100  rounded-xl items-center justify-between">
+            <div class=" md:flex items-center md:gap-6 md:px-4 px-8 py-4 justify-between">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="fas fa-boxes-packing text-red-400 text-2xl"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Project Cargo Handling</span>
+            </div>
+
+            <div class="md:flex justify-end items-center md:px-3 px-8">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Specialized for oversized or complex shipments,with tailored logistics solutions</p>
+              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="fas fa-arrow-right text-white"></i></div>
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden">Get a Quote <i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+    </section>
+
+    <section class="px-6 md:px-16 my-20">
+      <div class="lg:flex items-center justify-between">
+        <div class="flex flex-col items-start">
+          <h1 class="uppercase text-blue-950 text-[14px] md:text-[18px] pb-6"><i class="fas fa-circle">testimonials</i></h1>
+          <div class="md:flex items-center">
+          <h2 class="text-red-600 text-4xl ">Trusted</h2><p class="text-blue-950 text-4xl">by Worldwide</p></h2>
+          </div>
+        </div>
+
+          <div class="max-w-140 pt-8">
+            <p class="text-blue-950 text-[18px]">Many company already work with us.Praise pleases us, criticism helps us because we want to get better every day.</p>
+          </div>
+  
+      </div>
+
+      <div class="my-10 border border-blue-100 py-3 px-3 rounded-2xl shadow-sm lg:flex lg:items-center lg:justify-between">
+        <div class="pt">
+          <img src="./image/person4.jpg" alt="person" class="w-80 h-200 rounded-2xl">
+        </div>
+
+        <div class="flex flex-col max-w-150">
+          <h1 class="text-blue-800 pt-3">Philadelphia, Pennsylvania</h1>
+          <h2 class="text-4xl text-blue-950 py-4">"Allowing us focus on growth Highly recommended!"</h2>
+          <p class="md:text-[18px] text-blue-800">"Their seamless coordination and proactive communication have made a real difference in our operations. From customers clearance to last-mile delivery,we handled every detail with expertise and care. We couldn't ask for a better logistics partners."</p>
+          <p class="font-semibold md:text-[20px] text-[18px] py-3 text-blue-950">Mike Lander</p>
+          <p class="md:text-[18px] text-blue-800">Retailer</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 md:px-16">
+      <div class="lg:flex items-center justify-between ">
+        <div class="max-w-100 text-wrap">
+          <h1 class="text-blue-950"><i class="fas fa-circle text-red-600 pr-2"></i>LATEST ARTICLE</h1>
+          <h1 class="text-[43px] md:text-5xl text-blue-950 text-wrap font-semibold md:flex items-center gap-2">Industry <span class="text-red-600">Insights </span><span class="text-blue-950 pr-2">And</span><span class="text-red-600">Tips</span></h1>
+        </div>
+
+        <div class="pt-4 items-start flex flex-col justify-end max-w-120">
+          <p class="text-blue-800 text-[14px]">stay informed with the latest industry insights and experts tips to optimize your logistics strategies and stay ahead of market trends.</p>
+
+          <button class="border border-blue-500 rounded-full shadow-sm shadow-blue-400 w-fit px-4 py-1 text-blue-950 my-6 md:ml-50">
+            View All Post
+          </button>
+        </div>
+      </div>
+
+    <div class="mt-14 lg:flex-row flex flex-col justify-center lg:justify-between items-center gap-4">
+      <div class="relative max-w-[350px] min-w-100 h-[400px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
+        <div class="absolute inset-0 bg-[url('./image/gallery.jpg')] bg-cover bg-center"></div>
+          <div class="absolute inset-0 bg-blue-900/40 backdrop-blur-sm"></div>
+            <div class="relative z-10 h-full flex flex-col justify-between">
+              <div class="flex justify-between items-center">
+                <span class="bg-white text-gray-800 px-4 py-1 rounded-full text-sm font-medium">Logistic Innovation</span>
+                <span class="text-sm font-light opacity-90">November 5, 2030</span>
+              </div>
+
+              <div>
+               <h2 class="text-3xl font-bold leading-tight mb-4">Streamlining Supply Chains with Innovative Logistics Solutions</h2>
+                <p class="text-sm opacity-80 max-w-md">Discover how advanced technology is transforming logistics, making supply chains faster and more efficient.</p>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="font-semibold">Emily Tran</span>
+                <button class="bg-white text-blue-900 px-6 py-2 rounded-full flex items-center gap-2 font-bold hover:bg-gray-100 transition">
+                  Read More 
+                  <span class="bg-blue-900 text-white rounded-full p-1 text-xs">→</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+  
+      <div class="relative w-[350px] h-[400px] md:h-[400px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
+        <div class="absolute inset-0 bg-[url('./image/gallery2.jpg')] bg-cover bg-center"></div>
+          <div class="absolute inset-0 bg-blue-900/40 "></div>
+            <div class="relative z-10 h-full flex flex-col justify-between">
+              <div class="flex justify-between items-center">
+                <span class="bg-white text-gray-800 px-4 py-1 rounded-full text-sm font-medium">Delivery Solutions</span>
+              </div>
+
+              <div class=" mt-20">
+                <h2 class="text-3xl font-bold leading-tight">The Future of Last-Mile Delivery:</h2>
+                <p class="text-3xl font-bold leading-tight">Trends and Challenges</p>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="font-bold">Mark Douglas</span>
+              </div>
+            </div>
+          </div>
+
+
+      <div class="relative w-[350px] h-[400px] md:h-[400px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
+        <div class="absolute inset-0 bg-[url('./image/gallery3.jpeg')] bg-cover bg-center"></div>
+          <div class="absolute inset-0 bg-blue-900/40"></div>
+            <div class="relative z-10 h-full flex flex-col justify-between">
+              <div class="flex justify-between items-center">
+                <span class="bg-white text-gray-800 px-4 py-1 rounded-full text-sm font-medium">Sustainability</span>
+              </div>
+
+              <div class=" mt-20">
+                <h2 class="text-3xl font-bold leading-tight">Why Sustainable</h2>
+                <p class="text-3xl font-bold leading-tight">Practice Matter in Logistics</p>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="font-bold">Sarah Lee</span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </section>
+
+    <section class="mx-auto relative mt-20 text-center w-full items-center flex-col justify-center">
+      <div class=" relative items-center flex justify-center ">
+        <img src="./image/yellowtruck.webp" alt="" class=" items-center object-cover max-w-500">
+      </div>
+        
+      <!-- <div class=" w-full mx-auto">
+        <img src="./image/track.webp" alt="" class="w-full m-0 object-cover" >
+      </div> -->
+    </section>
+
+    <section class="px-6 md:px-16 my-10">
+      <div class="md:flex rounded-2xl justify-between bg-blend-multiply bg-blue-600/50 bg-[url('./image/seaimg.jpg')] bg-cover bg-center">
+        <div class="max-w-100 p-8">
+          <h1 class="text-white text-4xl mb-2">Streamline Your <br>Logistics Today!</h1>
+          <p class="text-white text-[14px]">Discover a world of effortless and seamless losgistics,ready to transform the way you move forward.</p>
+        </div>
+
+        <button class="bg-white w-fit text-blue-950 flex-nowrap rounded-full px-4 py-1 mx-8 mb-5 self-center md:mt-36">
+          Get a Quote <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="bg-blue-950 py-17">
+      <div class="lg:flex justify-between items-center px-6 md:px-16">
+        <div class="py-6 max-w-100">
+          <h1 class="font-serif text-white text-6xl pb-2 animate__animated animate__heartBeat animate__slow animate__infinite animate__delay-1s">SWIFT <br>FREIGHT</h1>
+          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
+          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
+
+          <div class="bg-white flex items-center text-center px-2 mt-4 rounded-full">
+            <input type="email" placeholder="Type your email" class="text-center text-gray-600 bg-transparent outline-none border-none pb-5 px-7 w-full mt-6 rounded-full">
+            <button type="submit" class="py-3 text-nowrap px-4 rounded-full bg-blue-950 text-white mx-1 hover:bg-blue-900 hover:scale-105 transition-all duration-1000"> Get a Quote</button>
+          </div>
+        </div>
+
+        
+        
+        
+        <div class="md:flex-col justify-between ">
+          <div>
+            <h1 class="text-3xl font-semibold py-2 text-white self-end">The Future of Urban<br>Delivery Starts Here</h1>
+          </div>
+          <div class="md:flex gap-18 items-center grid grid-cols-2">
+            
+            <div class="items-center flex-col justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
+              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
+              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
+              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="items-center flex-col justify-center gap-10 md:pb-6">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
+              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
+              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="items-center flex-col justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
+              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <footer class="bg-blue-950 border-t-2 border-gray-400 px-6 md:px-16">
+        <div class="py-2 items-center md:flex justify-between">
+          <div class="w-fit flex text-center justify-center items-center md:gap-14 gap-8">
+            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
+            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
+            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
+          </div>
+
+          <div class="py-2">
+            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
+          </div>
+        </div>
+      </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="script.js"></script>
+  </body>
+</html>
+ 
+</body>
+</html>

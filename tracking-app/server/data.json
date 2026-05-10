@@ -1,0 +1,13 @@
+{
+  "CHRIS105": {
+    "status": "In Transit",
+    "location": "Lagos",
+    "date": "May 11, 2026",
+    "steps": [
+      "Package received",
+      "Shipped from warehouse",
+      "Arrived Lagos",
+      "Out for delivery"
+    ]
+  }
+}
