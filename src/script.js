@@ -86,20 +86,17 @@ gsap.ticker.add((time) => {
 
 gsap.ticker.lagSmoothing(0);
 
-// 3. The Professional Reveal Animation
-// This creates the parallax effect where the image moves slower than the scroll
 gsap.to(".reveal-image", {
-    yPercent: -20, // Moves up inside the container
+    yPercent: -20, 
     ease: "none",
     scrollTrigger: {
         trigger: ".reveal-container",
-        start: "top bottom", // Animation starts when container top hits screen bottom
-        end: "bottom top",    // Ends when container bottom hits screen top
-        scrub: 2,          // Links animation directly to scrollbar
+        start: "top bottom", 
+        end: "bottom top",  
+        scrub: 2,  
     }
 });
 
-// Text Reveal Animation
 gsap.from(".reveal-text", {
     y: 100,
     opacity: 0,
@@ -111,47 +108,46 @@ gsap.from(".reveal-text", {
     }
 });
 
-// Ensure GSAP and ScrollTrigger are ready
+
 gsap.registerPlugin(ScrollTrigger);
 
-// Target all elements with the class
+
 const revealElements = document.querySelectorAll(".premium-reveal");
 
 revealElements.forEach((el) => {
   gsap.fromTo(el, 
     { 
       opacity: 0, 
-      y: 100,             // Start 100px lower
-      scale: 0.95,        // Start slightly smaller
-      filter: "blur(10px)" // Add a premium blur
+      y: 100,             
+      scale: 0.95,       
+      filter: "blur(5px)"
     }, 
     {
       opacity: 1,
       y: 0,
       scale: 1,
       filter: "blur(0px)",
-      duration: 1.2,      // Take 1.2 seconds to reveal
-      ease: "power4.out", // This is the "luxury" easing curve
+      duration: 1.2,     
+      ease: "power4.out",
       scrollTrigger: {
         trigger: el,
-        start: "top 85%", // Starts when the top of the div hits 85% of viewport height
-        toggleActions: "play none none reverse", // Plays on scroll down, reverses on scroll up
+        start: "top 90%", 
+        toggleActions: "play none none reverse", 
       }
     }
   );
 });
 
-window.addEventListener("load", () => {
-    // Create a timeline for the page entrance
-    const tl = gsap.timeline();
+        window.addEventListener("load", () => {
+            const tl = gsap.timeline();
 
-    tl.to(".premium-reveal", {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        duration: 1.5,
-        ease: "power4.out",
-        stagger: 0.2, // This makes elements fade in one after another (very premium!)
+            tl.to(".premium-reveal", {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                filter: "blur(0px)",
+                duration: 1.2,
+                ease: "power4.out",
+                stagger: 0.3,
     });
 });
