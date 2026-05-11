@@ -1,21 +1,27 @@
-@keyframes{
-.reveal {
-  @apply opacity-0 translate-y-10 transition-all duration-1000 ease-out;
+
+html.lenis {
+  height: auto;
 }
 
-.reveal.active {
-  @apply opacity-100 translate-y-0;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
-@layer components {
-  /* The starting state (Hidden) */
-  .reveal {
-    @apply opacity-0 translate-y-12 scale-95 transition-all duration-1000 ease-out;
-  }
-
-  /* The ending state (Visible) */
-  .reveal.active {
-    @apply opacity-100 translate-y-0 scale-100;
-  }
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
+
+.lennis.lenis-stopped {overflow: hidden;}
+
+.premium-reveal {
+    opacity: 0;
+    will-change: transform,opacity;
+}
+
+
+.premium-reveal {
+    opacity: 0;
+    transform: translateY(30px); 
+    filter: blur(10px);
+    will-change: transform, opacity;
 }
