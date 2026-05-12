@@ -34,7 +34,6 @@ const observer = new IntersectionObserver((entries) => {
 
 
 
-// 1. Setup Lenis (The Smooth Scroll Engine)
 const lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -65,7 +64,7 @@ gsap.to(".reveal-image", {
 gsap.from(".reveal-text", {
     y: 100,
     opacity: 0,
-    duration: 1.5,
+    duration: 1.2,
     ease: "power4.out",
     scrollTrigger: {
         trigger: ".reveal-text",

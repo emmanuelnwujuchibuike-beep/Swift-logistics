@@ -24,7 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   </head>
-  <body style="height: 200vh" class=" pt-20 opacity-100 duration-1000 overflow-x-hidden font-mono delay-100 max-w-350 reveal">
+  <body style="height: 200vh" class=" pt-20 opacity-100 duration-1000 overflow-x-hidden font-['roboto'] delay-100 max-w-350 reveal">
 
     <header class="fixed z-50 top-0 left-0 right-0  bg-white">
       <section class="reveal  flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
@@ -476,7 +476,7 @@
         </div>
       </div>
 
-    <div class=" flex flex-col items-center justify-center gap-4 mt-14 lg:flex-row lg:justify-between">
+    <div class=" flex flex-col items-center justify-center gap-4 mt-14 md:grid grid-cols-2 lg:flex-row lg:justify-between">
       <div class="relative max-w-[350px] h-[450px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
         <div class="absolute inset-0 bg-[url('./image/gallery.jpg')] bg-cover bg-center"></div>
           <div class="absolute inset-0 bg-blue-900/40 backdrop-blur-sm"></div>
@@ -502,7 +502,7 @@
           </div>
 
   
-      <div class="relative w-[350px] h-[450px] md:h-[400px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
+      <div class="relative w-[350px] h-[450px] md:h-[450px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
         <div class="absolute inset-0 bg-[url('./image/gallery2.jpg')] bg-cover bg-center"></div>
           <div class="absolute inset-0 bg-blue-900/40 "></div>
             <div class="relative z-10 flex flex-col justify-between h-full">
@@ -661,34 +661,10 @@
 
 
      
-    <script>
-        gsap.to(".box", {
-          y: 100,
-          opacity: 0,
-          filter: "blur(5px)",
-          duration: 2,
-
-          scrollTrigger: {
-            trigger: ".premium-reveal",
-            start: "top 85%",
-            end: "top 40%",
-            scrub: 2
-          }
-        });
-    </script>
+   
 
 
     <script src="script.js"></script>
-
-   
-
-    <script>
-        
-      </script>
-
-    <script src="script.js" defer></script>
-
-
   </body>
  
 </body>
