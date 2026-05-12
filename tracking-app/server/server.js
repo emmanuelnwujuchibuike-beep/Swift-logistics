@@ -26,13 +26,10 @@ app.get('/track/:id', (req, res) => {
     }
 });
 
-// app.listen(3000, () => {
-//     console.log("SERVER IS LIVE ON PORT 3000");
-// });
 
-// // This tells the server: Use the port Render gives us, or 3000 as a backup
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+

@@ -47,7 +47,7 @@
 
         <div id="navButtons" class="flex-col items-start hidden w-full gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
           <button class="items-center px-4 py-2 text-white rounded-full  bg-blue-950 hover:bg-blue-600">
-            <a href="get-started.html" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+            <a href="get-started" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
           </button>
         </div>
         </div>
@@ -62,7 +62,7 @@
 
       <div class="flex flex-col mb-10">
         <button class="items-center px-3 py-4 mx-4 text-white w-50 bg-blue-950 hover:bg-blue-600 rounded-4xl">
-          <a href="get-started.html" class="flex items-center px-2 py-[4px] text-white text-[15px] hover:bg-blue-600 rounded-2xl">
+          <a href="#" class="flex items-center px-2 py-[4px] text-white text-[15px] hover:bg-blue-600 rounded-2xl">
           Get a Free Quote<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i>
           </a>
         </button>
@@ -125,7 +125,7 @@
     </section>
     
     <section class="relative z-50">
-      <div class="fixed p-2 bg-red-600 rounded-full right-2 bottom-10 w-fit shadow-4xl shadow-red-300 aspect-square">
+      <div class="fixed z-50 p-2 bg-green-100 shadow-2xl shadow-green-200 rounded-full right-2 bottom-10 w-fit aspect-square">
         <button>
           <a href="https://wa.me/18562803438" target="_blank"><i class="px-1 text-4xl text-green-500 fab fa-whatsapp"></i></a>
         </button>
@@ -173,7 +173,7 @@
     </section>
 
 
-    <section class="premiun-reveal gap-10 px-4 py-2 bg-white mt-30 md:mt-15 lg:flex">
+    <section class="gap-10 px-4 py-2 bg-white mt-30 md:mt-15 lg:flex">
     
       <div class="px-4 md:flex-col premium-reveal">
         <div class="mt-10 md:w-130">
@@ -183,19 +183,19 @@
         </div>
   
 
-        <div class="premiun-reveal items-start mt-10 md:flex md:w-150 md:gap-8">
+        <div class=" items-start mt-10 md:flex md:w-150 md:gap-8">
           <h1 class="text-2xl font-bold text-red-600">01 Vision</h1>
           <p class="text-blue-900 md:w-200">Our mission is to lead the global logistics industry by providing seamless, reliable, and innovative solutions thst not only meet but exceed client expectations, driving long-term success and growth for bussiness worldwide.</p>
         </div>
 
-        <div class="premiun-reveal items-start mt-10 md:flex md:w-150 md:gap-8">
+        <div class=" items-start mt-10 md:flex md:w-150 md:gap-8">
           <h1 class="text-2xl font-bold text-red-600">02 Mision</h1>
           <p class="text-blue-900 md:w-200">We connect businesses to a syreamlined and efficient supply chain by offering innovative and responsible logistics solutions that enhance operational performance, reduce costs, and faster growth in a dynamic global market</p>
         </div>.
       </div>
 
 
-        <div class=" animate__animated animate__backInLeft animate__slow animate__repeat-1 animate__delay-1s md:w-170 md:ml-5 md:mt-10">
+        <div class="premium-reveal animate__animated animate__backInLeft animate__slow animate__repeat-1 animate__delay-1s md:w-170 md:ml-5 md:mt-10">
           <img src="./image/a-blue-truck-on-transparent-background-png.webp" alt="bg2" class="object-cover w-full md:h-300 md:w-300">
         </div>
 
@@ -203,11 +203,9 @@
 
     <section class=" items-center px-6 text-center md:px-16 my-14">
       <div class="flex justify-center">
-          <div class="w-full p-8 shadow-2xl bg-blue-950 rounded-2xl shadow-blue-400 max-w-150">
+          <div class="w-full p-8 shadow-2xl bg-blue-950 rounded-3xl shadow-blue-400 max-w-150">
 
-            <h2 class="mb-6 text-2xl font-bold text-center text-white">
-              Track Your Package
-            </h2>
+            <h2 class="mb-6 text-2xl font-bold text-center text-white">Track Your Package</h2>
 
             <div class="flex gap-2">
               <input id="trackingInput"type="text"placeholder="Enter Tracking Code" required class="w-full p-3 text-white border rounded-lg focus:outline-none"onkeyup="if(event.key === 'Enter')checkTrack()">
@@ -217,15 +215,15 @@
             </div>
 
             <div id="resultBox" class="hidden p-6 mt-8 border rounded-2xl bg-slate-900/50 border-slate-700 backdrop-blur-md">
-              <h3 class="mb-6 font-bold text-blue-400">Shipment Progress</h3>
+                <h3 class="mb-6 font-bold text-blue-400">Shipment Progress</h3>
 
-            <div class="relative flex flex-col gap-8">
+              <div class="relative flex flex-col gap-8">
         
-            <div class="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-700"></div>
+              <div class="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-700"></div>
 
-            <div class="relative flex items-start gap-4">
-            <div class="z-10 w-6 h-6 bg-blue-600 border-4 rounded-full border-slate-900"></div>
-            <div>
+              <div class="relative flex items-start gap-4">
+              <div class="z-10 w-6 h-6 bg-blue-600 border-4 rounded-full border-slate-900"></div>
+              <div>
                 <p class="text-sm text-gray-400">Origin</p>
                 <p id="info1" class="font-medium text-white">Loaded at Lagos Airport</p>
             </div>

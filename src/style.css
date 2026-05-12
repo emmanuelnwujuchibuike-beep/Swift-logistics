@@ -22,6 +22,6 @@ html.lenis {
 .premium-reveal {
     opacity: 0;
     transform: translateY(30px); 
-    filter: blur(10px);
+    filter: blur(7px);
     will-change: transform, opacity;
 }
