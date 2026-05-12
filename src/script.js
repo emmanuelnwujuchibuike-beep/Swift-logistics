@@ -32,41 +32,6 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-
-import Lenis from 'lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-// 1. Register ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
-
-// 2. Initialize Lenis
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Premium easing
-  smoothWheel: true,
-});
-
-// 3. Sync Lenis with GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update);
-
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000); // Convert time to milliseconds
-});
-
-gsap.ticker.lagSmoothing(0);
-
-gsap.to(".reveal-selection", {
-  yPercent: 30, // Moves the image slightly slower than the scroll
-  ease: "none",
-  scrollTrigger: {
-    trigger: ".reveal",
-    start: "top bottom", // Starts when top of container hits bottom of viewport
-    end: "bottom top",
-    scrub: true,         // Smoothly follows the scrollbar
-  },
-});
 
 
 // 1. Setup Lenis (The Smooth Scroll Engine)
@@ -77,7 +42,6 @@ const lenis = new Lenis({
     gestureOrientation: 'vertical',
     smoothWheel: true,
 });
-
 
 lenis.on('scroll', ScrollTrigger.update);
 
