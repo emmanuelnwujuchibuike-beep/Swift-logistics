@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="input.css">
+    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+     <header class="fixed z-50 top-0 left-0 right-0  bg-white">
+      <section class="reveal flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
+        <div class="flex items-center justify-between w-full md:w-fit">
+          <img src="./image/logo.png" alt="logo" class="w-10 h-10" >
+
+          <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
+            <i class="text-2xl fas fa-bars text-blue-950"></i>
+          </label>
+        </div>
+
+        <div class="gap-10 md:flex peer-checked">
+        <input type="checkbox" class="peer" id="ham-menu" hidden>
+        <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
+          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Home</a>
+          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">About</a>
+          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Services</a>
+          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Contact</a>
+        </nav>
+
+        <div id="navButtons" class="flex-col items-start hidden w-full gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
+          <button class="items-center px-4 py-2 text-white rounded-full  bg-blue-950 hover:bg-blue-600">
+            <a href="quote.html" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+          </button>
+        </div>
+        </div>
+      </section>
+    </header>
+
+    <section class="mt-10 min-h-screen bg-blend-multiply bg-[url('./image/bt2.jpg')] object-cover bg-cover text-white py-12 px-6 flex items-center justify-center relative overflow-hidden">
+  
+    <div class="absolute top-0 -left-20 w-96 h-96 bg-blue-800/20 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-0 -right-20 w-96 h-96 bg-red-900/10 rounded-full blur-[120px]"></div>
+
+    <div class="max-w-5xl w-full grid lg:grid-cols-2 gap-12 relative z-10">
+    
+    <div class="flex flex-col justify-center">
+      <div class="flex items-center gap-2 mb-6">
+        <span class="w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
+        <span class="uppercase tracking-[0.2em] text-xs font-bold text-blue-600">Fast & Reliable</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">Ready to move <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">your cargo?</span>
+      </h1>
+      <p class="text-lg mb-8 font-semibold text-blue-950 max-w-md">Fill out the form to receive a custom quote for your logistics needs. Our team will get back to you within 24 hours.</p>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <p class="font-medium text-blue-950">Real-time GPS Tracking</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p class="font-medium text-blue-950">24/7 Delivery Support</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl">
+      <form class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-blue-800">Full Name</label>
+            <input type="text" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="John Doe">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-blue-800">Email Address</label>
+            <input type="email" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="john@example.com">
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+    
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-blue-800">Shipment Type</label>
+            <select class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors text-gray-400">
+              <option>Air Freight</option>
+              <option>Sea Freight</option>
+              <option>Road Transport</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-blue-800">Approx. Weight (kg)</label>
+            <input type="number" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2 text-blue-800">Pickup Location</label>
+          <input type="text" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="City, Country">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2 text-blue-800">Delivery Destination</label>
+          <input type="text" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="City, Country">
+        </div>
+
+        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all transform hover:scale-[1.02]">Request Quote</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<section class="bg-blue-950 py-17">
+      <div>
+      <div class="items-center justify-between px-6 lg:flex md:px-16">
+        <div class="py-6 max-w-100">
+          <h1 class="pb-2 font-serif text-6xl text-white animate__animated animate__heartBeat animate__slow animate__repeat-1 animate__delay-1s">SWIFT <br>FREIGHT</h1>
+          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
+          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
+
+          <div class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
+            <input type="email" placeholder="Type your email" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-7">
+            <button type="submit" class="px-4 py-3 mx-1 text-white transition-all duration-1000 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-105"> Get a Quote</button>
+          </div>
+        </div>
+
+        
+        
+        
+        <div class="justify-between md:flex-col ">
+          <div>
+            <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
+          </div>
+          <div class="grid items-center grid-cols-2 md:flex gap-18">
+            
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
+              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
+              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
+              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
+              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
+              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
+              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
+            </div>
+          </div>
+        </div>
+        </div>
+      
+          <div class="items-center mt-10 text-center">
+            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
+              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
+            </button>
+          </div>
+      </section>
+
+
+      <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
+        <div class="items-center self-center justify-between py-2 text-center md:flex">
+          <div class="flex items-center justify-center gap-8 text-center  md:gap-14">
+            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
+            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
+            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
+          </div>
+
+          <div class="self-center py-2">
+            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
+          </div>
+        </div>
+      </footer>
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      <script src="script.js"></script>
+</body>
+</html>
