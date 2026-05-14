@@ -115,3 +115,5 @@ const revealElements = document.querySelectorAll(".premium-reveal");
                 stagger: 0.3,
     });
 });
+
+        

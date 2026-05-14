@@ -25,3 +25,10 @@ html.lenis {
     filter: blur(7px);
     will-change: transform, opacity;
 }
+
+.gsap-reveal {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  will-change: transform, opacity;
+}
