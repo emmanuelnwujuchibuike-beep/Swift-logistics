@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="input.css">
+    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body class="overflow-x-hidden">
+     <header class="fixed z-50 top-0 left-0 right-0  bg-white">
+      <section class="reveal flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
+        <div class="flex items-center justify-between w-full md:w-fit">
+          <img src="./image/mainlog.jpeg" alt="logo" class="w-10 h-10" >
+
+          <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
+            <i class="text-2xl fas fa-bars text-blue-950"></i>
+          </label>
+        </div>
+
+        <div class="gap-10 md:flex peer-checked">
+        <input type="checkbox" class="peer" id="ham-menu" hidden>
+        <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
+          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Home</a>
+          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">About</a>
+          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Services</a>
+          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Contact</a>
+        </nav>
+
+        <div id="navButtons" class="flex-col items-start hidden w-full gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
+          <button class="items-center px-4 py-2 text-white rounded-full  bg-blue-950 hover:bg-blue-600">
+            <a href="quote.html" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+          </button>
+        </div>
+        </div>
+      </section>
+    </header>
+
+     <section class="items-center mt-20 self-center justify-center px-6">
+        <div class="flex justify-center items-center w-full  object-cover">
+            <div class="bg-blue-950/20 text-center self-center rounded-2xl w-full  bg-blend-multiply max-w-290  bg-[url('./image/bt7.jpg')] object-cover bg-cover h-100  px-4 md:px-30">
+                <h1 class="self-center text-center text-white text-5xl font-semibold items-center md:text-6xl pt-24 font-serif animate__animated animate__tada animate__slow animate__repeat-1 animate__delay-1s">Logistics Services</h1>
+                <p class="text-gray-300 text-[14px] md:text-[18px] py-5">Our comprehensive logistics solution is designed to optimize your supply chain and enhance your business operations.</p>
+                <h2 class="uppercase text-[18px] pt-6 text-white"><i class="fas fa-circle text-[18px] md:text-2xl text-red-600 pr-2"></i>custom solutions for every need</h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 md:px-16 mt-20 pt-20">
+        <div class="lg:flex justify-between lg:items-start items-center">
+            <div class="flex flex-col lg:items-start ">
+                <h1 class="text-[16px] uppercase text-blue-950 pb-6"><i class="fas fa-circle text text-red-600 pr-1"></i> our community</h1>
+                <h2 class="md:text-[46px] text-[36px] font-semibold text-blue-950 leading-tight">Join a <span class="text-red-600">Growing <br> Community</span> of Business and Logistics Partners</h2>
+                <p class="text-[20px] text-blue-900 py-5">Join a dynamic community of businesses and logistics partners,<br>optimizing supply chains and driving growth.</p>
+                <button class="w-fit px-2 py-1 border border-blue-800 text-center rounded-full shadow-sm shadow-blue-200 mt-6 hover:bg-blue-100 ">
+                <a href="https://wa.me/18562803438" target="_blank" class="text-center">Join Us</a><i class="fas fa-arrow-right ml-2 border border-blue-800 rounded-full p-1 text-blue-950 aspect-square"></i></button>
+                
+                <div class="grid grid-cols-2 gap-8 pt-14 justify-between lg:items-start text-start">
+                    <div class="text-center flex flex-col items-center ">
+                        <h1 class="text-[20px] font-semibold font-mono">Email Us</h1>
+                        <a href="mailto:swiftfreightlogix@gmail.com" target="_blank" class="hover:underline"><p class="text-[12px] md:text-[16px] text-blue-900 font-mono">swiftfreightlogix@gmail.com</a></p>
+                        <div class="pt-2 pb-1 flex items-center">
+                            <img src="./image/gmail2-removebg-preview.png" alt="" class="w-9 ">
+                        </div>
+                    </div>
+                    
+                    <div class="text-center flex flex-col items-center ">
+                        <h1 class="text-[20px] font-semibold font-mono">WhatsApp Us</h1>
+                        <a href="https://wa.me/18562803438" target="_blank"  class="hover:underline"><p class="text-[12px] md:text-[16px] text-blue-900 font-mono">+1(856) (280) 3438</a></p>
+                        <div class="pt-2 flex items-center">
+                            <img src="./image/logo100-removebg-preview.png" alt="" class="w-14 ">
+                        </div>
+                    </div>
+
+                    <div class="text-center flex flex-col items-center ">
+                        <h1 class="text-[20px] font-semibold font-mono"> X</h1>
+                        <a href="mailto:swiftfreightlogix@gmail.com" target="_blank" class="hover:underline"><p class="text-[12px] md:text-[16px] text-blue-900 font-mono">swiftfreightlogix</a></p>
+                        <div class="pt-2 pb-1 flex items-center">
+                            <img src="./image/twit-removebg-preview.png" alt="" class="w-9 ">
+                        </div>
+                    </div>
+
+                    <div class="text-center flex flex-col items-center ">
+                        <h1 class="text-[20px] font-semibold font-mono"> Tiktok</h1>
+                        <a href="mailto:swiftfreightlogix@gmail.com" target="_blank" class="hover:underline"><p class="text-[12px] md:text-[16px] text-blue-900 font-mono">swiftfreightlogix</a></p>
+                        <div class="pt-2 pb-1 flex items-center">
+                            <img src="./image/tiktok-removebg-preview.png" alt="" class="w-10 ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col items-center w-full lg:items-end mt-10 lg:mt-48">
+                <div class="md:grid grid-cols-2 md:gap-6 w-full flex flex-col gap-6 justify-between items-center">
+                    <div class="border border-blue-100 text-center  w-full h-60 rounded-xl shadow-blue-100 shadow-sm">
+                        <h1 class="text-blue-950 text-7xl pt-14">25</h1>
+                        <p class="text-blue-950 pt-3 px-2">Years of Industry Experience</p>
+                    </div>
+
+                    <div class="border border-blue-100 text-center  w-full h-60 rounded-xl shadow-blue-100 shadow-sm">
+                        <h1 class="text-blue-950 text-7xl pt-14">99%</h1>
+                        <p class="text-blue-950 pt-3 px-1">On-Time Delivery Rate</p>
+                    </div>
+
+                    <div class="border border-blue-100 text-center  w-full h-60 rounded-xl shadow-blue-100 shadow-sm">
+                        <h1 class="text-blue-950 text-7xl pt-14">500+</h1>
+                        <p class="text-blue-950 pt-3 px-2">Satisfied Clients Worldwide</p>
+                    </div>
+
+                    <div class="border border-blue-100 text-center  w-full h-60 rounded-xl shadow-blue-100 shadow-sm">
+                        <h1 class="text-blue-950 text-7xl pt-14">300+</h1>
+                        <p class="text-blue-950 pt-3 px-2">Employees for your success</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 md:px-16 my-20">
+        <div class="text-center">
+            <h1 class="text-blue-950 uppercase"><i class="fas fa-circle text-red-600 pr-2"></i>logistics services</h1>
+            <h2 class="text-4xl pt-8 text-blue-950">Comprehensive<span class="text-red-600">Logix Services </span> to<br> Meet Your Unique <span class="text-red-600">Needs</span></h2>
+
+            <p class="text-[16px] py-6 text-blue-900 md:text-[20px]">Our vision is to be the leading logistics partners, known for excellence in supply chain management innovation, and customer satisfaction, while exceeding expectations and driving success for our client globally.</p>
+        </div>
+
+        <div class="md:grid grid-cols-3 gap-6">     
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+            <div class="items-center justify-between px-8 py-4  md:gap-6 md:px-4">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="text-2xl text-red-400 fas fa-id-badge"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Customs Brokerage</span>
+            </div>
+
+            <div class=" items-center justify-end px-8  md:px-3">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Navigating customs with ease,ensuring your goods clear borders swiftly and compliantly.</p>
+              
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center "><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md: bg-blue-950 rounded-xl">
+            <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
+              <div class="mb-4 w-fit bg-blue-100 rounded-[6px] px-3 py-1">
+                <i class="text-2xl fas fa-truck text-blue-950"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-white font-semibold">Warehousing & Distribution</span>
+            </div>
+
+            <div class="items-center justify-end px-8 md:px-3">
+              <p class="text-[16px] md:text-[18px] text-white max-w-120">Secure storage and efficient distribution and solutions to keep your inventory flowing smoothly</p>
+            
+              <button class="bg-blue-100 hover:bg-blue-550 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-blue-950 items-center"><a href="quote.html" >Get a Quote</a> <i class="fas fa-arrow-right text-white bg-blue-950 rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+            <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="text-2xl text-red-400 fas fa-network-wired"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Supply Chain Management</span>
+            </div>
+
+            <div class="items-center justify-end px-8 md:px-3">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Optimizing every step of your supply chain for streamlined,cost-effective operations.</p>
+
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center"><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+            <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="text-2xl text-red-400 fas fa-earth-americas"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Cross-Border Solutions</span>
+            </div>
+
+            <div class="items-center justify-end px-8 md:px-3">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Seamless cross-border logistics to connect your business with international markets.</p>
+            
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 md:mt-11 rounded-2xl px-5 py-1.5 text-white items-center"><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class="items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+            <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="text-2xl text-red-400 fas fa-dolly"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Last-Mile Delivery</span>
+            </div>
+
+            <div class="items-center justify-end px-8 md:px-3">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Reliable last-mile delivery that gets your products to customers doorsteps with precision.</p>
+            
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center"><a href="quote.html" >Get a Quote</a> <i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+            <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
+              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
+                <i class="text-2xl text-red-400 fas fa-boxes-packing"></i>
+              </div>
+              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Project Cargo Handling</span>
+            </div>
+
+            <div class="items-center justify-end px-8 md:px-3">
+              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Specialized for oversized or complex shipments,with tailored logistics solutions</p>
+            
+              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 md:mt-11 rounded-2xl px-5 py-1.5 text-white items-center"><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <section class="px-6 md:px-16 mb-14">
+        <div>
+            <h1 class="text-blue-950 uppercase py-6"><i class="fas fa-circle text-red-600 pr-2"></i>work process</h1>
+
+            <h2 class="text-blue-950 text-4xl">Our <span class="text-red-600">Proven Process </span> for Excellence</h2>
+        </div>
+
+        <div class=" lg:flex justify-between ">
+            <div class="max-w-90">
+                <p class="text-blue-900 text-[14px] my-10">Our process is simple yet effective. Every project is different, but we've seen thousands of them since we first launched. Our experience is your asset.</p>
+
+                <div class="flex flex-col items-center">
+                    <img src="./image/serviceimg.jpg" alt="" class=" w-80 rounded-2xl shadow-sm shadow-blue-400">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex gap-6 mt-10 max-w-110 border-t-2 py-2 border-b-2 ">
+                    <div>
+                        <h1 class="font-mono text-gray-400 text-7xl">01</h1>
+                    </div>
+                    <div class="max-w-">
+                        <h2 class="pb-3 text-blue-950 font-semibold text-[30px]">In-Depth Consultation</h2>
+                        <p class="text-blue-900 text-[14px]">Carefully assessing your logistics needs to ensure tailored and effective solutions.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 mt-6 max-w-110 ">
+                    <div>
+                        <h1 class="font-mono text-gray-400 text-7xl">02</h1>
+                    </div>
+                    <div class="max-w-">
+                        <h2 class="pb-3 text-blue-950 font-semibold text-[30px]">Strategic Planning</h2>
+                        <p class="text-blue-900 text-[14px]">Designing a best plan to ensure efficient and optimal delivery of your goods.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 mt-6 max-w-110 ">
+                    <div>
+                        <h1 class="font-mono text-gray-400 text-7xl">03</h1>
+                    </div>
+                    <div class="max-w-">
+                        <h2 class="pb-3 text-blue-950 font-semibold text-[30px]">Efficient Execution</h2>
+                        <p class="text-blue-900 text-[14px]">Carefully cordinating every detail of the shipment process to ensure smooth and timely execution.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 mt-6 max-w-110 ">
+                    <div>
+                        <h1 class="font-mono text-gray-400 text-7xl">04</h1>
+                    </div>
+                    <div class="max-w-">
+                        <h2 class="pb-3 text-blue-950 font-semibold text-[30px]">On-Time Delivery</h2>
+                        <p class="text-blue-900 text-[14px]">Gaining a deep understanding of your logistics needs to offer the best possible solutions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal px-6 my-10 md:px-16">
+      <div class="rounded-2xl text-center bg-blend-multiply bg-blue-600/50 bg-[url('./image/seaimg.jpg')] bg-cover bg-center">
+        <div class="reveal-selection p-8 flex flex-col pt-6 items-center text-center">
+          <h1 class="mb-2 text-4xl text-white">Streamline Your Logistics Today!</h1>
+          <p class="text-white text-[14px] max-w-120 pt-3">Discover a world of effortless and seamless losgistics,ready to transform the way you move forward.</p>
+        </div>
+
+        <button class="self-center px-4 py-1 mx-8 mb-5 bg-white rounded-full w-fit text-blue-950 hover:bg-slate-500">
+          <a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="bg-blue-950 py-17">
+      <div>
+      <div class="items-center justify-between px-6 lg:flex md:px-16">
+        <div class="py-6 max-w-100">
+          <h1 class="pb-2 font-serif text-6xl text-white animate__animated animate__heartBeat animate__slow animate__repeat-1 animate__delay-1s">SWIFT <br>FREIGHT</h1>
+          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
+          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
+
+          <div class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
+            <input type="email" placeholder="Type your email" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-">
+            <button type="submit" class="px-4 self-center py-4 mx-1 text-white transition-all duration-1000 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-105"> Get a Quote</button>
+          </div>
+        </div>
+
+        
+        <div class="justify-between md:flex-col ">
+          <div>
+            <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
+          </div>
+          <div class="grid items-center grid-cols-2 md:flex gap-18">
+            
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
+              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
+              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
+              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
+              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
+              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
+              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
+            </div>
+          </div>
+        </div>
+        </div>
+      
+          <div class="items-center mt-10 text-center">
+            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
+              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
+            </button>
+          </div>
+      </section>
+
+      <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
+        <div class="items-center self-center justify-between py-2 text-center md:flex">
+          <div class="flex items-center justify-center gap-8 text-center  md:gap-14">
+            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
+            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
+            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
+          </div>
+
+          <div class="self-center py-2">
+            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
+          </div>
+        </div>
+      </footer>
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+      <script src="script.js"></script>
+
+
+
+</body>
+</html>
