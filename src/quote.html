@@ -24,12 +24,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
-<body class="overflow-x-hidden">
-     <header class="fixed z-50 top-0 left-0 right-0  bg-white">
-      <section class="reveal flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
+<body class="overflow-x-hidden animate__animated animate__fadeIn animate__slow animate__repeat-1 animate__delay-1s">
+      
+  <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
+      <section class="reveal  flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
         <div class="flex items-center justify-between w-full md:w-fit">
-          <img src="./image/mainlog.jpeg" alt="logo" class="w-10 h-10" >
+          <div class="flex items-center">
+          <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15 rounded-xl" >
 
+          </div>
           <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
             <i class="text-2xl fas fa-bars text-blue-950"></i>
           </label>
@@ -38,21 +41,26 @@
         <div class="gap-10 md:flex peer-checked">
         <input type="checkbox" class="peer" id="ham-menu" hidden>
         <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Home</a>
-          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">About</a>
-          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Services</a>
-          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Contact</a>
+          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-house-user text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Home</a>
+          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-images text-blue-950 hover:text-blue-800 text-2xl pr-1"></i>About</a>
+          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fab fa-whmcs text-3xl text-blue-950 hover:text-blue-800 pr-1"></i>Services</a>
+          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-address-card text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Contact</a>
         </nav>
 
         <div id="navButtons" class="flex-col items-start hidden w-full gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-          <button class="items-center px-4 py-2 text-white rounded-full  bg-blue-950 hover:bg-blue-600">
-            <a href="quote.html" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+          <button class="px-8 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                <a href="quote.html">Get a Free Quote</a> 
+            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+          </button>
+                    
+          <button class="px-8 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+            <i class="fas fa-location-dot"></i>
+                <a href="payment.html">Track Shipment</a> 
           </button>
         </div>
         </div>
       </section>
     </header>
-
     <section class="mt-10 bg-blend-multiply bg-[url('./image/bt2.jpg')] object-cover bg-cover text-white py-12 px-6 flex items-center justify-center relative overflow-hidden">
   
     <div class="absolute top-0 -left-20 w-96 h-96 bg-blue-800/20 rounded-full blur-[120px]"></div>
@@ -63,9 +71,9 @@
     <div class="flex flex-col justify-center">
       <div class="flex items-center gap-2 mb-6">
         <span class="w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
-        <span class="uppercase tracking-[0.2em] text-xs font-bold text-blue-600">Fast & Reliable</span>
+        <span class="uppercase tracking-[0.2em] text-xs font-bold text-blue-600 [text-shadow:0_1px_2px]">Fast & Reliable</span>
       </div>
-      <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">Ready to move <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">your cargo?</span>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 [text-shadow:0_1px_3px]">Ready to move <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">your cargo?</span>
       </h1>
       <p class="text-lg mb-8 font-semibold text-blue-950 max-w-md">Fill out the form to receive a custom quote for your logistics needs. Our team will get back to you within 24 hours.</p>
 
@@ -90,53 +98,58 @@
     </div>
 
     <div class="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl">
-      <form class="space-y-6">
+      <form name="logistics-final" method="POST" data-netlify="true" action="/success">
+        <input type="hidden" name="form-name" value="logistics-final" />
+
         <div class="grid md:grid-cols-2 gap-6">
           <div>
             <label class="block text-sm font-semibold mb-2 text-blue-800">Full Name</label>
-            <input type="text" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="John Doe">
+            <input type="text" name="name" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
           </div>
+
           <div>
             <label class="block text-sm font-semibold mb-2 text-blue-800">Email Address</label>
-            <input type="email" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="john@example.com">
+            <input type="email" name="email" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
           </div>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
-    
-          <div>
-            <label class="block text-sm font-semibold mb-2 text-blue-800">Shipment Type</label>
-            <select class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors text-gray-400">
-              <option>Air Freight</option>
-              <option>Sea Freight</option>
-              <option>Road Transport</option>
-              <option>Rail Transport</option>
-            </select>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-blue-800">Shipment Type</label>
+              <select name="shipment_type" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+                <option value="Air Freight">Air Freight</option>
+                <option value="Sea Freight">Sea Freight</option>
+                <option value="Road Freight">Road Freight</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-blue-800">Weight (kg)</label>
+              <input type="text" name="weight" placeholder="e.g. 500" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+            </div>
           </div>
-          
-          <div>
-            <label class="block text-sm font-semibold mb-2 text-blue-800">Approx. Weight (kg)</label>
-            <input type="number" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="500">
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-blue-800">Pickup Location</label>
+              <input type="text" name="pickup_location" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-blue-800">Delivery Destination</label>
+              <input type="text" name="delivery_destination" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label class="block text-sm font-semibold mb-2 text-blue-800">Pickup Location</label>
-          <input type="text" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="City, Country">
-        </div>
-        <div>
-          <label class="block text-sm font-semibold mb-2 text-blue-800">Delivery Destination</label>
-          <input type="text" class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-red-500 transition-colors placeholder-gray-500" placeholder="City, Country">
-        </div>
-
-        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all transform hover:scale-[1.02]">Request Quote</button>
+        <button type="submit" class="w-full mt-4 bg-red-600 text-white font-bold py-4 rounded-xl">Request Quote</button>
       </form>
     </div>
 
   </div>
-</section>
+  </section>
 
-<section class="bg-blue-950 py-17">
+
+
+  
+  <section class="bg-blue-950 py-17">
       <div>
       <div class="items-center justify-between px-6 lg:flex md:px-16">
         <div class="py-6 max-w-100">
@@ -224,5 +237,26 @@
 
 
       <script src="script.js"></script>
+
+      <script>
+        const form = document.querySelector('form[name="quote-request"]');
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const formData = new FormData(form);
+
+          fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams(formData).toString(),
+          })
+            .then(() => {
+              // This forces the browser to go to your success page
+              window.location.href = "success.html";
+            })
+            .catch((error) => alert(error));
+        });
+      </script>
 </body>
 </html>

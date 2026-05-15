@@ -28,13 +28,15 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
   </head>
-  <body style="height: 200vh" class=" pt-20 opacity-100 antialiased overflow-x-hidden font-['roboto'] delay-100 max-w-350 reveal">
+  <body class="animate__animated animate__fadeIn animate__slow animate__repeat-1 animate__delay-1s pt-20 opacity-100 antialiased overflow-x-hidden font-['roboto'] delay-100 max-w-350">
 
-    <header class="fixed z-50 top-0 left-0 right-0  bg-white">
+    <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
       <section class="reveal  flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
         <div class="flex items-center justify-between w-full md:w-fit">
-          <img src="./image/logo.png" alt="logo" class="w-15 h-15" >
+          <div class="flex items-center">
+          <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15 rounded-xl" >
 
+          </div>
           <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
             <i class="text-2xl fas fa-bars text-blue-950"></i>
           </label>
@@ -43,52 +45,57 @@
         <div class="gap-10 md:flex peer-checked">
         <input type="checkbox" class="peer" id="ham-menu" hidden>
         <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Home</a>
-          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">About</a>
-          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Services</a>
-          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Contact</a>
+          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-house-user text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Home</a>
+          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-images text-blue-950 hover:text-blue-800 text-2xl pr-1"></i>About</a>
+          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fab fa-whmcs text-3xl text-blue-950 hover:text-blue-800 pr-1"></i>Services</a>
+          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-address-card text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Contact</a>
         </nav>
 
         <div id="navButtons" class="flex-col items-start hidden w-full gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-          <button class="items-center px-4 py-2 text-white rounded-full  bg-blue-950 hover:bg-blue-600">
-            <a href="quote.html" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+          <button class="px-8 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                <a href="quote.html">Get a Free Quote</a> 
+            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
           </button>
-
-          <button class="items-center px-6 py-2 text-white rounded-full  bg-red-600 hover:bg-blue-600">
-            <a href="payment.html" class="text-white hover:text-blue-200">Check Package and Payment<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+                    
+          <button class="px-8 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+            <i class="fas fa-location-dot"></i>
+                <a href="payment.html">Track Shipment</a> 
           </button>
         </div>
         </div>
       </section>
     </header>
 
-    <section id="Top" class=" w-full gap-10 px-2 py-2 bg-white  max-w-350 md:hidden">
-      <div class=" animate__animated animate__rubberBand animate__slow animate__repeat-1 animate__delay-2s">
-      <h1 class="reveal-selec w-full px-4 py-3 text-5xl font-semibold leading-tight tracking-wide text-blue-950 max-w-350 text-start">Delivering More Than<br>Just freight</h1>
-      <p class="text-blue-900 text-[20px] w-full max-w-350 px-4 py-3 mb-8 text-start font-semibol">We prioritize reliability,precision,and strong partnerships in every shipment,ensuring a seamless and efficient logistics experience from start to finish.</p>
+    
+    <section id="Top" class="font-sans bg-blue-100/30 w-full gap-10 px-2 py-2 max-w-350 md:hidden">
+      <div class="absolute top-40 -right-20 w-96 h-96 bg-blue-200/50 rounded-full blur-3xl -z-10"></div>
+      <div class="absolute bottom-20 -left-20 w-72 h-72 bg-blue-100/50 rounded-full blur-3xl -z-10"></div>
+
+      <div class=" ">
+      <h1 class="w-full [text-shadow:1px_1px_3px] px-4 py-3 text-5xl leading-tight tracking-wide text-blue-950 max-w-350 text-start animate__animated animate__rubberBand animate__slow animate__repeat-1 animate__delay-2s font-extrabold">Delivering More Than<br><span class="text-blue-600 drop-shadow-2xl">Just Freight</span></h1>
+      <p class="text-blue-900 [text-shadow:0_1px_1px] text-[20px] w-full max-w-350 px-4 py-3 mb-8 text-start font-thin font-sans">We prioritize reliability,precision,and strong partnerships in every shipment,ensuring a seamless and efficient logistics experience from start to finish.</p>
       </div>
 
-      <div class="flex flex-col mb-10 px-6">
-        <button class="items-center px-3 py-4 text-white w-50 bg-blue-950 hover:bg-blue-600 rounded-4xl">
-          <a href="quote.html" class="flex items-center px-2 py-[4px] text-white text-[15px] hover:bg-blue-600 rounded-2xl">
-          Get a Free Quote<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i>
-          </a>
-        </button>
-
-        <button class="items-center px-6 py-4 w-fit mt-8 text-white rounded-full  bg-red-600 hover:bg-blue-600">
-            <a href="payment.html" class="text-white hover:text-blue-200">Check Package and Payment<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+      <div class="flex flex-wrap gap-4">
+          <button class="px-8 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                <a href="quote.html">Get a Free Quote</a> 
+            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+          </button>
+                    
+          <button class="px-8 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+            <i class="fas fa-location-dot"></i>
+                <a href="payment.html">Track Shipment</a> 
           </button>
 
-        <button class="items-center w-40 px-2 py-2 mt-8 text-white bg-white border  hover:bg-blue-950 border-blue-950 rounded-4xl">
-          <a href="about.html" class="flex items-center px-4 py-[4px] text-blue-950 rounded-2xl hover:text-white hover:bg-blue-950">
-            Learn more<i class="fas fa-arrow-right text-[10px] text-black bg-white border border-blue-950 rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i>
-          </a>
-        </button>
-      </div>
+          <button class="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-full font-semibold flex items-center gap-2 hover:bg-slate-50 transition-all duration-300">
+                <a href="about.html">Learn More</a> 
+            <i class="fas fa-arrow-right text-sm"></i>
+          </button>
+        </div>
     </section>
 
     <!-- Medium device home -->
-    <section class="premiun-reveal hidden md:block mt-2 items-center justify-center p-4 mx-auto bg-blue-950/50 bg-blend-multiply min-h-[90vh] bg-[url('./image/bt2.jpg')] object-cover bg-cover md:px-6 acs delay-150">
+    <section class="hidden md:block mt-2 items-center justify-center p-4 mx-auto bg-blue-950/50 bg-blend-multiply min-h-[90vh] bg-[url('./image/bt2.jpg')] object-cover bg-cover md:px-6 acs delay-150">
 
       <div class="z-10 flex flex-row justify-center overflow-hidden">
         <div class="absolute z-10 px-4 py-3 text-center bg-white rounded-3xl left-250 right-17 top-30">
@@ -101,24 +108,25 @@
       </div>
 
       <div class="">
-        <h1 class="text-white md:text-8xl md:font-semibold md:text-start md:mt-[70px] animate__animated animate__bounceIn animate__slow animate__repeat-1 animate__delay-1s">Delivering More<br> Than Just Freight</h1>
-        <p class="text-gray-200 text-[20px] md:max-w-350 md:px-2 md:py-3 md:mb-8 md:mt-6 md:text-start font-semibol">We prioritize reliability, precision, and strong partnerships in every shipment,<br> ensuring a seamless and efficient logistics experience from start to finish.</p>
+        <h1 class="text-white [text-shadow:1px_1px_3px] md:text-8xl md:font-semibold md:text-start md:mt-[70px] animate__animated animate__bounceIn animate__slow animate__repeat-1 animate__delay-1s">Delivering More<br> Than Just Freight</h1>
+        <p class="text-gray-200 text-[20px] [text-shadow:0_1px_1px] md:max-w-350 md:px-2 md:py-3 md:mb-8 md:mt-6 md:text-start font-semibol">We prioritize reliability, precision, and strong partnerships in every shipment,<br> ensuring a seamless and efficient logistics experience from start to finish.</p>
       </div>
 
       <div class="flex-row md:flex gap-2 md:pt-52">
-        <button class="items-center px-6 py-2 text-white  bg-blue-950 hover:bg-blue-600 rounded-4xl">
-          <a href="get-started.html" class="text-white hover:text-blue-200">Get a Free Quote<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square md:p-[3px] md:ml-3 md:justify-center items-center"></i></a>
-        </button>
-
-        <button class="items-center px-6 py-3 text-white rounded-full  bg-red-600 hover:bg-blue-600">
-            <a href="payment.html" class="text-white hover:text-blue-200">Check Package and Payment<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+        <button class="px-8 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                <a href="quote.html">Get a Free Quote</a>  
+            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+          </button>
+                    
+          <button class="px-8 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+            <i class="fas fa-location-dot"></i>
+                <a href="payment.html">Track Shipment</a> 
           </button>
 
-        <button class="items-center px-4 py-2 ml-6 text-transparent bg-white border  hover:bg-blue-950 border-blue-950 rounded-4xl">
-          <a href="get-started" class="flex items-center px-4 py-[4px] text-blue-950 hover:text-white">
-            Learn more<i class="fas fa-arrow-right text-[10px] text-black bg-white border border-blue-950 rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i>
-          </a>
-        </button>
+          <button class="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-full font-semibold flex items-center gap-2 hover:bg-slate-300 transition-all duration-300">
+                <a href="about.html">Learn More</a> 
+            <i class="fas fa-arrow-right text-sm"></i>
+          </button>
       </div>
 
     <div class="z-0 overflow-hidden ">
@@ -141,15 +149,14 @@
     </section>
     
     <section class="relative z-50">
-      <div class="fixed z-50 p-2 bg-green-100 shadow-2xl shadow-green-200 rounded-full right-2 bottom-10 w-fit aspect-square">
         <button>
-          <a href="https://wa.me/18562803438" target="_blank"><i class="px-1 text-4xl text-green-500 fab fa-whatsapp"></i></a>
-        </button>
+          <a href="https://wa.me/18562803438" target="_blank" class="fixed bottom-8 right-8 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-2xl hover:scale-110 transition-transform z-50">
+          <i class="fab fa-whatsapp"></i></a> </button>
       </div>
     </section>
 
     <!-- mobile home -->
-    <section class="premiun-reveal relative md:hidden  bg-blue-950/50 bg-blend-multiply min-h-[90vh] bg-[url('./image/seaimg.jpg')] bg-center w-full">
+    <section class="premiun-reveal relative md:hidden  bg-blue-950/50 bg-blend-multiply min-h-[90vh] bg-[url('./image/mobilebg.jpg')] bg-cover w-full">
       
       <div class="relative premiun-reveal">
         <div class="absolute z-10 px-4 py-3 text-center bg-white rounded-3xl left-18 top-20">
@@ -189,7 +196,7 @@
     </section>
 
 
-    <section class="gap-10 px-4 py-2 bg-white mt-30 md:mt-15 lg:flex">
+    <section class="gap-10 px-4 py-2 bg-white mt-10 md:mt-15 lg:flex">
     
       <div class="px-4 md:flex-col ">
         <div class="mt-10 md:w-130 premium-reveal">
@@ -216,67 +223,6 @@
         </div>
 
     </section>
-
-    <!-- <section class=" items-center px-6 text-center md:px-16 my-14">
-      <div class="flex justify-center">
-          <div class="w-full p-8 shadow-2xl bg-blue-950 rounded-3xl shadow-blue-400 max-w-150">
-
-            <h2 class="mb-6 text-2xl font-bold text-center text-white">Track Your Package</h2>
-
-            <div class="flex gap-2">
-              <input id="trackingInput"type="text"placeholder="Enter Tracking Code" required class="w-full p-3 text-white border rounded-lg focus:outline-none"onkeyup="if(event.key === 'Enter')checkTrack()">
-              <button onclick="checkTrack()"class="px-4 text-white bg-blue-600 rounded-lg  hover:bg-blue-700">
-                Track
-              </button>
-            </div>
-
-            <div id="resultBox" class="hidden p-6 mt-8 border rounded-2xl bg-slate-900/50 border-slate-700 backdrop-blur-md">
-                <h3 class="mb-6 font-bold text-blue-400">Shipment Progress</h3>
-
-              <div class="relative flex flex-col gap-8">
-        
-              <div class="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-700"></div>
-
-              <div class="relative flex items-start gap-4">
-              <div class="z-10 w-6 h-6 bg-blue-600 border-4 rounded-full border-slate-900"></div>
-              <div>
-                <p class="text-sm text-gray-400">Origin</p>
-                <p id="info1" class="font-medium text-white">Loaded at Lagos Airport</p>
-            </div>
-        </div>
-
-        <div class="relative flex items-start gap-4">
-            <div class="z-10 w-6 h-6 bg-blue-600 border-4 rounded-full border-slate-900"></div>
-            <div>
-                <p class="text-sm text-gray-400">Departure</p>
-                <p id="info2" class="font-medium text-white">Departed Lagos</p>
-            </div>
-        </div>
-
-        <div class="relative flex items-start gap-4">
-            <div id="dot3" class="z-10 w-6 h-6 border-4 rounded-full bg-slate-700 border-slate-900"></div>
-            <div>
-                <p class="text-sm text-gray-400">Status</p>
-                <p id="info3" class="font-medium text-white">On Transit</p>
-            </div>
-        </div>
-
-        <div class="relative flex items-start gap-4">
-            <div id="dot4" class="z-10 w-6 h-6 border-4 rounded-full bg-slate-700 border-slate-900"></div>
-            <div>
-                <p class="text-sm text-gray-400">Final Destination</p>
-                <p id="info4" class="font-medium text-white">Estimated Arrival</p>
-              </div>
-            </div>
-
-            </div>
-            </div>
-          </div>
-
-        </div>
-        
-    </section> -->
-
 
     <section id="freightSolution" class="items-center mb-20 bg-white">
       <h1 class=" px-4 uppercase text-[20px] text-blue-950 text-center pb-6"><i class="text-red-700 fas fa-circle"></i> Our freight solution</h1>
@@ -674,10 +620,18 @@
 
      
    
-
+    <div style="display:none;">
+      <form name="quote-request" data-netlify="true">
+        <input type="text" name="full-name">
+        <input type="email" name="email">
+        <input type="text" name="shipment_type">
+        <input type="text" name="weight_kg">
+        <input type="text" name="pickup_location">
+        <input type="text" name="delivery_destination">
+      </form>
+    </div>
       
     <script src="script.js"></script>
-  </body>
  
 </body>
 </html>

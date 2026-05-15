@@ -116,4 +116,63 @@ const revealElements = document.querySelectorAll(".premium-reveal");
     });
 });
 
-        
+
+
+      cument.getElementById("quote-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); // This stops the "White Screen" refresh
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  try {
+    await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(formData).toString(),
+    });
+    
+    // Replace the button text to show success
+    const btn = form.querySelector('button');
+    btn.innerHTML = "Quote Sent Successfully!";
+    btn.style.backgroundColor = "#10b981"; // Changes to Green
+    form.reset(); // Clears the boxes
+    
+  } catch (error) {
+    alert("Submission failed. Please check your internet.");
+  }
+});
+
+
+/** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  content: ["./src/**/*.{html,js}"],
+  theme: {
+    extend: {
+      // You can define colors here to use in your shadows later
+      colors: {
+        'brand-blue': '#001b3d', // Your Blue-950
+      },
+    },
+  },
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      const newUtilities = {
+        '.text-shadow': {
+          textShadow: '0 2px 4px rgba(0,0,0,0.10)',
+        },
+        '.text-shadow-md': {
+          textShadow: '0 4px 8px rgba(0,0,0,0.12)',
+        },
+        '.text-shadow-lg': {
+          textShadow: '0 10px 20px rgba(0,0,0,0.25)',
+        },
+        '.text-shadow-none': {
+          textShadow: 'none',
+        },
+      }
+      addUtilities(newUtilities)
+    }),
+  ],
+}
