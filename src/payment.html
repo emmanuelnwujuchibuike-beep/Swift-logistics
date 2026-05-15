@@ -30,11 +30,13 @@
 </head>
 <body class="bg-gray-50 font-sans antialiased">
 
-    <header class="fixed z-50 top-0 left-0 right-0  bg-white">
+    <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
       <section class="reveal  flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
         <div class="flex items-center justify-between w-full md:w-fit">
-          <img src="./image/logo.png" alt="logo" class="w-15 h-15" >
+          <div class="flex items-center">
+          <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15 rounded-xl" >
 
+          </div>
           <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
             <i class="text-2xl fas fa-bars text-blue-950"></i>
           </label>
@@ -43,19 +45,21 @@
         <div class="gap-10 md:flex peer-checked">
         <input type="checkbox" class="peer" id="ham-menu" hidden>
         <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Home</a>
-          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">About</a>
-          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Services</a>
-          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2">Contact</a>
+          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-house-user text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Home</a>
+          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-images text-blue-950 hover:text-blue-800 text-2xl pr-1"></i>About</a>
+          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fab fa-whmcs text-3xl text-blue-950 hover:text-blue-800 pr-1"></i>Services</a>
+          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-address-card text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Contact</a>
         </nav>
 
         <div id="navButtons" class="flex-col items-start hidden w-full gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-          <button class="items-center px-4 py-2 text-white rounded-full  bg-blue-950 hover:bg-blue-600">
-            <a href="quote.html" class="text-white hover:text-blue-200">Get Started<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+          <button class="px-8 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                <a href="quote.html">Get a Free Quote</a> 
+            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
           </button>
-
-          <button class="items-center px-6 py-2 text-white rounded-full  bg-red-600 hover:bg-blue-600">
-            <a href="payment.html" class="text-white hover:text-blue-200">Check Package and Payment<i class="fas fa-arrow-right text-[10px] text-black bg-white rounded-full aspect-square p-[3px] ml-1 justify-center items-center"></i></a>
+                    
+          <button class="px-8 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+            <i class="fas fa-location-dot"></i>
+                <a href="payment.html">Track Shipment</a> 
           </button>
         </div>
         </div>

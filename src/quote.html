@@ -99,17 +99,17 @@
 
     <div class="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl">
       <form name="logistics-final" method="POST" data-netlify="true" action="/success">
-        <input type="hidden" name="form-name" value="logistics-final" />
+        <input type="hidden" name="form-name" value="logistics-final" placeholder=""/>
 
         <div class="grid md:grid-cols-2 gap-6">
           <div>
             <label class="block text-sm font-semibold mb-2 text-blue-800">Full Name</label>
-            <input type="text" name="name" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+            <input type="text" name="name" placeholder="John Doe" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
           </div>
 
           <div>
             <label class="block text-sm font-semibold mb-2 text-blue-800">Email Address</label>
-            <input type="email" name="email" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+            <input type="email" name="email" placeholder="@example.mail" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
           </div>
         </div>
 
@@ -120,6 +120,7 @@
                 <option value="Air Freight">Air Freight</option>
                 <option value="Sea Freight">Sea Freight</option>
                 <option value="Road Freight">Road Freight</option>
+                <option value="Road Freight">Rail Freight</option>
               </select>
             </div>
             <div>
@@ -131,11 +132,16 @@
           <div class="grid md:grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-semibold mb-2 text-blue-800">Pickup Location</label>
-              <input type="text" name="pickup_location" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+              <input type="text" name="pickup_location" placeholder="Address" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
             </div>
             <div>
               <label class="block text-sm font-semibold mb-2 text-blue-800">Delivery Destination</label>
-              <input type="text" name="delivery_destination" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+              <input type="text" name="delivery_destination" placeholder="Address" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-blue-800">Phone Number</label>
+              <input type="number" name="cellphonenumber" placeholder="123****" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
             </div>
           </div>
 
