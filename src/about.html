@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,10 +25,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
   </head>
-  <body style="height: 200vh" class="animate__animated animate__fadeIn animate__slow animate__repeat-1 animate__delay-1s pt-20 opacity-100 duration-300 overflow-x-hidden font-['roboto'] delay-100 max-w-350 reveal">
+  <body class=" animate__animated animate__fadeIn animate__slow animate__repeat-1 animate__delay-1s pt-20 opacity-100 duration-300 overflow-x-hidden font-['roboto'] delay-100">
 
      <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
-      <section class="reveal  flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
+      <section class=" flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
         <div class="flex items-center justify-between w-full md:w-fit">
           <div class="flex items-center">
           <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15 rounded-xl" >
@@ -39,22 +39,22 @@
           </label>
         </div>
 
-        <div class="gap-10 md:flex peer-checked">
+        <div class="gap-10 w-full md:w-fit md:flex peer-checked">
         <input type="checkbox" class="peer" id="ham-menu" hidden>
         <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-          <a href="index.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-house-user text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Home</a>
-          <a href="about.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-images text-blue-950 hover:text-blue-800 text-2xl pr-1"></i>About</a>
-          <a href="services.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fab fa-whmcs text-3xl text-blue-950 hover:text-blue-800 pr-1"></i>Services</a>
-          <a href="contact.html" class="font-semibold text-[18px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><i class="fas fa-address-card text-2xl text-blue-950 hover:text-blue-800 pr-1"></i>Contact</a>
+          <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
+          <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
+          <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
+          <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
         </nav>
 
-        <div id="navButtons" class="flex-col items-start hidden w-full gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-          <button class="px-8 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+        <div id="navButtons" class="w-full  flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
+          <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
                 <a href="quote.html">Get a Free Quote</a> 
             <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
           </button>
                     
-          <button class="px-8 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+          <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
             <i class="fas fa-location-dot"></i>
                 <a href="payment.html">Track Shipment</a> 
           </button>
@@ -311,10 +311,10 @@
           <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
           <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
 
-          <div class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
-            <input type="email" placeholder="Type your email" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-7">
-            <button type="submit" class="px-4 py-3 mx-1 text-white transition-all duration-1000 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-105">Get a quote</button>
-          </div>
+          <form name="aboutquote" data-netlify="true" value="logistics-final" method="post" action="/success.html" class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
+            <input type="text" name="email-text" placeholder="Type your email" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-7">
+            <button type="submit" class="px-4 py-3 mx-1 text-white transition-all duration-700 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-95">Get a quote</button>
+          </form>
         </div>
 
         
