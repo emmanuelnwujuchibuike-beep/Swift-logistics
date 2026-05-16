@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth overflow-x-hidden max-w-100%">
+<html lang="en" class="scroll-smooth overflow-x-hidden relative">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
   </head>
-  <body class="h-200vh max-w-[100%] pt-20 opacity-100 duration-300 overflow-x-hidden font-['roboto'] delay-100">
+  <body class="h-200vh max-w-[100%] pt-20 overflow-x-hidden font-['roboto']">
     <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
       <section class=" flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
         <div class="flex items-center justify-between w-full md:w-fit">
@@ -64,9 +64,9 @@
 
     
     
-    <section id="Top" class="font-sans bg-blue-100/30 w-full gap-10 px-2 max-w-350 md:hidden">
-      <div class="absolute top-40 -right-20 w-96 h-96 bg-blue-200/50 rounded-full blur-3xl -z-10"></div>
-      <div class="absolute bottom-20 -left-20 w-72 h-72 bg-blue-100/50 rounded-full blur-3xl -z-10"></div>
+    <section id="Top" class="overflow-x-hidden font-sans bg-blue-100/30 pb-8 w-full gap-10 px-2 max-w-350 md:hidden">
+      <!-- <div class="absolute top-40 -right-20 w-96 h-96 bg-blue-200/50 rounded-full blur-3xl -z-10"></div>
+      <div class="absolute bottom-20 -left-20 w-72 h-72 bg-blue-100/50 rounded-full blur-3xl -z-10"></div> -->
 
       <div class=" ">
       <h1 class="w-full [text-shadow:1px_1px_3px] px-4 py-3 text-5xl leading-tight tracking-wide text-blue-950 max-w-350 text-start animate__animated animate__rubberBand animate__slow animate__repeat-1 animate__delay-2s font-extrabold">Delivering More Than<br><span class="text-blue-600 drop-shadow-2xl">Just Freight</span></h1>
@@ -126,7 +126,7 @@
           </button>
       </div>
 
-    <div class="z-0 overflow-hidden ">
+    <div class="z-0 overflow-x-hidden ">
       <div class=" absolute flex-row items-center h-auto gap-3 shadow md:flex right-20 top-120 md:bg-white md:px-2 md:py-1 md:rounded-2xl">
           <div class=" relative flex-col items-start gap-1 px-1 py-0  md:flex">
             <h1>We <span class="text-red-500">Cover</span></h1>
@@ -146,14 +146,14 @@
     </section>
     
     <section class="relative z-50 overflow-x-hidden">
-        <button class="fixed bottom-8 right-8 ">
-          <a href="https://wa.me/18562803438" target="_blank" class="w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-2xl hover:scale-110 transition-transform z-50">
+        <button class="fixed bottom-8 right-8 z-50">
+          <a href="https://wa.me/18562803438" target="_blank" class="w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-2xl hover:scale-110 transition-transform">
           <i class="fab fa-whatsapp"></i></a> </button>
       </div>
     </section>
 
     <!-- mobile home -->
-    <section class="premiun-reveal relative md:hidden  bg-blue-950/ bg-blend-multiply min-h-[90vh] bg-[url('./image/mobileimage.jpg')] bg-cover w-full">
+    <section class="premiun-reveal relative md:hidden bg-blue-950/ bg-blend-multiply min-h-[90vh] bg-[url('./image/mobileimage.jpg')] bg-cover w-full">
       
       <div class="relative premiun-reveal">
         <div class="absolute z-10 px-4 py-3 text-center bg-white rounded-3xl left-18 top-20">
@@ -504,7 +504,7 @@
 
     <section class="premium-reveal relative flex-col items-center justify-center w-full mx-auto mt-20 text-center">
       <div class="relative flex items-center justify-center ">
-        <img src="./image/yellowtruck.webp" alt="" class="items-center object-cover  max-w-500">
+        <img src="./image/yellowtruck.webp" alt="" class="items-center object-cover  max-w-full h-auto">
       </div>
     </section>
 
@@ -613,7 +613,17 @@
 
 
 
+    <div>
+    <body class="...">
+        <div class="w-full max-w-[100vw] overflow-x-hidden relative">
+          
+          <header>...</header>
+          <main>...</main>
+          <footer>...</footer>
 
+        </div>
+      </body>
+    </div>
 
      
    
@@ -640,6 +650,26 @@
           }
         });
     </script>
+
+    <script>
+      // Example Frontend Script
+async function handleCreateShipment() {
+    const response = await fetch('http://localhost:5000/api/shipments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: "Customer Name",
+            email: "customer@gmail.com"
+        })
+    });
+    
+    const data = await response.json();
+    if(data.success) {
+        alert("Shipment Created! Check your email for ID: " + data.id);
+    }
+}
+    </script>
+    
     <script src="script.js"></script>
  
 </body>

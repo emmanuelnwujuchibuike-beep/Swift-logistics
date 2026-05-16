@@ -176,3 +176,14 @@ module.exports = {
     }),
   ],
 }
+
+// Put this in your frontend script.js
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+
+if (id) {
+    console.log("User is tracking ID:", id);
+    // Use this ID to show the "Progress Bar" we built earlier!
+}
+
+

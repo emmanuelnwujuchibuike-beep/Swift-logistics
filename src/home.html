@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <title>swift freight</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="input.css">
+    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+
+</head>
+<body>
+    
+        <form id="shipmentForm" onsubmit="return false;" class="bg-blue-950/50 backdrop-blur-md p-6 rounded-lg">
+            <input type="text" id="custName" placeholder="Enter Customer Name" required>
+            <input type="email" id="custEmail" placeholder="Enter Customer Email" required>
+            <button id="generateBtn">Generate & Send</button>
+        </form>
+
+
+
+        const mailOptions = {
+    from: '"SwiftBolt Logistics" <swiftfreightlogix@gmail.com>',
+    to: customerEmail,
+    subject: `Shipment Confirmation: ${trackingID} for ${customerName}`,
+    // Plain text fallback for filters
+    text: `Hello ${customerName}, your shipment ${trackingID} is ready. Track it here: https://swiftboltlogistics.netlify.app/track.html?id=${trackingID}`,
+    html: `
+    <div style="background-color: #020617; color: #ffffff; padding: 40px; font-family: sans-serif; line-height: 1.6;">
+        <div style="max-width: 600px; margin: auto; border: 1px solid #1e293b; padding: 20px; border-radius: 12px;">
+            <h1 style="color: #f97316; margin-top: 0;">SwiftBolt Logistics</h1>
+            <p>Dear <strong>${customerName}</strong>,</p>
+            <p>Your shipment is now being processed and is ready for transit.</p>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; margin: 25px 0;">
+                <p style="margin: 0; color: #94a3b8; font-size: 14px;">Tracking Number</p>
+                <h2 style="margin: 5px 0; color: #f97316; letter-spacing: 2px;">${trackingID}</h2>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="https://swiftboltlogistics.netlify.app/track.html?id=${trackingID}" 
+                   style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                   Track Your Shipment
+                </a>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #1e293b; margin: 30px 0;">
+            
+            <p style="font-size: 12px; color: #64748b; text-align: center;">
+                SwiftBolt Logistics | Port Harcourt, Rivers State, Nigeria<br>
+                If you didn't expect this email, please ignore it.
+            </p>
+        </div>
+    </div>
+    `
+};
+
+
+
+
+
+    <script>
+            const response = await fetch('http://localhost:5000/api/create-shipment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: nameInput, email: emailInput })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            statusText.textContent = `✅ Generated: ${result.trackingID}`;
+            // This is where you can stop the "Processing" spinner
+        }
+    </script>
+
+    <script src="script.js"></script>
+    <script src="server.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+const mailOptions = {
+    from: '"SwiftBolt Logistics" <swiftfreightlogix@gmail.com>',
+    to: customerEmail,
+    subject: `Shipment Update - ${trackingID}`,
+    html: `
+        <div style="text-align: center; background-color: #020617; padding: 20px;">
+            <img src="cid:swiftlogo" style="width: 120px;"/>
+            <h1 style="color: #f97316;">SwiftBolt Logistics</h1>
+        </div>
+        `,
+    // ADD THE ATTACHMENT SECTION HERE
+    attachments: [{
+        filename: 'logo.png',
+        path: './assets/logo.png', // Ensure this path correctly points to the file on your PC
+        cid: 'swiftlogo' // This MUST match the src="cid:swiftlogo" exactly
+    }]
+};
