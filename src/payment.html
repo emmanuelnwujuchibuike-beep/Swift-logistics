@@ -65,196 +65,45 @@
         </div>
       </section>
     </header>
-
-    <section class="mt-20">
-        <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-6xl mx-auto">
-                
-                <!-- Header -->
-                <div class="flex items-center space-x-2 mb-10">
-                    <div class="bg-blue-600 p-2 rounded">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <span class="text-xl font-bold text-blue-900 tracking-tight uppercase">Swift Freight Logix</span>
-                </div>
-
-                <!-- STEP 1: TRACKING GATEKEEPER -->
-                <div id="tracking-section" class="max-w-2xl mx-auto text-center py-20 fade-in">
-                    <h1 class="text-4xl font-black text-slate-900 mb-4">Track Your Shipment</h1>
-                    <p class="text-slate-500 mb-8">Enter your Tracking ID to access payment and logistics details.</p>
-                    <div class="relative max-w-md mx-auto">
-                        <input type="text" id="track-input" placeholder="Enter code" 
-                            class="w-full px-8 py-5 rounded-full border-2 border-slate-200 focus:border-blue-600 outline-none shadow-sm text-xl font-bold uppercase tracking-widest transition-all">
-                        <button onclick="checkTracking()" id="track-btn" class="absolute right-2 top-2 bottom-2 bg-blue-600 text-white px-8 rounded-full font-bold hover:bg-blue-700 transition-all active:scale-95">
-                            Find
-                        </button>
-                    </div>
-                    <p id="error-msg" class="text-red-500 text-sm mt-4 hidden font-medium italic">Tracking ID not found. Please verify and try again.</p>
-                </div>
-
-                <!-- STEP 2: MAIN INTERFACE -->
-                <div id="payment-section" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8 fade-in">
-                    
-                    <!-- Sidebar: Shipment Info -->
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                        <h2 class="text-xs font-bold text-slate-400 border-b pb-4 mb-6 uppercase tracking-widest">Live Shipment Status</h2>
-                        <div class="space-y-4 text-sm" id="shipment-data">
-                            <!-- Updated by JS based on status.json -->
-                        </div>
-                    </div>
-
-                    <!-- Main Payment Area -->
-                    <div class="lg:col-span-2 relative">
-                        <div id="main-pay-card" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                            <h2 class="text-lg font-bold text-slate-800 mb-6 uppercase tracking-wide">Secure Checkout</h2>
-                            
-                            <!-- Tabs -->
-                            <div class="grid grid-cols-3 gap-3 mb-8">
-                                <button onclick="showMethod('card')" id="tab-card" class="method-btn p-4 border-2 border-blue-600 bg-blue-50 rounded-xl text-xs font-bold text-blue-600 transition-all">Card</button>
-                                <button onclick="showMethod('paypal')" id="tab-paypal" class="method-btn p-4 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-all">Bitcoin</button>
-                                <button onclick="showMethod('bank')" id="tab-bank" class="method-btn p-4 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 transition-all">Bank Transfer</button>
-                            </div>
-
-                            <!-- Form Content -->
-                            <div id="form-card" class="payment-view space-y-4">
-                                <input type="text" required placeholder="Cardholder Name" class="w-full border-slate-200 border p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
-                                <input type="text" required pattern="\d{16}" placeholder="16-Digit Card Number" class="w-full border-slate-200 border p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-
-                            <div id="form-paypal" class="payment-view hidden py-10 text-center bg-yellow-50 flex flex-col items-center rounded-xl border border-yellow-100">
-                                <img src="./image/wallet.jpeg" alt="bitcoin:178MRAPrprUd6kq3HqabUz8Bad4DUfN3JV" class="w-60">
-                                <p class="text-sm text-yellow-800 font-medium">bitcoin:178MRAPrprUd6kq3HqabUz8Bad4DUfN3JV</p>
-                            </div>
-
-                            <div id="form-bank" class="payment-view hidden bg-blue-50 p-6 rounded-xl border border-blue-100 text-sm leading-relaxed">
-                                <strong class="text-blue-900 block mb-2 uppercase text-xs">Wire Transfer Details</strong>
-                                Bank: Chase Bank<br>Acc: 0982231044<br>Name: Swift Freight Logix.
-                            </div>
-
-                            <button id="final-pay-btn" onclick="startProcessing()" class="mt-10 w-full bg-blue-600 text-white font-bold py-5 rounded-xl shadow-lg hover:bg-blue-700 active:scale-95 transition-all">
-                                Complete Transaction $1,475.00
-                            </button>
-                        </div>
-
-                        <!-- SUCCESS MESSAGE (The Goal) -->
-                        <div id="success-msg" class="hidden bg-white p-16 rounded-2xl shadow-xl text-center border border-green-100 fade-in">
-                            <div class="h-24 w-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
-                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
-                            </div>
-                            <h2 class="text-3xl font-black text-slate-900 mb-3">Payment Confirmed!</h2>
-                            <p class="text-slate-500 mb-10 max-w-sm mx-auto font-medium">Your shipment GLL2948102 has been cleared for transit and is currently in processing.</p>
-                            <p class="text-slate-500 mb-10 max-w-sm mx-auto font-medium">Estimated Arrival Time: <span class="text-green-500">30hrs</span>.</p>
-                            <p class="text-slate-500 mb-10 max-w-sm mx-auto font-medium">Estimated Arrival Date:<span class="text-yellow-600">Tuesday Evening</span>.</p>
-                            <button onclick="location.reload()" class="bg-slate-900 text-white px-10 py-4 rounded-xl font-bold shadow-md"><a href="index.html">Dashboard</a></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-     
-
-
-
-
-
-
-
-
-
-
     
 
+ 
 
-
-
-
-
-
-    <script>
-                // Put this in your frontend script.js
-                const params = new URLSearchParams(window.location.search);
-                const id = params.get('id');
-
-                if (id) {
-                    console.log("User is tracking ID:", id);
-                    // Use this ID to show the "Progress Bar" we built earlier!
-}
-    </script>
-
-
-
-    <script>
-        const TRACK_ID = "SFL-192358675";
-
-        // 1. GATEKEEPER LOGIC
-        function checkTracking() {
-            const input = document.getElementById('track-input').value.toUpperCase();
-            const btn = document.getElementById('track-btn');
-            const error = document.getElementById('error-msg');
-
-            btn.innerHTML = "...";
-            error.classList.add('hidden');
-
-            setTimeout(() => {
-                if(input === TRACK_ID) {
-                    document.getElementById('tracking-section').classList.add('hidden');
-                    document.getElementById('payment-section').classList.remove('hidden');
-                    syncStatus(); // Start checking JSON immediately
-                } else {
-                    btn.innerHTML = "Find";
-                    error.classList.remove('hidden');
-                }
-            }, 1000);
-        }
-
-        // 2. REMOTE STATUS LOGIC (Checks status.json)
-        async function syncStatus() {
-            try {
-                const response = await fetch('./status.json?t=' + Date.now());
-                const data = await response.json();
-
-                // Check if status is success
-                if (data[TRACK_ID] === "success") {
-                    document.getElementById('main-pay-card').classList.add('hidden');
-                    document.getElementById('success-msg').classList.remove('hidden');
-                }
+        <div id="app-container" class="max-w-xl mt-10 mx-auto py-12 px-4">
+            <div id="search-gate" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-black text-slate-900 mb-2 uppercase">Track Parcel</h2>
+                <p class="text-slate-400 text-xs mb-8 font-medium">Enter your ID to view shipment details.</p>
                 
-                // Update Sidebar
-                const isDone = data[TRACK_ID] === "success";
-                document.getElementById('shipment-data').innerHTML = `
-                    <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Status:</span> <span class="${isDone ? 'text-green-600' : 'text-orange-500'} font-black text-xs uppercase">${isDone ? 'Confirmed' : 'Pending Payment'}</span></div>
-                    <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Origin:</span> <span class="font-semibold text-slate-700">Houston, Tx, USA</span></div>
-                    <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Destination:</span> <span class="font-semibold text-slate-700">London, UK</span></div>
-                    <div class="flex justify-between border-b border-slate-50 pb-3"><span class="text-slate-400 uppercase text-[10px] font-bold">Estimated Arrival Time:</span> <span class="font-semibold text-slate-700">30HRS</span></div>
-                    <div class="flex justify-between pt-2"><span class="text-slate-400 uppercase text-[10px] font-bold">Total Shipping and clearance fee:</span> <span class="text-blue-900 font-black text-lg">$1,475.00</span></div>
-                    
-                `;
-            } catch (err) { console.log("Awaiting sync..."); }
-        }
+                <input type="text" id="track-input" placeholder="ENTER CODE" 
+                    class="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl mb-4 outline-none focus:ring-2 focus:ring-blue-600 font-mono uppercase transition-all">
+                
+                <button onclick="handleTracking()" class="w-full bg-slate-900 text-white font-bold py-5 rounded-2xl hover:bg-blue-600 transition-all active:scale-95">
+                    Find Shipment
+                </button>
+                
+                <p id="error-msg" class="hidden text-red-500 text-[10px] mt-4 text-center font-bold uppercase tracking-widest"></p>
+            </div>
 
-        setInterval(syncStatus, 5000);
+            <div id="dashboard-target"></div>
+        </div>
 
-        // 3. UI LOGIC (Tabs and Buttons)
-        function showMethod(method) {
-            document.querySelectorAll('.payment-view').forEach(v => v.classList.add('hidden'));
-            document.querySelectorAll('.method-btn').forEach(b => {
-                b.classList.remove('border-blue-600', 'bg-blue-50', 'text-blue-600', 'border-2');
-                b.classList.add('border', 'border-slate-200', 'text-slate-500');
-            });
-            document.getElementById('form-' + method).classList.remove('hidden');
-            const active = document.getElementById('tab-' + method);
-            active.classList.add('border-blue-600', 'bg-blue-50', 'text-blue-600', 'border-2');
-        }
 
-        function startProcessing() {
-            const payBtn = document.getElementById('final-pay-btn');
-            payBtn.innerHTML = "Authenticating Transaction...";
-            payBtn.disabled = true;
-            alert("Transaction processing. Please do not refresh the page.");
-        }
-    </script>
 
+
+
+
+
+
+
+
+
+
+
+        <script>
+           
+        </script>
+
+
+    <script src="script.js"></script>
 </body>
 </html>

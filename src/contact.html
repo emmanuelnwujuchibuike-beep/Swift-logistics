@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About swift freight</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="input.css">
+    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+  </head>
+  <body class=" animate__animated animate__fadeIn animate__slow animate__repeat-1 animate__delay-1s pt-20 opacity-100 duration-300 overflow-x-hidden font-['roboto'] delay-100">
+
+     <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
+      <section class=" flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
+        <div class="flex items-center justify-between w-full md:w-fit">
+          <div class="flex items-center">
+          <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15 rounded-xl" >
+
+          </div>
+          <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
+            <i class="text-2xl fas fa-bars text-blue-950"></i>
+          </label>
+        </div>
+
+        <div class="gap-10 w-full md:w-fit md:flex peer-checked">
+        <input type="checkbox" class="peer" id="ham-menu" hidden>
+        <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
+          <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
+          <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
+          <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
+          <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
+        </nav>
+
+        <div id="navButtons" class="w-full  flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
+          <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                <a href="quote.html">Get a Free Quote</a> 
+            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+          </button>
+                    
+          <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+            <i class="fas fa-location-dot"></i>
+                <a href="payment.html">Track Shipment</a> 
+          </button>
+        </div>
+        </div>
+      </section>
+    </header>
+
+
+    <section class="py-20 bg-blue-900/50 bg-blend-multiply bg-[url('./image/bt8.jpg')] object-cover bg-cover h-100 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+        </div>
+        <div class="relative z-10 max-w-3xl mx-auto px-6">
+            <h1 class="text-5xl font-black text-white mb-4 tracking-tight">Global Support Center</h1>
+            <p class="text-slate-400 text-lg">Our logistics experts are available 24/7 to assist with your shipments and technical inquiries.</p>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-6 mt-10 mb-20 relative z-20">
+        <div class="grid lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-slate-300 p-8 rounded-[2rem] shadow-sm border border-slate-100">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="relative">
+                            <div class="w-3 h-3 bg-green-500 rounded-full absolute -right-0.5 -top-0.5 animate-ping"></div>
+                            <div class="w-3 h-3 bg-green-500 rounded-full absolute -right-0.5 -top-0.5"></div>
+                            <img src="https://ui-avatars.com/api/?name=Support+Team&background=f1f5f9&color=64748b" class="w-12 h-12 rounded-full border-2 border-white shadow-sm" alt="Support">
+                        </div>
+                        <div>
+                            <p class="text-slate-900 font-bold">Agents Online</p>
+                            <p class="text-slate-600 text-xs">Typical response: <span class="text-blue-600">5 mins</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+                                <i class="fas fa-envelope text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Email Us</p>
+                                <p class="text-slate-900 font-bold text-sm">support@swiftfreight.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+                                <i class="fas fa-phone text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Global Line</p>
+                                <p class="text-slate-900 font-bold text-sm">+1 (800) SWIFT-LOG</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-950 p-8 rounded-[2rem] text-white">
+                    <h3 class="text-blue-500 font-bold uppercase text-[10px] tracking-[0.3em] mb-6">Main Headquarters</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        124 Logistics Way, <br>
+                        Terminal 4, Heathrow,<br>
+                        London, United Kingdom
+                    </p>
+                    <div class="mt-8 pt-8 border-t border-slate-800">
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-all"><i class="fab fa-linkedin-in text-xs"></i></a>
+                            <a href="#" class="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-all"><i class="fab fa-twitter text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-white p-10 rounded-[2.5rem] shadow-xl border border-slate-100 bg-blend-multiply bg-[url('./image/contact.jpg')] object-cover bg-cove backdrop-blur-md bg-cover">
+                <form name="contact-form" method="POST" data-netlify="true" action="/success" class="space-y-6 ">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                            <input type="text" name="clientname" placeholder="John Doe" class="w-full p-4 bg-purple-100 text-white border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                            <input type="email" placeholder="john@example.com" name="client-email" class="w-full p-4  bg-purple-100 text-white border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tracking Number (Optional)</label>
+                        <input type="text" placeholder="SFL-XXXXXXXX" name="client-tracking-number" class="w-full p-4  bg-purple-100 text-white border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all uppercase font-mono">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Message</label>
+                        <textarea rows="5" name="client-message" placeholder="How can our logistics team help you?" class="w-full p-4  bg-purple-100 text-white border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-red-800 text-white font-bold py-5 rounded-2xl shadow-xl shadow-slate-200 hover:bg-red-900 hover:scale-95 transition-all flex items-center justify-center space-x-3">
+                        <span>Send Message</span>
+                        <i class="fas fa-paper-plane text-xs opacity-50"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+
+    <section class="bg-blue-950 py-17">
+      <div>
+      <div class="items-center justify-between px-6 lg:flex md:px-16">
+        <div class="py-6 max-w-100">
+          <h1 class="pb-2 font-serif text-6xl text-white animate__animated animate__heartBeat animate__slow animate__repeat-1 animate__delay-1s">SWIFT <br>FREIGHT</h1>
+          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
+          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
+
+          <form name="aboutquote" data-netlify="true" value="logistics-final" method="post" action="/success.html" class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
+            <input type="text" name="email-text" placeholder="Type your email" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-7">
+            <button type="submit" class="px-4 py-3 mx-1 text-white transition-all duration-700 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-95">Get a quote</button>
+          </form>
+        </div>
+
+        
+        
+        
+        <div class="justify-between md:flex-col ">
+          <div>
+            <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
+          </div>
+          <div class="grid items-center grid-cols-2 md:flex gap-18">
+            
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
+              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
+              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
+              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
+              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
+              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
+              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
+            </div>
+          </div>
+        </div>
+        </div>
+      
+          <div class="items-center mt-10 text-center">
+            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
+              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
+            </button>
+          </div>
+      </section>
+
+
+      <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
+        <div class="items-center self-center justify-between py-2 text-center md:flex">
+          <div class="flex items-center justify-center gap-8 text-center  md:gap-14">
+            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
+            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
+            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
+          </div>
+
+          <div class="self-center py-2">
+            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
+          </div>
+        </div>
+      </footer>
+
+
+
+
+
+
+
+
+
+
+      <script src="script.js"></script>
+
+</body>
+</html>

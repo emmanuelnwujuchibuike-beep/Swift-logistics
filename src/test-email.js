@@ -1,11 +1,19 @@
-const { sendTrackingEmail } = require('./mailer');
+const { sendTrackingEmail } = require('./mailer.js');
 
-console.log("Starting email test...");
 
-sendTrackingEmail("anthonialopez119@gmail.com", "John smith")
-    .then(id => {
-        console.log("✅ Success! Email sent with ID:", id);
+const customerEmail = "anthonialopez119@gmail.com"; 
+const customerName = "Anthonia";
+
+console.log("--- Starting Swift Freight Email Test ---");
+
+// 2. Call the function and handle the result
+sendTrackingEmail(customerEmail, customerName)
+    .then((result) => {
+    
+        console.log("✅ Success! email sent to:", customerEmail);
+        console.log("📦 Tracking ID Generated:", result);
     })
-    .catch(err => {
-        console.log("❌ Test failed. See error above.");
+    .catch((err) => {
+        console.error("❌ Test failed. See error details below:");
+        console.error(err);
     });
