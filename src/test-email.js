@@ -1,8 +1,8 @@
 const { sendTrackingEmail } = require('./mailer.js');
 
 
-const customerEmail = "anthonialopez119@gmail.com"; 
-const customerName = "Anthonia";
+const customerEmail = "destinystarboy33@gmail.com"; 
+const customerName = "Destiny";
 
 console.log("--- Starting Swift Freight Email Test ---");
 

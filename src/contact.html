@@ -25,42 +25,68 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
   </head>
-  <body class=" animate__animated animate__fadeIn animate__slow animate__repeat-1 animate__delay-1s pt-20 opacity-100 duration-300 overflow-x-hidden font-['roboto'] delay-100">
+  <body class=" pt-20 opacity-100 duration-300 overflow-x-hidden font-['roboto'] delay-100">
 
      <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
-      <section class=" flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
-        <div class="flex items-center justify-between w-full md:w-fit">
-          <div class="flex items-center">
-          <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15 rounded-xl" >
-
+        <section class="">
+        <nav class=" flex w-full items-center justify-between py-2 px-6 bg-transparent">
+          <div class="flex justify-between w-full">
+              <div class="flex items-center">
+                <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15" >
+              </div>
+              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden">
+                  <div class="relative h-5 w-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                  </div>
+              </button>
           </div>
-          <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
-            <i class="text-2xl fas fa-bars text-blue-950"></i>
-          </label>
-        </div>
+          
 
-        <div class="gap-10 w-full md:w-fit md:flex peer-checked">
-        <input type="checkbox" class="peer" id="ham-menu" hidden>
-        <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-          <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
-          <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
-          <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
-          <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
+          <div class="md:flex md:justify-between md:gap-8 md:items-center">
+            <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
+              <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
+              <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
+              <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
+              <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
+            </nav>
+
+            <div id="navButtons" class="w-full text-nowrap flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
+              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                    <a href="quote.html">Get a Free Quote</a> 
+                <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+              </button>
+                        
+              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+                <i class="fas fa-location-dot"></i>
+                    <a href="payment.html">Track Shipment</a> 
+              </button>
+            </div>
+          </div>
         </nav>
 
-        <div id="navButtons" class="w-full  flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-          <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
-                <a href="quote.html">Get a Free Quote</a> 
-            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-          </button>
-                    
-          <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
-            <i class="fas fa-location-dot"></i>
-                <a href="payment.html">Track Shipment</a> 
-          </button>
+        <div id="overlay" class="fixed inset-0 z-[80] hidden bg-black/20 backdrop-blur-[5px] transition-opacity duration-500 opacity-0"></div>
+
+        <div id="side-menu" class="fixed top-0 right-0 z-[90] h-screen w-[65%] translate-x-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
+            <div class="flex flex-col h-full pt-32 px-10">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-10">Menu</h2>
+                <ul class="space-y-6">
+                    <li><a href="index.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Home</a></li>
+                    <li><a href="payment.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Track Shipment</a></li>
+                    <li><a href="services.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Our Services</a></li>
+                    <li><a href="contact.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Contact</a></li>
+                    <li><a href="about.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">about Us</a></li>
+                </ul>
+                
+                <div class="mt-auto mb-12">
+                    <button class="w-full rounded-xl bg-blue-950 py-4 text-white font-bold shadow-xl hover:bg-blue-900 transition-all">
+                       <a href="quote.html">Get a Quote</a> 
+                    </button>
+                </div>
+            </div>
         </div>
-        </div>
+                
       </section>
+
     </header>
 
 
@@ -69,8 +95,8 @@
             <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
         </div>
         <div class="relative z-10 max-w-3xl mx-auto px-6">
-            <h1 class="text-5xl font-black text-white mb-4 tracking-tight">Global Support Center</h1>
-            <p class="text-blue-950 text-lg">Our logistics experts are available 24/7 to assist with your shipments and technical inquiries.</p>
+            <h1 class="text-5xl font-black text-white mb-4 tracking-tight font-serif shado [text-shadow:0_2px_2px] animate-pulse"> Support Center</h1>
+            <p class="text-amber-200 text-lg">Our logistics experts are available 24/7 to assist with your shipments and technical inquiries.</p>
         </div>
     </section>
 
@@ -107,7 +133,7 @@
                             </div>
                             <div>
                                 <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Global Line</p>
-                                <p class="text-slate-900 font-bold text-sm">+1 (800) SWIFT-LOG</p>
+                                <p class="text-slate-900 font-bold text-sm">+1 (856) 280-3438</p>
                             </div>
                         </div>
                     </div>
@@ -116,9 +142,7 @@
                 <div class="bg-blue-950 p-8 rounded-[2rem] text-white">
                     <h3 class="text-blue-500 font-bold uppercase text-[10px] tracking-[0.3em] mb-6">Main Headquarters</h3>
                     <p class="text-sm text-slate-300 leading-relaxed">
-                        124 Logistics Way, <br>
-                        Terminal 4, Heathrow,<br>
-                        London, United Kingdom
+                        United States Head Office:<br> 1201 Peachtree Street NE,<br> Atlanta, GA 30361
                     </p>
                     <div class="mt-8 pt-8 border-t border-slate-800">
                         <div class="flex space-x-4">
@@ -129,30 +153,30 @@
                 </div>
             </div>
 
-            <div class="lg:col-span-2 bg-white p-10 rounded-[2.5rem] shadow-xl border border-slate-100 bg-blend-multiply bg-[url('./image/contact.jpg')] object-cover bg-cove backdrop-blur-md bg-cover">
+            <div class="lg:col-span-2 bg-black/60 p-10 rounded-[2.5rem] shadow-xl border border-slate-100 bg-blend-multiply bg-[url('./image/contactbg.jpg')] object-cover bg-cove backdrop-blur-3xl bg-cover">
                 <form name="contact-form" method="POST" data-netlify="true" action="/success" class="space-y-6 ">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
-                            <input type="text" name="clientname" placeholder="John Doe" class="w-full p-4 bg-purple-100 text-blue-950 border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            <input type="text" name="clientname" placeholder="John Doe" class="w-full p-4 bg-blue-50 text-blue-950 border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
-                            <input type="email" placeholder="john@example.com" name="client-email" class="w-full p-4  bg-purple-100 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            <input type="email" placeholder="john@example.com" name="client-email" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                         </div>
                     </div>
                     
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tracking Number (Optional)</label>
-                        <input type="text" placeholder="SFL-XXXXXXXX" name="client-tracking-number" class="w-full p-4  bg-purple-100 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all uppercase font-mono">
+                        <input type="text" placeholder="SFL-XXXXXXXX" name="client-tracking-number" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all uppercase font-mono">
                     </div>
 
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Message</label>
-                        <textarea rows="5" name="client-message" placeholder="How can our logistics team help you?" class="w-full p-4  bg-purple-100 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"></textarea>
+                        <textarea rows="5" name="client-message" placeholder="How can our logistics team help you?" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-red-800 text-white font-bold py-5 rounded-2xl shadow-xl shadow-slate-200 hover:bg-red-900 hover:scale-95 transition-all flex items-center justify-center space-x-3">
+                    <button type="submit" class="w-full bg-blue-900 text-white font-bold py-5 rounded-2xl shadow-xl shadow-slate-200 hover:bg-blue-950 hover:scale-95 transition-all flex items-center justify-center space-x-3">
                         <span>Send Message</span>
                         <i class="fas fa-paper-plane text-xs opacity-50"></i>
                     </button>
@@ -235,6 +259,18 @@
       </footer>
 
 
+      
+      <section>
+        <div id="loader-wrapper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white/80 backdrop-blur-md transition-opacity duration-500">
+          <div class="relative flex items-center justify-center">
+            <!-- The Icon: Using 'animate-pulse' or 'animate-bounce' -->
+            <img src="./image/loadingicon-removebg-preview.png" alt="Loading" class="w-16 h-16 z-10 animate-pulse">
+            
+            <!-- Outer Ring: Custom spinning animation -->
+            <div class="absolute w-18 h-18 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+        </div>
+      </section>
 
 
 
@@ -242,6 +278,61 @@
 
 
 
+
+      <script>
+          window.addEventListener("load", () => {
+          const loader = document.getElementById("loader-wrapper");
+          
+          // Fade out
+          loader.classList.add("opacity-0");
+          
+
+          setTimeout(() => {
+            loader.style.display = "none";
+          }, 500); 
+        });
+      </script>
+
+
+
+      <script>
+        
+          const menuBtn = document.getElementById('menu-btn');
+          const sideMenu = document.getElementById('side-menu');
+          const overlay = document.getElementById('overlay');
+          const l1 = document.getElementById('line-1');
+          const l2 = document.getElementById('line-2');
+          const l3 = document.getElementById('line-3');
+
+          menuBtn.addEventListener('click', () => {
+              // Toggle the side menu
+              const isOpen = sideMenu.classList.toggle('translate-x-full');
+              
+              if (!isOpen) {
+                  // OPEN STATE
+                  overlay.classList.remove('hidden');
+                  setTimeout(() => overlay.classList.add('opacity-100'), 10);
+                  
+                  // Morph to X
+                  l1.classList.replace('-translate-y-2', 'rotate-45');
+                  l2.classList.add('opacity-0', '-translate-x-2');
+                  l3.classList.replace('translate-y-2', '-rotate-45');
+              } else {
+                  // CLOSE STATE
+                  overlay.classList.remove('opacity-100');
+                  setTimeout(() => overlay.classList.add('hidden'), 500);
+                  
+                  // Morph back to Hamburger
+                  l1.classList.replace('rotate-45', '-translate-y-2');
+                  l2.classList.remove('opacity-0', '-translate-x-2');
+                  l3.classList.replace('-rotate-45', 'translate-y-2');
+              }
+          });
+
+          // Close menu if clicking the blurred area
+          overlay.addEventListener('click', () => menuBtn.click());
+    
+      </script>
 
       <script src="script.js"></script>
 

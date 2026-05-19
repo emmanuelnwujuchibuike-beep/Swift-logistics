@@ -23,62 +23,160 @@
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
     <style>
-        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    @keyframes premium-slide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); } 
+    }
+
+    #premium-ticker {
+      display: flex;
+      animation: premium-slide 20s linear infinite;
+      width: max-content;
+    }
+
+    #premium-ticker:hover {
+      animation-play-state: paused;
+      cursor: default;
+    }
+
+    #premium-ticker span, #premium-ticker div {
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: 0.15em;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 font-sans overflow-x-hidden antialiased">
 
-    <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
-      <section class=" flex flex-col items-start justify-between px-4 py-2 mx-auto  md:flex-row md:items-center max-w-350 md:px-16">
-        <div class="flex items-center justify-between w-full md:w-fit">
-          <div class="flex items-center">
-          <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15 rounded-xl" >
-
+   <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
+      <section class="">
+        <nav class=" flex w-full items-center justify-between py-2 px-6 bg-transparent">
+          <div class="flex justify-between w-full">
+              <div class="flex items-center">
+                <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15" >
+              </div>
+              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden">
+                  <div class="relative h-5 w-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                  </div>
+              </button>
           </div>
-          <label for="ham-menu" id="menu" class="flex items-center px-4 md:hidden">
-            <i class="text-2xl fas fa-bars text-blue-950"></i>
-          </label>
-        </div>
+          
 
-        <div class="gap-10 w-full md:w-fit md:flex peer-checked">
-        <input type="checkbox" class="peer" id="ham-menu" hidden>
-        <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-          <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
-          <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
-          <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
-          <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
+          <div class="md:flex md:justify-between md:gap-8 md:items-center">
+            <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
+              <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
+              <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
+              <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
+              <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
+            </nav>
+
+            <div id="navButtons" class="w-full text-nowrap flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
+              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
+                    <a href="quote.html">Get a Free Quote</a> 
+                <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+              </button>
+                        
+              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
+                <i class="fas fa-location-dot"></i>
+                    <a href="payment.html">Track Shipment</a> 
+              </button>
+            </div>
+          </div>
         </nav>
 
-        <div id="navButtons" class="w-full text-center flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-          <button class="px-8 w-full hover:scale-95 justify-center md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
-                <a href="quote.html">Get a Free Quote</a> 
-            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-          </button>
-                    
-          <button class="px-8 w-full hover:scale-95 justify-center md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
-            <i class="fas fa-location-dot"></i>
-                <a href="payment.html">Track Shipment</a> 
-          </button>
+        <div id="overlay" class="fixed inset-0 z-[80] hidden bg-black/20 backdrop-blur-[5px] transition-opacity duration-500 opacity-0"></div>
+
+        <div id="side-menu" class="fixed top-0 right-0 z-[90] h-screen w-[65%] translate-x-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
+            <div class="flex flex-col h-full pt-32 px-10">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-10">Menu</h2>
+                <ul class="space-y-6">
+                    <li><a href="index.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Home</a></li>
+                    <li><a href="payment.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Track Shipment</a></li>
+                    <li><a href="services.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Our Services</a></li>
+                    <li><a href="contact.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Contact</a></li>
+                    <li><a href="about.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">about Us</a></li>
+                </ul>
+                
+                <div class="mt-auto mb-12">
+                    <button class="w-full rounded-xl bg-blue-950 py-4 text-white font-bold shadow-xl hover:bg-blue-900 transition-all">
+                       <a href="quote.html">Get a Quote</a> 
+                    </button>
+                </div>
+            </div>
         </div>
-        </div>
+                
       </section>
+
+        
+
+        <div class="w-full bg-slate-900 border-y border-white/10 py-4 overflow-hidden relative">
+          <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
+          <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-900 to-transparent z-10"></div>
+
+          <div id="premium-ticker" class="flex items-center whitespace-nowrap uppercase tracking-widest text-[10px] font-bold">
+            <div class="flex items-center px-12 text-white/80">
+              <span class="relative flex h-2 w-2 mr-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              SwiftFreight <span class="text-green-500 ml-2">Network Active</span>
+            </div>
+
+            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
+              <i class="fa-solid fa-plane-up mr-3 text-blue-400"></i>
+              Air Freight <span class="text-white ml-2">Priority Dispatched</span>
+            </div>
+
+            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
+              <i class="fa-solid fa-shield-halved mr-3 text-yellow-500"></i>
+              Cargo <span class="text-white ml-2">Fully Insured</span>
+            </div>
+
+            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
+              <i class="fa-solid fa-earth-africa mr-3 text-green-400"></i>
+              International Shipment <span class="text-green-500 ml-2">Operating 24/7</span>
+            </div>
+
+            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
+              <span class="relative flex h-2 w-2 mr-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              SwiftFreight <span class="text-green-500 ml-2">Network Active</span>
+            </div>
+            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
+              <i class="fa-solid fa-plane-up mr-3 text-blue-400"></i>
+              Air Freight <span class="text-white ml-2">Priority Dispatched</span>
+            </div>
+            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
+              <i class="fa-solid fa-shield-halved mr-3 text-yellow-500"></i>
+              Cargo <span class="text-white ml-2">Fully Insured</span>
+            </div>
+            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
+              <i class="fa-solid fa-earth-africa mr-3 text-green-400"></i>
+              World Wide <span class="text-white ml-2">Operating 24/7</span>
+            </div>
+          </div>
+        </div>
+
     </header>
     
 
  
-
-        <div id="app-container" class="max-w-xl mt-10 mx-auto py-12 px-4">
-            <div id="search-gate" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                <h2 class="text-2xl font-black text-slate-900 mb-2 uppercase">Track Parcel</h2>
-                <p class="text-slate-400 text-xs mb-8 font-medium">Enter your ID to view shipment details.</p>
+    <section class="bg-white/5 backdrop-blur-2xl mt-14 border border-white/10 py-10  bg-blend-multiply bg-[url('./image/track2.jpg')] object-cover bg-cover">
+      <!-- <div class="bg-white/5 backdrop-blur-2xl border border-white/10 w-full shadow-2xl mt-20 rounded-3xl"> -->
+        <div id="app-container" class="max-w-xl mt-10 mx-auto py-12 px-4 ">
+            <div id="search-gate" class="bg-white p-8 rounded-[2.5rem] border border-slate-100 bg-white/5 backdrop-blur-2xl border-white/10 w-full shadow-2xl">
+                <h2 class="text-2xl font-black text-white mb-2 uppercase">Track Parcel</h2>
+                <p class="text-slate-100 text-xs mb-8 font-medium">Enter your ID to view shipment details.</p>
                 
-                <input type="text" id="track-input" placeholder="ENTER CODE" 
+                <input type="text" id="trackingInput" placeholder="ENTER CODE" 
                     class="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl mb-4 outline-none focus:ring-2 focus:ring-blue-600 font-mono uppercase transition-all">
                 
-                <button onclick="handleTracking()" class="w-full bg-slate-900 text-white font-bold py-5 rounded-2xl hover:bg-blue-600 transition-all active:scale-95">
-                    Find Shipment
+                <button onclick="handleTracking()" class="w-full bg-blue-900 text-white font-bold py-5 rounded-2xl hover:bg-blue-600 transition-all active:scale-95">
+                   <i class="fab fa-searchengin text-xl"></i> Find Shipment
                 </button>
                 
                 <p id="error-msg" class="hidden text-red-500 text-[10px] mt-4 text-center font-bold uppercase tracking-widest"></p>
@@ -86,7 +184,115 @@
 
             <div id="dashboard-target"></div>
         </div>
+      </div>
+    </section>
 
+    
+    <section class="bg-blue-950 py-10">
+      <div>
+      <div class="items-center justify-between px-6 lg:flex md:px-16">
+        <div class="py-6 max-w-100">
+          <h1 class="pb-2 font-serif text-6xl text-white animate__animated animate__heartBeat animate__slow animate__repeat-1 animate__delay-1s">SWIFT <br>FREIGHT</h1>
+          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
+          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
+
+          <form name="aboutquote" data-netlify="true" value="logistics-final" method="post" action="/success.html" class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
+            <input type="text" name="email-text" placeholder="Type your email" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-7">
+            <button type="submit" class="px-4 py-3 mx-1 text-white transition-all duration-700 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-95">Get a quote</button>
+          </form>
+        </div>
+
+        
+        
+        
+        <div class="justify-between md:flex-col ">
+          <div>
+            <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
+          </div>
+          <div class="grid items-center grid-cols-2 md:flex gap-18">
+            
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
+              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
+              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
+              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
+              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
+              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
+              <h1><a href="payment.html" class="text-gray-400 text-[14px]">Careers</a></h1>
+            </div>
+
+            <div class="premium-reveal flex-col items-center justify-center gap-10">
+              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
+              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
+              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
+            </div>
+          </div>
+        </div>
+        </div>
+      
+          <div class="items-center mt-10 text-center">
+            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
+              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
+            </button>
+          </div>
+      </section>
+
+
+      <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
+        <div class="items-center self-center justify-between py-2 text-center md:flex">
+          <div class="flex items-center justify-center gap-8 text-center  md:gap-14">
+            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
+            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
+            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
+          </div>
+
+          <div class="self-center py-2">
+            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
+          </div>
+        </div>
+      </footer>
+
+
+      
+      <section>
+        <div id="loader-wrapper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white/80 backdrop-blur-md transition-opacity duration-500">
+          <div class="relative flex items-center justify-center">
+            <!-- The Icon: Using 'animate-pulse' or 'animate-bounce' -->
+            <img src="./image/loadingicon-removebg-preview.png" alt="Loading" class="w-16 h-16 z-10 animate-pulse">
+            
+            <!-- Outer Ring: Custom spinning animation -->
+            <div class="absolute w-18 h-18 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+      <script>
+          window.addEventListener("load", () => {
+          const loader = document.getElementById("loader-wrapper");
+          
+          // Fade out
+          loader.classList.add("opacity-0");
+          
+
+          setTimeout(() => {
+            loader.style.display = "none";
+          }, 500); 
+        });
+      </script>
 
 
 
@@ -100,10 +306,154 @@
 
 
         <script>
-           
-        </script>
+            // 1. ELITE PAYMENT SWITCHER WITH GSAP
+    function switchPayment(method) {
+    const display = document.getElementById('payment-detail-display');
+    const btcAddr = "bc1qxy2kgdy6277p4039syas73v8430TRX"; 
+    const usdtAddr = "0x71C7656EC7ab88b098defB751B7401B5f"; 
 
+    gsap.to(display, { opacity: 0, y: 5, duration: 0.2, onComplete: () => {
+        if (method === 'BTC') {
+            display.innerHTML = `<p class="text-blue-400 font-bold mb-1">BITCOIN WALLET</p><span class="text-white text-[10px] break-all font-mono selection:bg-blue-500">${btcAddr}</span>`;
+        } else if (method === 'USDT') {
+            display.innerHTML = `<p class="text-green-400 font-bold mb-1">USDT ADDRESS (TRC20)</p><span class="text-white text-[10px] break-all font-mono selection:bg-blue-500">${usdtAddr}</span>`;
+        } else {
+            display.innerHTML = `<p class="text-slate-400 font-bold mb-1">LOCAL BANK</p><span class="text-white text-[10px] font-mono uppercase">Swift Intl Bank / Emmanuel Chris Logistics</span>`;
+        }
+        gsap.to(display, { opacity: 1, y: 0, duration: 0.3 });
+    }});
+}
 
-    <script src="script.js"></script>
+// 2. MAIN TRACKING ENGINE
+    async function handleTracking() {
+    const trackingInput = document.getElementById('trackingInput');
+    const dashboard = document.getElementById('dashboard-target');
+    const searchGate = document.getElementById('search-gate');
+
+    if (!trackingInput.value) return;
+    const trackingNo = trackingInput.value.trim();
+
+    const spaceId = 'i55d4qvuj8ah';
+    const accessToken = 'e4BFBJQiuGHI2ZIrKdxgmaUXNCmRUi46jSwQjbw0pUg';
+    const url = `https://cdn.contentful.com/spaces/${spaceId}/entries?access_token=${accessToken}&content_type=shipment&fields.trackingId=${trackingNo}`;
+
+    try {
+    const response = await fetch(url);
+    const resData = await response.json();
+
+        if (resData.items && resData.items.length > 0) {
+            const shipment = resData.items[0].fields;
+            searchGate.style.display = "none";
+
+            // CHECK PAYMENT STATUS (Case-Insensitive)
+            const isPaid = shipment.paymentStatus?.toLowerCase() === "confirmed";
+
+            dashboard.innerHTML = `
+                <div class="w-full max-w-md mx-auto p-6 sm:p-10 bg-[#05070a] border-x sm:border border-white/10 shadow-2xl sm:rounded-[4rem] min-h-screen sm:min-h-0 relative overflow-hidden">
+                    
+                    <div class="header-anim flex justify-between items-start mb-12">
+                        <div>
+                            <p class="text-blue-500 font-mono text-[9px] tracking-[0.4em] uppercase mb-1">Secured Tracking</p>
+                            <h2 class="text-white text-4xl font-black italic tracking-tighter uppercase">${trackingNo}</h2>
+                        </div>
+                        <button onclick="location.reload()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 border border-white/10 hover:border-blue-500 transition-all">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="relative">
+                        <div id="fluid-line" class="absolute left-[19px] top-4 bottom-10 w-[2px] bg-gradient-to-b from-blue-600 via-blue-400 to-transparent origin-top scale-y-0"></div>
+                        
+                        <div class="space-y-6">
+                            ${renderEliteStep(shipment.status, shipment.currentLocation, "Live Update", "fa-box", true)}
+                            ${renderEliteStep(shipment.TrasitStep3Name, shipment.TrasitStep3Location, "Loaded", "fa-truck", !!shipment.TrasitStep3Name)}
+                            ${renderEliteStep(shipment.Transitstep2Name, shipment.Transitstep2Location, "Dispatched", "fa-plane", !!shipment.transitStep2Name)}
+                            ${renderEliteStep(shipment.TransitStep1Name, shipment.TransitStep1Location, "Origin", "fa-box-open", !!shipment.transitStep1Name)}
+                        </div>
+                    </div>
+
+                    <div class="payment-anim mt-12">
+                        ${isPaid ? `
+                            <div class="bg-green-500/10 border border-green-500/20 p-8 rounded-[2.5rem] flex items-center gap-5">
+                                <div class="success-icon w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+                                    <i class="fas fa-check text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-white font-bold uppercase text-[11px] tracking-widest">Payment Confirmed</h3>
+                                    <p class="text-green-500/60 text-[9px] mt-1 font-mono uppercase italic">Package Security Cleared</p>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="bg-blue-600/5 border-2 border-blue-600/30 p-8 rounded-[3rem] backdrop-blur-xl">
+                                <div class="flex justify-between items-center mb-6">
+                                    <p class="text-blue-500 font-black text-[10px] uppercase tracking-widest italic">Service Dues</p>
+                                    <span class="text-white font-mono text-3xl font-bold">${shipment.amountDue || '$0.00'}</span>
+                                </div>
+                                <div id="payment-detail-display" class="bg-black/60 p-5 rounded-2xl text-slate-400 text-[11px] font-mono mb-6 border border-white/5 min-h-[60px]">
+                                    BANK: SWIFT INTL BANK <br> NAME: EMMANUEL CHRIS LOGISTICS
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="switchPayment('BTC')" class="flex-1 bg-white/10 hover:bg-blue-600 py-4 rounded-2xl text-[9px] text-white font-black transition-all border border-white/5">BTC</button>
+                                    <button onclick="switchPayment('USDT')" class="flex-1 bg-white/10 hover:bg-blue-600 py-4 rounded-2xl text-[9px] text-white font-black transition-all border border-white/5">USDT</button>
+                                    <button onclick="switchPayment('WIRE')" class="flex-1 bg-white/10 hover:bg-blue-600 py-4 rounded-2xl text-[9px] text-white font-black transition-all border border-white/5">WIRE</button>
+                                </div>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+
+            // TRIGGER GSAP MASTER ANIMATIONS
+            gsap.from(".header-anim", { opacity: 0, y: -20, duration: 1, ease: "power4.out" });
+            
+            // 1. Animate the fluid line first
+            gsap.to("#fluid-line", { scaleY: 1, duration: 2, ease: "power2.inOut", delay: 0.5 });
+
+            // 2. Animate the step items and their icons
+            gsap.from(".step-item", { opacity: 0, x: -20, stagger: 0.2, duration: 1, ease: "power3.out", delay: 0.8 });
+            gsap.from(".icon-anim", { 
+                scale: 0, 
+                rotation: -180, 
+                stagger: 0.2, 
+                duration: 1, 
+                ease: "back.out(1.7)", 
+                delay: 0.9 
+            });
+
+            // 3. Animate the payment box
+            gsap.from(".payment-anim", { opacity: 0, y: 50, duration: 1.2, ease: "expo.out", delay: 1.2 });
+            gsap.from(".success-icon", { scale: 0, rotation: 360, duration: 1, ease: "back.out(2)", delay: 1.5 });
+
+        } else {
+            alert("Record not found in database.");
+        }
+    } catch (e) { console.error("Elite Tracking System Error:", e); }
+}
+
+function renderEliteStep(name, loc, label, icon, active) {
+    if (!name) return ""; 
+    return `
+        <div class="step-item relative pl-14 group">
+            <div class="icon-anim absolute left-0 top-1 w-10 h-10 rounded-2xl bg-[#0a0f1a] border border-white/10 flex items-center justify-center z-20 ${active ? 'text-blue-500 border-blue-600/40 shadow-[0_0_20px_rgba(37,99,235,0.2)]' : 'text-slate-700'}">
+                <i class="fas ${icon} text-xs animate-pulse"></i>
+            </div>
+            <div class="bg-white/[0.03] p-5 rounded-[2rem] border border-white/5 backdrop-blur-sm group-hover:bg-white/[0.06] transition-all">
+                <div class="flex justify-between items-start">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-tight">${name}</h4>
+                    <span class="text-blue-500 font-mono text-[8px] font-bold uppercase tracking-widest">${label}</span>
+                </div>
+                <p class="text-slate-500 text-[10px] mt-2 italic font-mono uppercase">${loc}</p>
+            </div>
+        </div>`;
+}
+      </script>
+
+    <script src="./script.js"></script>
 </body>
 </html>
+
+
+${renderEliteStep(shipment.status, shipment.currentLocation, "Live Update", "fa-truck", true)}
+${renderEliteStep(shipment.TrasitStep3Name, shipment.TrasitStep3Location, "Loaded", "fa-truck", !!shipment.TrasitStep3Name)}
+${renderEliteStep(shipment.Transitstep2Name, shipment.Transitstep2Location, "Dispatched", "fa-plane", !!shipment.transitStep2Name)}
+${renderEliteStep(shipment.TransitStep1Name, shipment.TransitStep1Location, "Origin", "fa-box-open", !!shipment.transitStep1Name)}
