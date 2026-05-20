@@ -224,7 +224,7 @@ module.exports = {
                     <div class="header-anim flex justify-between items-start mb-12">
                       <div>
                         <p class="text-blue-500 font-mono text-[9px] tracking-[0.4em] uppercase mb-1">Secured Tracking</p>
-                        <h2 class="text-white text-4xl font-black italic tracking-tighter uppercase">${trackingNo}</h2>
+                        <h2 class="text-blue-950 text-4xl font-black italic tracking-tighter uppercase">${trackingNo}</h2>
                       </div>
                           <button onclick="location.reload()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 border border-white/10 hover:border-blue-500 transition-all">
                             <i class="fas fa-times"></i>
@@ -310,25 +310,25 @@ module.exports = {
               
              
               function renderEliteStep(name, loc, label, icon, active, color) {
-    if (!name) return "";
+          if (!name) return "";
 
-    // If no color is provided in Contentful, default to blue
-    const colorClass = color || "text-blue-500"; 
-    // We replace 'text-' with 'bg-' for the icon background if needed
-    const bgClass = colorClass.replace("text-", "bg-").replace("-500", "-950");
+          // If no color is provided in Contentful, default to blue
+          const colorClass = color || "text-blue-500"; 
+          // We replace 'text-' with 'bg-' for the icon background if needed
+          const bgClass = colorClass.replace("text-", "bg-").replace("-500", "-950");
 
-   return `
-<div class="step-item relative pl-14 group">
-    <div class="absolute left-0 top-1 w-10 h-10 rounded-2xl ${bgClass} border border-white/10 flex items-center justify-center ${colorClass}">
-        <i class="fas ${icon} text-xs animate-pulse"></i>
-    </div>
-    
-    <div class="bg-white/0.05 p-5 rounded-[2rem] border border-white/5 shadow-lg backdrop-blur-sm">
-        <div class="flex justify-between items-center w-full">
-            <h4 class=" font-bold text-xs uppercase ">${name}</h4>
-            <span class="font-mono text-[12px] font-bold uppercase text- ml-4">${label}</span>
-        </div>
-        <p class="text-white text-[14px] mt-2 fontmono">${loc}</p>
-    </div>
-</div>`;
-}
+          return `
+          <div class="step-item relative pl-14 group">
+              <div class="absolute left-0 top-1 w-10 h-10 rounded-2xl ${bgClass} border border-white/10 flex items-center justify-center ${colorClass}">
+                  <i class="fas ${icon} text-xs animate-pulse"></i>
+              </div>
+              
+              <div class="bg-white/0.05 p-5 rounded-[2rem] border border-white/5 shadow-lg backdrop-blur-sm">
+                  <div class="flex justify-between items-center w-full">
+                      <h4 class=" font-bold text-xs uppercase ">${name}</h4>
+                      <span class="font-mono text-[12px] font-bold uppercase text- ml-4">${label}</span>
+                  </div>
+                  <p class="text-white text-[14px] mt-2 fontmono">${loc}</p>
+              </div>
+          </div>`;
+    }
