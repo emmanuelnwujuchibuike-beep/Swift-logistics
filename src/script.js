@@ -1,189 +1,40 @@
 
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-    }
-  });
-}, { threshold: 0.1 });
-
-
-
-const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    orientation: 'vertical',
-    gestureOrientation: 'vertical',
-    smoothWheel: true,
-});
-
-lenis.on('scroll', ScrollTrigger.update);
-
-gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-});
-
-gsap.ticker.lagSmoothing(0);
-
-gsap.to(".reveal-image", {
-    yPercent: -20, 
-    ease: "none",
-    scrollTrigger: {
-        trigger: ".reveal-container",
-        start: "top bottom", 
-        end: "bottom top",  
-        scrub: 2,  
-    }
-});
-
-gsap.from(".reveal-text", {
-    y: 100,
-    opacity: 0,
-    duration: 1.2,
-    ease: "power4.out",
-    scrollTrigger: {
-        trigger: ".reveal-text",
-        start: "top 90%",
-    }
-});
-
-
-gsap.registerPlugin(ScrollTrigger);
-
-
-const revealElements = document.querySelectorAll(".premium-reveal");
-
-                revealElements.forEach((el) => {
-                gsap.fromTo(el, 
-                                { 
-                opacity: 0, 
-                y: 100,             
-                scale: 0.95,       
-                filter: "blur(5px)"
-                }, 
-                {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                filter: "blur(0px)",
-                duration: 1.2,     
-                ease: "power4.out",
-                scrollTrigger: {
-                    trigger: el,
-                    start: "top 90%", 
-                    toggleActions: "play none none reverse", 
-                }
-                }
-            );
-            });
-
-        window.addEventListener("load", () => {
-            const tl = gsap.timeline();
-
-            tl.to(".premium-reveal", {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                filter: "blur(0px)",
-                duration: 1.2,
-                ease: "power4.out",
-                stagger: 0.3,
-    });
-});
 
 
 
 
 
+          function switchPayment(method, info) {
+                  // Make sure this ID exists inside your newly injected HTML
+          const display = document.getElementById('payment-detail-display');
 
-    document.getElementById("quote-form").addEventListener("submit", async (e) => {
-  e.preventDefault(); // This stops the "White Screen" refresh
+          if (!display) {
+          console.error("Could not find payment-detail-display. Check your HTML!");
+          return;
+                  }
 
-  const form = e.target;
-  const formData = new FormData(form);
-
-  try {
-    await fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData).toString(),
-    });
-    
-    // Replace the button text to show success
-    const btn = form.querySelector('button');
-    btn.innerHTML = "Quote Sent Successfully!";
-    btn.style.backgroundColor = "#10b981"; // Changes to Green
-    form.reset(); // Clears the boxes
-    
-  } catch (error) {
-    alert("Submission failed. Please check your internet.");
-  }
-});
-
-
-/** @type {import('tailwindcss').Config} */
-const plugin = require('tailwindcss/plugin')
-
-module.exports = {
-  content: ["./src/**/*.{html,js}"],
-  theme: {
-    extend: {
-      // You can define colors here to use in your shadows later
-      colors: {
-        'brand-blue': '#001b3d', // Your Blue-950
-      },
-    },
-  },
-  plugins: [
-    plugin(function ({ addUtilities }) {
-      const newUtilities = {
-        '.text-shadow': {
-          textShadow: '0 2px 4px rgba(0,0,0,0.10)',
-        },
-        '.text-shadow-md': {
-          textShadow: '0 4px 8px rgba(0,0,0,0.12)',
-        },
-        '.text-shadow-lg': {
-          textShadow: '0 10px 20px rgba(0,0,0,0.25)',
-        },
-        '.text-shadow-none': {
-          textShadow: 'none',
-        },
-      }
-      addUtilities(newUtilities)
-    }),
-  ],
-}
+                  // GSAP animate the display container out
+          gsap.to(display, { opacity: 0, y: 10, duration: 0.3, onComplete: () => {
+                  // Update the content based on the method
+          if (method === 'BTC') {
+                      display.innerHTML = `<p class="text-blue-400 font-bold mb-1">BITCOIN WALLET</p><span class="break-all font-mono">${info}</span>`;
+          } else if (method === 'USDT') {
+                      display.innerHTML = `<p class="text-green-400 font-bold mb-1">USDT ADDRESS</p><span class="break-all font-mono">${info}</span>`;
+          } else {
+                      // Re-format the WIRE string if it contains commas
+          const formattedWire = info.replace(/Bank: |Name: |Account: /g, '<br>$&');
+          display.innerHTML = `<p class="text-slate-300 font-bold mb-1">LOCAL BANK</p><span class="text-sm">${formattedWire}</span>`;
+                  }
+                  
+                  // GSAP animate it back in
+          gsap.to(display, { opacity: 1, y: 0, duration: 0.3 });
+              }});
+          }
 
 
+          
 
-              function switchPayment(method, info) {
-    // Make sure this ID exists inside your newly injected HTML
-    const display = document.getElementById('payment-detail-display');
-
-    if (!display) {
-        console.error("Could not find payment-detail-display. Check your HTML!");
-        return;
-    }
-
-    // GSAP animate the display container out
-    gsap.to(display, { opacity: 0, y: 10, duration: 0.3, onComplete: () => {
-        // Update the content based on the method
-        if (method === 'BTC') {
-            display.innerHTML = `<p class="text-blue-400 font-bold mb-1">BITCOIN WALLET</p><span class="break-all font-mono">${info}</span>`;
-        } else if (method === 'USDT') {
-            display.innerHTML = `<p class="text-green-400 font-bold mb-1">USDT ADDRESS</p><span class="break-all font-mono">${info}</span>`;
-        } else {
-            // Re-format the WIRE string if it contains commas
-            const formattedWire = info.replace(/Bank: |Name: |Account: /g, '<br>$&');
-            display.innerHTML = `<p class="text-slate-300 font-bold mb-1">LOCAL BANK</p><span class="text-sm">${formattedWire}</span>`;
-        }
-        
-        // GSAP animate it back in
-        gsap.to(display, { opacity: 1, y: 0, duration: 0.3 });
-    }});
-}
 
           // 2. MAIN TRACKING ENGINE
               async function handleTracking() {
@@ -219,7 +70,7 @@ module.exports = {
               dashboard.innerHTML = `
 
               
-                <div class="w-full max-w-md mx-auto p-6 border-x sm:borde rounded-[2.5rem] border border-slate-100 bg-white/5 backdrop-blur-2xl border-white/10 w-full shadow-2xl min-h-screen relative overflow-hidden">
+                <div class="max-w-md mx-auto p-6 border-x sm:borde rounded-[2.5rem] border border-slate-100 bg-white/5 backdrop-blur-2xl border-white/10 w-full shadow-2xl min-h-screen relative overflow-hidden">
                               
                     <div class="header-anim flex justify-between items-start mb-12">
                       <div>
@@ -232,7 +83,7 @@ module.exports = {
                     </div>
 
                     <div class="relative">
-                          <div id="fluid-line" class="absolute left-[19px] top-4 bottom-10 w-[2px] bg-gradient-to-b from-green-600 via-green-400 to-transparent origin-top scale-y-0"></div>
+                          <div id="fluid-line" class="absolute left-[19px] top-4 bottom-10 w-[4px] bg-gradient-to-b from-green-600 via-green-400 to-transparent origin-top scale-y-0 animate-pulse"></div>
                                           
                             <div class="space-y-6">
                               ${renderEliteStep(shipment.status, shipment.currentLocation, "Picked Up", "fa-box", true ,shipment.transit1textcolor)}
@@ -250,21 +101,21 @@ module.exports = {
                           </div>
 
                           <div>
-                            <h3 class="text-white font-bold uppercase text-[11px] tracking-widest">Payment Confirmed</h3>
+                            <h3 class="text-white font-bold uppercase text-[11px] tracking-widest">Package Secured</h3>
                             <p class="text-green-500/60 text-[9px] mt-1 font-mono uppercase italic">Package Security Cleared</p>
                           </div>
                         </div>
                                       ` : `
                         <div class="bg-blue-600/5 border-2 border-blue-600/30 p-8 rounded-[3rem] backdrop-blur-xl">
                           <div class="flex justify-between items-center mb-6">
-                            <p class="text-blue-500 font-black text-[10px] uppercase tracking-widest italic">Service Dues</p>
+                            <p class="text-blue-950 font-semibold text-[14px] uppercase tracking-widest italic">Service Invoice</p>
                             <span class="text-white font-mono text-3xl font-bold">${shipment.amountDue || '$0.00'}</span>
                           </div>
-                            <div id="payment-detail-display" class="bg-black/60 p-5 rounded-2xl text-slate-400 text-[11px] font-mono mb-6 border border-white/5 min-h-[60px]">
-                                BANK: SWIFT INTL BANK <br> NAME: EMMANUEL CHRIS LOGISTICS
+                            <div id="payment-detail-display" class="bg-black/60 p-5 rounded-2xl text-slate-400 text-[15px] font-mono mb-6 border border-white/5 min-h-[60px]">
+                               <p class="text-green-500 font-semibold">Select Method</p>
                             </div>
                 
-                            <div class="flex gap-2 mt-4">
+                            <div id="payment-anim" class="flex gap-2 mt-4">
                                 <button onclick="switchPayment('BTC', '${shipment.btcAddress}')" class="flex-1 bg-white/10 p-2">BTC</button>
                                 <button onclick="switchPayment('USDT', '${shipment.usdtAddress}')" class="flex-1 bg-white/10 p-2">USDT</button>
                                 <button onclick="switchPayment('WIRE', 'Bank: ${shipment.bankName || 'N/A'}, Name: ${shipment.accountName || 'N/A'}, Account: ${shipment.bankNumber || 'N/A'}')" class="flex-1 bg-white/10 p-2">WIRE</button>
@@ -275,13 +126,13 @@ module.exports = {
                 </div>
                       `;
 
-                      // TRIGGER GSAP MASTER ANIMATIONS
-                gsap.from(".header-anim", { opacity: 0, y: -20, duration: 1, ease: "power4.out" });
                       
-                      // 1. Animate the fluid line first
-                gsap.to("#fluid-line", { scaleY: 1, duration: 2, ease: "power2.inOut", delay: 0.5 });
+                gsap.from(".header-anim", { opacity: 4, y: -20, duration: 1, ease: "power4.out" });
+                      
+                    
+                gsap.to("#fluid-line", { scaleY: 1, duration: 3, ease: "power2.inOut", delay: 0.5 });
 
-                      // 2. Animate the step items and their icons
+                  
                 gsap.from(".step-item", { opacity: 0, x: -20, stagger: 0.2, duration: 1, ease: "power3.out", delay: 0.8 });
                 gsap.from(".icon-anim", { 
                 scale: 0, 
@@ -309,7 +160,7 @@ module.exports = {
 
               
              
-              function renderEliteStep(name, loc, label, icon, active, color) {
+          function renderEliteStep(name, loc, label, icon, active, color) {
           if (!name) return "";
 
           // If no color is provided in Contentful, default to blue
@@ -320,15 +171,126 @@ module.exports = {
           return `
           <div class="step-item relative pl-14 group">
               <div class="absolute left-0 top-1 w-10 h-10 rounded-2xl ${bgClass} border border-white/10 flex items-center justify-center ${colorClass}">
-                  <i class="fas ${icon} text-xs animate-pulse"></i>
+                  <i class="fas ${icon} text-xs animate-bounce animate-pulse "></i>
               </div>
               
               <div class="bg-white/0.05 p-5 rounded-[2rem] border border-white/5 shadow-lg backdrop-blur-sm">
                   <div class="flex justify-between items-center w-full">
                       <h4 class=" font-bold text-xs uppercase ">${name}</h4>
-                      <span class="font-mono text-[12px] font-bold uppercase text- ml-4">${label}</span>
+                      <span class="font-mono text-[12px] font-bold uppercase  text-slate-700 text- ml-4">${label}</span>
                   </div>
                   <p class="text-white text-[14px] mt-2 fontmono">${loc}</p>
               </div>
           </div>`;
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const revealElements = document.querySelectorAll('.reveal-init, .reveal-from-left, .reveal-from-right, .reveal-from-bottom');
+        if (revealElements.length === 0) return;
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -120px 0px',
+            threshold: 0.15,
+        };
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const element = entry.target;
+                element.classList.add('reveal-active');
+                observer.unobserve(element);
+            });
+        }, observerOptions);
+
+        revealElements.forEach(element => {
+            const delayValue = element.dataset.revealDelay;
+            if (delayValue) {
+                const delay = delayValue.toString().trim();
+                element.style.transitionDelay = delay.endsWith('s') ? delay : `${delay}s`;
+            }
+            revealObserver.observe(element);
+        });
+    });
+
+
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuBtn = document.getElementById('menu-btn');
+        const sideMenu = document.getElementById('side-menu');
+
+        if (!menuBtn || !sideMenu) return;
+
+        const refreshMenuState = () => {
+            const isOpen = !sideMenu.classList.contains('translate-x-full');
+            sideMenu.classList.toggle('menu-open', isOpen);
+        };
+
+        menuBtn.addEventListener('click', () => {
+            requestAnimationFrame(refreshMenuState);
+        });
+
+        refreshMenuState();
+    });
+    
+
+
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+        const topLinks = Array.from(body.querySelectorAll('a[href="#Top"]'));
+        topLinks.forEach(link => {
+            if (link.textContent.trim().toLowerCase().includes('back to top')) {
+                const parent = link.closest('div, section, footer');
+                if (parent) parent.style.display = 'none';
+            }
+        });
+
+        const premiumBtn = document.createElement('button');
+        premiumBtn.id = 'premium-back-to-top';
+        premiumBtn.type = 'button';
+        premiumBtn.className = 'premium-back-to-top';
+        premiumBtn.innerHTML = '<span class="back-to-top-icon animate-">↑</span><span class="back-to-top-text"></span>';
+        premiumBtn.style.display = 'none';
+        premiumBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        body.appendChild(premiumBtn);
+
+        // Choose the second top-level section if available, otherwise the second top-level div
+        let triggerElement = null;
+        try {
+            const sections = Array.from(document.querySelectorAll('section'));
+            const divs = Array.from(document.querySelectorAll('div'));
+            if (sections.length > 1) triggerElement = sections[1];
+            else if (divs.length > 1) triggerElement = divs[1];
+            else triggerElement = document.querySelector('section, div');
+        } catch (err) {
+            console.warn('Trigger selection fallback', err);
+            triggerElement = document.querySelector('section, div');
+        }
+
+        if (!triggerElement) {
+            console.debug('Premium back-to-top: no trigger element found, showing button by default');
+            premiumBtn.style.display = 'flex';
+            return;
+        }
+
+        const updateThreshold = () => triggerElement.getBoundingClientRect().bottom + window.scrollY;
+        let threshold = updateThreshold();
+
+        const updateButton = () => {
+            threshold = updateThreshold();
+            const show = window.scrollY > threshold;
+            premiumBtn.style.display = show ? 'flex' : 'none';
+            // debug logs
+            if (Math.abs(window.scrollY - threshold) < 50) {
+                console.debug('premium-back-to-top: scrollY', window.scrollY, 'threshold', threshold, 'show', show);
+            }
+        };
+
+        window.addEventListener('scroll', updateButton, { passive: true });
+        window.addEventListener('resize', updateButton);
+        // run once after small delay so layout settles
+        setTimeout(updateButton, 120);
+    });

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="output.css">
     <link rel="stylesheet" href="input.css">
-    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+    <link rel="icon" type="image/png" href="./image/loadingicon-removebg-preview.png" class="">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,14 +29,19 @@
 
     <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
         <section class="">
-        <nav class=" flex w-full items-center justify-between py-2 px-6 bg-transparent">
+        <nav class=" flex w-full items-center justify-between py-2 px-6 md:px-14 bg-transparent">
           <div class="flex justify-between w-full">
-              <div class="flex items-center">
-                <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15" >
+              <div class="flex items-center pt-3">
+                <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
               </div>
-              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden">
+              
+              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden ">
                   <div class="relative h-5 w-6">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                       
+                      <svg id="x-icon" class="hidden w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
                   </div>
               </button>
           </div>
@@ -89,10 +94,10 @@
 
     </header>
 
-     <section class="items-center mt-20 md:pt-10 self-center justify-center px-6">
+     <section class="items-center mt-10 md:pt-10 self-center justify-center px-6">
         <div class="flex justify-center items-center w-full  object-cover">
-            <div class="bg-blue-950/20 text-center self-center rounded-2xl w-full  bg-blend-multiply max-w-290  bg-[url('./image/bt7.jpg')] object-cover bg-cover h-100  px-4 md:px-30">
-                <h1 class="self-center text-center text-white text-5xl font-semibold items-center md:text-6xl pt-24 font-serif animate__animated animate__tada animate__slow animate__repeat-1 animate__delay-1s [text-shadow:1px_1px_3px]">Logistics Services</h1>
+            <div id="" class="bg-blue-950/20 text-center self-center rounded-2xl w-full  bg-blend-multiply max-w-290  bg-[url('./image/bt7.jpg')] object-cover bg-cover h-100  px-4 md:px-30">
+                <h1 id="" class="self-center text-center text-white text-5xl font-semibold items-center md:text-6xl pt-24 font-serif [text-shadow:1px_1px_3px] reveal-from-bottom" data-reveal-delay="0.1s">Logistics Services</h1>
                 <p class="text-gray-300 text-[14px] md:text-[18px] [text-shadow:0_1px_1px] py-5">Our comprehensive logistics solution is designed to optimize your supply chain and enhance your business operations.</p>
                 <h2 class="uppercase text-[18px] pt-6 text-white"><i class="fas fa-circle text-[18px] md:text-2xl text-red-600 pr-2"></i>custom solutions for every need</h2>
             </div>
@@ -101,14 +106,14 @@
 
     <section class="px-6 md:px-16 mt-10 pt-10">
         <div class="lg:flex justify-between lg:items-start items-center">
-            <div class="flex flex-col lg:items-start ">
+            <div class="flex flex-col lg:items-start">
                 <h1 class="text-[16px] uppercase text-blue-950 pb-6"><i class="fas fa-circle text text-red-600 pr-1"></i> our community</h1>
                 <h2 class="md:text-[46px] text-[36px] font-semibold text-blue-950 leading-tight">Join a <span class="text-red-600">Growing <br> Community</span> of Business and Logistics Partners</h2>
                 <p class="text-[20px] text-blue-900 py-5">Join a dynamic community of businesses and logistics partners,<br>optimizing supply chains and driving growth.</p>
                 <button class="w-fit px-2 py-1 border border-blue-800 text-center rounded-full shadow-sm shadow-blue-200 mt-6 hover:bg-blue-100 ">
                 <a href="https://wa.me/18562803438" target="_blank" class="text-center">Join Us</a><i class="fas fa-arrow-right ml-2 border border-blue-800 rounded-full p-1 text-blue-950 aspect-square"></i></button>
                 
-                <div class="grid grid-cols-2 gap-8 pt-14 justify-between lg:items-start text-start">
+                <div class="grid grid-cols-2 gap-8 pt-14 justify-between lg:items-start text-start reveal-init">
                     <div class="text-center flex flex-col items-center ">
                         <h1 class="text-[20px] font-semibold font-mono">Email Us</h1>
                         <a href="mailto:swiftfreightlogix@gmail.com" target="_blank" class="hover:underline"><p class="text-[12px] md:text-[16px] text-blue-900 font-mono">swiftfreightlogix@gmail.com</a></p>
@@ -185,7 +190,7 @@
     </section>
 
     <section class="px-6 md:px-16 my-20">
-        <div class="text-center">
+        <div class="text-center reveal-from-bottom" data-reveal-delay="0.1s">
             <h1 class="text-blue-950 uppercase"><i class="fas fa-circle text-red-600 pr-2"></i>logistics services</h1>
             <h2 class="text-4xl pt-8 text-blue-950">Comprehensive<span class="text-red-600">Logix Services </span> to<br> Meet Your Unique <span class="text-red-600">Needs</span></h2>
 
@@ -193,7 +198,7 @@
         </div>
 
         <div class="md:grid grid-cols-3 gap-6">     
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl reveal-from-right" data-reveal-delay="0.1s">
             <div class="items-center justify-between px-8 py-4  md:gap-6 md:px-4">
               <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
                 <i class="text-2xl text-red-400 fas fa-id-badge"></i>
@@ -208,7 +213,7 @@
             </div>
           </div>
 
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md: bg-blue-950 rounded-xl">
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md: bg-blue-950 rounded-xl reveal-from-left" data-reveal-delay="0.1s">
             <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
               <div class="mb-4 w-fit bg-blue-100 rounded-[6px] px-3 py-1">
                 <i class="text-2xl fas fa-truck text-blue-950"></i>
@@ -223,7 +228,7 @@
             </div>
           </div>
 
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl reveal-from-right" data-reveal-delay="0.1s">
             <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
               <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
                 <i class="text-2xl text-red-400 fas fa-network-wired"></i>
@@ -238,7 +243,7 @@
             </div>
           </div>
 
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl reveal-from-left" data-reveal-delay="0.1s">
             <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
               <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
                 <i class="text-2xl text-red-400 fas fa-earth-americas"></i>
@@ -253,7 +258,7 @@
             </div>
           </div>
 
-          <div class="items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+          <div class="items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl reveal-from-right" data-reveal-delay="0.1s">
             <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
               <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
                 <i class="text-2xl text-red-400 fas fa-dolly"></i>
@@ -268,7 +273,7 @@
             </div>
           </div>
 
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl">
+          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm rounded-xl reveal-from-left" data-reveal-delay="0.1s">
             <div class="items-center justify-between px-8 py-4 md:gap-6 md:px-4">
               <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
                 <i class="text-2xl text-red-400 fas fa-boxes-packing"></i>
@@ -296,13 +301,13 @@
             <div class="max-w-90">
                 <p class="text-blue-900 text-[14px] my-10">Our process is simple yet effective. Every project is different, but we've seen thousands of them since we first launched. Our experience is your asset.</p>
 
-                <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center reveal-from-bottom" data-reveal-delay="0.1s">
                     <img src="./image/serviceimg.jpg" alt="" class=" w-80 rounded-2xl shadow-sm shadow-blue-400">
                 </div>
             </div>
 
             <div>
-                <div class="flex gap-6 mt-10 max-w-110 border-t-2 py-2 border-b-2 ">
+                <div class="flex gap-6 mt-10 max-w-110 border-t-2 py-2 border-b-2 reveal-from-right" data-reveal-delay="0.1s">
                     <div>
                         <h1 class="font-mono text-gray-400 text-7xl">01</h1>
                     </div>
@@ -312,27 +317,27 @@
                     </div>
                 </div>
 
-                <div class="flex gap-6 mt-6 max-w-110 ">
+                <div class="flex gap-6 mt-6 max-w-110 border-b-2 border-gray-200 reveal-from-left" data-reveal-delay="0.1s">
                     <div>
                         <h1 class="font-mono text-gray-400 text-7xl">02</h1>
                     </div>
                     <div class="max-w-">
                         <h2 class="pb-3 text-blue-950 font-semibold text-[30px]">Strategic Planning</h2>
-                        <p class="text-blue-900 text-[14px]">Designing a best plan to ensure efficient and optimal delivery of your goods.</p>
+                        <p class="text-blue-900 text-[14px] pb-2">Designing a best plan to ensure efficient and optimal delivery of your goods.</p>
                     </div>
                 </div>
 
-                <div class="flex gap-6 mt-6 max-w-110 ">
+                <div class="flex gap-6 mt-6 max-w-110 border-b-2 border-gray-200 reveal-from-right" data-reveal-delay="0.1s">
                     <div>
                         <h1 class="font-mono text-gray-400 text-7xl">03</h1>
                     </div>
                     <div class="max-w-">
                         <h2 class="pb-3 text-blue-950 font-semibold text-[30px]">Efficient Execution</h2>
-                        <p class="text-blue-900 text-[14px]">Carefully cordinating every detail of the shipment process to ensure smooth and timely execution.</p>
+                        <p class="text-blue-900 text-[14px] pb-2">Carefully cordinating every detail of the shipment process to ensure smooth and timely execution.</p>
                     </div>
                 </div>
 
-                <div class="flex gap-6 mt-6 max-w-110 ">
+                <div class="flex gap-6 mt-6 max-w-110 border-b-2 border-gray-200 reveal-from-left" data-reveal-delay="0.1s ">
                     <div>
                         <h1 class="font-mono text-gray-400 text-7xl">04</h1>
                     </div>
@@ -377,9 +382,9 @@
           <div>
             <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
           </div>
-          <div class="grid items-center grid-cols-2 md:flex gap-18">
+          <div class="grid items-center grid-cols-2 md:flex gap-18 reveal-from-bottom" data-reveal-delay="0.1s">
             
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
               <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
               <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
@@ -387,14 +392,14 @@
               <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+            <div class="a-reveal flex-col items-center justify-center gap-10 md:pb-6">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
               <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
               <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
               <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
               <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
               <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
@@ -405,11 +410,7 @@
         </div>
         </div>
       
-          <div class="items-center mt-10 text-center">
-            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
-              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
-            </button>
-          </div>
+          
       </section>
 
       <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
@@ -426,25 +427,7 @@
         </div>
       </footer>
 
-      <section class="bg-orange-500 py-20 px-5 flex flex-col gap-6 items-center">
-  
-  <div class="counter-container bg-white rounded-xl p-8 shadow-lg w-full max-w-md text-center">
-    <h2 class="counter text-5xl font-bold text-gray-800 mb-2" data-target="4334">0</h2>
-    <p class="text-gray-600 font-medium uppercase tracking-wider">Projects Completed</p>
-    <div class="mt-4 inline-block p-3 bg-orange-100 rounded-full text-orange-600">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-    </div>
-  </div>
-
-  <div class="counter-container bg-white rounded-xl p-8 shadow-lg w-full max-w-md text-center">
-    <h2 class="counter text-5xl font-bold text-gray-800 mb-2" data-target="4315">0</h2>
-    <p class="text-gray-600 font-medium uppercase tracking-wider">Satisfied Customers</p>
-    <div class="mt-4 inline-block p-3 bg-orange-100 rounded-full text-orange-600">
-       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-    </div>
-  </div>
-
-</section>
+      
 
 
 
@@ -533,6 +516,24 @@
 
           counters.forEach(counter => counterObserver.observe(counter));
         </script>
+
+
+
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const xIcon = document.getElementById('x-icon');
+
+        menuBtn.addEventListener('click', () => {
+        menuIcon.classList.toggle('hidden');
+        xIcon.classList.toggle('hidden');
+        console.log("Button clicked!");
+            });
+          });
+      </script>
+
 
 
 

@@ -1,21 +1,12 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./src/**/*.{html,js}", "./*.html"],
+export default {
+  content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {
-      animation: {
-        marquee: 'marquee 30s linear infinite',
-      },
-      keyframes: {
-        marquee: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-      },
-    },
+    extend: {},
   },
   plugins: [],
 }
+
 
 module.exports = {
   theme: {
@@ -32,3 +23,27 @@ module.exports = {
     }
   }
 }
+
+
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* Hide scrollbar for Chrome, Safari and Opera */
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+          /* Hide scrollbar for IE, Edge and Firefox */
+          '-ms-overflow-style': 'none', /* IE and Edge */
+          'scrollbar-width': 'none',  /* Firefox */
+        },
+      });
+    },
+  ],
+}
+

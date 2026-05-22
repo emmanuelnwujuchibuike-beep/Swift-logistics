@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="output.css">
     <link rel="stylesheet" href="input.css">
-    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+    <link rel="icon" type="image/png" href="./image/loadingicon-removebg-preview.png" class="">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,41 +24,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-    <style>
-    @keyframes premium-slide {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); } 
-    }
-
-    #premium-ticker {
-      display: flex;
-      animation: premium-slide 20s linear infinite;
-      width: max-content;
-    }
-
-    #premium-ticker:hover {
-      animation-play-state: paused;
-      cursor: default;
-    }
-
-    #premium-ticker span, #premium-ticker div {
-      -webkit-font-smoothing: antialiased;
-      letter-spacing: 0.15em;
-    }
+  <style>
+    
   </style>
 </head>
 <body class=" font-sans overflow-x-hidden antialiased">
 
    <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
       <section class="">
-        <nav class=" flex w-full items-center justify-between py-2 px-6 bg-transparent">
+        <nav class=" flex w-full items-center justify-between py-2 px-6 md:px-14 bg-transparent">
           <div class="flex justify-between w-full">
-              <div class="flex items-center">
-                <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15" >
+              <div class="flex items-center pt-3">
+                <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
               </div>
-              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden">
+              
+               <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden ">
                   <div class="relative h-5 w-6">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                       
+                      <svg id="x-icon" class="hidden w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
                   </div>
               </button>
           </div>
@@ -111,11 +97,11 @@
 
         
 
-        <div class="w-full bg-slate-900 border-y border-white/10 py-4 overflow-hidden relative">
+        <div id="" class="w-full bg-slate-900 border-y border-white/10 py-2.5 overflow-hidden relative">
           <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
           <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-900 to-transparent z-10"></div>
 
-          <div id="premium-ticker" class="flex items-center whitespace-nowrap uppercase tracking-widest text-[10px] font-bold">
+          <div id="a-ticker" class="flex items-center whitespace-nowrap uppercase tracking-widest text-[10px] font-bold">
             <div class="flex items-center px-12 text-white/80">
               <span class="relative flex h-2 w-2 mr-3">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -165,18 +151,17 @@
     
 
  
-    <section class="bg-white/5 backdrop-blur-2xl mt-14 border border-white/10 py-10  bg-blend-multiply bg-[url('./image/track2.jpg')] object-cover bg-cover overflow-hidden">
+    <section id="" class="bg-white/5 backdrop-blur-2xl mt-14 border border-white/10 py-10  bg-blend-multiply bg-[url('./image/track2.jpg')] object-cover bg-cover overflow-hidden">
       <!-- <div class="bg-white/5 backdrop-blur-2xl border border-white/10 w-full shadow-2xl mt-20 rounded-3xl"> -->
         <div id="app-container" class="max-w-xl mt-10 mx-auto py-12 px-4 ">
             <div id="search-gate" class="bg-white p-8 rounded-[2.5rem] border border-slate-100 bg-white/5 backdrop-blur-2xl border-white/10 w-full shadow-2xl">
-                <h2 class="text-2xl font-black text-white mb-2 uppercase">Track Parcel</h2>
+                <h2 id="" class="text-2xl font-black text-white mb-2 uppercase reveal-from-bottom" data-reveal-delay="0.2s">Track Parcel</h2>
                 <p class="text-slate-100 text-xs mb-8 font-medium">Enter your ID to view shipment details.</p>
                 
-                <input type="text" id="trackingInput" placeholder="ENTER CODE" 
-                    class="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl mb-4 outline-none focus:ring-2 focus:ring-blue-600 font-mono uppercase transition-all">
+                <input type="text" id="trackingInput" placeholder="ENTER CODE" class="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl mb-4 outline-none focus:ring-2 focus:ring-blue-600 font-mono uppercase transition-all">
                 
-                <button onclick="handleTracking()" class="w-full bg-blue-900 text-white font-bold py-5 rounded-2xl hover:bg-blue-600 transition-all active:scale-95">
-                   <i class="fab fa-searchengin text-xl"></i> Find Shipment
+                <button onclick="handleTracking()" class="w-full bg-blue-900 text-white font-bold py-5 rounded-2xl hover:bg-blue-600 transition-all active:scale-95 ">
+                   <i class="fab fa-searchengin text-xl "></i> Find Shipment
                 </button>
                 
                 <p id="error-msg" class="hidden text-red-500 text-[10px] mt-4 text-center font-bold uppercase tracking-widest"></p>
@@ -192,7 +177,7 @@
       <div>
       <div class="items-center justify-between px-6 lg:flex md:px-16">
         <div class="py-6 max-w-100">
-          <h1 class="pb-2 font-serif text-6xl text-white animate__animated animate__heartBeat animate__slow animate__repeat-1 animate__delay-1s">SWIFT <br>FREIGHT</h1>
+          <h1 class="pb-2 font-serif text-6xl text-white reveal-init">SWIFT <br>FREIGHT</h1>
           <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
           <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
 
@@ -211,7 +196,7 @@
           </div>
           <div class="grid items-center grid-cols-2 md:flex gap-18">
             
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
               <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
               <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
@@ -219,14 +204,14 @@
               <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+            <div class="a-reveal flex-col items-center justify-center gap-10 md:pb-6">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
               <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
               <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
               <h1><a href="payment.html" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
               <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
               <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
@@ -237,11 +222,7 @@
         </div>
         </div>
       
-          <div class="items-center mt-10 text-center">
-            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
-              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
-            </button>
-          </div>
+          
       </section>
 
 
@@ -295,21 +276,19 @@
       </script>
 
 
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const xIcon = document.getElementById('x-icon');
 
-
-
-
-
-
-
-
-
-
-        <script>
-               
-        </script>
-
-
+        menuBtn.addEventListener('click', () => {
+        menuIcon.classList.toggle('hidden');
+        xIcon.classList.toggle('hidden');
+        console.log("Button clicked!");
+            });
+          });
+      </script>
 
         <script>
         

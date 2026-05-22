@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="output.css">
     <link rel="stylesheet" href="input.css">
-    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+    <link rel="icon" type="image/png" href="./image/loadingicon-removebg-preview.png" class="">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,12 +30,17 @@
       <section class="">
         <nav class=" flex w-full items-center justify-between py-2 px-6 bg-transparent">
           <div class="flex justify-between w-full">
-              <div class="flex items-center">
-                <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15" >
+              <div class="flex items-center pt-3">
+                <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
               </div>
-              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden">
+              
+               <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden ">
                   <div class="relative h-5 w-6">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                       
+                      <svg id="x-icon" class="hidden w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
                   </div>
               </button>
           </div>
@@ -90,39 +95,39 @@
 
     <section class="mt-10 pt-20 bg-blend-multiply bg-[url('./image/bt2.jpg')] object-cover bg-cover text-white py-12 px-6 flex items-center justify-center relative overflow-hidden">
   
-    <div class="absolute top-0 -left-20 w-96 h-96 bg-blue-800/20 rounded-full blur-[120px]"></div>
-    <div class="absolute bottom-0 -right-20 w-96 h-96 bg-red-900/10 rounded-full blur-[120px]"></div>
+      <div class="absolute top-0 -left-20 w-96 h-96 bg-blue-800/20 rounded-full blur-[120px]"></div>
+      <div class="absolute bottom-0 -right-20 w-96 h-96 bg-red-900/10 rounded-full blur-[120px]"></div>
 
-    <div class="max-w-5xl w-full grid lg:grid-cols-2 gap-12 relative z-10">
-    
-    <div class="flex flex-col justify-center">
-      <div class="flex items-center gap-2 mb-6">
-        <span class="w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
-        <span class="uppercase tracking-[0.2em] text-xs font-bold text-blue-600 [text-shadow:0_1px_2px]">Fast & Reliable</span>
-      </div>
-      <h1 class="text-4xl md:text-6xl font-bold mb-6 [text-shadow:0_1px_3px]">Ready to move <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">your cargo?</span>
-      </h1>
-      <p class="text-lg mb-8 font-semibold text-blue-950 max-w-md">Fill out the form to receive a custom quote for your logistics needs. Our team will get back to you within 24 hours.</p>
+      <div class="max-w-5xl w-full grid lg:grid-cols-2 gap-12 relative z-10">
+      
+      <div id="" class="flex flex-col justify-center">
+        <div id="welcome" class="flex items-center gap-2 mb-6">
+          <span class="w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
+          <span class="uppercase tracking-[0.2em] text-xs font-bold text-blue-600 [text-shadow:0_1px_2px]">Fast & Reliable</span>
+        </div>
+        <h1 id="welcome" class="text-4xl md:text-6xl font-bold mb-6 [text-shadow:0_1px_3px]">Ready to move <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">your cargo?</span>
+        </h1>
+        <p id="welcome" class="text-lg mb-8 font-semibold text-blue-950 max-w-md">Fill out the form to receive a custom quote for your logistics needs. Our team will get back to you within 24 hours.</p>
 
-      <div class="space-y-4">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
+        <div class="space-y-4">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p class="font-medium text-blue-950">Real-time GPS Tracking</p>
           </div>
-          <p class="font-medium text-blue-950">Real-time GPS Tracking</p>
-        </div>
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p class="font-medium text-blue-950">24/7 Delivery Support</p>
           </div>
-          <p class="font-medium text-blue-950">24/7 Delivery Support</p>
         </div>
       </div>
-    </div>
 
     <div class="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl">
       <form name="logistics-final" method="POST" data-netlify="true" action="/success">
@@ -177,7 +182,7 @@
     </div>
 
   </div>
-  </section>
+</section>
 
 
 
@@ -202,7 +207,7 @@
           </div>
           <div class="grid items-center grid-cols-2 md:flex gap-18">
             
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
               <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
               <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
@@ -210,14 +215,14 @@
               <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+            <div class="a-reveal flex-col items-center justify-center gap-10 md:pb-6">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
               <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
               <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
               <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
               <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
               <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
@@ -228,11 +233,7 @@
         </div>
         </div>
       
-          <div class="items-center mt-10 text-center">
-            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
-              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
-            </button>
-          </div>
+          
       </section>
 
 
@@ -281,6 +282,44 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const xIcon = document.getElementById('x-icon');
+
+        menuBtn.addEventListener('click', () => {
+        menuIcon.classList.toggle('hidden');
+        xIcon.classList.toggle('hidden');
+        console.log("Button clicked!");
+            });
+          });
+      </script>
 
 
 

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="output.css">
     <link rel="stylesheet" href="input.css">
-    <link rel="icon" type="image/png" href="./image/logo.png" class="">
+    <link rel="icon" type="image/png" href="./image/loadingicon-removebg-preview.png" class="">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,12 +31,17 @@
         <section class="">
         <nav class=" flex w-full items-center justify-between py-2 px-6 bg-transparent">
           <div class="flex justify-between w-full">
-              <div class="flex items-center">
-                <img src="./image/mainlog.jpeg" alt="logo" class="w-15 h-15" >
+              <div class="flex items-center pt-3">
+                <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
               </div>
-              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden">
+
+               <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden ">
                   <div class="relative h-5 w-6">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
+                       
+                      <svg id="x-icon" class="hidden w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
                   </div>
               </button>
           </div>
@@ -92,11 +97,11 @@
 
     <section class="py-20 bg-blue-900/50 bg-blend-multiply bg-[url('./image/bt8.jpg')] object-cover bg-cover h-100 text-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+    
         </div>
         <div class="relative z-10 max-w-3xl mx-auto px-6">
-            <h1 class="text-5xl font-black text-white mb-4 tracking-tight font-serif shado [text-shadow:0_2px_2px] animate-pulse"> Support Center</h1>
-            <p class="text-amber-200 text-lg">Our logistics experts are available 24/7 to assist with your shipments and technical inquiries.</p>
+            <h1 class="text-5xl font-black text-white mb-4 tracking-tight font-serif shado [text-shadow:0_2px_2px] animate-pulse reveal-from-right" data-reveal-delay="0.1s"> Support Center</h1>
+            <p class="text-amber-200 text-lg reveal-from-bottom" data-reveal-delay="0.3s">Our logistics experts are available 24/7 to assist with your shipments and technical inquiries.</p>
         </div>
     </section>
 
@@ -104,7 +109,7 @@
         <div class="grid lg:grid-cols-3 gap-8">
             
             <div class="lg:col-span-1 space-y-6">
-                <div class="bg-slate-300 p-8 rounded-[2rem] shadow-sm border border-slate-100">
+                <div class="bg-slate-300 p-8 rounded-[2rem] shadow-sm border border-slate-100 reveal-from-left" data-reveal-delay="0.1s">
                     <div class="flex items-center space-x-4 mb-6">
                         <div class="relative">
                             <div class="w-3 h-3 bg-green-500 rounded-full absolute -right-0.5 -top-0.5 animate-ping"></div>
@@ -139,7 +144,7 @@
                     </div>
                 </div>
 
-                <div class="bg-blue-950 p-8 rounded-[2rem] text-white">
+                <div class="bg-blue-950 p-8 rounded-[2rem] text-white reveal-from-right" data-reveal-delay="0.1s">
                     <h3 class="text-blue-500 font-bold uppercase text-[10px] tracking-[0.3em] mb-6">Main Headquarters</h3>
                     <p class="text-sm text-slate-300 leading-relaxed">
                         United States Head Office:<br> 1201 Peachtree Street NE,<br> Atlanta, GA 30361
@@ -157,22 +162,22 @@
                 <form name="contact-form" method="POST" data-netlify="true" action="/success" class="space-y-6 ">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                            <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Full Name</label>
                             <input type="text" name="clientname" placeholder="John Doe" class="w-full p-4 bg-blue-50 text-blue-950 border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                            <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Email Address</label>
                             <input type="email" placeholder="john@example.com" name="client-email" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                         </div>
                     </div>
                     
                     <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tracking Number (Optional)</label>
+                        <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Tracking Number (Optional)</label>
                         <input type="text" placeholder="SFL-XXXXXXXX" name="client-tracking-number" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all uppercase font-mono">
                     </div>
 
                     <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Message</label>
+                        <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Message</label>
                         <textarea rows="5" name="client-message" placeholder="How can our logistics team help you?" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"></textarea>
                     </div>
 
@@ -208,9 +213,9 @@
           <div>
             <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
           </div>
-          <div class="grid items-center grid-cols-2 md:flex gap-18">
+          <div class="grid items-center grid-cols-2 md:flex gap-18 reveal-from-bottom" data-reveal-delay="0.1s">
             
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
               <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
               <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
@@ -218,14 +223,14 @@
               <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10 md:pb-6">
+            <div class="a-reveal flex-col items-center justify-center gap-10 md:pb-6">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
               <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
               <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
               <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
             </div>
 
-            <div class="premium-reveal flex-col items-center justify-center gap-10">
+            <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
               <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
               <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
@@ -236,11 +241,7 @@
         </div>
         </div>
       
-          <div class="items-center mt-10 text-center">
-            <button class="items-center px-2 pb-3 text-center transition-all duration-1000 bg-blue-400 w-fit rounded-2xl hover:bg-slate-400 hover:scale-105">
-              <a href="#Top" class="font-bold text-white">Back To Top</a><i class="pl-2 text-4xl text-red-600 fas fa-angle-up"></i>
-            </button>
-          </div>
+          
       </section>
 
 
@@ -278,6 +279,29 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const xIcon = document.getElementById('x-icon');
+
+        menuBtn.addEventListener('click', () => {
+        menuIcon.classList.toggle('hidden');
+        xIcon.classList.toggle('hidden');
+        console.log("Button clicked!");
+            });
+          });
+      </script>
 
       <script>
           window.addEventListener("load", () => {

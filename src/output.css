@@ -554,18 +554,16 @@ video {
   display: none;
 }
 
-/* THE FIX: Add this below the tailwind directives */
-
 html, body {
   max-width: 100%;
   overflow-x: hidden;
   position: relative;
-  /* This prevents the "wiggle" when scrolling on mobile */
   touch-action: pan-y;
 }
-
-/* If you have elements flying in from the side (like the truck), clip them */
 
 .hero-container, #Top {
   overflow-x: clip !important;
 }
+
+
+
