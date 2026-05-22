@@ -14,23 +14,233 @@
     <link rel="icon" type="image/png" href="./image/logo.png" class="">
 
 </head>
-<body>
-    
-<div class="flex overflow-x-auto snap-x snap-mandatory gap-6 p-4 scrollbar-hide">
-  
-  <div class="snap-center shrink-0 w-80 h-64 bg-gray-200 rounded-xl overflow-hidden">
-    <img src="your-image-1.jpg" class="w-full h-full object-cover" />
-  </div>
-  
-  <div class="snap-center shrink-0 w-80 h-64 bg-gray-200 rounded-xl overflow-hidden">
-    <img src="your-image-2.jpg" class="w-full h-full object-cover" />
-  </div>
-  
-  <div class="snap-center shrink-0 w-80 h-64 bg-gray-200 rounded-xl overflow-hidden">
-    <img src="your-image-3.jpg" class="w-full h-full object-cover" />
+
+<body class="bg-slate-950 min-h-screen flex items-center justify-center p-6 text-white">
+
+  <div class="w-full max-w-5xl">
+
+    <!-- Main Container -->
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-cyan-700 via-blue-900 to-slate-900 p-8">
+
+        <div class="flex flex-col md:flex-row justify-between gap-5">
+
+          <div>
+            <p class="uppercase tracking-[0.3em] text-cyan-300 text-xs font-semibold">
+              Logistics Tracking
+            </p>
+
+            <h1 class="text-4xl font-bold mt-3">
+              SwiftFreight
+            </h1>
+
+            <p class="text-slate-300 mt-2">
+              Premium shipment tracking dashboard
+            </p>
+          </div>
+
+          <!-- Search -->
+          <div class="flex gap-3">
+
+            <input
+              id="trackInput"
+              type="text"
+              placeholder="Enter Tracking ID"
+              class="bg-slate-800 border border-slate-700 rounded-xl px-5 py-4 outline-none focus:border-cyan-400 w-64"
+            >
+
+            <button
+              onclick="showTracking()"
+              class="bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold px-6 rounded-xl transition-all duration-300"
+            >
+              Track
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Hidden Tracking Area -->
+      <div id="trackingBox" class="hidden p-8">
+
+        <!-- Top Cards -->
+        <div class="grid md:grid-cols-3 gap-5 mb-10">
+
+          <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            <p class="text-slate-400 text-sm">Tracking Number</p>
+            <h2 class="text-2xl font-bold mt-2">SWF-204938</h2>
+          </div>
+
+          <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            <p class="text-slate-400 text-sm">Current Location</p>
+            <h2 class="text-2xl font-bold mt-2 text-cyan-400">
+              Lagos Hub
+            </h2>
+          </div>
+
+          <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            <p class="text-slate-400 text-sm">Delivery Status</p>
+            <h2 class="text-2xl font-bold mt-2 text-green-400">
+              In Transit
+            </h2>
+          </div>
+
+        </div>
+
+        <!-- Route -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 border border-slate-700 mb-10">
+
+          <div class="flex items-center justify-between mb-8">
+
+            <h2 class="text-2xl font-bold">
+              Shipment Route
+            </h2>
+
+            <div class="bg-green-500/20 border border-green-500/30 text-green-400 px-4 py-2 rounded-full text-sm">
+              LIVE
+            </div>
+
+          </div>
+
+          <div class="flex items-center justify-between gap-4">
+
+            <div class="text-center">
+              <div class="w-6 h-6 rounded-full bg-cyan-400 mx-auto"></div>
+              <p class="mt-3">China</p>
+            </div>
+
+            <div class="flex-1 h-1 bg-cyan-500 rounded-full"></div>
+
+            <div class="text-center">
+              <div class="w-8 h-8 rounded-full bg-cyan-400 ring-8 ring-cyan-500/20 animate-pulse mx-auto"></div>
+              <p class="mt-3 text-cyan-400 font-semibold">
+                Lagos
+              </p>
+            </div>
+
+            <div class="flex-1 h-1 bg-slate-700 rounded-full"></div>
+
+            <div class="text-center">
+              <div class="w-6 h-6 rounded-full bg-slate-600 mx-auto"></div>
+              <p class="mt-3 text-slate-400">
+                Delivery
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Timeline -->
+        <div class="space-y-6 border-l border-slate-700 ml-3">
+
+          <!-- Item -->
+          <div class="relative pl-10">
+
+            <div class="absolute -left-[13px] top-2 w-6 h-6 rounded-full bg-green-500 border-4 border-slate-900"></div>
+
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+
+              <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">
+                  Package Received
+                </h3>
+
+                <span class="text-green-400 text-sm">
+                  Completed
+                </span>
+              </div>
+
+              <p class="text-slate-400 mt-2">
+                Shipment received at export warehouse.
+              </p>
+
+            </div>
+
+          </div>
+
+          <!-- Item -->
+          <div class="relative pl-10">
+
+            <div class="absolute -left-[13px] top-2 w-6 h-6 rounded-full bg-cyan-400 border-4 border-slate-900 animate-pulse"></div>
+
+            <div class="bg-slate-800 rounded-2xl p-5 border border-cyan-500/40">
+
+              <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-cyan-400">
+                  Arrived at Lagos Hub
+                </h3>
+
+                <span class="text-cyan-400 text-sm">
+                  Current
+                </span>
+              </div>
+
+              <p class="text-slate-300 mt-2">
+                Shipment currently processing in Lagos.
+              </p>
+
+            </div>
+
+          </div>
+
+          <!-- Item -->
+          <div class="relative pl-10">
+
+            <div class="absolute -left-[13px] top-2 w-6 h-6 rounded-full bg-slate-600 border-4 border-slate-900"></div>
+
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 opacity-70">
+
+              <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">
+                  Final Delivery
+                </h3>
+
+                <span class="text-slate-400 text-sm">
+                  Pending
+                </span>
+              </div>
+
+              <p class="text-slate-400 mt-2">
+                Shipment awaiting dispatch.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
-</div>
+  <script>
+    function showTracking() {
+      const box = document.getElementById("trackingBox");
+      const input = document.getElementById("trackInput");
+
+      if (input.value.trim() !== "") {
+        box.classList.remove("hidden");
+
+        box.scrollIntoView({
+          behavior: "smooth"
+        });
+
+      } else {
+        alert("Please enter tracking ID");
+      }
+    }
+  </script>
+
+</body>
+</html>
 
 
 
