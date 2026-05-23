@@ -86,7 +86,7 @@
                       searchGate.style.display = 'none';
 
                       dashboard.innerHTML = `
-                          <div class="dashboard-panel max-w-3xl mx-auto overflow-hidden rounded-[3rem] border border-white/10 bg-slate-950/85 shadow-[0_45px_120px_rgba(15,23,42,0.55)] backdrop-blur-3xl text-slate-100">
+                          <div class="dashboard-panel mx-auto overflow-hidden rounded-[3rem] border border-white/10 bg-slate-950/85 shadow-[0_45px_120px_rgba(15,23,42,0.55)] backdrop-blur-3xl text-slate-100">
                               <div class="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-950/90 to-cyan-950/95 px-8 py-8">
                                   <div class="pointer-events-none absolute -left-24 top-8 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl"></div>
                                   <div class="pointer-events-none absolute -right-28 bottom-12 h-56 w-56 rounded-full bg-blue-500/10 blur-3xl"></div>
@@ -107,8 +107,8 @@
                                   </div>
                               </div>
 
-                              <div class="grid gap-6 lg:grid-cols-[1.25fr_0.9fr] p-8">
-                                  <div class="space-y-6">
+                              <div class="grid gap-6 lg:grid-cols-[1.25fr_0.9fr] w-full h-auto p-8">
+                                  <div class="space-y-6 relative">
                                       <div class="panel-card rounded-[2.5rem] border border-white/10 bg-slate-900/70 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.32)] backdrop-blur-xl">
                                           <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                               <div>
@@ -120,9 +120,12 @@
                                           <p class="mt-4 text-sm leading-relaxed text-slate-300">Latest location: <span class="font-semibold text-white">${shipment.currentLocation || 'Unknown location'}</span></p>
                                       </div>
 
-                                        <div id="fluid-line" class="absolute left-[19px] top-4 bottom-10 w-[4px] bg-gradient-to-b from-green-600 via-green-400 to-transparent origin-top scale-y-0 animate-pulse"></div>
-
-                                      <div class="space-y-4">
+                                        <div class="relative">
+                                            <div class="pointer-events-none absolute top-2  bottom-20 left-[18px] w-1 h-100 rounded-full bg-gradient-to-b from-emerald-400/80 via-green-400/50 to-transparent shadow-[0_0_40px_rgba(52,211,153,0.35)]">
+                                            </div>
+                                        </div>
+                                
+                                      <div class="space-y-4 relative z-10">
                                           ${renderEliteStep(shipment.status, shipment.currentLocation, 'Picked Up', 'fa-box', true, shipment.transit1textcolor)}
                                           ${renderEliteStep(shipment.TrasitStep3Name, shipment.TrasitStep3Location, 'Loaded', 'fa-truck', !!shipment.TrasitStep3Name, shipment.transit3textcolor)}
                                           ${renderEliteStep(shipment.Transitstep2Name, shipment.Transitstep2Location, 'Transit', 'fa-plane', !!shipment.transitStep2Name, shipment.transit2textcolor)}
@@ -145,13 +148,13 @@
                                           </ul>
                                       </div>
                                       ${isPaid ? `
-                                          <div class="panel-card rounded-[2.5rem] border border-emerald-400/15 bg-emerald-500/10 p-6 shadow-[0_20px_90px_rgba(16,185,129,0.15)] backdrop-blur-xl">
+                                          <div class="panel-card rounded-[2.5rem] border border-green-800 bg-green-500/10 p-6 shadow-green-600 shadow-sm backdrop-blur-xl">
                                               <div class="flex items-center justify-between mb-4">
                                                   <div>
-                                                      <p class="text-xs uppercase tracking-[0.4em] text-emerald-200">Shipment Status</p>
+                                                      <p class="text-xs uppercase tracking-[0.4em] text-green-300">Shipment Status</p>
                                                       <h3 class="mt-2 text-3xl font-extrabold text-white">Package Secured</h3>
                                                   </div>
-                                                  <span class="rounded-full bg-emerald-500/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-100">${shipment.paymentStatus}</span>
+                                                  <span class="rounded-full bg-green-500 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-100">${shipment.paymentStatus}</span>
                                               </div>
                                               <p class="text-sm leading-relaxed text-slate-200">Your delivery is cleared and proceeding on schedule.</p>
                                           </div>
@@ -160,7 +163,7 @@
                                           <div class="flex items-center justify-between mb-4">
                                               <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Payment</p>
                                               ${isPaid ? `
-                                              <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-100">Comfirmed</span>
+                                              <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-green-600">Comfirmed</span>
                                               ` : `
                                               <span class="rounded-full bg-amber-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-200">Pending</span>
                                               `}
@@ -214,11 +217,12 @@
           const colorClass = color || "text-blue-500"; 
           // We replace 'text-' with 'bg-' for the icon background if needed
           const bgClass = colorClass.replace("text-", "bg-").replace("-500", "-950");
+           
 
           return `
           <div class="step-item relative pl-14 group">
-              <div class="absolute left-0 top-1 w-10 h-10 rounded-2xl ${bgClass} border border-white/10 flex items-center justify-center ${colorClass} icon-anim">
-                  <i class="fas ${icon} text-xs animate-bounce"></i>
+              <div class="absolute left-0 top-1 w-10 h-10 rounded-4xl ${bgClass} border border-white/10 flex items-center justify-center ${colorClass} icon-anim">
+                  <i class="fas ${icon} text-xs text-shadow-2xl  animate-bounce"></i>
               </div>
               
               <div class="bg-white/5 p-5 rounded-[2rem] border border-white/10 shadow-[0_20px_80px_rgba(15,23,42,0.15)] backdrop-blur-xl transition duration-300 hover:-translate-y-1">
