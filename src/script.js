@@ -128,6 +128,8 @@
                                           ${renderEliteStep(shipment.Transitstep2Name, shipment.Transitstep2Location, 'Transit', 'fa-plane', !!shipment.transitStep2Name, shipment.transit2textcolor)}
                                           ${renderEliteStep(shipment.TransitStep1Name, shipment.TransitStep1Location, 'Arrival', 'fa-box-open', !!shipment.TransitStep1Name, shipment.transit2textcolor)}
                                       </div>
+
+                                      
                                   </div>
 
                                   <div class="space-y-6">
