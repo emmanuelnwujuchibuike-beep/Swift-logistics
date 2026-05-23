@@ -23,22 +23,25 @@
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-  <style>
-    
-  </style>
+  
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{display:['Bebas Neue'],body:['DM Sans'],mono:['JetBrains Mono']}}}}</script>
 </head>
 <body class=" font-sans overflow-x-hidden antialiased">
 
-   <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
-      <section class="">
-        <nav class=" flex w-full items-center justify-between py-2 px-6 md:px-14 bg-transparent">
-          <div class="flex justify-between w-full">
+   <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50 animated-gradient">
+      <section class="bg-gradient-to-br from-blue-50 via-blue-300 to-indigo-50">
+        <nav class=" flex w-full items-center justify-between px-6 bg-transparent">
+          <div class="flex justify-between w-full items-center">
               <div class="flex items-center pt-3">
                 <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
               </div>
+
+              <div class="uppercase font-semibold lg:hidden">
+                <h1 class="text-blue-950 text-[13px] italic mt-2 font-serif reveal-from-left">swift Freight Logix</h1>
+              </div>
               
-               <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden ">
+               <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 lg:hidden ">
                   <div class="relative h-5 w-6">
                       <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
                        
@@ -50,7 +53,7 @@
           </div>
           
 
-          <div class="md:flex md:justify-between md:gap-8 md:items-center">
+          <div class="lg:flex md:hidden md:justify-between md:gap-8 md:items-center">
             <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
               <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
               <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
@@ -85,7 +88,7 @@
                     <li><a href="about.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">about Us</a></li>
                 </ul>
                 
-                <div class="mt-auto mb-12">
+                <div class="mt-auto mb-32">
                     <button class="w-full rounded-xl bg-blue-950 py-4 text-white font-bold shadow-xl hover:bg-blue-900 transition-all">
                        <a href="quote.html">Get a Quote</a> 
                     </button>
@@ -158,7 +161,7 @@
                 <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.25),_transparent_35%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.16),_transparent_28%)]"></div>
                 <div class="relative z-10">
                     <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
+                        <div class="reveal-from-bottom">
                             <p class="text-cyan-300 font-mono text-[10px] tracking-[0.45em] uppercase mb-2">Premium Tracking</p>
                             <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">Track Your Shipment</h2>
                         </div>
@@ -207,7 +210,7 @@
           <div>
             <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
           </div>
-          <div class="grid items-center grid-cols-2 md:flex gap-18">
+          <div class="grid items-center grid-cols-2 md:flex reveal-from-bottom gap-18">
             
             <div class="a-reveal flex-col items-center justify-center gap-10">
               <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
@@ -255,17 +258,15 @@
 
 
       
-      <section>
-        <div id="loader-wrapper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white/80 backdrop-blur-md transition-opacity duration-500">
-          <div class="relative flex items-center justify-center">
-            <!-- The Icon: Using 'animate-pulse' or 'animate-bounce' -->
-            <img src="./image/loadingicon-removebg-preview.png" alt="Loading" class="w-16 h-16 z-10 animate-pulse">
-            
-            <!-- Outer Ring: Custom spinning animation -->
-            <div class="absolute w-18 h-18 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
+       <!-- LOADER -->
+    <section>
+        <div id="loader">
+          <div class="loader-wordmark">
+            <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
           </div>
+          <div class="loader-bar"><div class="loader-bar-fill"></div></div>
         </div>
-      </section>
+    </section>
 
 
 
@@ -284,7 +285,7 @@
 
           setTimeout(() => {
             loader.style.display = "none";
-          }, 500); 
+          }, 20); 
         });
       </script>
 

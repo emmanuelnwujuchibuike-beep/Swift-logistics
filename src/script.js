@@ -3,7 +3,6 @@
 
 
 
-
           function switchPayment(method, info) {
                   // Make sure this ID exists inside your newly injected HTML
           const display = document.getElementById('payment-detail-display');
@@ -116,10 +115,12 @@
                                                   <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Current Status</p>
                                                   <h3 class="mt-2 text-3xl font-extrabold text-white">${shipment.status || 'In Transit'}</h3>
                                               </div>
-                                              <span class="rounded-full bg-green-500 flex px-4 items-center gap-2 text-nowrap py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100"> <svg xmlns="http://www.w3.org/2000/svg" height="34px" viewBox="0 -960 960 960" width="34px" fill="#FDF3D0"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H182l4-17q6-28 27.5-45.5T264-800h456l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-19-273 2-7-84 360 2-7 34-146 46-200ZM20-427l20-80h220l-20 80H20Zm80-146 20-80h260l-20 80H100Zm180 333q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z" class="animated-pulse"/></svg>${shipment.priority || 'Priority'}</span>
+                                              <span class="rounded-full bg-green-500 flex px-4 animate-pulse items-center gap-2 text-nowrap py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100"> <svg xmlns="http://www.w3.org/2000/svg" height="34px" viewBox="0 -960 960 960" width="34px" fill="#FDF3D0"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H182l4-17q6-28 27.5-45.5T264-800h456l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-19-273 2-7-84 360 2-7 34-146 46-200ZM20-427l20-80h220l-20 80H20Zm80-146 20-80h260l-20 80H100Zm180 333q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z" class="animated-bounce"/></svg>${shipment.priority || 'Priority'}</span>
                                           </div>
                                           <p class="mt-4 text-sm leading-relaxed text-slate-300">Latest location: <span class="font-semibold text-white">${shipment.currentLocation || 'Unknown location'}</span></p>
                                       </div>
+
+                                        <div id="fluid-line" class="absolute left-[19px] top-4 bottom-10 w-[4px] bg-gradient-to-b from-green-600 via-green-400 to-transparent origin-top scale-y-0 animate-pulse"></div>
 
                                       <div class="space-y-4">
                                           ${renderEliteStep(shipment.status, shipment.currentLocation, 'Picked Up', 'fa-box', true, shipment.transit1textcolor)}
@@ -163,9 +164,15 @@
                                               `}
                                           </div>
                                           
+                                            
+
                                           <p class="mt-3 text-sm text-slate-400">${isPaid ? 'Payment confirmed for this shipment.' : 'Payment is pending. Select a secure option below.'}</p>
 
                                           ${isPaid ? '' : `
+                                            <div class="flex justify-between items-center mb-6">
+                                                <p class="text-green-800 font-semibold text-[18px] uppercase tracking-widest">Service Invoice</p>
+                                                <span class="text-white font-mono text-3xl font-bold">${shipment.amountDue || '$0.00'}</span>
+                                            </div>
                                               <div class="mt-6 grid gap-3">
                                                   <button onclick="switchPayment('BTC', '${shipment.btcAddress}')" class="w-full rounded-2xl bg-white/10 px-4 py-3 text-sm uppercase tracking-[0.18em] text-white transition hover:bg-white/20">BTC</button>
                                                   <button onclick="switchPayment('USDT', '${shipment.usdtAddress}')" class="w-full rounded-2xl bg-white/10 px-4 py-3 text-sm uppercase tracking-[0.18em] text-white transition hover:bg-white/20">USDT</button>
@@ -209,7 +216,7 @@
           return `
           <div class="step-item relative pl-14 group">
               <div class="absolute left-0 top-1 w-10 h-10 rounded-2xl ${bgClass} border border-white/10 flex items-center justify-center ${colorClass} icon-anim">
-                  <i class="fas ${icon} text-xs"></i>
+                  <i class="fas ${icon} text-xs animate-bounce"></i>
               </div>
               
               <div class="bg-white/5 p-5 rounded-[2rem] border border-white/10 shadow-[0_20px_80px_rgba(15,23,42,0.15)] backdrop-blur-xl transition duration-300 hover:-translate-y-1">
@@ -222,7 +229,7 @@
           </div>`;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initializeRevealAnimations() {
         const revealElements = document.querySelectorAll('.reveal-init, .reveal-from-left, .reveal-from-right, .reveal-from-bottom');
         if (revealElements.length === 0) return;
 
@@ -249,10 +256,8 @@
             }
             revealObserver.observe(element);
         });
-    });
+    }
 
-
-    
     document.addEventListener('DOMContentLoaded', () => {
         const menuBtn = document.getElementById('menu-btn');
         const sideMenu = document.getElementById('side-menu');
@@ -331,4 +336,21 @@
         window.addEventListener('resize', updateButton);
         // run once after small delay so layout settles
         setTimeout(updateButton, 120);
+    });
+
+
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        const hideLoaderAndStartReveals = () => {
+            if (loader) {
+                loader.classList.add('hidden');
+            }
+            initializeRevealAnimations();
+        };
+
+        if (loader) {
+            setTimeout(hideLoaderAndStartReveals, 1600);
+        } else {
+            initializeRevealAnimations();
+        }
     });

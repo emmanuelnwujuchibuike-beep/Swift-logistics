@@ -24,22 +24,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{display:['Bebas Neue'],body:['DM Sans'],mono:['JetBrains Mono']}}}}</script>
   </head>
-  <body class=" pt-20 opacity-100 duration-300 overflow-x-hidden font-['roboto'] delay-100">
-
-     <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50">
-        <section class="">
-        <nav class=" flex w-full items-center justify-between py-2 px-6 bg-transparent">
-          <div class="flex justify-between w-full">
+  <body class="h-200vh max-w-[100%] pt-20 overflow-x-hidden font-['roboto'] bg-gradient-to-br from-blue-100 via-blue-50 to-blue-100">
+    <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50 animated-gradient">
+      <section class="bg-gradient-to-br from-blue-50 via-blue-300 to-indigo-50">
+        <nav class=" flex w-full items-center justify-between px-6 bg-transparent">
+          <div class="flex justify-between w-full items-center">
               <div class="flex items-center pt-3">
                 <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
               </div>
 
-               <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden ">
+              <div class="uppercase font-semibold lg:hidden">
+                <h1 class="text-blue-950 text-[13px] font-serif italic mt-2 reveal-from-left">swift Freight Contact</h1>
+              </div>
+
+              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 lg:hidden ">
                   <div class="relative h-5 w-6">
                       <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
                        
-                      <svg id="x-icon" class="hidden w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg id="x-icon" class="hidden w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                       </svg>
                   </div>
@@ -47,7 +52,7 @@
           </div>
           
 
-          <div class="md:flex md:justify-between md:gap-8 md:items-center">
+          <div class="lg:flex hidden md:justify-between md:gap-8 md:items-center">
             <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
               <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
               <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
@@ -69,21 +74,21 @@
           </div>
         </nav>
 
-        <div id="overlay" class="fixed inset-0 z-[80] hidden bg-black/20 backdrop-blur-[5px] transition-opacity duration-500 opacity-0"></div>
+        <div id="overlay" class="fixed inset-0 z-[80] hidden bg-black/20 backdrop-blur-sm transition-opacity duration-500 opacity-0"></div>
 
-        <div id="side-menu" class="fixed top-0 right-0 z-[90] h-screen w-[65%] translate-x-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
+        <div id="side-menu" class="fixed top-0 right-0 z-[90] h-screen w-[65%] translate-x-full bg-blue-950 shadow-[-20px_0_50px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-in-out">
             <div class="flex flex-col h-full pt-32 px-10">
                 <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-10">Menu</h2>
                 <ul class="space-y-6">
-                    <li><a href="index.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Home</a></li>
-                    <li><a href="payment.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Track Shipment</a></li>
-                    <li><a href="services.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Our Services</a></li>
-                    <li><a href="contact.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Contact</a></li>
-                    <li><a href="about.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">about Us</a></li>
+                    <li><a href="index.html" class="text-2xl menu-item font-bold text-white hover:text-blue-600 transition-all duration-700 delay-100">Home</a></li>
+                    <li><a href="payment.html" class="text-2xl menu-item font-bold text-white hover:text-blue-600 transition-colors">Track Shipment</a></li>
+                    <li><a href="services.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">Our Services</a></li>
+                    <li><a href="contact.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">Contact</a></li>
+                    <li><a href="about.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">about Us</a></li>
                 </ul>
                 
-                <div class="mt-auto mb-12">
-                    <button class="w-full rounded-xl bg-blue-950 py-4 text-white font-bold shadow-xl hover:bg-blue-900 transition-all">
+                <div class="mt-auto mb-32">
+                    <button class="w-full rounded-xl bg-gradient-to-br from-blue-400 via-indigo-100 to-blue-200 py-4 text-blue-950 font-bold shadow-xl hover:bg-blue-900 transition-all">
                        <a href="quote.html">Get a Quote</a> 
                     </button>
                 </div>
@@ -162,22 +167,22 @@
                 <form name="contact-form" method="POST" data-netlify="true" action="/success" class="space-y-6 ">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Full Name</label>
+                            <label class="text-[10px] font-black text-slate-300 uppercase tracking-widest ml-1">Full Name</label>
                             <input type="text" name="clientname" placeholder="John Doe" class="w-full p-4 bg-blue-50 text-blue-950 border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Email Address</label>
+                            <label class="text-[10px] font-black text-slate-300 uppercase tracking-widest ml-1">Email Address</label>
                             <input type="email" placeholder="john@example.com" name="client-email" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                         </div>
                     </div>
                     
                     <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Tracking Number (Optional)</label>
+                        <label class="text-[10px] font-black text-slate-300 uppercase tracking-widest ml-1">Tracking Number (Optional)</label>
                         <input type="text" placeholder="SFL-XXXXXXXX" name="client-tracking-number" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all uppercase font-mono">
                     </div>
 
                     <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-800 uppercase tracking-widest ml-1">Message</label>
+                        <label class="text-[10px] font-black text-slate-300 uppercase tracking-widest ml-1">Message</label>
                         <textarea rows="5" name="client-message" placeholder="How can our logistics team help you?" class="w-full p-4  bg-blue-50 text-blue-950 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"></textarea>
                     </div>
 
@@ -261,17 +266,15 @@
 
 
       
-      <section>
-        <div id="loader-wrapper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white/80 backdrop-blur-md transition-opacity duration-500">
-          <div class="relative flex items-center justify-center">
-            <!-- The Icon: Using 'animate-pulse' or 'animate-bounce' -->
-            <img src="./image/loadingicon-removebg-preview.png" alt="Loading" class="w-16 h-16 z-10 animate-pulse">
-            
-            <!-- Outer Ring: Custom spinning animation -->
-            <div class="absolute w-18 h-18 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
+       <!-- LOADER -->
+    <section>
+        <div id="loader">
+          <div class="loader-wordmark">
+            <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
           </div>
+          <div class="loader-bar"><div class="loader-bar-fill"></div></div>
         </div>
-      </section>
+    </section>
 
 
 
