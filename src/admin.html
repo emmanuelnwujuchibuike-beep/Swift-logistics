@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SFL Admin — Shipment Manager</title>
+<link rel="icon" type="image/svg+xml" href="./image/sfl-logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --accent:#3b82f6; --accent-hi:#60a5fa; --accent-rgb:59,130,246;
+  --bg:#03081a; --bg2:#060d20; --bg3:#080f26;
+  --surface:rgba(255,255,255,.035); --surface2:rgba(255,255,255,.06);
+  --text:#e8f0fe; --muted:rgba(232,240,254,.6); --muted2:rgba(232,240,254,.36);
+  --border:rgba(232,240,254,.07); --border2:rgba(232,240,254,.12);
+  --aborder:rgba(59,130,246,.22); --hdr-bg:rgba(3,8,26,.92);
+  --sidebar-w:240px; --hdr-h:60px;
+  --green:#22c55e; --amber:#f59e0b; --red:#ef4444;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(var(--accent-rgb),.3);border-radius:99px}
+
+/* ── Login ── */
+#login-screen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+#login-screen::before{content:'';position:absolute;top:-40%;left:-20%;width:60%;height:80%;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.06),transparent 70%);pointer-events:none}
+.login-card{width:100%;max-width:400px}
+.login-logo{font-family:'Bebas Neue';font-size:clamp(1.5rem,6vw,1.9rem);letter-spacing:.18em;color:var(--text);margin-bottom:6px}
+.login-logo span{color:var(--accent)}
+.login-sub{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted2);margin-bottom:32px}
+.login-glass{background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:clamp(24px,6vw,36px) clamp(20px,6vw,32px);backdrop-filter:blur(12px)}
+.login-glass h2{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:22px;letter-spacing:.04em}
+#login-err{color:#f87171;font-size:.8rem;margin-top:12px;display:none}
+
+/* ── Shared inputs ── */
+.f-group{margin-bottom:18px}
+.f-group label{display:block;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
+.f-input,.f-select,.f-textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:10px 13px;color:var(--text);font-size:.86rem;font-family:'DM Sans';outline:none;transition:border-color .2s}
+.f-input.mono{font-family:'JetBrains Mono';font-size:.82rem}
+.f-input:focus,.f-select:focus,.f-textarea:focus{border-color:var(--accent)}
+.f-select{cursor:pointer}.f-select option{background:var(--bg2)}
+.f-textarea{resize:vertical;min-height:80px}
+.f-hint{font-size:.7rem;color:var(--muted2);margin-top:5px}
+
+/* ── Buttons ── */
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--accent);color:#fff;border:none;border-radius:3px;padding:12px 24px;font:600 .82rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.btn-primary:hover{background:var(--accent-hi);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--border2);color:var(--muted);border-radius:3px;padding:11px 22px;font:600 .79rem/1 'DM Sans';letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-secondary:disabled{opacity:.45;cursor:not-allowed}
+.btn-danger{display:inline-flex;align-items:center;gap:8px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:3px;padding:11px 22px;font:600 .79rem/1 'DM Sans';letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-danger:hover{background:rgba(239,68,68,.2)}
+.btn-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:3px;background:rgba(var(--accent-rgb),.08);border:1px solid var(--aborder);color:var(--accent);cursor:pointer;transition:all .15s;font-size:.85rem;text-decoration:none}
+.btn-icon:hover{background:rgba(var(--accent-rgb),.18)}
+
+/* ── App layout ── */
+#admin-app{display:none;height:100vh;overflow:hidden}
+.app-grid{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:var(--hdr-h) 1fr;height:100vh}
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;background:var(--hdr-bg);border-bottom:1px solid var(--border);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);z-index:100;box-shadow:0 1px 0 rgba(var(--accent-rgb),.06)}
+.topbar-brand{font-family:'Bebas Neue';font-size:1.18rem;letter-spacing:.22em;color:var(--text);display:flex;align-items:center;gap:12px;text-decoration:none}
+.topbar-brand span{color:var(--accent)}
+.admin-badge{font-size:.58rem;letter-spacing:.34em;text-transform:uppercase;background:rgba(var(--accent-rgb),.1);color:var(--accent);border:1px solid var(--aborder);border-radius:2px;padding:3px 8px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.conn-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;margin-right:6px;transition:background .3s}
+.conn-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+.conn-status{font-size:.73rem;color:var(--muted2);display:flex;align-items:center}
+.topbar-logout{background:none;border:1px solid var(--border2);color:var(--muted);padding:6px 14px;border-radius:3px;font:600 .72rem/1 'DM Sans';letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.topbar-logout:hover{border-color:var(--accent);color:var(--accent)}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-section{font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:var(--muted2);padding:0 18px 8px;opacity:.7}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 18px;font:500 .83rem/1 'DM Sans';color:var(--muted);cursor:pointer;border-left:3px solid transparent;transition:color .22s,border-color .22s,background .22s;text-decoration:none;user-select:none;margin:1px 8px;border-radius:0 4px 4px 0;border-left-width:3px}
+.nav-item i{width:16px;text-align:center;font-size:.8rem;flex-shrink:0;opacity:.8}
+.nav-item:hover{color:var(--text);background:rgba(var(--accent-rgb),.05)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(var(--accent-rgb),.09)}
+.nav-item.active i{opacity:1}
+.nav-divider{height:1px;background:var(--border);margin:12px 18px}
+.sidebar-badge{margin-left:auto;background:linear-gradient(135deg,var(--accent),var(--accent-hi));color:#fff;font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:99px;min-width:20px;text-align:center;letter-spacing:.04em}
+.main-content{overflow-y:auto;background:var(--bg);padding:32px;scroll-behavior:smooth}
+.main-content::-webkit-scrollbar{width:4px}
+.main-content::-webkit-scrollbar-thumb{background:rgba(var(--accent-rgb),.2);border-radius:99px}
+.view{display:none}.view.active{display:block}
+.page-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.page-hdr-left h1{font:700 1.5rem/1.1 'DM Sans';color:var(--text);margin-bottom:5px;letter-spacing:-.01em}
+.page-hdr-left p{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* ── Stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:22px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;cursor:default}
+.stat-card:hover{border-color:var(--aborder);transform:translateY(-1px)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),rgba(var(--accent-rgb),.0))}
+.stat-card::after{content:'';position:absolute;bottom:0;right:0;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),.07),transparent 70%);pointer-events:none}
+.stat-card.green::before{background:linear-gradient(90deg,var(--green),rgba(34,197,94,0))}
+.stat-card.green::after{background:radial-gradient(circle,rgba(34,197,94,.07),transparent 70%)}
+.stat-card.amber::before{background:linear-gradient(90deg,var(--amber),rgba(245,158,11,0))}
+.stat-card.amber::after{background:radial-gradient(circle,rgba(245,158,11,.07),transparent 70%)}
+.stat-card.red::before{background:linear-gradient(90deg,var(--red),rgba(239,68,68,0))}
+.stat-card.red::after{background:radial-gradient(circle,rgba(239,68,68,.07),transparent 70%)}
+.stat-label{font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;line-height:1.4}
+.stat-value{font:700 2rem/1 'DM Sans';color:var(--text);letter-spacing:-.02em}
+.stat-icon{position:absolute;right:20px;top:20px;font-size:1.15rem;opacity:.14}
+
+/* ── Table ── */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.table-top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.table-title{font:700 .88rem/1 'DM Sans';color:var(--text);flex:1;min-width:0;letter-spacing:.02em}
+.search-wrap{position:relative;flex:1;min-width:140px;max-width:260px}
+.search-input{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:8px 14px 8px 34px;color:var(--text);font:400 .83rem/1 'DM Sans';outline:none;transition:border-color .2s;width:100%}
+.search-input:focus{border-color:var(--accent)}
+.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:.72rem;color:var(--muted2);pointer-events:none}
+.filter-select{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:8px 10px;color:var(--muted);font:400 .79rem/1 'DM Sans';outline:none;cursor:pointer;max-width:140px}
+.filter-select option{background:var(--bg2);color:var(--text)}
+table{width:100%;border-collapse:collapse;min-width:580px}
+thead th{text-align:left;padding:11px 14px;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted2);border-bottom:1px solid var(--border);background:rgba(255,255,255,.025);white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(232,240,254,.035);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(var(--accent-rgb),.05)}
+tbody td{padding:13px 14px;font-size:.81rem;color:var(--muted);vertical-align:middle;white-space:nowrap}
+tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.76rem;letter-spacing:.04em}
+.empty-row td{text-align:center;padding:52px 16px;color:var(--muted2);font-size:.84rem;white-space:normal}
+.badge{display:inline-block;padding:3px 10px;border-radius:2px;font-size:.63rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase}
+.badge-transit{background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.2)}
+.badge-pending{background:rgba(245,158,11,.1);color:#fcd34d;border:1px solid rgba(245,158,11,.2)}
+.badge-confirmed{background:rgba(34,197,94,.1);color:#86efac;border:1px solid rgba(34,197,94,.2)}
+.badge-delivered{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.badge-held{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.badge-required{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.badge-notreq{background:rgba(148,163,184,.08);color:#94a3b8;border:1px solid rgba(148,163,184,.15)}
+.tbl-actions{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
+.tbl-btn{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:3px;font:600 .65rem/1 'DM Sans';letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:1px solid;transition:all .15s;text-decoration:none;background:none;white-space:nowrap;flex-shrink:0}
+.tbl-btn-edit{border-color:var(--aborder);color:var(--accent);background:rgba(var(--accent-rgb),.06)}.tbl-btn-edit:hover{background:rgba(var(--accent-rgb),.14)}
+.tbl-btn-view{border-color:rgba(34,197,94,.2);color:#4ade80;background:rgba(34,197,94,.06)}.tbl-btn-view:hover{background:rgba(34,197,94,.12)}
+
+/* ── Form ── */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:28px 32px;margin-bottom:20px;transition:border-color .2s}
+.form-card-title{font:700 .74rem/1 'DM Sans';letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;display:flex;align-items:center;gap:10px;flex-shrink:0;min-width:0}
+.form-card-title i{flex-shrink:0;width:16px;text-align:center}
+.form-grid{display:grid;gap:18px}
+.form-grid-2{grid-template-columns:1fr 1fr}
+.form-grid-3{grid-template-columns:1fr 1fr 1fr}
+.input-with-btn{display:flex;gap:8px}
+.input-with-btn .f-input{flex:1}
+.form-actions{display:flex;align-items:center;gap:12px;padding-top:8px;flex-wrap:wrap}
+.grule{height:1px;background:var(--border);margin:20px 0}
+.step-block{border:1px solid var(--border);border-radius:5px;padding:18px 20px;background:rgba(255,255,255,.02);margin-bottom:12px}
+.step-block:last-child{margin-bottom:0}
+.step-block-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:nowrap;overflow:hidden}
+.step-num{width:26px;height:26px;border-radius:50%;background:rgba(var(--accent-rgb),.12);border:1px solid var(--aborder);display:flex;align-items:center;justify-content:center;font:700 .72rem/1 'JetBrains Mono';color:var(--accent);flex-shrink:0}
+.step-block-hdr span{font-size:.78rem;font-weight:600;color:var(--text);flex-shrink:0}
+.step-block-hdr small{font-size:.68rem;color:var(--muted2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.color-dots{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.color-dot{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s}
+.color-dot:hover{transform:scale(1.2)}
+.color-dot.selected{border-color:#fff;transform:scale(1.15)}
+.tracking-id-box{background:rgba(var(--accent-rgb),.08);border:1px solid var(--aborder);border-radius:3px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+.tracking-id-label{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2)}
+.tracking-id-val{font-family:'JetBrains Mono';font-size:1.1rem;color:var(--accent-hi);font-weight:700;letter-spacing:.12em}
+
+/* ── Settings ── */
+.settings-title{font:700 .78rem/1 'DM Sans';letter-spacing:.3em;text-transform:uppercase;color:var(--muted2);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.info-box{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:4px;padding:14px 18px;font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:20px}
+.info-box strong{color:var(--accent)}
+.warn-box{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:4px;padding:14px 18px;font-size:.82rem;color:rgba(253,230,138,.8);line-height:1.7;margin-bottom:20px}
+.sql-wrap{position:relative}
+.sql-block{background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:4px;padding:20px;font-family:'JetBrains Mono';font-size:.74rem;color:#7dd3fc;line-height:1.7;white-space:pre;overflow-x:auto}
+.sql-copy-btn{position:absolute;top:10px;right:10px;background:rgba(var(--accent-rgb),.12);border:1px solid var(--aborder);color:var(--accent);border-radius:3px;padding:5px 12px;font:600 .68rem/1 'DM Sans';letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s}
+.sql-copy-btn:hover{background:rgba(var(--accent-rgb),.22)}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:28px;right:28px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast-item{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:13px 18px;min-width:280px;box-shadow:0 8px 40px rgba(0,0,0,.4);animation:toastIn .3s ease}
+.toast-item.error{border-left:3px solid var(--red)}
+.toast-item.success{border-left:3px solid var(--green)}
+.toast-item.info{border-left:3px solid var(--accent)}
+.toast-msg{font-size:.83rem;color:var(--text)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+.spinner-lg{width:26px;height:26px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Email type chips ── */
+.email-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.email-chip{font-size:.72rem;letter-spacing:.08em;padding:7px 14px;border-radius:2px;border:1px solid var(--border2);color:var(--muted2);cursor:pointer;transition:all .2s;user-select:none}
+.email-chip:hover{border-color:var(--accent);color:var(--accent)}
+.email-chip.sel{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent-hi)}
+
+/* ── Confirm ── */
+#confirm-modal{position:fixed;inset:0;z-index:9000;background:rgba(3,8,26,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
+#confirm-modal.open{display:flex}
+.confirm-card{background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:32px;max-width:400px;width:100%;margin:20px}
+.confirm-card h3{font:700 1rem/1.4 'DM Sans';color:var(--text);margin-bottom:10px}
+.confirm-card p{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:24px}
+.confirm-btns{display:flex;gap:10px;justify-content:flex-end}
+
+/* ── Table scroll ── */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* ── New action buttons ── */
+.tbl-btn-del{border-color:rgba(239,68,68,.25);color:#f87171;background:rgba(239,68,68,.05)}.tbl-btn-del:hover{background:rgba(239,68,68,.15)}
+.tbl-btn-done{border-color:rgba(34,197,94,.22);color:#4ade80;background:rgba(34,197,94,.05)}.tbl-btn-done:hover{background:rgba(34,197,94,.13)}
+
+/* ── Mobile sidebar overlay ── */
+.sidebar-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(3,8,26,.6);backdrop-filter:blur(4px)}
+.sidebar-overlay.open{display:block}
+.ham-btn{display:none;background:none;border:1px solid var(--border2);color:var(--muted2);width:34px;height:34px;border-radius:3px;cursor:pointer;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;transition:all .2s}
+.ham-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── Mobile bottom nav ── */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;background:var(--bg2);border-top:1px solid var(--border);padding:6px 0;gap:0}
+.mob-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);cursor:pointer;transition:color .2s;border:none;background:none;font-family:'DM Sans'}
+.mob-nav-item i{font-size:1rem}
+.mob-nav-item.active{color:var(--accent)}
+[data-theme="light"] .mobile-nav{background:var(--bg2);border-color:var(--border)}
+
+/* ── Theme toggle button ── */
+.topbar-theme{background:none;border:1px solid var(--border2);color:var(--muted2);width:34px;height:34px;border-radius:3px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.topbar-theme:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── Invisible secret trigger (topbar padlock) ── */
+#secret-topbar-btn{
+  all:unset;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;
+  cursor:pointer;flex-shrink:0;
+  opacity:0 !important;
+  -webkit-tap-highlight-color:transparent !important;
+  outline:none !important;
+  box-shadow:none !important;
+  border:none !important;
+  background:transparent !important;
+  user-select:none;
+}
+#secret-topbar-btn:focus,
+#secret-topbar-btn:focus-visible,
+#secret-topbar-btn:focus-within,
+#secret-topbar-btn:active,
+#secret-topbar-btn:hover{
+  opacity:0 !important;
+  outline:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+[data-theme="light"] #secret-topbar-btn,
+[data-theme="light"] #secret-topbar-btn:focus,
+[data-theme="light"] #secret-topbar-btn:active{
+  opacity:0 !important;
+  outline:none !important;
+}
+
+/* ── Secret popup (revealed on 1s hold) ── */
+#secret-popup{
+  display:none;position:fixed;top:calc(var(--hdr-h) + 8px);right:16px;z-index:8000;
+  background:var(--bg2);border:1px solid var(--border2);border-radius:4px;
+  padding:20px 22px;width:min(320px,90vw);
+  box-shadow:0 16px 48px rgba(0,0,0,.55);
+  animation:popIn .22s cubic-bezier(.22,1,.36,1);
+}
+#secret-popup.open{display:block}
+@keyframes popIn{from{opacity:0;transform:translateY(-10px)scale(.97)}to{opacity:1;transform:none}}
+.secret-popup-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.secret-popup-title{font:700 .72rem/1 'DM Sans';letter-spacing:.28em;text-transform:uppercase;color:var(--accent)}
+.secret-popup-close{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.85rem;padding:4px;line-height:1;transition:color .2s}
+.secret-popup-close:hover{color:var(--text)}
+[data-theme="light"] #secret-popup{background:#fff;border-color:var(--border2)}
+
+/* ── Responsive ── */
+@media(max-width:1200px){
+  .stats-grid{grid-template-columns:repeat(4,1fr);gap:12px}
+}
+@media(max-width:1100px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  :root{--hdr-h:56px}
+  .app-grid{grid-template-columns:1fr}
+  .topbar{grid-column:1/-1;padding:0 14px}
+  .sidebar{
+    display:block;
+    position:fixed;top:var(--hdr-h);left:0;bottom:0;z-index:210;
+    width:min(260px,82vw);
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.22,1,.36,1);
+    box-shadow:12px 0 48px rgba(0,0,0,.5);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .main-content{
+    grid-column:1/-1;
+    overflow-y:auto;
+    height:calc(100vh - var(--hdr-h));
+    padding:20px 16px 100px;
+  }
+  .ham-btn{display:flex}
+  .mobile-nav{display:flex}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+  .form-grid-2,.form-grid-3{grid-template-columns:1fr}
+  .topbar-brand{font-size:.96rem}
+  .admin-badge{display:none}
+  .conn-status span:last-child{display:none}
+  .topbar-logout span{display:none}
+  .page-hdr{margin-bottom:20px}
+  .page-hdr-left h1{font-size:1.3rem}
+  .form-card{padding:20px 18px}
+  .stat-value{font-size:1.65rem}
+  .step-block-hdr small{max-width:100px}
+}
+@media(max-width:640px){
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .stat-card{padding:16px 16px}
+  .stat-value{font-size:1.5rem}
+  .stat-label{font-size:.6rem;letter-spacing:.22em}
+  .table-top{flex-wrap:wrap;gap:8px;padding:12px 14px}
+  .search-wrap{max-width:none;min-width:0;flex:1 1 100%}
+  .search-input{width:100%}
+  .filter-select{flex:1 1 auto;max-width:none;font-size:.76rem}
+  .tbl-btn span.btn-label{display:none}
+  .tbl-btn{padding:5px 8px}
+  .page-hdr{flex-direction:column;gap:10px;margin-bottom:16px}
+  .page-hdr-left h1{font-size:1.2rem}
+  .page-hdr > button,.page-hdr > a{width:100%;justify-content:center}
+  .form-actions{flex-direction:column;gap:8px}
+  .form-actions button{width:100%;justify-content:center}
+  .email-chips{gap:6px}
+  .email-chip{font-size:.67rem;padding:6px 10px}
+  .form-card{padding:16px 14px}
+  .form-card-title{font-size:.7rem;letter-spacing:.2em;margin-bottom:16px}
+  .step-block{padding:14px 14px}
+  .step-block-hdr{gap:8px}
+  .step-block-hdr small{display:none}
+  .table-wrap{border-radius:4px}
+  .tracking-id-val{font-size:.92rem}
+  #toast{bottom:72px;right:10px;left:10px}
+  .toast-item{min-width:0;width:100%}
+  .grule{margin:14px 0}
+  .color-dots{gap:10px}
+  .color-dot{width:22px;height:22px}
+}
+@media(max-width:420px){
+  :root{--sidebar-w:220px}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .stat-card{padding:14px 12px}
+  .stat-value{font-size:1.35rem}
+  .stat-icon{font-size:.95rem}
+  .tbl-actions{gap:4px}
+  .tbl-btn{padding:4px 7px;font-size:.6rem}
+  .main-content{padding:14px 10px 90px}
+  .topbar-brand{font-size:.86rem}
+  .form-card{padding:14px 12px}
+  .page-hdr-left h1{font-size:1.1rem}
+  .confirm-card{padding:24px 20px}
+}
+
+/* ── Toggle switch (email send) ── */
+.toggle-switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;cursor:pointer}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid var(--border2);transition:background .25s,border-color .25s}
+.toggle-track::before{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .25s;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.toggle-switch input:checked+.toggle-track{background:var(--accent);border-color:var(--accent)}
+.toggle-switch input:checked+.toggle-track::before{transform:translateX(20px)}
+
+/* ── Email send toggle row ── */
+.email-send-row{display:flex;align-items:center;gap:14px;padding:16px 0 18px;border-top:1px solid var(--border);margin-top:4px}
+.email-send-row-info{flex:1}
+.email-send-row-label{font:600 .8rem/1 'DM Sans';color:var(--text);margin-bottom:4px}
+.email-send-row-hint{font-size:.72rem;color:var(--muted2);line-height:1.5}
+
+/* ── Light mode ── */
+[data-theme="light"]{
+  --bg:#f0f4ff;--bg2:#e8eeff;--bg3:#e0e8ff;
+  --surface:rgba(255,255,255,.85);--surface2:rgba(255,255,255,.97);
+  --text:#0f172a;--muted:rgba(15,23,42,.6);--muted2:rgba(15,23,42,.4);
+  --border:rgba(15,23,42,.09);--border2:rgba(15,23,42,.15);
+  --aborder:rgba(59,130,246,.3);--hdr-bg:rgba(240,244,255,.94);
+}
+[data-theme="light"] body{background:var(--bg)}
+[data-theme="light"] .topbar{background:var(--hdr-bg)}
+[data-theme="light"] .sidebar{background:var(--bg2);border-color:var(--border)}
+[data-theme="light"] .main-content{background:var(--bg)}
+[data-theme="light"] .nav-item:hover{background:rgba(59,130,246,.06)}
+[data-theme="light"] .nav-item.active{background:rgba(59,130,246,.09)}
+[data-theme="light"] .f-input,[data-theme="light"] .f-select,[data-theme="light"] .f-textarea{background:rgba(255,255,255,.9);border-color:var(--border2);color:var(--text)}
+[data-theme="light"] .f-select option{background:#fff;color:#0f172a}
+[data-theme="light"] .login-glass{background:rgba(255,255,255,.9);border-color:var(--border2)}
+[data-theme="light"] .form-card{background:rgba(255,255,255,.85);border-color:var(--border)}
+[data-theme="light"] .table-wrap{background:rgba(255,255,255,.85);border-color:var(--border)}
+[data-theme="light"] .stat-card{background:rgba(255,255,255,.85);border-color:var(--border)}
+[data-theme="light"] thead th{background:rgba(0,0,0,.02);color:var(--muted2)}
+[data-theme="light"] tbody td{color:var(--muted)}
+[data-theme="light"] tbody td:first-child{color:var(--text)}
+[data-theme="light"] tbody tr:hover{background:rgba(59,130,246,.05)}
+[data-theme="light"] .step-block{background:rgba(0,0,0,.02);border-color:var(--border)}
+[data-theme="light"] .sql-block{background:rgba(0,0,0,.04);color:#1e40af}
+[data-theme="light"] .toast-item{background:#fff;border-color:rgba(0,0,0,.1)}
+[data-theme="light"] .toast-msg{color:#0f172a}
+[data-theme="light"] .confirm-card{background:#fff;border-color:var(--border2)}
+[data-theme="light"] .email-chip{color:var(--muted2);border-color:var(--border2)}
+[data-theme="light"] .tracking-id-box{background:rgba(59,130,246,.06)}
+[data-theme="light"] .info-box{background:rgba(59,130,246,.06);color:var(--muted)}
+[data-theme="light"] .warn-box{background:rgba(245,158,11,.06)}
+[data-theme="light"] .search-input,[data-theme="light"] .filter-select{background:rgba(255,255,255,.9);color:var(--text);border-color:var(--border2)}
+[data-theme="light"] .toggle-track{background:rgba(0,0,0,.1)}
+[data-theme="light"] .toggle-switch input:checked+.toggle-track{background:var(--accent)}
+[data-theme="light"] .sidebar{background:var(--bg2);border-right:1px solid var(--border)}
+[data-theme="light"] .sidebar-overlay{background:rgba(240,244,255,.5)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><span>SWIFT</span> FREIGHT</div>
+    <div class="login-sub">Admin Control Panel</div>
+    <div class="login-glass">
+      <h2>Admin Login</h2>
+      <div class="f-group">
+        <label>Password</label>
+        <input type="password" id="login-pw" class="f-input" placeholder="Enter admin password" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" style="width:100%;margin-top:4px;" id="login-btn">
+        <i class="fas fa-arrow-right-to-bracket"></i> Unlock
+      </button>
+      <p id="login-err"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ APP ═══════════ -->
+<div id="admin-app">
+  <div class="app-grid">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="ham-btn" id="ham-btn" aria-label="Menu"><i class="fas fa-bars"></i></button>
+        <div class="topbar-brand"><span>SWIFT</span> FREIGHT &nbsp;<div class="admin-badge">Admin</div></div>
+      </div>
+      <div class="topbar-right">
+        <div class="conn-status"><span class="conn-dot" id="conn-dot"></span><span id="conn-label">Connecting…</span></div>
+        <button class="topbar-theme" id="theme-toggle" title="Toggle light / dark mode"><i class="fas fa-sun" id="theme-icon"></i></button>
+        <button id="secret-topbar-btn" tabindex="-1" aria-hidden="true"></button>
+        <button class="topbar-logout" id="logout-btn"><i class="fas fa-right-from-bracket"></i><span> Lock</span></button>
+      </div>
+    </header>
+
+    <!-- Secret popup (revealed by 1s hold on invisible topbar button) -->
+    <div id="secret-popup">
+      <div class="secret-popup-hdr">
+        <span class="secret-popup-title"><i class="fas fa-shield-halved" style="margin-right:6px"></i>API Secret</span>
+        <button class="secret-popup-close" onclick="document.getElementById('secret-popup').classList.remove('open')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="f-group" style="margin-bottom:12px;">
+        <label>Admin Secret Key</label>
+        <input type="text" id="s-api-secret" class="f-input mono" placeholder="SFL-ADMIN-2025-Xp7kZ3mN">
+      </div>
+      <button class="btn-primary" style="width:100%;" onclick="saveApiSecret()"><i class="fas fa-floppy-disk"></i> Save Secret</button>
+      <p id="api-result" style="margin-top:10px;font-size:.8rem;display:none;"></p>
+    </div>
+
+    <nav class="sidebar">
+      <div class="sidebar-section">Navigation</div>
+      <div class="nav-item active" data-view="dashboard"><i class="fas fa-gauge-high"></i> Dashboard</div>
+      <div class="nav-item" data-view="shipments"><i class="fas fa-box-archive"></i> Shipments <span class="sidebar-badge" id="sidebar-count">0</span></div>
+      <div class="nav-divider"></div>
+      <div class="sidebar-section">Actions</div>
+      <div class="nav-item" data-view="form-new"><i class="fas fa-circle-plus"></i> New Shipment</div>
+      <div class="nav-divider"></div>
+      <div class="sidebar-section">System</div>
+      <div class="nav-item" data-view="settings"><i class="fas fa-gear"></i> Settings</div>
+    </nav>
+
+    <main class="main-content">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="view active" id="view-dashboard">
+        <div class="page-hdr">
+          <div class="page-hdr-left"><h1>Dashboard</h1><p>Overview of all shipments.</p></div>
+          <button class="btn-primary" onclick="switchView('form-new')"><i class="fas fa-plus"></i> New Shipment</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" id="s-total">—</div><i class="fas fa-boxes-stacked stat-icon"></i></div>
+          <div class="stat-card amber"><div class="stat-label">Payment Required</div><div class="stat-value" id="s-pay-req">—</div><i class="fas fa-clock stat-icon"></i></div>
+          <div class="stat-card green"><div class="stat-label">Payment Confirmed</div><div class="stat-value" id="s-pay-ok">—</div><i class="fas fa-circle-check stat-icon"></i></div>
+          <div class="stat-card"><div class="stat-label">In Transit</div><div class="stat-value" id="s-transit">—</div><i class="fas fa-truck-moving stat-icon"></i></div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-top"><span class="table-title">Recent Shipments</span><button class="btn-secondary" style="padding:7px 16px;font-size:.72rem;" onclick="switchView('shipments')">View All <i class="fas fa-arrow-right"></i></button></div>
+          <div class="table-scroll"><table><thead><tr><th>Tracking ID</th><th>Recipient</th><th>Destination</th><th>Status</th><th>Payment</th><th>ETA</th><th>Actions</th></tr></thead>
+          <tbody id="dash-tbody"><tr class="empty-row"><td colspan="7"><div class="spinner spinner-lg"></div></td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ── ALL SHIPMENTS ── -->
+      <div class="view" id="view-shipments">
+        <div class="page-hdr">
+          <div class="page-hdr-left"><h1>All Shipments</h1><p id="ship-count-label">Loading…</p></div>
+          <button class="btn-primary" onclick="switchView('form-new')"><i class="fas fa-plus"></i> New Shipment</button>
+        </div>
+        <div class="table-wrap">
+          <div class="table-top">
+            <span class="table-title">Records</span>
+            <div class="search-wrap"><i class="fas fa-magnifying-glass"></i><input type="text" class="search-input" id="search-input" placeholder="Search ID, name…" oninput="filterTable()"></div>
+            <select class="filter-select" id="status-filter" onchange="filterTable()">
+              <option value="">All Statuses</option><option>In Transit</option><option>Delivered</option><option>Pending</option><option>Customs Hold</option><option>Delayed</option>
+            </select>
+            <button class="btn-icon" title="Refresh" onclick="loadShipments()"><i class="fas fa-arrows-rotate"></i></button>
+          </div>
+          <div class="table-scroll"><table><thead><tr><th>Tracking ID</th><th>Recipient</th><th>Destination</th><th>Status</th><th>Payment</th><th>Amount</th><th>ETA</th><th>Actions</th></tr></thead>
+          <tbody id="ship-tbody"><tr class="empty-row"><td colspan="8"><div class="spinner spinner-lg"></div></td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ── NEW SHIPMENT FORM ── -->
+      <div class="view" id="view-form-new">
+        <div class="page-hdr">
+          <div class="page-hdr-left"><h1>Register New Shipment</h1><p>A confirmation email is sent to the customer automatically.</p></div>
+          <button class="btn-secondary" onclick="switchView('shipments')"><i class="fas fa-arrow-left"></i> Back</button>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-user"></i> Customer &amp; Shipment Info</div>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>Recipient Name *</label><input type="text" id="n-name" class="f-input" placeholder="Full name" required></div>
+            <div class="f-group"><label>Customer Email *</label><input type="email" id="n-email" class="f-input" placeholder="customer@email.com" required></div>
+            <div class="f-group"><label>Sender's Name</label><input type="text" id="n-sender" class="f-input" placeholder="Full name of sender"></div>
+            <div class="f-group"><label>Service Type</label>
+              <select id="n-service" class="f-select"><option>Standard Freight</option><option>Express Freight</option><option>Air Cargo</option><option>Sea Freight</option><option>Road Transport</option><option>Rail Freight</option><option>Cold Chain Logistics</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-route"></i> Route &amp; Timing</div>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>Origin</label><input type="text" id="n-origin" class="f-input" placeholder="e.g. Lagos, Nigeria"></div>
+            <div class="f-group"><label>Destination *</label><input type="text" id="n-dest" class="f-input" placeholder="e.g. London, UK" required></div>
+            <div class="f-group"><label>Pickup Date</label><input type="text" id="n-pickup" class="f-input" placeholder="e.g. June 10, 2025"></div>
+            <div class="f-group"><label>ETA</label><input type="text" id="n-eta" class="f-input" placeholder="e.g. June 20, 2025"></div>
+            <div class="f-group"><label>Package Details</label><input type="text" id="n-pkg" class="f-input" placeholder="e.g. Electronics, 12 kg, 2 boxes"></div>
+            <div class="f-group"><label>Priority</label>
+              <select id="n-priority" class="f-select"><option>Standard</option><option>Priority</option><option>Express</option><option>Emergency</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-map-pin"></i> Initial Status</div>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>Status</label>
+              <select id="n-status" class="f-select"><option>Pending</option><option>Registered</option><option>Picked Up</option><option>In Transit</option></select>
+            </div>
+            <div class="f-group"><label>Current Location</label><input type="text" id="n-location" class="f-input" placeholder="e.g. Lagos Sorting Hub"></div>
+          </div>
+          <div class="f-group"><label>Step 1 Colour</label>
+            <div class="color-dots" data-field="n-s1color">
+              <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500"></div>
+              <div class="color-dot" style="background:#22c55e" data-value="text-green-500"></div>
+              <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
+              <div class="color-dot" style="background:#ef4444" data-value="text-red-500"></div>
+              <div class="color-dot" style="background:#a855f7" data-value="text-purple-500"></div>
+            </div><input type="hidden" id="n-s1color" value="text-blue-500">
+          </div>
+          <div class="grule"></div>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px">Transit steps 2–4 are optional — fill in to build a full tracking timeline.</p>
+          <div class="step-block">
+            <div class="step-block-hdr"><div class="step-num">2</div><span>Step 2</span><small>e.g. Loaded / Departed</small></div>
+            <div class="form-grid form-grid-3">
+              <div class="f-group"><label>Name</label><input type="text" id="n-s2name" class="f-input" placeholder="In Transit"></div>
+              <div class="f-group"><label>Location</label><input type="text" id="n-s2loc" class="f-input" placeholder="Frankfurt Hub"></div>
+              <div class="f-group"><label>Colour</label>
+                <div class="color-dots" data-field="n-s2color">
+                  <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500"></div>
+                  <div class="color-dot" style="background:#22c55e" data-value="text-green-500"></div>
+                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
+                  <div class="color-dot" style="background:#ef4444" data-value="text-red-500"></div>
+                </div><input type="hidden" id="n-s2color" value="text-blue-500">
+              </div>
+            </div>
+          </div>
+          <div class="step-block">
+            <div class="step-block-hdr"><div class="step-num">3</div><span>Step 3</span><small>e.g. Customs / Arrival Hub</small></div>
+            <div class="form-grid form-grid-3">
+              <div class="f-group"><label>Name</label><input type="text" id="n-s3name" class="f-input" placeholder="Customs Clearance"></div>
+              <div class="f-group"><label>Location</label><input type="text" id="n-s3loc" class="f-input" placeholder="London Heathrow"></div>
+              <div class="f-group"><label>Colour</label>
+                <div class="color-dots" data-field="n-s3color">
+                  <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500"></div>
+                  <div class="color-dot" style="background:#22c55e" data-value="text-green-500"></div>
+                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
+                  <div class="color-dot" style="background:#ef4444" data-value="text-red-500"></div>
+                </div><input type="hidden" id="n-s3color" value="text-blue-500">
+              </div>
+            </div>
+          </div>
+          <div class="step-block">
+            <div class="step-block-hdr"><div class="step-num">4</div><span>Step 4</span><small>e.g. Delivered / Out for Delivery</small></div>
+            <div class="form-grid form-grid-3">
+              <div class="f-group"><label>Name</label><input type="text" id="n-s4name" class="f-input" placeholder="Delivered"></div>
+              <div class="f-group"><label>Location</label><input type="text" id="n-s4loc" class="f-input" placeholder="London, UK"></div>
+              <div class="f-group"><label>Colour</label>
+                <div class="color-dots" data-field="n-s4color">
+                  <div class="color-dot" style="background:#3b82f6" data-value="text-blue-500"></div>
+                  <div class="color-dot selected" style="background:#22c55e" data-value="text-green-500"></div>
+                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
+                </div><input type="hidden" id="n-s4color" value="text-green-500">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-credit-card"></i> Payment (optional)</div>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>Payment Status</label>
+              <select id="n-paystatus" class="f-select"><option value="not-required">Not Required</option><option value="required">Required</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option></select>
+            </div>
+            <div class="f-group"><label>Amount Due</label><input type="text" id="n-amount" class="f-input" placeholder="$1,200.00"></div>
+            <div class="f-group"><label>BTC Address</label><input type="text" id="n-btc" class="f-input mono" placeholder="bc1q…"></div>
+            <div class="f-group"><label>USDT Address</label><input type="text" id="n-usdt" class="f-input mono" placeholder="TRC20 / ERC20…"></div>
+            <div class="f-group"><label>Bank Name</label><input type="text" id="n-bank" class="f-input" placeholder="Chase Bank"></div>
+            <div class="f-group"><label>Account Name</label><input type="text" id="n-accname" class="f-input" placeholder="Swift Freight LLC"></div>
+            <div class="f-group"><label>Account Number</label><input type="text" id="n-accnum" class="f-input mono" placeholder="000123456789"></div>
+            <div class="f-group"><label>PayPal Email</label><input type="text" id="n-paypal" class="f-input" placeholder="payments@example.com"></div>
+            <div class="f-group"><label>Cash App $Cashtag</label><input type="text" id="n-cashapp" class="f-input mono" placeholder="$SwiftFreight"></div>
+            <div class="f-group"><label>Zelle (Email / Phone)</label><input type="text" id="n-zelle" class="f-input" placeholder="zelle@example.com or +1 555…"></div>
+            <div class="f-group" style="grid-column:1/-1"><label>Western Union Info</label><textarea id="n-wu" class="f-input" rows="3" style="resize:vertical;height:auto" placeholder="Recipient name, address, MTCN reference…"></textarea></div>
+          </div>
+        </div>
+
+        <div class="email-send-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="n-send-email" checked>
+            <span class="toggle-track"></span>
+          </label>
+          <div class="email-send-row-info">
+            <div class="email-send-row-label">Send confirmation email to customer</div>
+            <div class="email-send-row-hint">Sends the <em>Shipment Registered</em> email with tracking ID and details.</div>
+          </div>
+        </div>
+        <button class="btn-primary" id="register-btn" style="width:100%;justify-content:center;padding:15px;">
+          <i class="fas fa-box-open"></i>&nbsp; Register Shipment &amp; Send Email
+        </button>
+        <div id="new-result" style="margin-top:16px;display:none;"></div>
+      </div>
+
+      <!-- ── UPDATE SHIPMENT ── -->
+      <div class="view" id="view-form-edit">
+        <div class="page-hdr">
+          <div class="page-hdr-left"><h1>Update Shipment</h1><p id="edit-subtitle">Editing <span id="edit-tid" style="color:var(--accent-hi);font-family:'JetBrains Mono'"></span></p></div>
+          <button class="btn-secondary" onclick="switchView('shipments')"><i class="fas fa-arrow-left"></i> Back</button>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-map-pin"></i> Status &amp; Location</div>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>New Status</label>
+              <select id="u-status" class="f-select">
+                <option value="">— Keep current —</option><option>Pending</option><option>Registered</option><option>Picked Up</option><option>In Transit</option><option>Customs Hold</option><option>Out for Delivery</option><option>Delayed</option><option>Delivered</option>
+              </select>
+            </div>
+            <div class="f-group"><label>Step 1 Colour</label>
+              <select id="u-s1color" class="f-select">
+                <option value="">— Keep current —</option>
+                <option value="text-blue-500">🔵 Blue — Active / In Progress</option>
+                <option value="text-green-500">🟢 Green — Completed</option>
+                <option value="text-amber-500">🟡 Amber — Hold / Delayed</option>
+                <option value="text-red-500">🔴 Red — Issue</option>
+                <option value="text-purple-500">🟣 Purple</option>
+              </select>
+            </div>
+            <div class="f-group"><label>Current Location (Step 1)</label><input type="text" id="u-location" class="f-input" placeholder="e.g. Frankfurt Hub — leave blank to keep"></div>
+            <div class="f-group"><label>Update ETA</label><input type="text" id="u-eta" class="f-input" placeholder="Leave blank to keep current"></div>
+            <div class="f-group"><label>Payment Status</label>
+              <select id="u-paystatus" class="f-select"><option value="">— Keep current —</option><option value="not-required">Not Required</option><option value="required">Required</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option></select>
+            </div>
+            <div class="f-group"><label>Amount Due</label><input type="text" id="u-amount" class="f-input" placeholder="Leave blank to keep current"></div>
+            <div class="f-group"><label>Notes / Delay Reason</label><input type="text" id="u-notes" class="f-input" placeholder="Internal note or delay reason"></div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-credit-card"></i> Update Payment Methods (leave blank to keep)</div>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>BTC Address</label><input type="text" id="u-btc" class="f-input mono" placeholder="Leave blank to keep"></div>
+            <div class="f-group"><label>USDT Address</label><input type="text" id="u-usdt" class="f-input mono" placeholder="Leave blank to keep"></div>
+            <div class="f-group"><label>Bank Name</label><input type="text" id="u-bank" class="f-input" placeholder="Leave blank to keep"></div>
+            <div class="f-group"><label>Account Name</label><input type="text" id="u-accname" class="f-input" placeholder="Leave blank to keep"></div>
+            <div class="f-group"><label>Account Number</label><input type="text" id="u-accnum" class="f-input mono" placeholder="Leave blank to keep"></div>
+            <div class="f-group"><label>PayPal Email</label><input type="text" id="u-paypal" class="f-input" placeholder="Leave blank to keep"></div>
+            <div class="f-group"><label>Cash App $Cashtag</label><input type="text" id="u-cashapp" class="f-input mono" placeholder="Leave blank to keep"></div>
+            <div class="f-group"><label>Zelle (Email / Phone)</label><input type="text" id="u-zelle" class="f-input" placeholder="Leave blank to keep"></div>
+            <div class="f-group" style="grid-column:1/-1"><label>Western Union Info</label><textarea id="u-wu" class="f-input" rows="3" style="resize:vertical;height:auto" placeholder="Leave blank to keep"></textarea></div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-route"></i> Update Transit Steps (leave blank to keep)</div>
+          <div class="step-block">
+            <div class="step-block-hdr"><div class="step-num">2</div><span>Step 2</span></div>
+            <div class="form-grid form-grid-3">
+              <div class="f-group"><label>Name</label><input type="text" id="u-s2name" class="f-input"></div>
+              <div class="f-group"><label>Location</label><input type="text" id="u-s2loc" class="f-input"></div>
+              <div class="f-group"><label>Colour</label><select id="u-s2color" class="f-select"><option value="">Keep</option><option value="text-blue-500">Blue</option><option value="text-green-500">Green</option><option value="text-amber-500">Amber</option><option value="text-red-500">Red</option></select></div>
+            </div>
+          </div>
+          <div class="step-block">
+            <div class="step-block-hdr"><div class="step-num">3</div><span>Step 3</span></div>
+            <div class="form-grid form-grid-3">
+              <div class="f-group"><label>Name</label><input type="text" id="u-s3name" class="f-input"></div>
+              <div class="f-group"><label>Location</label><input type="text" id="u-s3loc" class="f-input"></div>
+              <div class="f-group"><label>Colour</label><select id="u-s3color" class="f-select"><option value="">Keep</option><option value="text-blue-500">Blue</option><option value="text-green-500">Green</option><option value="text-amber-500">Amber</option><option value="text-red-500">Red</option></select></div>
+            </div>
+          </div>
+          <div class="step-block">
+            <div class="step-block-hdr"><div class="step-num">4</div><span>Step 4</span></div>
+            <div class="form-grid form-grid-3">
+              <div class="f-group"><label>Name</label><input type="text" id="u-s4name" class="f-input"></div>
+              <div class="f-group"><label>Location</label><input type="text" id="u-s4loc" class="f-input"></div>
+              <div class="f-group"><label>Colour</label><select id="u-s4color" class="f-select"><option value="">Keep</option><option value="text-green-500">Green</option><option value="text-blue-500">Blue</option><option value="text-amber-500">Amber</option></select></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-envelope"></i> Email Notification</div>
+          <p style="font-size:.78rem;color:var(--muted2);margin-bottom:14px">Choose which email to send — or leave on Auto to detect from the status change:</p>
+          <div class="email-chips">
+            <div class="email-chip sel" data-type="auto">⚡ Auto-detect</div>
+            <div class="email-chip" data-type="location-update">📍 Location Update</div>
+            <div class="email-chip" data-type="payment-required">💳 Payment Required</div>
+            <div class="email-chip" data-type="delayed">⏳ Delayed</div>
+            <div class="email-chip" data-type="customs-hold">🛃 Customs Hold</div>
+            <div class="email-chip" data-type="out-for-delivery">🚚 Out for Delivery</div>
+            <div class="email-chip" data-type="delivered">✅ Delivered</div>
+            <div class="email-chip" data-type="none">🔕 No Email</div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-primary" id="update-btn"><i class="fas fa-floppy-disk"></i> Save &amp; Send Notification</button>
+          <button class="btn-secondary" onclick="switchView('shipments')"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+        <div id="update-result" style="margin-top:16px;display:none;"></div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div class="view" id="view-settings">
+        <div class="page-hdr">
+          <div class="page-hdr-left"><h1>Settings</h1><p>Manage site configuration and preferences.</p></div>
+        </div>
+
+        <div class="form-card" style="margin-bottom:24px;">
+          <div class="settings-title"><i class="fas fa-bullhorn" style="color:var(--accent);margin-right:8px"></i> Site Ticker / Broadcast</div>
+          <div class="info-box">This message scrolls across all site pages as a live announcement strip. Leave blank to hide the ticker. Changes go live as soon as you save.</div>
+          <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+            <div class="form-group" style="flex:1;min-width:220px;margin-bottom:0;">
+              <label for="ticker-input">Ticker Message</label>
+              <input type="text" id="ticker-input" class="form-input" placeholder="e.g. 🚚 New Lagos route live · Express freight available now">
+            </div>
+            <button class="btn-primary" onclick="saveTicker()" style="white-space:nowrap;flex-shrink:0;padding:12px 22px;">
+              <i class="fas fa-save"></i> Save
+            </button>
+            <button class="btn-secondary" onclick="clearTicker()" style="white-space:nowrap;flex-shrink:0;padding:11px 18px;font-size:.72rem;">
+              <i class="fas fa-times"></i> Clear
+            </button>
+          </div>
+          <div id="ticker-save-status" style="margin-top:10px;font-size:.78rem;color:var(--muted2);min-height:18px;"></div>
+        </div>
+
+        <div class="form-card" style="display:none;">
+          <div class="settings-title"></div>
+          <div class="sql-wrap">
+            <button class="sql-copy-btn" onclick="copySql()"><i class="fas fa-copy"></i> Copy</button>
+            <pre class="sql-block" id="setup-sql">-- ══════════════════════════════════════════════
+-- Swift Freight Logistics — Database Setup
+-- Run ONCE in Supabase SQL Editor
+-- ══════════════════════════════════════════════
+
+-- ── Site Settings (ticker, announcements) ────────────────────
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  key        text PRIMARY KEY,
+  value      text,
+  updated_at timestamptz DEFAULT now()
+);
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public can read settings" ON public.site_settings FOR SELECT USING (true);
+
+-- Insert default ticker (empty = hidden)
+INSERT INTO public.site_settings (key, value) VALUES ('ticker', '') ON CONFLICT (key) DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS public.shipments (
+  id               BIGSERIAL PRIMARY KEY,
+  tracking_id      TEXT UNIQUE NOT NULL,
+  customer_email   TEXT,
+  name             TEXT,
+  senders_name     TEXT,
+  status           TEXT DEFAULT 'Pending',
+  current_location TEXT,
+  destination      TEXT,
+  origin           TEXT,
+  pickup_date      TEXT,
+  eta              TEXT,
+  package_details  TEXT,
+  service_type     TEXT DEFAULT 'Standard Freight',
+  priority         TEXT DEFAULT 'Standard',
+  payment_status   TEXT DEFAULT 'not-required',
+  amount_due       TEXT,
+  btc_address      TEXT,
+  usdt_address     TEXT,
+  bank_name        TEXT,
+  account_name     TEXT,
+  bank_number      TEXT,
+  notes            TEXT,
+  step1_color      TEXT DEFAULT 'text-blue-500',
+  step2_name       TEXT,
+  step2_location   TEXT,
+  step2_color      TEXT DEFAULT 'text-blue-500',
+  step3_name       TEXT,
+  step3_location   TEXT,
+  step3_color      TEXT DEFAULT 'text-blue-500',
+  step4_name       TEXT,
+  step4_location   TEXT,
+  step4_color      TEXT DEFAULT 'text-green-500',
+  created_at       TIMESTAMPTZ DEFAULT NOW(),
+  updated_at       TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Row Level Security
+ALTER TABLE public.shipments ENABLE ROW LEVEL SECURITY;
+
+-- Anon users can read (for tracking page)
+CREATE POLICY "Public read shipments"
+  ON public.shipments FOR SELECT USING (true);
+
+-- Only authenticated / service_role can write
+CREATE POLICY "Service role full access"
+  ON public.shipments USING (auth.role() = 'service_role');
+
+-- Public view — hides customer_email from the frontend
+DROP VIEW IF EXISTS public.shipments_public;
+CREATE VIEW public.shipments_public AS
+  SELECT
+    id, tracking_id, name, senders_name, status,
+    current_location, destination, origin,
+    pickup_date, eta, package_details, service_type, priority,
+    payment_status, amount_due,
+    btc_address, usdt_address, bank_name, account_name, bank_number,
+    notes,
+    step1_color,
+    step2_name, step2_location, step2_color,
+    step3_name, step3_location, step3_color,
+    step4_name, step4_location, step4_color,
+    created_at, updated_at
+  FROM public.shipments;
+
+-- Grant anon access to the public view
+GRANT SELECT ON public.shipments_public TO anon;
+
+-- Quote requests table
+CREATE TABLE IF NOT EXISTS public.quote_requests (
+  id           BIGSERIAL PRIMARY KEY,
+  reference    TEXT UNIQUE NOT NULL,
+  full_name    TEXT,
+  email        TEXT,
+  phone        TEXT,
+  origin       TEXT,
+  destination  TEXT,
+  cargo_type   TEXT,
+  weight       TEXT,
+  message      TEXT,
+  created_at   TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.quote_requests ENABLE ROW LEVEL SECURITY;
+
+-- Auto-update timestamp trigger
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN NEW.updated_at = NOW(); RETURN NEW; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_updated_at
+  BEFORE UPDATE ON public.shipments
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- Index for fast tracking lookups
+CREATE INDEX IF NOT EXISTS shipments_tracking_id_idx ON public.shipments (tracking_id);
+CREATE INDEX IF NOT EXISTS shipments_email_idx ON public.shipments (customer_email);</pre>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="settings-title"><i class="fas fa-lock" style="color:var(--accent);margin-right:8px"></i> Change Admin Password</div>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:18px;line-height:1.6">This is the password used to log into this admin panel. Default is <strong style="color:var(--accent-hi)">swift2025</strong>.</p>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>New Password</label><input type="password" id="s-new-pw" class="f-input" placeholder="Enter new password" autocomplete="new-password"></div>
+            <div class="f-group"><label>Confirm Password</label><input type="password" id="s-confirm-pw" class="f-input" placeholder="Repeat new password" autocomplete="new-password"></div>
+          </div>
+          <button class="btn-primary" style="margin-top:4px;" onclick="changePassword()"><i class="fas fa-key"></i> Update Password</button>
+          <p id="pw-result" style="margin-top:10px;font-size:.8rem;display:none;"></p>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- Mobile bottom nav -->
+<nav class="mobile-nav" id="mobile-nav">
+  <button class="mob-nav-item active" data-view="dashboard"><i class="fas fa-gauge-high"></i>Dashboard</button>
+  <button class="mob-nav-item" data-view="shipments"><i class="fas fa-box-archive"></i>Shipments</button>
+  <button class="mob-nav-item" data-view="form-new"><i class="fas fa-plus"></i>New</button>
+  <button class="mob-nav-item" data-view="settings"><i class="fas fa-gear"></i>Settings</button>
+</nav>
+
+<!-- Confirm modal -->
+<div id="confirm-modal">
+  <div class="confirm-card">
+    <h3 id="confirm-title">Confirm Action</h3>
+    <p id="confirm-msg">Are you sure?</p>
+    <div class="confirm-btns">
+      <button class="btn-secondary" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-danger" id="confirm-ok-btn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SUPABASE_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
+const ANON_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+const FN            = SUPABASE_URL + '/functions/v1';
+const PW_KEY        = 'sfl_panel_pw';
+const API_KEY       = 'sfl_api_secret';
+const DEFAULT_PW    = 'swift2025';
+const DEFAULT_API   = 'SFL-ADMIN-2025-Xp7kZ3mN';
+let allShipments    = [];
+let editId          = null;
+let emailType       = 'auto';
+
+/* ═══ AUTH ═══ */
+const getStoredPw  = () => localStorage.getItem(PW_KEY)  || DEFAULT_PW;
+const getApiSecret = () => (localStorage.getItem(API_KEY) || DEFAULT_API).replace(/[^\x20-\x7E]/g, '');
+
+function tryLogin() {
+  const pw  = document.getElementById('login-pw').value.trim();
+  const btn = document.getElementById('login-btn');
+  if (!pw) { showLoginErr('Enter your admin password.'); return; }
+  if (pw !== getStoredPw()) { showLoginErr('Incorrect password. Try again.'); return; }
+  localStorage.setItem('sfl_auth', '1');
+  launchApp();
+}
+function showLoginErr(msg) {
+  const el = document.getElementById('login-err');
+  el.textContent = msg; el.style.display = 'block';
+}
+function launchApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-app').style.display = 'block';
+  loadShipments();
+  loadTicker();
+  initTheme();
+}
+document.getElementById('login-btn').addEventListener('click', tryLogin);
+document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+document.getElementById('logout-btn').addEventListener('click', () => { localStorage.removeItem('sfl_auth'); location.reload(); });
+if (localStorage.getItem('sfl_auth') === '1') { launchApp(); }
+
+/* ═══ NAVIGATION ═══ */
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.view === name || n.dataset.view === name.split('-')[0] + '-' + name.split('-')[1]);
+  });
+  if (name === 'form-new') clearNewForm();
+  if (name === 'settings') {
+    const el = document.getElementById('s-api-secret');
+    if (el) el.value = localStorage.getItem(API_KEY) || DEFAULT_API;
+  }
+}
+document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => {
+  const v = n.dataset.view;
+  if (v === 'form-new') { clearNewForm(); }
+  switchView(v);
+}));
+
+/* ═══ LOAD SHIPMENTS ═══ */
+async function loadShipments() {
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/shipments_public?select=*&order=created_at.desc`, {
+      headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY },
+    });
+    allShipments = await r.json();
+    renderDash();
+    renderTable(allShipments);
+    updateStats();
+    document.getElementById('sidebar-count').textContent = allShipments.length;
+    document.getElementById('conn-dot').classList.add('ok');
+    document.getElementById('conn-label').textContent = 'Connected';
+  } catch (e) {
+    document.getElementById('conn-label').textContent = 'Error';
+  }
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent   = allShipments.length;
+  document.getElementById('s-pay-req').textContent = allShipments.filter(s => s.payment_status === 'required').length;
+  document.getElementById('s-pay-ok').textContent  = allShipments.filter(s => s.payment_status === 'confirmed').length;
+  document.getElementById('s-transit').textContent = allShipments.filter(s => (s.status||'').toLowerCase().includes('transit')).length;
+}
+
+function rowActions(tid) {
+  return `<div class="tbl-actions">
+    <button class="tbl-btn tbl-btn-edit" onclick="openEdit('${tid}')" title="Edit"><i class="fas fa-pen"></i><span class="btn-label"> Edit</span></button>
+    <a class="tbl-btn tbl-btn-view" href="payment.html?id=${tid}" target="_blank" title="View"><i class="fas fa-eye"></i></a>
+    <button class="tbl-btn tbl-btn-done" title="Mark Delivered" onclick="markDelivered('${tid}')"><i class="fas fa-circle-check"></i></button>
+    <button class="tbl-btn tbl-btn-del"  title="Delete"         onclick="confirmDelete('${tid}')"><i class="fas fa-trash"></i></button>
+  </div>`;
+}
+
+function renderDash() {
+  const tbody = document.getElementById('dash-tbody');
+  const rows  = allShipments.slice(0, 8);
+  if (!rows.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No shipments yet.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(s => `
+    <tr>
+      <td>${s.tracking_id}</td>
+      <td style="color:var(--text)">${s.name||'—'}</td>
+      <td>${s.destination||'—'}</td>
+      <td>${statusBadge(s.status)}</td>
+      <td>${payBadge(s.payment_status)}</td>
+      <td>${s.eta||'—'}</td>
+      <td>${rowActions(s.tracking_id)}</td>
+    </tr>`).join('');
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('ship-tbody');
+  document.getElementById('ship-count-label').textContent = data.length + ' shipment' + (data.length !== 1 ? 's' : '');
+  if (!data.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No shipments found.</td></tr>'; return; }
+  tbody.innerHTML = data.map(s => `
+    <tr>
+      <td>${s.tracking_id}</td>
+      <td style="color:var(--text)">${s.name||'—'}</td>
+      <td>${s.destination||'—'}</td>
+      <td>${statusBadge(s.status)}</td>
+      <td>${payBadge(s.payment_status)}</td>
+      <td>${s.amount_due||'—'}</td>
+      <td>${s.eta||'—'}</td>
+      <td>${rowActions(s.tracking_id)}</td>
+    </tr>`).join('');
+}
+
+function filterTable() {
+  const q   = document.getElementById('search-input').value.toLowerCase();
+  const sf  = document.getElementById('status-filter').value.toLowerCase();
+  const filtered = allShipments.filter(s =>
+    (!q  || (s.tracking_id+s.name+s.destination).toLowerCase().includes(q)) &&
+    (!sf || (s.status||'').toLowerCase().includes(sf))
+  );
+  renderTable(filtered);
+}
+
+function statusBadge(s) {
+  const sl = (s||'').toLowerCase();
+  const cl = sl.includes('deliver') ? 'badge-delivered' : sl.includes('transit') ? 'badge-transit' : sl.includes('hold')||sl.includes('custom') ? 'badge-held' : sl.includes('delay') ? 'badge-pending' : 'badge-pending';
+  return `<span class="badge ${cl}">${s||'—'}</span>`;
+}
+function payBadge(p) {
+  const cl = p==='confirmed'?'badge-confirmed':p==='required'?'badge-required':p==='pending'?'badge-pending':'badge-notreq';
+  return `<span class="badge ${cl}">${p||'not-required'}</span>`;
+}
+
+/* ═══ COLOR DOTS ═══ */
+document.querySelectorAll('.color-dots').forEach(group => {
+  group.querySelectorAll('.color-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      group.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+      dot.classList.add('selected');
+      const field = group.dataset.field;
+      if (field) document.getElementById(field).value = dot.dataset.value;
+    });
+  });
+});
+
+/* ═══ EMAIL CHIPS ═══ */
+document.querySelectorAll('.email-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.email-chip').forEach(c => c.classList.remove('sel'));
+    chip.classList.add('sel');
+    emailType = chip.dataset.type;
+    // Update update-btn label
+    const ub = document.getElementById('update-btn');
+    if (ub) ub.innerHTML = emailType === 'none'
+      ? '<i class="fas fa-floppy-disk"></i> Save Changes (No Email)'
+      : '<i class="fas fa-floppy-disk"></i> Save &amp; Send Notification';
+  });
+});
+
+/* ═══ NEW SHIPMENT EMAIL TOGGLE ═══ */
+(function(){
+  const toggle = document.getElementById('n-send-email');
+  const btn    = document.getElementById('register-btn');
+  if (!toggle || !btn) return;
+  toggle.addEventListener('change', () => {
+    btn.innerHTML = toggle.checked
+      ? '<i class="fas fa-box-open"></i>&nbsp; Register Shipment &amp; Send Email'
+      : '<i class="fas fa-box-open"></i>&nbsp; Register Shipment (No Email)';
+  });
+})();
+
+/* ═══ HELPERS ═══ */
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function toast(msg, type = 'info') {
+  const el  = document.createElement('div');
+  el.className = 'toast-item ' + type;
+  const icon = type === 'success' ? 'circle-check' : type === 'error' ? 'circle-xmark' : 'circle-info';
+  el.innerHTML = `<i class="fas fa-${icon}" style="color:var(--${type==='success'?'green':type==='error'?'red':'accent'})"></i><span class="toast-msg">${msg}</span>`;
+  document.getElementById('toast').appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function showInline(id, type, html) {
+  const el = document.getElementById(id);
+  const bg = type === 'success' ? 'rgba(34,197,94,.1)' : 'rgba(239,68,68,.1)';
+  const bc = type === 'success' ? 'rgba(34,197,94,.3)' : 'rgba(239,68,68,.28)';
+  const col = type === 'success' ? '#4ade80' : '#f87171';
+  el.style.cssText = `display:block;background:${bg};border:1px solid ${bc};border-radius:3px;padding:16px 20px;color:${col};font-size:.84rem;line-height:1.6`;
+  el.innerHTML = html;
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function clearNewForm() {
+  document.querySelectorAll('#view-form-new input, #view-form-new select, #view-form-new textarea').forEach(el => {
+    el.value = el.tagName === 'SELECT' ? el.options[0]?.value || '' : '';
+  });
+  document.getElementById('new-result').style.display = 'none';
+  // Reset color dots
+  document.querySelectorAll('#view-form-new .color-dots').forEach(group => {
+    group.querySelectorAll('.color-dot').forEach((dot, i) => dot.classList.toggle('selected', i === 0));
+    const field = group.dataset.field;
+    if (field) document.getElementById(field).value = group.querySelector('.color-dot').dataset.value;
+  });
+  // Default step4 to green
+  const s4 = document.querySelector('[data-field="n-s4color"]');
+  if (s4) {
+    s4.querySelectorAll('.color-dot').forEach(d => d.classList.toggle('selected', d.dataset.value === 'text-green-500'));
+    document.getElementById('n-s4color').value = 'text-green-500';
+  }
+}
+
+/* ═══ REGISTER ═══ */
+document.getElementById('register-btn').addEventListener('click', async () => {
+  if (!v('n-name') || !v('n-email') || !v('n-dest')) {
+    showInline('new-result', 'error', '<i class="fas fa-triangle-exclamation"></i> Name, Email, and Destination are required.');
+    return;
+  }
+  const btn       = document.getElementById('register-btn');
+  const sendEmail = document.getElementById('n-send-email')?.checked !== false;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>&nbsp; Registering…';
+  const body = {
+    name: v('n-name'), customer_email: v('n-email'), senders_name: v('n-sender'),
+    origin: v('n-origin'), destination: v('n-dest'), pickup_date: v('n-pickup'), eta: v('n-eta'),
+    service_type: v('n-service'), priority: v('n-priority'), package_details: v('n-pkg'),
+    status: v('n-status') || 'Pending', current_location: v('n-location'),
+    step1_color: v('n-s1color') || 'text-blue-500',
+    step2_name: v('n-s2name'), step2_location: v('n-s2loc'), step2_color: v('n-s2color') || 'text-blue-500',
+    step3_name: v('n-s3name'), step3_location: v('n-s3loc'), step3_color: v('n-s3color') || 'text-blue-500',
+    step4_name: v('n-s4name'), step4_location: v('n-s4loc'), step4_color: v('n-s4color') || 'text-green-500',
+    payment_status: v('n-paystatus') || 'not-required', amount_due: v('n-amount'),
+    btc_address: v('n-btc'), usdt_address: v('n-usdt'),
+    bank_name: v('n-bank'), account_name: v('n-accname'), bank_number: v('n-accnum'),
+    paypal_email: v('n-paypal'), cashapp_tag: v('n-cashapp'),
+    zelle_id: v('n-zelle'), western_union_info: v('n-wu'),
+    sendEmail,
+  };
+  try {
+    const res  = await fetch(FN + '/register-shipment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ANON_KEY, 'x-admin-secret': getApiSecret() },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.error || data.message) throw new Error(data.error || data.message);
+    showInline('new-result', 'success',
+      `<div style="text-align:center;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.28);border-radius:3px;padding:18px;margin-bottom:12px">
+        <div style="font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(232,240,254,.45);margin-bottom:6px">Tracking ID</div>
+        <div style="font-family:'JetBrains Mono';font-size:1.3rem;font-weight:700;color:#60a5fa;letter-spacing:.14em">${data.trackingId}</div>
+      </div>
+      Confirmation email sent to <strong>${v('n-email')}</strong>.<br>
+      <a href="payment.html?id=${data.trackingId}" target="_blank" style="color:#60a5fa;text-decoration:none;font-weight:600">View tracking page →</a>`
+    );
+    toast('Shipment ' + data.trackingId + ' registered!', 'success');
+    loadShipments();
+  } catch (e) {
+    showInline('new-result', 'error', '<i class="fas fa-circle-xmark" style="margin-right:7px"></i>' + e.message);
+    toast(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-box-open"></i>&nbsp; Register Shipment &amp; Send Email';
+  }
+});
+
+/* ═══ OPEN EDIT ═══ */
+function openEdit(tid) {
+  const s = allShipments.find(x => x.tracking_id === tid);
+  if (!s) return;
+  editId = tid;
+  document.getElementById('edit-tid').textContent = tid;
+  // Reset fields
+  ['u-status','u-s1color','u-location','u-eta','u-paystatus','u-amount','u-notes',
+   'u-s2name','u-s2loc','u-s2color','u-s3name','u-s3loc','u-s3color','u-s4name','u-s4loc','u-s4color',
+   'u-btc','u-usdt','u-bank','u-accname','u-accnum','u-paypal','u-cashapp','u-zelle','u-wu']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = el.tagName === 'SELECT' ? '' : ''; });
+  document.getElementById('update-result').style.display = 'none';
+  emailType = 'auto';
+  document.querySelectorAll('.email-chip').forEach(c => c.classList.toggle('sel', c.dataset.type === 'auto'));
+  switchView('form-edit');
+}
+
+/* ═══ UPDATE ═══ */
+document.getElementById('update-btn').addEventListener('click', async () => {
+  if (!editId) return;
+  const btn = document.getElementById('update-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>&nbsp; Saving…';
+  const updates = {};
+  if (v('u-status'))    updates.status           = v('u-status');
+  if (v('u-s1color'))   updates.step1_color      = v('u-s1color');
+  if (v('u-location'))  updates.current_location = v('u-location');
+  if (v('u-eta'))       updates.eta              = v('u-eta');
+  if (v('u-paystatus')) updates.payment_status   = v('u-paystatus');
+  if (v('u-amount'))    updates.amount_due       = v('u-amount');
+  if (v('u-notes'))     updates.notes            = v('u-notes');
+  if (v('u-s2name'))    updates.step2_name       = v('u-s2name');
+  if (v('u-s2loc'))     updates.step2_location   = v('u-s2loc');
+  if (v('u-s2color'))   updates.step2_color      = v('u-s2color');
+  if (v('u-s3name'))    updates.step3_name       = v('u-s3name');
+  if (v('u-s3loc'))     updates.step3_location   = v('u-s3loc');
+  if (v('u-s3color'))   updates.step3_color      = v('u-s3color');
+  if (v('u-s4name'))    updates.step4_name       = v('u-s4name');
+  if (v('u-s4loc'))     updates.step4_location   = v('u-s4loc');
+  if (v('u-s4color'))   updates.step4_color      = v('u-s4color');
+  if (v('u-btc'))       updates.btc_address       = v('u-btc');
+  if (v('u-usdt'))      updates.usdt_address      = v('u-usdt');
+  if (v('u-bank'))      updates.bank_name         = v('u-bank');
+  if (v('u-accname'))   updates.account_name      = v('u-accname');
+  if (v('u-accnum'))    updates.bank_number       = v('u-accnum');
+  if (v('u-paypal'))    updates.paypal_email      = v('u-paypal');
+  if (v('u-cashapp'))   updates.cashapp_tag       = v('u-cashapp');
+  if (v('u-zelle'))     updates.zelle_id          = v('u-zelle');
+  if (v('u-wu'))        updates.western_union_info = v('u-wu');
+  if (!Object.keys(updates).length) {
+    showInline('update-result', 'error', 'No changes entered.'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save &amp; Send Notification'; return;
+  }
+  try {
+    const res  = await fetch(FN + '/update-shipment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ANON_KEY, 'x-admin-secret': getApiSecret() },
+      body: JSON.stringify({ trackingId: editId, updates, sendEmail: emailType !== 'none', emailType: emailType === 'auto' ? undefined : emailType }),
+    });
+    const data = await res.json();
+    if (data.error || data.message) throw new Error(data.error || data.message);
+    showInline('update-result', 'success',
+      `<i class="fas fa-circle-check" style="margin-right:8px"></i>
+       <strong>${editId}</strong> updated.${emailType !== 'none' ? ' Notification email sent.' : ' No email sent.'}`
+    );
+    toast(editId + ' updated!', 'success');
+    loadShipments();
+  } catch (e) {
+    showInline('update-result', 'error', '<i class="fas fa-circle-xmark" style="margin-right:7px"></i>' + e.message);
+    toast(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save &amp; Send Notification';
+  }
+});
+
+/* ═══ SETTINGS ═══ */
+function changePassword() {
+  const np = document.getElementById('s-new-pw').value.trim();
+  const cp = document.getElementById('s-confirm-pw').value.trim();
+  const el = document.getElementById('pw-result');
+  el.style.display = 'block';
+  if (!np) { el.style.color='#f87171'; el.textContent='Enter a new password.'; return; }
+  if (np.length < 4) { el.style.color='#f87171'; el.textContent='Password must be at least 4 characters.'; return; }
+  if (np !== cp) { el.style.color='#f87171'; el.textContent='Passwords do not match.'; return; }
+  localStorage.setItem(PW_KEY, np);
+  el.style.color='#4ade80';
+  el.textContent='✓ Password updated. It will be required next time you log in.';
+  document.getElementById('s-new-pw').value = '';
+  document.getElementById('s-confirm-pw').value = '';
+  toast('Admin password updated!', 'success');
+}
+
+function saveApiSecret() {
+  const val = document.getElementById('s-api-secret').value.trim().replace(/[^\x20-\x7E]/g, '');
+  const el  = document.getElementById('api-result');
+  el.style.display = 'block';
+  if (!val) { el.style.color='#f87171'; el.textContent='Enter the API secret.'; return; }
+  localStorage.setItem(API_KEY, val);
+  el.style.color='#4ade80';
+  el.textContent='✓ API secret saved locally. Remember to redeploy edge functions if you changed it on Supabase.';
+  toast('API secret saved!', 'success');
+}
+
+/* ═══ TICKER ═══ */
+async function loadTicker() {
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
+      headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY }
+    });
+    const rows = await r.json();
+    if (rows && rows[0]) document.getElementById('ticker-input').value = rows[0].value || '';
+  } catch(_) {}
+}
+async function saveTicker() {
+  const val = (document.getElementById('ticker-input')?.value || '').trim();
+  const status = document.getElementById('ticker-save-status');
+  status.textContent = 'Saving…';
+  status.style.color = 'var(--muted2)';
+  const SECRET = (localStorage.getItem('sfl_secret') || '').replace(/[^\x20-\x7E]/g,'');
+  try {
+    const r = await fetch(FN + '/update-setting', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+ANON_KEY, 'x-admin-secret': SECRET },
+      body: JSON.stringify({ key: 'ticker', value: val }),
+    });
+    const d = await r.json();
+    if (d.error || d.message) throw new Error(d.error || d.message);
+    status.textContent = val ? '✓ Ticker saved and live!' : '✓ Ticker cleared (hidden on site).';
+    status.style.color = 'var(--success)';
+    setTimeout(() => { status.textContent = ''; }, 4000);
+  } catch(e) {
+    status.textContent = 'Error: ' + String(e);
+    status.style.color = '#f87171';
+  }
+}
+function clearTicker() {
+  document.getElementById('ticker-input').value = '';
+  saveTicker();
+}
+
+/* ═══ SECRET TOPBAR GESTURE ═══ */
+(function(){
+  const btn    = document.getElementById('secret-topbar-btn');
+  const popup  = document.getElementById('secret-popup');
+  if (!btn || !popup) return;
+
+  let holdTimer = null;
+  let ringEl    = null;
+
+  function startHold(e) {
+    e.preventDefault();
+    // Ring indicator
+    ringEl = document.createElement('div');
+    ringEl.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;width:38px;height:38px;border-radius:50%;border:2px solid transparent;border-top-color:#3b82f6;border-right-color:#3b82f6;box-sizing:border-box;animation:sSpin 1s linear forwards;';
+    const r = btn.getBoundingClientRect();
+    ringEl.style.left = (r.left + r.width/2 - 19) + 'px';
+    ringEl.style.top  = (r.top  + r.height/2 - 19) + 'px';
+    document.body.appendChild(ringEl);
+
+    holdTimer = setTimeout(() => {
+      if (ringEl) { ringEl.remove(); ringEl = null; }
+      // Load saved secret
+      const saved = (localStorage.getItem('sfl_secret') || '').replace(/[^\x20-\x7E]/g,'');
+      const inp = document.getElementById('s-api-secret');
+      if (inp && saved) inp.value = saved;
+      // Position popup near the top-right
+      popup.classList.add('open');
+    }, 1000);
+  }
+
+  function cancelHold() {
+    clearTimeout(holdTimer); holdTimer = null;
+    if (ringEl) { ringEl.remove(); ringEl = null; }
+  }
+
+  btn.addEventListener('pointerdown',   startHold);
+  btn.addEventListener('pointerup',     cancelHold);
+  btn.addEventListener('pointerleave',  cancelHold);
+  btn.addEventListener('pointercancel', cancelHold);
+  btn.addEventListener('contextmenu',   e => e.preventDefault());
+
+  // Close popup when clicking outside
+  document.addEventListener('pointerdown', function(e) {
+    if (popup.classList.contains('open') && !popup.contains(e.target) && e.target !== btn) {
+      popup.classList.remove('open');
+    }
+  });
+
+  if (!document.getElementById('sSpin-kf')) {
+    const s = document.createElement('style');
+    s.id = 'sSpin-kf';
+    s.textContent = '@keyframes sSpin{0%{transform:rotate(0)scale(.5);opacity:.5}100%{transform:rotate(360deg)scale(1.15);opacity:0}}';
+    document.head.appendChild(s);
+  }
+})();
+
+/* ═══ SQL COPY ═══ */
+function copySql() {
+  const text = document.getElementById('setup-sql').innerText.replace(/Copy\s*/,'');
+  navigator.clipboard.writeText(text).then(() => toast('SQL copied to clipboard!', 'success'));
+}
+
+/* ═══ THEME ═══ */
+function initTheme() {
+  const saved = localStorage.getItem('sfl_admin_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeIcon(saved);
+}
+function toggleTheme() {
+  const cur  = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sfl_admin_theme', next);
+  updateThemeIcon(next);
+}
+function updateThemeIcon(theme) {
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+initTheme();
+
+/* ═══ MOBILE SIDEBAR ═══ */
+function openSidebar() {
+  document.querySelector('.sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+document.getElementById('ham-btn').addEventListener('click', openSidebar);
+document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', closeSidebar));
+
+/* ═══ MOBILE BOTTOM NAV ═══ */
+document.querySelectorAll('.mob-nav-item').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mob-nav-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    switchView(btn.dataset.view);
+  });
+});
+
+/* ═══ CONFIRM MODAL ═══ */
+let confirmCallback = null;
+function openConfirm(title, msg, okLabel, okClass, cb) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent   = msg;
+  const okBtn = document.getElementById('confirm-ok-btn');
+  okBtn.textContent = okLabel;
+  okBtn.className   = okClass;
+  confirmCallback = cb;
+  document.getElementById('confirm-modal').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirm-modal').classList.remove('open');
+  confirmCallback = null;
+}
+document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+  if (confirmCallback) confirmCallback();
+  closeConfirm();
+});
+document.getElementById('confirm-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('confirm-modal')) closeConfirm();
+});
+
+/* ═══ DELETE SHIPMENT ═══ */
+function confirmDelete(tid) {
+  openConfirm(
+    'Delete Shipment',
+    `Permanently delete shipment ${tid}? This cannot be undone.`,
+    'Delete',
+    'btn-danger',
+    () => doDelete(tid)
+  );
+}
+async function doDelete(tid) {
+  try {
+    const res  = await fetch(FN + '/delete-shipment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ANON_KEY, 'x-admin-secret': getApiSecret() },
+      body: JSON.stringify({ trackingId: tid }),
+    });
+    const data = await res.json();
+    if (data.error || data.message) throw new Error(data.error || data.message);
+    toast(tid + ' deleted.', 'success');
+    loadShipments();
+  } catch (e) {
+    toast('Delete failed: ' + e.message, 'error');
+  }
+}
+
+/* ═══ MARK DELIVERED ═══ */
+function markDelivered(tid) {
+  openConfirm(
+    'Mark as Delivered',
+    `Mark ${tid} as Delivered? A delivery confirmation email will be sent to the customer.`,
+    'Mark Delivered',
+    'btn-primary',
+    () => doMarkDelivered(tid)
+  );
+}
+async function doMarkDelivered(tid) {
+  try {
+    const res  = await fetch(FN + '/update-shipment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ANON_KEY, 'x-admin-secret': getApiSecret() },
+      body: JSON.stringify({
+        trackingId: tid,
+        updates:    { status: 'Delivered', step1_color: 'text-green-500', payment_status: 'confirmed' },
+        sendEmail:  true,
+        emailType:  'delivered',
+      }),
+    });
+    const data = await res.json();
+    if (data.error || data.message) throw new Error(data.error || data.message);
+    toast(tid + ' marked as delivered!', 'success');
+    loadShipments();
+  } catch (e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+</script>
+</body>
+</html>

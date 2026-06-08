@@ -1,1072 +1,1927 @@
 <!DOCTYPE html>
-<html lang="en" class=" overflow-x-hidden relative">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>swift freight | Home</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="output.css">
-    <link rel="stylesheet" href="input.css">
-    <link rel="icon" type="image/png" href="./image/loadingicon-removebg-preview.png" class="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swift Freight | Premium Global Logistics</title>
+  <meta name="description" content="Swift Freight Logistics — premium global freight services. Fast, reliable shipping solutions for businesses worldwide. Get a quote today.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Swift Freight | Premium Global Logistics">
+  <meta property="og:description" content="Premium global freight and shipping solutions. Fast, reliable, worldwide.">
+  <meta property="og:image" content="https://swiftfreightlogix.netlify.app/image/sfl-logo.svg">
+  <meta property="og:url" content="https://swiftfreightlogix.netlify.app/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://swiftfreightlogix.netlify.app/image/sfl-logo.svg">
+  <link rel="icon" type="image/svg+xml" href="./image/sfl-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./image/loadingicon-removebg-preview.png">
+  <link rel="apple-touch-icon" href="./image/loadingicon-removebg-preview.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <style>
+    /* ═══════════════════════════════════════════
+       SWIFT FREIGHT — ULTRA PREMIUM DESIGN SYSTEM
+    ═══════════════════════════════════════════ */
 
-    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
-    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <script>tailwind.config={theme:{extend:{fontFamily:{display:['Bebas Neue'],body:['DM Sans'],mono:['JetBrains Mono']}}}}</script>
+    :root {
+      --accent:       #3b82f6;
+      --accent-hi:    #60a5fa;
+      --accent-deep:  #1d4ed8;
+      --accent-dim:   rgba(59,130,246,.1);
+      --accent-rgb:   59,130,246;
+      --gold:         #c9a84c;
+      --gold-hi:      #e8c97a;
+      --gold-dim:     rgba(201,168,76,.12);
 
-  </head>
-  <body class="h-200vh max-w-[100%] pt-20 overflow-x-hidden font-['roboto'] bg-gradient-to-br from-blue-100 via-blue-50 to-blue-100">
-    <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50 animated-gradient">
-      <section class="bg-gradient-to-br from-blue-50 via-blue-400 to-indigo-50">
-        <nav class=" flex w-full items-center justify-between px-6 bg-transparent">
-          <div class="flex justify-between w-full items-center">
-              <div class="flex items-center pt-3">
-                <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
-              </div>
+      --bg:           #03081a;
+      --bg2:          #060d20;
+      --bg3:          #080f26;
+      --bg-rgb:       3,8,26;
 
-              <div class="uppercase font-semibold lg:hidden">
-                <h1 class="text-blue-950 text-[13px] font-serif mt-2 italic reveal-from-left">swift Freight Logix</h1>
-              </div>
+      --surface:      rgba(255,255,255,.03);
+      --surface2:     rgba(255,255,255,.055);
+      --surface3:     rgba(255,255,255,.085);
 
-              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 lg:hidden ">
-                  <div class="relative h-5 w-6">
-                      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
-                       
-                      <svg id="x-icon" class="hidden w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                      </svg>
-                  </div>
-              </button>
-          </div>
-          
+      --text:         #e8f0fe;
+      --text-rgb:     232,240,254;
+      --muted:        rgba(232,240,254,.68);
+      --muted2:       rgba(232,240,254,.40);
 
-          <div class="lg:flex md:justify-between hidden md:gap-8 md:items-center">
-            <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-              <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
-              <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
-              <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
-              <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
-            </nav>
+      --border:       rgba(232,240,254,.065);
+      --border2:      rgba(232,240,254,.11);
+      --aborder:      rgba(59,130,246,.2);
+      --gborder:      rgba(201,168,76,.18);
 
-            <div id="navButtons" class="w-full text-nowrap flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
-                    <a href="quote.html">Get a Free Quote</a> 
-                <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-              </button>
-                        
-              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
-                <i class="fas fa-location-dot"></i>
-                    <a href="payment.html">Track Shipment</a> 
-              </button>
-            </div>
-          </div>
-        </nav>
+      --hdr-bg:       rgba(3,8,26,.88);
+      --card-bg:      rgba(255,255,255,.035);
+      --footer-bg:    #020612;
 
-        <div id="overlay" class="fixed inset-0 z-[80] hidden bg-black/20 backdrop-blur-sm transition-opacity duration-500 opacity-0"></div>
+      --nav-drop-bg:  rgba(3,8,26,.97);
+      --nav-item:     rgba(232,240,254,.85);
 
-        <div id="side-menu" class="fixed top-0 right-0 z-[90] h-screen w-[65%] translate-x-full bg-blue-950 shadow-[-20px_0_50px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-in-out">
-            <div class="flex flex-col h-full pt-32 px-10">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-10">Menu</h2>
-                <ul class="space-y-6">
-                    <li><a href="index.html" class="text-2xl menu-item font-bold text-white hover:text-blue-600 transition-all duration-700 delay-100">Home</a></li>
-                    <li><a href="payment.html" class="text-2xl menu-item font-bold text-white hover:text-blue-600 transition-colors">Track Shipment</a></li>
-                    <li><a href="services.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">Our Services</a></li>
-                    <li><a href="contact.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">Contact</a></li>
-                    <li><a href="about.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">about Us</a></li>
-                </ul>
-                
-                <div class="mt-auto mb-32">
-                    <button class="w-full rounded-xl bg-gradient-to-br from-blue-400 via-indigo-100 to-blue-200 py-4 text-blue-950 font-bold shadow-xl hover:bg-blue-900 transition-all">
-                       <a href="quote.html">Get a Quote</a> 
-                    </button>
-                </div>
-            </div>
+      --shadow-lg:    0 32px 80px rgba(0,0,0,.55), 0 8px 24px rgba(0,0,0,.3);
+      --shadow-glow:  0 0 60px rgba(59,130,246,.12);
+    }
+
+    [data-theme="light"] {
+      --accent:       #1d4ed8;
+      --accent-hi:    #3b82f6;
+      --accent-deep:  #1e40af;
+      --accent-dim:   rgba(29,78,216,.08);
+      --accent-rgb:   29,78,216;
+      --gold:         #b8860b;
+      --gold-hi:      #d4a017;
+      --gold-dim:     rgba(184,134,11,.1);
+
+      --bg:           #f0f4fc;
+      --bg2:          #e6edf9;
+      --bg3:          #dce7f6;
+      --bg-rgb:       240,244,252;
+
+      --surface:      rgba(255,255,255,.72);
+      --surface2:     rgba(255,255,255,.88);
+      --surface3:     rgba(255,255,255,.98);
+
+      --text:         #05102a;
+      --text-rgb:     5,16,42;
+      --muted:        rgba(5,16,42,.68);
+      --muted2:       rgba(5,16,42,.42);
+
+      --border:       rgba(5,16,42,.07);
+      --border2:      rgba(5,16,42,.12);
+      --aborder:      rgba(29,78,216,.16);
+      --gborder:      rgba(184,134,11,.18);
+
+      --hdr-bg:       rgba(240,244,252,.92);
+      --card-bg:      rgba(255,255,255,.78);
+      --footer-bg:    #020612;
+
+      --nav-drop-bg:  rgba(240,244,252,.98);
+      --nav-item:     rgba(5,16,42,.88);
+
+      --shadow-lg:    0 32px 80px rgba(5,16,42,.14), 0 8px 24px rgba(5,16,42,.08);
+      --shadow-glow:  0 0 60px rgba(29,78,216,.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background .4s ease, color .4s ease;
+    }
+
+    /* Luxurious noise grain */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.032'/%3E%3C/svg%3E");
+      opacity: .22;
+    }
+
+    /* Ambient background gradient — dark */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(59,130,246,.055) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 90%, rgba(59,130,246,.04) 0%, transparent 55%);
+    }
+    [data-theme="light"] body::after {
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(29,78,216,.045) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 90%, rgba(29,78,216,.03) 0%, transparent 55%);
+    }
+
+    header, main, section, footer, .fab-btn { position: relative; z-index: 1; }
+
+    /* ── Gradient text ── */
+    .gt {
+      background: linear-gradient(115deg, var(--accent) 0%, var(--accent-hi) 55%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gt-gold {
+      background: linear-gradient(115deg, var(--gold) 0%, var(--gold-hi) 55%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Typography ── */
+    .display { font-family: 'Bebas Neue'; letter-spacing: .03em; line-height: .92; }
+    .serif   { font-family: 'Cormorant Garamond'; }
+    .mono    { font-family: 'JetBrains Mono'; }
+
+    /* ── Section label ── */
+    .lbl {
+      display: inline-flex; align-items: center; gap: 12px;
+      font: 700 8px/1 'DM Sans'; letter-spacing: .48em; text-transform: uppercase;
+      color: var(--accent); opacity: .9;
+    }
+    .lbl::before, .lbl::after {
+      content: ''; width: 22px; height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: .5;
+    }
+    .lbl::after { background: linear-gradient(270deg, var(--accent), transparent); }
+
+    /* ── Gradient divider ── */
+    .grule {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),.16), rgba(var(--accent-rgb),.06), transparent);
+    }
+
+    /* ── Orb ── */
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(110px);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent) 50%, var(--accent-hi) 100%);
+      background-size: 200% 100%; background-position: left;
+      color: #fff; font: 700 .74rem/1 'DM Sans'; letter-spacing: .12em; text-transform: uppercase;
+      padding: 15px 32px; border-radius: 2px; border: none; cursor: pointer;
+      text-decoration: none; white-space: nowrap;
+      transition: background-position .5s ease, box-shadow .3s, transform .25s;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .btn-primary:hover {
+      background-position: right;
+      box-shadow: 0 0 40px rgba(var(--accent-rgb),.38), 0 8px 32px rgba(var(--accent-rgb),.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: transparent; color: var(--muted);
+      font: 600 .74rem/1 'DM Sans'; letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px 28px; border-radius: 2px;
+      border: 1px solid var(--border2); cursor: pointer; text-decoration: none;
+      transition: all .3s; white-space: nowrap;
+      clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+    }
+    .btn-outline:hover {
+      color: var(--accent); border-color: rgba(var(--accent-rgb),.45);
+      background: rgba(var(--accent-rgb),.06);
+      box-shadow: 0 0 28px rgba(var(--accent-rgb),.1);
+    }
+
+    /* ── Glass card ── */
+    .glass {
+      background: var(--card-bg);
+      backdrop-filter: blur(28px) saturate(1.5);
+      -webkit-backdrop-filter: blur(28px) saturate(1.5);
+      border: 1px solid var(--aborder);
+    }
+    [data-theme="light"] .glass {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      box-shadow: 0 8px 48px rgba(5,16,42,.07), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    /* ── Card hover lift ── */
+    .lift {
+      transition: transform .38s cubic-bezier(.25,.46,.45,.94),
+                  box-shadow .38s, border-color .3s;
+    }
+    .lift:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(var(--accent-rgb),.4) !important;
+    }
+    [data-theme="light"] .lift:hover {
+      box-shadow: 0 32px 64px rgba(5,16,42,.16), 0 8px 24px rgba(5,16,42,.08);
+    }
+
+    /* ── Freight card ── */
+    .fc {
+      position: relative; border-radius: 3px; overflow: hidden;
+      cursor: pointer;
+      transition: transform .4s cubic-bezier(.25,.46,.45,.94), box-shadow .4s;
+    }
+    .fc::after {
+      content: ''; position: absolute; inset: 0; border-radius: 3px;
+      border: 1px solid transparent; transition: border-color .35s; pointer-events: none;
+    }
+    .fc:hover { transform: translateY(-7px); box-shadow: var(--shadow-lg); }
+    .fc:hover::after { border-color: rgba(var(--accent-rgb),.55); }
+    .fc-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(2,6,18,.96) 0%, rgba(2,6,18,.5) 45%, transparent 100%);
+    }
+    .fc-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .7s ease;
+      filter: brightness(.88) saturate(.9);
+    }
+    [data-theme="light"] .fc-img { filter: brightness(.82) saturate(.85); }
+    .fc:hover .fc-img { transform: scale(1.05); filter: brightness(.92) saturate(1); }
+
+    /* ── Service row ── */
+    .srow {
+      display: flex; align-items: center; gap: 20px;
+      padding: 24px 30px; border-radius: 3px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: all .3s;
+      position: relative; overflow: hidden;
+    }
+    .srow::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent-hi));
+      transform: scaleY(0); transform-origin: top;
+      transition: transform .3s cubic-bezier(.25,.46,.45,.94);
+    }
+    .srow:hover::before { transform: scaleY(1); }
+    .srow:hover {
+      background: rgba(var(--accent-rgb),.055);
+      border-color: rgba(var(--accent-rgb),.25);
+      transform: translateX(8px);
+      box-shadow: 0 4px 32px rgba(var(--accent-rgb),.08);
+    }
+    [data-theme="light"] .srow {
+      background: var(--surface2);
+      border-color: var(--border2);
+      box-shadow: 0 2px 16px rgba(5,16,42,.05);
+    }
+    [data-theme="light"] .srow:hover {
+      background: rgba(var(--accent-rgb),.05);
+      box-shadow: 0 8px 40px rgba(var(--accent-rgb),.1);
+    }
+    .snum { font: 500 .65rem/1 'JetBrains Mono'; color: rgba(var(--accent-rgb),.35); letter-spacing: .06em; flex-shrink: 0; width: 26px; }
+
+    /* ── Icon box ── */
+    .ibox {
+      width: 46px; height: 46px; border-radius: 3px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent-dim); border: 1px solid var(--aborder);
+      color: var(--accent); font-size: .88rem;
+      transition: background .3s, box-shadow .3s, transform .3s;
+    }
+    .srow:hover .ibox {
+      background: rgba(var(--accent-rgb),.15);
+      box-shadow: 0 0 22px rgba(var(--accent-rgb),.22);
+      transform: scale(1.08);
+    }
+
+    /* ── Stat cell ── */
+    .stat-c {
+      padding: 22px 26px; border-right: 1px solid var(--border);
+      text-align: center; flex: 1;
+      transition: background .3s;
+    }
+    .stat-c:last-child { border-right: none; }
+    .stat-c:hover { background: rgba(var(--accent-rgb),.04); }
+
+
+    /* ══════════════════════════════
+       LOADER — wordmark
+    ══════════════════════════════ */
+    @keyframes ldr-up {
+      from { opacity:0; transform:translateY(18px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes ldr-bar {
+      from { transform:scaleX(0); transform-origin:left; }
+      to   { transform:scaleX(1); transform-origin:left; }
+    }
+    #loader {
+      position:fixed; inset:0; z-index:9999;
+      background:var(--bg);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:28px;
+    }
+    .loader-wordmark {
+      display:flex; gap:6px;
+      font-family:'Bebas Neue'; font-size:3rem; letter-spacing:.3em; color:var(--text);
+    }
+    .loader-wordmark span {
+      display:inline-block;
+      animation:ldr-up .6s cubic-bezier(.22,1,.36,1) both;
+    }
+    .loader-wordmark span:nth-child(1){animation-delay:.08s}
+    .loader-wordmark span:nth-child(2){animation-delay:.16s}
+    .loader-wordmark span:nth-child(3){animation-delay:.24s}
+    .loader-wordmark span:nth-child(4){animation-delay:.32s}
+    .loader-wordmark span:nth-child(5){animation-delay:.40s}
+    .loader-bar {
+      width:160px; height:2px; background:rgba(var(--accent-rgb),.13);
+      border-radius:99px; overflow:hidden;
+    }
+    .loader-bar-fill {
+      height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-hi));
+      animation:ldr-bar 1s ease .42s both;
+      box-shadow:0 0 8px rgba(var(--accent-rgb),.4);
+    }
+    /* Smooth theme transitions */
+    .sfl-transitioning body,.sfl-transitioning #hdr,.sfl-transitioning footer,.sfl-transitioning .card-glass,.sfl-transitioning section { transition:background-color .4s cubic-bezier(.4,0,.2,1),border-color .4s cubic-bezier(.4,0,.2,1),color .28s ease,box-shadow .4s ease !important; }
+
+
+    /* ══════════════════════════════
+       HEADER — refined luxury
+    ══════════════════════════════ */
+    #hdr {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: var(--hdr-bg);
+      backdrop-filter: blur(32px) saturate(1.6);
+      -webkit-backdrop-filter: blur(32px) saturate(1.6);
+      border-bottom: 1px solid var(--border);
+      transition: background .4s, box-shadow .4s, border-color .4s;
+    }
+    #hdr.scrolled {
+      box-shadow: 0 4px 48px rgba(0,0,0,.4), 0 1px 0 rgba(var(--accent-rgb),.1);
+      border-bottom-color: rgba(var(--accent-rgb),.14);
+    }
+    [data-theme="light"] #hdr {
+      background: rgba(240,244,252,.88);
+      border-bottom: 1px solid rgba(5,16,42,.06);
+      box-shadow: 0 1px 0 rgba(255,255,255,.8);
+    }
+    [data-theme="light"] #hdr.scrolled {
+      box-shadow: 0 4px 40px rgba(5,16,42,.1), 0 1px 0 rgba(255,255,255,.9);
+      border-bottom-color: rgba(var(--accent-rgb),.12);
+    }
+
+    .hdr-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 74px; max-width: 1400px; margin: 0 auto;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .logo img { width: 40px; height: 40px; filter: drop-shadow(0 2px 12px rgba(var(--accent-rgb),.42)); }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-name { font-family: 'Bebas Neue'; font-size: 1.08rem; letter-spacing: .18em; line-height: 1.1; }
+    .logo-sub { font-size: 6px; letter-spacing: .52em; text-transform: uppercase; color: rgba(var(--accent-rgb),.38); margin-top: 2px; }
+
+    .nav-links { display: flex; align-items: center; gap: 38px; list-style: none; }
+    .nav-links a {
+      font: 500 .78rem/1 'DM Sans'; letter-spacing: .05em;
+      color: var(--muted); text-decoration: none;
+      transition: color .2s; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; left: 50%; bottom: -4px;
+      width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-hi));
+      transition: width .35s, left .35s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; left: 0; }
+
+    .hdr-actions { display: flex; align-items: center; gap: 12px; }
+    .mobile-controls { display: none; align-items: center; gap: 10px; }
+
+    /* Theme toggle */
+    .theme-btn {
+      width: 40px; height: 40px; border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.18);
+      color: var(--accent); cursor: pointer; flex-shrink: 0;
+      transition: all .25s;
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    }
+    .theme-btn:hover { background: rgba(var(--accent-rgb),.16); transform: scale(1.06); }
+    .theme-btn i { font-size: .8rem; pointer-events: none; }
+
+    /* Mobile hamburger */
+    .menu-btn {
+      display: none;
+      width: 44px; height: 44px; border-radius: 2px;
+      flex-direction: column; align-items: center; justify-content: center; gap: 5.5px;
+      background: rgba(var(--accent-rgb),.06); border: 1px solid rgba(var(--accent-rgb),.14);
+      cursor: pointer; z-index: 310; flex-shrink: 0;
+      transition: background .25s, border-color .25s;
+      clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+    }
+    .menu-btn:hover { background: rgba(var(--accent-rgb),.12); border-color: rgba(var(--accent-rgb),.28); }
+    .menu-btn span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--accent); border-radius: 1px;
+      transition: transform .42s cubic-bezier(.16,1,.3,1), opacity .3s, width .3s;
+      transform-origin: center;
+    }
+    .menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; width: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Ticker strip */
+    .ticker-strip {
+      overflow: hidden; position: relative; padding: 8px 0;
+      background: rgba(var(--accent-rgb),.022);
+      border-top: 1px solid rgba(var(--text-rgb),.04);
+    }
+    [data-theme="light"] .ticker-strip {
+      background: rgba(var(--accent-rgb),.03);
+      border-top: 1px solid rgba(5,16,42,.06);
+    }
+    .ticker-fade-l, .ticker-fade-r {
+      position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2; pointer-events: none;
+    }
+    .ticker-fade-l { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+    .ticker-fade-r { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+    .ticker-track {
+      display: flex; width: max-content; white-space: nowrap;
+      animation: tickerRun 58s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes tickerRun { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 10px; padding: 0 44px;
+      font: 700 8.5px/1 'DM Sans'; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(var(--text-rgb),.58); border-left: 1px solid rgba(var(--text-rgb),.042);
+    }
+    .ticker-item:first-child { border-left: none; }
+    .ticker-item i { color: var(--accent); font-size: .7rem; }
+    .ticker-item .hi { color: var(--accent); }
+    .ping-dot {
+      position: relative; display: inline-flex; width: 7px; height: 7px; flex-shrink: 0;
+    }
+    .ping-dot::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: var(--accent); opacity: .55;
+      animation: ping 1.6s ease-in-out infinite;
+    }
+    .ping-dot::after {
+      content: ''; position: relative; display: inline-flex;
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent); z-index: 1;
+    }
+    @keyframes ping { 0%,100%{transform:scale(1);opacity:.55} 50%{transform:scale(2.4);opacity:0} }
+
+
+    /* ══════════════════════════════
+       MOBILE NAV — premium overlay
+    ══════════════════════════════ */
+    #mobile-nav {
+      position: fixed; inset: 0; z-index: 250;
+      background: var(--nav-drop-bg);
+      backdrop-filter: blur(40px) saturate(1.8);
+      -webkit-backdrop-filter: blur(40px) saturate(1.8);
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .5s cubic-bezier(.76,0,.24,1);
+      display: none;
+    }
+    #mobile-nav.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    [data-theme="light"] #mobile-nav {
+      background: rgba(240,244,252,.97);
+    }
+
+    /* Decorative accent line top */
+    #mobile-nav::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent-hi), var(--accent), transparent);
+      opacity: .6;
+    }
+
+    /* Ambient orb inside nav */
+    #mobile-nav::after {
+      content: '';
+      position: absolute; bottom: -80px; right: -80px;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(var(--accent-rgb),.07), transparent);
+      pointer-events: none;
+    }
+
+    .mob-nav-inner {
+      position: relative; z-index: 2;
+      padding: 36px 36px 52px;
+      display: flex; flex-direction: column;
+      min-height: 100%;
+    }
+
+    /* Top bar with logo + close button */
+    .mob-nav-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 56px;
+    }
+
+    .mob-nav-logo {
+      display: flex; align-items: center; gap: 11px; text-decoration: none;
+    }
+    .mob-nav-logo img { width: 34px; height: 34px; filter: drop-shadow(0 2px 10px rgba(var(--accent-rgb),.4)); }
+    .mob-nav-logo-name { font-family: 'Bebas Neue'; font-size: .95rem; letter-spacing: .18em; }
+    .mob-nav-logo-name span:first-child { -webkit-text-fill-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-hi)); -webkit-background-clip: text; background-clip: text; }
+    .mob-nav-logo-name span:last-child { color: rgba(var(--text-rgb),.75); margin-left: 5px; }
+
+    /* ✕ Close button */
+    .mob-close-btn {
+      width: 46px; height: 46px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(var(--accent-rgb),.07);
+      border: 1px solid rgba(var(--accent-rgb),.2);
+      border-radius: 2px; cursor: pointer;
+      color: var(--accent); font-size: .85rem;
+      transition: background .25s, transform .3s, box-shadow .25s;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      flex-shrink: 0;
+    }
+    .mob-close-btn:hover {
+      background: rgba(var(--accent-rgb),.16);
+      box-shadow: 0 0 24px rgba(var(--accent-rgb),.2);
+      transform: rotate(90deg) scale(1.06);
+    }
+    .mob-close-btn i { pointer-events: none; }
+
+    .mob-nav-label {
+      font: 700 7px/1 'DM Sans'; letter-spacing: .48em;
+      text-transform: uppercase; color: rgba(var(--accent-rgb),.38);
+      margin-bottom: 20px;
+    }
+
+    .mob-nav-links { list-style: none; display: flex; flex-direction: column; gap: 0; }
+    .mob-nav-links li {
+      border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateX(-24px);
+      transition: opacity .0s, transform .0s;
+    }
+    #mobile-nav.open .mob-nav-links li {
+      opacity: 1; transform: translateX(0);
+      transition: opacity .55s cubic-bezier(.16,1,.3,1),
+                  transform .55s cubic-bezier(.16,1,.3,1);
+    }
+    #mobile-nav.open .mob-nav-links li:nth-child(1) { transition-delay: .08s; }
+    #mobile-nav.open .mob-nav-links li:nth-child(2) { transition-delay: .15s; }
+    #mobile-nav.open .mob-nav-links li:nth-child(3) { transition-delay: .22s; }
+    #mobile-nav.open .mob-nav-links li:nth-child(4) { transition-delay: .29s; }
+    #mobile-nav.open .mob-nav-links li:nth-child(5) { transition-delay: .36s; }
+
+    .mob-nav-links a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0;
+      font: 700 2rem/1 'Bebas Neue'; letter-spacing: .08em;
+      color: var(--nav-item); text-decoration: none;
+      transition: color .2s, padding-left .3s;
+    }
+    .mob-nav-links a .nav-arrow {
+      width: 32px; height: 32px; border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent-dim); border: 1px solid var(--aborder);
+      color: var(--accent); font-size: .65rem;
+      transition: background .25s, transform .3s, box-shadow .25s;
+      clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+    }
+    .mob-nav-links a:hover { color: var(--accent); padding-left: 8px; }
+    .mob-nav-links a:hover .nav-arrow {
+      background: rgba(var(--accent-rgb),.18);
+      transform: translateX(4px);
+      box-shadow: 0 0 16px rgba(var(--accent-rgb),.25);
+    }
+
+    .mob-nav-cta {
+      margin-top: 36px;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity .0s, transform .0s;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    #mobile-nav.open .mob-nav-cta {
+      opacity: 1; transform: translateY(0);
+      transition: opacity .5s ease .44s, transform .5s cubic-bezier(.16,1,.3,1) .44s;
+    }
+    .mob-nav-cta .btn-primary { width: 100%; justify-content: center; }
+    .mob-nav-cta .btn-outline  { width: 100%; justify-content: center; }
+
+    /* Nav footer with socials */
+    .mob-nav-footer {
+      margin-top: 36px; padding-top: 22px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      opacity: 0;
+      transition: opacity .0s;
+    }
+    #mobile-nav.open .mob-nav-footer {
+      opacity: 1; transition: opacity .5s ease .52s;
+    }
+    .mob-nav-footer p {
+      font: 500 .7rem/1 'DM Sans'; letter-spacing: .04em;
+      color: var(--muted2);
+    }
+    .mob-social-links { display: flex; gap: 10px; }
+    .mob-social-links a {
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 2px; border: 1px solid var(--border2);
+      color: var(--muted2); font-size: .72rem;
+      transition: color .2s, border-color .2s, background .2s;
+      text-decoration: none;
+    }
+    .mob-social-links a:hover {
+      color: var(--accent); border-color: rgba(var(--accent-rgb),.35);
+      background: rgba(var(--accent-rgb),.07);
+    }
+
+
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center;
+      overflow: hidden; padding-top: 120px;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      opacity: .58;
+      filter: brightness(.88) saturate(.85);
+    }
+    [data-theme="light"] .hero-bg img { opacity: .52; filter: brightness(.95) saturate(.85); }
+
+    .hero-fade-v {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(var(--bg-rgb),.55) 0%,
+        rgba(var(--bg-rgb),.04) 22%,
+        rgba(var(--bg-rgb),.04) 76%,
+        rgba(var(--bg-rgb),.65) 100%);
+    }
+    [data-theme="light"] .hero-fade-v {
+      background: linear-gradient(to bottom,
+        rgba(var(--bg-rgb),.22) 0%,
+        rgba(var(--bg-rgb),.02) 22%,
+        rgba(var(--bg-rgb),.02) 76%,
+        rgba(var(--bg-rgb),.28) 100%);
+    }
+    .hero-fade-h {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right,
+        rgba(var(--bg-rgb),.72) 0%,
+        rgba(var(--bg-rgb),.32) 48%,
+        transparent 100%);
+    }
+    [data-theme="light"] .hero-fade-h {
+      background: linear-gradient(to right,
+        rgba(var(--bg-rgb),.3) 0%,
+        rgba(var(--bg-rgb),.12) 48%,
+        transparent 100%);
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 1400px; margin: 0 auto;
+      padding: 80px 48px; width: 100%;
+    }
+
+    /* decorative vertical line */
+    .hero-vline {
+      position: absolute; left: 48px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(var(--accent-rgb),.22), transparent);
+      z-index: 1;
+    }
+
+    /* Scroll cue */
+    .scroll-cue {
+      position: absolute; bottom: 44px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: .3; z-index: 2;
+      text-decoration: none;
+    }
+    .scroll-cue span {
+      font: 700 7px/1 'DM Sans'; letter-spacing: .44em;
+      text-transform: uppercase; color: var(--accent);
+    }
+    .scroll-cue-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { transform: scaleY(1); opacity: .3; }
+      50% { transform: scaleY(.55); opacity: .55; }
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0; visibility: hidden;
+      transition: opacity .42s ease, transform .48s cubic-bezier(.25,.46,.45,.94);
+      transition-delay: var(--d, 0s);
+      will-change: opacity, transform;
+    }
+    .reveal.up    { transform: translate3d(0, 24px, 0); }
+    .reveal.left  { transform: translate3d(-24px, 0, 0); }
+    .reveal.right { transform: translate3d(24px, 0, 0); }
+    .reveal.on    { opacity: 1 !important; visibility: visible !important; transform: translate3d(0,0,0) !important; }
+
+
+    /* ══════════════════════════════
+       SECTIONS
+    ══════════════════════════════ */
+    .sec { padding: 120px 48px; max-width: 1400px; margin: 0 auto; }
+    .sec-full { padding: 120px 48px; }
+
+    /* About */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 88px; align-items: center; }
+    .about-img-wrap {
+      position: relative; border-radius: 3px; overflow: hidden;
+      border: 1px solid rgba(var(--accent-rgb),.14);
+    }
+    .about-img-wrap img { width: 100%; height: 520px; object-fit: cover; display: block; transition: transform .7s ease; }
+    .about-img-wrap:hover img { transform: scale(1.03); }
+    .about-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,8,26,.65) 0%, transparent 60%); }
+    [data-theme="light"] .about-img-overlay { background: linear-gradient(to top, rgba(5,16,42,.55) 0%, transparent 60%); }
+
+    /* Freight grid */
+    .freight-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+    /* Values grid */
+    .values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+    /* CTA section */
+    .cta-wrap {
+      position: relative; border-radius: 3px; overflow: hidden;
+      padding: 88px 80px;
+      border: 1px solid rgba(var(--accent-rgb),.14);
+    }
+    .cta-bg { position: absolute; inset: 0; }
+    .cta-bg img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .5; filter: brightness(.82) saturate(.8); }
+    [data-theme="light"] .cta-bg img { opacity: .42; filter: brightness(.92) saturate(.82); }
+    .cta-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(var(--bg-rgb),.88) 0%, rgba(var(--bg-rgb),.55) 100%);
+    }
+    [data-theme="light"] .cta-ov {
+      background: linear-gradient(135deg, rgba(var(--bg-rgb),.55) 0%, rgba(var(--bg-rgb),.25) 100%);
+    }
+
+    /* Blog grid */
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+    /* Testimonial */
+    .testi-wrap { display: flex; gap: 52px; align-items: flex-start; }
+
+
+    /* ══════════════════════════════
+       FEATURE STRIP — luxury
+    ══════════════════════════════ */
+    .feature-strip {
+      position: relative; height: 460px; overflow: hidden;
+    }
+    .feature-strip img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      opacity: .55; filter: brightness(.85) saturate(.8);
+    }
+    [data-theme="light"] .feature-strip img { opacity: .48; filter: brightness(.92) saturate(.8); }
+    .feature-strip-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right,
+        rgba(var(--bg-rgb),.88) 0%,
+        rgba(var(--bg-rgb),.52) 55%,
+        rgba(var(--bg-rgb),.86) 100%);
+    }
+    [data-theme="light"] .feature-strip-ov {
+      background: linear-gradient(to right,
+        rgba(var(--bg-rgb),.45) 0%,
+        rgba(var(--bg-rgb),.18) 55%,
+        rgba(var(--bg-rgb),.42) 100%);
+    }
+    .feature-strip-top,
+    .feature-strip-btm {
+      position: absolute; left: 0; right: 0; height: 90px; z-index: 1; pointer-events: none;
+    }
+    .feature-strip-top { top: 0; background: linear-gradient(to bottom, var(--bg), transparent); }
+    .feature-strip-btm { bottom: 0; background: linear-gradient(to top, var(--bg), transparent); }
+    .feature-strip-content {
+      position: relative; z-index: 2; height: 100%;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      padding: 40px;
+    }
+
+
+    /* ══════════════════════════════
+       LUXURY LIGHT MODE SPECIFIC
+    ══════════════════════════════ */
+    [data-theme="light"] .values-grid .glass {
+      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.75));
+      border: 1px solid rgba(5,16,42,.08);
+      box-shadow: 0 4px 32px rgba(5,16,42,.06), 0 1px 0 rgba(255,255,255,.9) inset;
+    }
+
+    [data-theme="light"] .stats-row {
+      background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.7)) !important;
+      border-color: rgba(5,16,42,.09) !important;
+      box-shadow: 0 4px 32px rgba(5,16,42,.08), 0 1px 0 rgba(255,255,255,.9) inset;
+    }
+
+    [data-theme="light"] .about-img-wrap {
+      box-shadow: 0 24px 64px rgba(5,16,42,.14);
+    }
+
+    [data-theme="light"] .cta-wrap {
+      border-color: rgba(5,16,42,.1);
+      box-shadow: 0 8px 64px rgba(5,16,42,.08);
+    }
+
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      background: var(--footer-bg);
+      border-top: 1px solid rgba(var(--accent-rgb),.07);
+      margin-top: 40px;
+    }
+    .footer-inner { max-width: 1400px; margin: 0 auto; padding: 88px 48px 0; }
+    .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 52px; padding-bottom: 64px; }
+    .footer-btm {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 22px 0; border-top: 1px solid rgba(255,255,255,.05);
+    }
+    footer h4 { color: rgba(232,240,254,.7); font: 700 .7rem/1 'DM Sans'; letter-spacing: .34em; text-transform: uppercase; margin-bottom: 24px; }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    footer ul a { color: rgba(232,240,254,.48); font-size: .82rem; text-decoration: none; transition: color .2s, padding-left .25s; display: inline-flex; align-items: center; gap: 7px; }
+    footer ul a::before { content: '—'; font-size: .6rem; color: rgba(var(--accent-rgb),.3); opacity: 0; transition: opacity .2s; }
+    footer ul a:hover { color: var(--accent); padding-left: 6px; }
+    footer ul a:hover::before { opacity: 1; }
+    footer p.foot-copy { color: rgba(232,240,254,.38); font-size: .7rem; letter-spacing: .04em; }
+    footer a.foot-link { color: rgba(232,240,254,.42); font-size: .72rem; text-decoration: none; transition: color .2s; }
+    footer a.foot-link:hover { color: rgba(232,240,254,.85); }
+    .footer-form {
+      display: flex; border-radius: 3px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.028);
+    }
+    .footer-form input {
+      flex: 1; padding: 13px 18px; background: transparent;
+      font: 400 .8rem/1 'DM Sans'; color: rgba(232,240,254,.55);
+      outline: none; border: none;
+    }
+    .footer-form input::placeholder { color: rgba(232,240,254,.28); }
+    .footer-form button { border-radius: 0; padding: 12px 22px; font-size: .7rem; }
+
+    /* Social icons in footer */
+    .footer-socials { display: flex; gap: 10px; margin-top: 22px; }
+    .footer-socials a {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 2px; border: 1px solid rgba(255,255,255,.08);
+      color: rgba(232,240,254,.4); font-size: .72rem;
+      transition: color .2s, border-color .2s, background .2s;
+      text-decoration: none;
+    }
+    .footer-socials a:hover {
+      color: var(--accent);
+      border-color: rgba(var(--accent-rgb),.35);
+      background: rgba(var(--accent-rgb),.08);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb),.25); border-radius: 2px; }
+
+    /* Luxury badge pill */
+    .badge-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 15px;
+      border-radius: 2px;
+      font: 700 8px/1 'DM Sans'; letter-spacing: .24em; text-transform: uppercase;
+      background: rgba(var(--accent-rgb),.1);
+      border: 1px solid rgba(var(--accent-rgb),.28);
+      color: var(--accent-hi);
+      clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 1023px) {
+      .hdr-inner { padding: 0 24px; }
+      .nav-links, .hdr-actions .btn-outline, .hdr-actions .btn-primary, #themeToggleDesktop { display: none !important; }
+      .menu-btn { display: flex !important; }
+      .mobile-controls { display: flex !important; }
+      #mobile-nav { display: block; }
+
+      .sec { padding: 88px 28px; }
+      .sec-full { padding: 88px 28px; }
+      .about-grid { grid-template-columns: 1fr; gap: 44px; }
+      .freight-grid { grid-template-columns: 1fr; }
+      .values-grid { grid-template-columns: 1fr; }
+      .blog-grid { grid-template-columns: repeat(2,1fr); }
+      .testi-wrap { flex-direction: column; }
+      .cta-wrap { padding: 64px 48px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 38px; }
+      .hero-content { padding: 64px 28px; }
+      .hero-vline { left: 28px; }
+    }
+
+    @media (max-width: 767px) {
+      .sec { padding: 68px 20px; }
+      .sec-full { padding: 68px 20px; }
+      #hero { padding-top: 100px; }
+      .hero-content { padding: 52px 20px 72px; }
+      .hero-btns { flex-direction: column; }
+      .hero-btns a { width: 100%; justify-content: center; }
+      .hero-vline { display: none; }
+
+      .stats-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+      }
+      .stat-c { border-right: 1px solid var(--border) !important; border-bottom: 1px solid var(--border) !important; }
+      .stat-c:nth-child(2n) { border-right: none !important; }
+      .stat-c:nth-child(3), .stat-c:nth-child(4) { border-bottom: none !important; }
+
+      .freight-grid .fc { height: 220px !important; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .blog-grid .fc { height: 280px !important; }
+      .feature-strip { height: 320px; }
+      .cta-wrap { padding: 48px 24px; }
+      .cta-wrap a.btn-primary { width: 100%; justify-content: center; }
+      .footer-grid { grid-template-columns: 1fr; }
+      footer .footer-inner { padding: 60px 20px 0; }
+      .footer-btm { flex-direction: column; align-items: flex-start; }
+      .footer-form { flex-direction: column; }
+      .footer-form input { border-radius: 0; }
+      .footer-form button { border-radius: 0; width: 100%; justify-content: center; }
+
+      #hdr .hdr-inner { padding: 0 20px; }
+      .mob-nav-inner { padding: 28px 22px 44px; }
+      .mob-nav-topbar { margin-bottom: 44px; }
+      .mob-nav-links a { font-size: 1.7rem; }
+
+      .about-img-wrap img { height: 300px; }
+      .ticker-item { padding: 0 22px; font-size: 8px; }
+    }
+
+    @media (max-width: 479px) {
+
+      .mob-nav-footer { flex-direction: column; align-items: flex-start; gap: 14px; }
+
+      .sec { padding: 52px 16px; }
+      .sec-full { padding: 52px 16px; }
+      #hero { padding-top: 72px; }
+      .hero-content { padding: 24px 16px 44px; }
+
+      .stat-c { padding: 14px 10px !important; }
+      .stat-c .display { font-size: 1.55rem !important; }
+
+      .freight-grid .fc { height: 180px !important; }
+      .blog-grid .fc { height: 200px !important; }
+      .feature-strip { height: 240px; }
+
+      .glass:has(.testi-wrap) { padding: 28px 20px !important; }
+
+      .cta-wrap { padding: 32px 16px; }
+      section:has(.cta-wrap) { padding-left: 16px !important; padding-right: 16px !important; }
+
+      footer .footer-inner { padding: 44px 16px 0; }
+      #hdr .hdr-inner { padding: 0 16px; }
+      .mob-nav-inner { padding: 22px 16px 36px; }
+      .mob-nav-links a { font-size: 1.45rem; }
+    }
+
+    @media (max-width: 359px) {
+      .sec { padding: 44px 12px; }
+      .sec-full { padding: 44px 12px; }
+      #hero { padding-top: 60px; }
+      #hdr .hdr-inner { padding: 0 12px; }
+      footer .footer-inner { padding: 36px 12px 0; }
+      .stat-c .display { font-size: 1.3rem !important; }
+      .stat-c { padding: 12px 8px !important; }
+      .mob-nav-links a { font-size: 1.25rem; }
+      .mob-nav-inner { padding: 18px 12px 28px; }
+    }
+    /* ── Site Ticker ── */
+    #site-ticker { overflow:hidden; height:0; background:rgba(59,130,246,.08); border-bottom:1px solid rgba(59,130,246,.18); transition:height .4s ease; }
+    #site-ticker.visible { height:30px; }
+    .ticker-track { display:inline-flex; white-space:nowrap; animation:ticker-scroll 35s linear infinite; }
+    .ticker-item  { font:500 .7rem/30px 'DM Sans'; letter-spacing:.1em; color:rgba(232,240,254,.6); padding:0 80px; }
+    @keyframes ticker-scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    [data-theme="light"] #site-ticker { background:rgba(29,78,216,.06); border-bottom-color:rgba(29,78,216,.14); }
+    [data-theme="light"] .ticker-item { color:rgba(5,16,42,.5); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ LOADER ══════════════ -->
+<div id="loader">
+  <div class="loader-wordmark">
+    <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
+  </div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header id="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="logo">
+      <img src="./image/sfl-logo.svg" alt="Swift Freight Logistics">
+      <div class="logo-text">
+        <div class="logo-name"><span class="gt">SWIFT</span><span style="color:rgba(var(--text-rgb),.8);margin-left:6px;">FREIGHT</span></div>
+        <div class="logo-sub">Logistics</div>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="hdr-actions">
+      <button class="theme-btn" id="themeToggleDesktop" aria-label="Toggle theme">
+        <i class="fas fa-sun" id="themeIconDesktop"></i>
+      </button>
+      <a href="payment.html" class="btn-outline" style="padding:11px 22px;font-size:.71rem;">
+        <i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track
+      </a>
+      <a href="quote.html" class="btn-primary" style="padding:12px 26px;font-size:.73rem;">
+        Get a Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i>
+      </a>
+    </div>
+
+    <div class="mobile-controls">
+      <button class="theme-btn" id="themeToggleMobile" aria-label="Toggle theme">
+        <i class="fas fa-sun" id="themeIconMobile"></i>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="ticker-strip">
+    <div class="ticker-fade-l"></div>
+    <div class="ticker-fade-r"></div>
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Network Active</span></div>
+      <div class="ticker-item"><i class="fas fa-plane-up"></i>Air Freight <span style="color:var(--muted2);">Priority Dispatched</span></div>
+      <div class="ticker-item"><i class="fas fa-shield-halved"></i>Cargo <span style="color:var(--muted2);">Fully Insured</span></div>
+      <div class="ticker-item"><i class="fas fa-earth-africa"></i>International <span style="color:var(--muted2);">Operating 24/7</span></div>
+      <div class="ticker-item"><i class="fas fa-ship"></i>Sea Routes <span style="color:var(--muted2);">150+ Countries</span></div>
+      <div class="ticker-item"><i class="fas fa-truck-fast"></i>Road Freight <span style="color:var(--muted2);">On-Time Delivery</span></div>
+      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Network Active</span></div>
+      <div class="ticker-item"><i class="fas fa-plane-up"></i>Air Freight <span style="color:var(--muted2);">Priority Dispatched</span></div>
+      <div class="ticker-item"><i class="fas fa-shield-halved"></i>Cargo <span style="color:var(--muted2);">Fully Insured</span></div>
+      <div class="ticker-item"><i class="fas fa-earth-africa"></i>International <span style="color:var(--muted2);">Operating 24/7</span></div>
+      <div class="ticker-item"><i class="fas fa-ship"></i>Sea Routes <span style="color:var(--muted2);">150+ Countries</span></div>
+      <div class="ticker-item"><i class="fas fa-truck-fast"></i>Road Freight <span style="color:var(--muted2);">On-Time Delivery</span></div>
+    </div>
+  </div>
+</header>
+<div id="site-ticker"><div class="ticker-track" id="ticker-track"><span class="ticker-item" id="ticker-t1"></span><span class="ticker-item" id="ticker-t2" aria-hidden="true"></span></div></div>
+
+<!-- ══════════════ MOBILE NAV ══════════════ -->
+<nav id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="mob-nav-inner">
+
+    <!-- Top bar: logo left, X right -->
+    <div class="mob-nav-topbar">
+      <a href="index.html" class="mob-nav-logo">
+        <img src="./image/sfl-logo.svg" alt="Swift Freight">
+        <div class="mob-nav-logo-name">
+          <span>SWIFT</span><span>FREIGHT</span>
         </div>
-                
-      </section>
+      </a>
 
-        
+      <!-- Close X button -->
+      <button class="mob-close-btn" id="mobileNavClose" aria-label="Close menu">
+        <i class="fas fa-xmark"></i>
+      </button>
+    </div>
 
-        <div class="w-full bg-slate-900 border-y border-white/10 py-2.5 overflow-hidden relative">
-          <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
-          <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-900 to-transparent z-10"></div>
+    <p class="mob-nav-label">Navigation</p>
+    <ul class="mob-nav-links">
+      <li><a href="index.html">Home <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="payment.html">Track Shipment <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="services.html">Our Services <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="contact.html">Contact <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="about.html">About Us <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+    </ul>
 
-          <div id="a-ticker" class="flex items-center whitespace-nowrap uppercase tracking-widest text-[10px] font-bold">
-            <div class="flex items-center px-12 text-white/80">
-              <span class="relative flex h-2 w-2 mr-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              SwiftFreight <span class="text-green-500 ml-2">Network Active</span>
-            </div>
+    <div class="mob-nav-cta">
+      <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.6rem;"></i></a>
+      <a href="payment.html" class="btn-outline"><i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track Shipment</a>
+    </div>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-plane-up mr-3 text-blue-400"></i>
-              Air Freight <span class="text-white ml-2">Priority Dispatched</span>
-            </div>
+    <div class="mob-nav-footer">
+      <p>©2025 Swift Freight Logistics</p>
+      <div class="mob-social-links">
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-shield-halved mr-3 text-yellow-500"></i>
-              Cargo <span class="text-white ml-2">Fully Insured</span>
-            </div>
+<!-- ══════════════ HERO ══════════════ -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="./image/background.jpg" alt="" aria-hidden="true">
+    <div class="hero-fade-v"></div>
+    <div class="hero-fade-h"></div>
+  </div>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-earth-africa mr-3 text-green-400"></i>
-              International Shipment <span class="text-green-500 ml-2">Operating 24/7</span>
-            </div>
+  <div class="hero-vline"></div>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <span class="relative flex h-2 w-2 mr-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              SwiftFreight <span class="text-green-500 ml-2">Network Active</span>
-            </div>
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-plane-up mr-3 text-blue-400"></i>
-              Air Freight <span class="text-white ml-2">Priority Dispatched</span>
-            </div>
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-shield-halved mr-3 text-yellow-500"></i>
-              Cargo <span class="text-white ml-2">Fully Insured</span>
-            </div>
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-earth-africa mr-3 text-green-400"></i>
-              World Wide <span class="text-white ml-2">Operating 24/7</span>
-            </div>
-          </div>
-        </div>
+  <div class="orb" style="width:800px;height:800px;background:radial-gradient(circle,rgba(var(--accent-rgb),.055),transparent);top:-250px;right:-150px;"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(20,50,140,.05),transparent);bottom:-100px;left:-80px;"></div>
 
-    </header>
+  <div class="hero-content">
+    <div style="max-width:820px;">
 
-   
-    
-    <section id="Top" class="overflow-x-hidden font-sans pt-10  pb-8 w-full gap-10 px-2 max-w-350 md:hidden">
-      <div id="" class="reveal-from-bottom" data-reveal-delay="0.1s">
-        <h1 class="w-full [text-shadow:1px_1px_3px] px-4 py-3 text-5xl leading-tight tracking-wide text-blue-950 max-w-350 text-start font-extrabold">Delivering More Than<br><span class="text-blue-600 drop-shadow-2xl">Just Freight</span></h1>
-        <p class="text-blue-900 [text-shadow:0_1px_1px] text-[20px] w-full max-w-350 px-4 py-3 mb-8 text-start font-thin font-sans reveal-from-bottom" data-reveal-delay="0.3s">We prioritize reliability,precision,and strong partnerships in every shipment,ensuring a seamless and efficient logistics experience from start to finish.</p>
+      <div class="lbl reveal up" style="margin-bottom:28px;">Premium Global Logistics</div>
+
+      <h1 class="display reveal up" style="--d:.08s;font-size:clamp(3.8rem,10.5vw,9.4rem);color:var(--text);">
+        DELIVERING<br>
+        <span class="gt">MORE THAN</span><br>
+        JUST FREIGHT
+      </h1>
+
+      <p class="reveal up" style="--d:.18s;font-size:1.05rem;font-weight:300;color:var(--muted);line-height:1.84;max-width:500px;margin-top:28px;border-left:2px solid rgba(var(--accent-rgb),.25);padding-left:18px;">
+        We prioritize reliability, precision, and strong partnerships in every shipment — ensuring a seamless and efficient logistics experience from start to finish.
+      </p>
+
+      <div class="hero-btns reveal up" style="--d:.28s;display:flex;flex-wrap:wrap;gap:13px;margin-top:38px;">
+        <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i></a>
+        <a href="payment.html" class="btn-outline"><i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track Shipment</a>
+        <a href="about.html" class="btn-outline" style="border-color:rgba(var(--text-rgb),.14);color:rgba(var(--text-rgb),.58);">Learn More <i class="fas fa-arrow-right" style="font-size:.58rem;"></i></a>
       </div>
 
-      <div id="" class="flex flex-wrap gap-4">
-          <button class="px-8 hover:scale-95 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
-                <a href="quote.html">Get a Free Quote</a> 
-            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-          </button>
-                    
-          <button class="px-8 hover:scale-95 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
-            <i class="fas fa-location-dot"></i>
-                <a href="payment.html">Track Shipment</a> 
-          </button>
-
-          <button class="px-8 hover:scale-95 py-4 bg-white border border-slate-200 text-slate-700 rounded-full font-semibold flex items-center gap-2 hover:bg-slate-50 transition-all duration-300">
-                <a href="about.html">Learn More</a> 
-            <i class="fas fa-arrow-right text-sm"></i>
-          </button>
-        </div>
-    </section>
-
-    <!-- Medium device home -->
-    <section class="hidden md:block items-center md:pt-10 justify-center p-4 mx-auto bg-blue-950/50 bg-blend-multiply min-h-[90vh] bg-[url('./image/mobile2.jpg')] object-cover bg-cover md:px-6 acs delay-150">
-
-      <div class="z-10 flex flex-row justify-center overflow-x-hiddenhidden">
-       
-
-        <div class="z-10 md:px-5 md:py-1 md:pl-[11px] pl-[11px] bg-white rounded-full w-fit absolute md:left-230 md:right-75 top-33 md:mt-3 text-center items-center">
-          <i class="fas fa-map-marker-alt text-red-500 text-[20px] items-center text-center md:pl-1 mt-2 pb-1"></i>
-        </div>
+      <div class="stats-row reveal up" style="--d:.38s;display:flex;max-width:640px;margin-top:56px;border:1px solid var(--border);border-radius:3px;overflow:hidden;backdrop-filter:blur(16px);">
+        <div class="stat-c"><div class="gt display" style="font-size:2.15rem;">150+</div><div style="font:700 7.5px/1 'DM Sans';letter-spacing:.26em;text-transform:uppercase;color:var(--muted2);margin-top:6px;">Countries</div></div>
+        <div class="stat-c"><div class="gt display" style="font-size:2.15rem;">99%</div><div style="font:700 7.5px/1 'DM Sans';letter-spacing:.26em;text-transform:uppercase;color:var(--muted2);margin-top:6px;">Delivery Rate</div></div>
+        <div class="stat-c"><div class="gt display" style="font-size:2.15rem;">24/7</div><div style="font:700 7.5px/1 'DM Sans';letter-spacing:.26em;text-transform:uppercase;color:var(--muted2);margin-top:6px;">Live Support</div></div>
+        <div class="stat-c"><div class="gt display" style="font-size:2.15rem;">10K+</div><div style="font:700 7.5px/1 'DM Sans';letter-spacing:.26em;text-transform:uppercase;color:var(--muted2);margin-top:6px;">Shipments</div></div>
       </div>
+    </div>
+  </div>
 
-      <div class="">
-        <h1 class="text-white [text-shadow:1px_1px_3px] md:text-8xl md:font-semibold md:text-start md:mt-[70px] reveal-from-bottom" data-reveal-delay="0.1s">Delivering More<br> Than Just Freight</h1>
-        <p class="text-gray-200 text-[20px] [text-shadow:0_1px_1px] md:max-w-350 md:px-2 md:py-3 md:mb-8 md:mt-6 md:text-start font-semibol">We prioritize reliability, precision, and strong partnerships in every shipment,<br> ensuring a seamless and efficient logistics experience from start to finish.</p>
-      </div>
+  <a href="#about-section" class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-cue-line"></div>
+  </a>
+</section>
 
-      <div class="flex-row md:flex gap-2 md:mt-72">
-        <button class="px-8 hover:scale-95 py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
-                <a href="quote.html">Get a Free Quote</a>  
-            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover"></i>
-          </button>
-                    
-          <button class="px-8 hover:scale-95 py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
-            <i class="fas fa-location-dot"></i>
-                <a href="payment.html">Track Shipment</a> 
-          </button>
+<!-- ══════════════ ABOUT ══════════════ -->
+<section class="sec" id="about-section" style="margin:0 auto;">
+  <div class="about-grid">
+    <div>
+      <div class="lbl reveal up" style="margin-bottom:28px;">Swift Freight At Your Service</div>
+      <h2 class="reveal left" style="--d:.1s;font-size:clamp(2.1rem,3.8vw,3.1rem);font-weight:700;color:var(--text);line-height:1.16;">
+        We Provide <span class="gt">End-to-End</span> Logistics for Timely, Secure Delivery.
+      </h2>
 
-          <button class="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-full font-semibold flex items-center gap-2 hover:bg-slate-300 transition-all duration-300">
-                <a href="about.html">Learn More</a> 
-            <i class="fas fa-arrow-right text-sm"></i>
-          </button>
-      </div>
-
-    <div class="z-0 overflow-x-hidden ">
-      <div class=" absolute flex-row items-center h-auto gap-3 shadow md:flex right-20 top-120 md:top-240 lg:top-180 md:bg-white md:px-2 md:py-1 md:rounded-2xl">
-          <div class=" relative flex-col items-start gap-1 px-1 py-0  md:flex">
-            <h1>We <span class="text-red-500">Cover</span></h1>
-            <h2>Shipment Around</h2>
-            <h3>the <span class="text-red-500">globe</span></h3>
-        
-            <div class="flex-row items-center gap-2 md:flex">
-              <i class="fab fa-phoenix-framework text-[30px] md:bg-white mr-2"></i>
-              <i class="fab fa-facebook-messenger text-[20px] md:bg-white md:border md:border-blue-950 md:rounded-full md:aspect-square md:p-[3px]"></i>
-            </div>
+      <div style="margin-top:48px;display:flex;flex-direction:column;gap:34px;">
+        <div class="reveal left" style="--d:.2s;display:flex;gap:20px;align-items:flex-start;">
+          <div style="flex-shrink:0;width:50px;height:50px;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,7px 100%,0 calc(100% - 7px));">
+            <span class="mono" style="font-size:.68rem;color:var(--accent);">01</span>
           </div>
-        <div class="flex-row md:flex">
-          <img src="./image/bgimg.jpg" alt=" map" class="w-40 shadow-md h-28 rounded-xl">
+          <div>
+            <h3 style="font:700 .95rem/1 'DM Sans';color:var(--text);margin-bottom:9px;letter-spacing:.03em;">Vision</h3>
+            <p style="color:var(--muted);font-size:.87rem;line-height:1.82;font-weight:300;">Our mission is to lead the global logistics industry by providing seamless, reliable, and innovative solutions that not only meet but exceed client expectations — driving long-term success worldwide.</p>
+          </div>
+        </div>
+        <div class="reveal left" style="--d:.3s;display:flex;gap:20px;align-items:flex-start;">
+          <div style="flex-shrink:0;width:50px;height:50px;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,7px 100%,0 calc(100% - 7px));">
+            <span class="mono" style="font-size:.68rem;color:var(--accent);">02</span>
+          </div>
+          <div>
+            <h3 style="font:700 .95rem/1 'DM Sans';color:var(--text);margin-bottom:9px;letter-spacing:.03em;">Mission</h3>
+            <p style="color:var(--muted);font-size:.87rem;line-height:1.82;font-weight:300;">We connect businesses to a streamlined and efficient supply chain by offering innovative and responsible logistics solutions that enhance operational performance, reduce costs, and foster growth.</p>
+          </div>
         </div>
       </div>
     </div>
-    </section>
-    
-    <section class="relative z-10 overflow-x-hidden shadow-[0_8px_32px_4_rgba(31,38,135,0.15)]">
-        <button class="fixed bottom-8 right-8 z-50 ">
-          <a href="https://wa.me/18562803438" target="_blank" class="w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-2xl hover:scale-110 transition-transform">
-          <i class="fab fa-whatsapp"></i></a> </button>
+
+    <div class="about-img-wrap reveal right" style="--d:.15s;">
+      <div style="position:absolute;inset:-24px;border-radius:6px;background:radial-gradient(ellipse,rgba(var(--accent-rgb),.065),transparent);z-index:-1;"></div>
+      <img src="./image/bt7.jpg" alt="Swift Freight operations">
+      <div class="about-img-overlay"></div>
+      <div style="position:absolute;bottom:26px;left:26px;">
+        <div class="lbl" style="color:rgba(var(--accent-rgb),.58);">Est. 2015</div>
+        <p class="serif" style="font-style:italic;font-size:1.32rem;color:rgba(var(--text-rgb),.78);margin-top:6px;line-height:1.3;">Precision in every mile.</p>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <!-- LOADER -->
-    <section>
-        <div id="loader">
-          <div class="loader-wordmark">
-            <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
-          </div>
-          <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-        </div>
-    </section>
+<div style="max-width:1400px;margin:0 auto;padding:0 48px;"><div class="grule"></div></div>
 
+<!-- ══════════════ FREIGHT SOLUTIONS ══════════════ -->
+<section class="sec" id="freightSolution" style="margin:0 auto;">
+  <div style="text-align:center;margin-bottom:60px;">
+    <div class="lbl reveal up" style="justify-content:center;margin-bottom:20px;">Our Freight Solutions</div>
+    <h2 class="display reveal up" style="--d:.1s;font-size:clamp(2.2rem,5vw,3.9rem);color:var(--text);">
+      EXPERTLY MANAGING EVERY STEP<br>
+      <span class="gt">FROM TRANSIT TO WAREHOUSING</span>
+    </h2>
+  </div>
 
-    
-
-
-      
-    <!-- mobile home -->
-    <section id="welcome-bg" class=" relative md:hidden bg-blue-950/ bg-blend-multiply min-h-[90vh] bg-[url('./image/onlybg.jpg')] bg-cover w-full">
-      
-      <div class="relative ">
-        
-
-        <div class="z-10 flex pb-1 md:px-5 pl-[11px] bg-white px-4 rounded-full absolute left-5 top-20 md:mt-3 text-center items-center">
-          <h1 class="text-blue-950 font-semibold">
-            <i class="fas fa-map-marker-alt text-red-500 text-[20px] items-center text-center pr-4 pl-1 py-1 mt-2 mb-1 pb-1"></i>VISIT US
-          </h1>
-        </div>
+  <div class="freight-grid">
+    <div class="fc reveal up" style="--d:.1s;height:310px;">
+      <img class="fc-img" src="./image/seaimg.jpg" alt="Sea Freight">
+      <div class="fc-ov"></div>
+      <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Sea Freight</span></div>
+      <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+        <h3 style="font:700 1.18rem/1.3 'DM Sans';color:#e8f0fe;margin-bottom:7px;">Cost-effective solutions for bulk goods</h3>
+        <p style="font-size:.78rem;color:rgba(232,240,254,.68);">Extensive port-to-port coverage worldwide.</p>
       </div>
+    </div>
 
-      <div class="relative">
-        <div class="absolute  flex h-auto gap-3 px-1 py-2 bg-white shadow-2xl right-8 top-110 left w-80 max-w-90 rounded-2xl"> 
-
-          <div class="flex flex-col items-start gap-1 p-2"> 
-            <div class="items-start gap-1">
-              <h1>We <span class="text-red-500">Cover</span></h1>
-              <h2>Shipment Around</h2>
-              <h3>the <span class="text-red-500">globe</span></h3>
-            </div>
-
-            <div class=" flex items-center gap-4">
-              <i class="fab fa-phoenix-framework text-[30px] md:bg-white "></i>
-              <i class="fab fa-facebook-messenger text-[20px] md:bg-white md:border border-blue-950 rounded-full aspect-square p-[3px]"></i>
-            </div>
-          </div>
-
-          <div class="">
-          <img src="./image/bgimg.jpg" alt=" map" class="h-32 shadow-md w-38 rounded-xl">
-          </div>
-          </div>
-        </div>
+    <div class="fc reveal up" style="--d:.2s;height:310px;">
+      <img class="fc-img" src="./image/bt6.jpg" alt="Road Freight">
+      <div class="fc-ov"></div>
+      <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Road Freight</span></div>
+      <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+        <h3 style="font:700 1.18rem/1.3 'DM Sans';color:#e8f0fe;margin-bottom:7px;">Efficient regional transportation</h3>
+        <p style="font-size:.78rem;color:rgba(232,240,254,.68);">Flexible schedules for seamless on-time delivery.</p>
       </div>
+    </div>
 
-
-  
-    </section>
-
-
-    <section class="gap-10 px-4 py-2 mt-10 md:mt-15 lg:flex">
-    
-      <div class="px-4 md:flex-col md:w-150 lg:w-170">
-        <div class="mt-10 md:w-130 ">
-          <h1 class="text-[18px] uppercase w-full max-w-350 text-blue-950 font-semibold"><i class="text-red-700 fas fa-circle"></i> Swift Freight at your service</h1>
-
-          <h2 class="mt-5 text-4xl font-semibold text-blue-950 reveal-from-left" data-reveal-delay="0.1s">We Provide <span class="text-red-700">End-to-end Logistics Services </span>for Timely, Secure Delivery.</h2>
-        </div>
-  
-
-        <div class=" items-start mt-10 md:flex md:w-150 md:gap-8 reveal-from-right" data-reveal-delay="0.2s">
-          <h1 class="text-2xl font-bold text-red-600">01 Vision</h1>
-          <p class="text-blue-900 md:w-200">Our mission is to lead the global logistics industry by providing seamless, reliable, and innovative solutions thst not only meet but exceed client expectations, driving long-term success and growth for bussiness worldwide.</p>
-        </div>
-
-        <div class=" items-start mt-10 md:flex md:w-150 md:gap-8 reveal-from-left" data-reveal-delay="0.3s">
-          <h1 class="text-2xl font-bold text-red-600">02 Mission</h1>
-          <p class="text-blue-900 md:w-200">We connect businesses to a syreamlined and efficient supply chain by offering innovative and responsible logistics solutions that enhance operational performance, reduce costs, and faster growth in a dynamic global market</p>
-        </div>.
+    <div class="fc reveal up" style="--d:.3s;height:310px;">
+      <img class="fc-img" src="./image/cargoplane.jpg" alt="Air Freight">
+      <div class="fc-ov"></div>
+      <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Air Freight</span></div>
+      <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+        <h3 style="font:700 1.18rem/1.3 'DM Sans';color:#e8f0fe;margin-bottom:7px;">Fast, reliable global shipping</h3>
+        <p style="font-size:.78rem;color:rgba(232,240,254,.68);">Priority handling for high-value, time-sensitive cargo.</p>
       </div>
+    </div>
 
-
-        <div class=" md:w-170 md:ml-5 md:mt-10">
-          <img src="./image/a-blue-truck-on-transparent-background-png.webp" alt="bg2" class="object-cover w-full md:h-300 md:w-300">
-        </div>
-
-    </section>
-
-    <section id="freightSolution" class="items-center mb-20 ">
-      <h1 class=" px-4 uppercase text-[20px] text-blue-950 text-center pb-6 reveal-from-bottom" data-reveal-delay="0.1s"><i class="text-red-700 fas fa-circle"></i> Our freight solution</h1>
-      <h2 class="px-6 text-center text-3xl a-reveal lg:text-[40px] reveal-from-bottom" data-reveal-delay="0.1s">Expertly Managing <span class="text-red-700 ">Every Steps From Transit to Warehousing</span></h2>
-
-      <div class=" flex flex-col justify-center w-full gap-6 mt-10 md:justify-between md:w-full md:py-9 md:px-16 md:items-center lg:grid grid-cols-2">
-        <div class=" max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/bg3.jpg')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
-          <div class="px-4 py-2 rounded-full shadow-2xl bg-white/50 bg-blend-normal w-fit"><h1 class="text-blue-950 text-center text-[11px]">Sea Freight</h1></div>
-          <h2 class="py-6 text-2xl text-white md:pt-4">Cost-efffective solutions for bulk goods, with extensive port-to-port coverage.</h2>
-        </div>
-
-        <div class=" max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/roadtruck.jpg')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
-          <div class="px-4 py-2 rounded-full shadow-2xl bg-white/50 bg-blend-normal w-fit"><h1 class="text-blue-950 text-center text-[11px]">Road Freight</h1></div>
-          <h2 class="py-6 text-2xl text-white md:pt-4">Efficient transportation for regional shipments with flexible schedules.</h2>
-        </div>
-
-        <div class=" max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/Air-Freight.png')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
-          <div class="px-4 py-2 rounded-full shadow-2xl bg-white/50 bg-blend-normal w-fit"><h1 class="text-blue-950 text-center text-[11px]">Air Freight</h1></div>
-          <h2 class="py-6 text-2xl text-white md:pt-4">Fast, reliable shipping for high-priority items across the globe.</h2>
-        </div>
-
-        <div class=" max-w-85 md:max-w-300 h-110 md:w-130 md:h-100 mx-auto bg-blue-950/50 bg-blend-multiply bg-[url('./image/rail.jpg')] bg-cover bg-center rounded-2xl shadow-2xl p-5">
-          <div class="px-4 py-2 rounded-full shadow-2xl bg-white/50 bg-blend-normal w-fit"><h1 class="text-blue-950 text-center text-[11px]">Rail Freight</h1></div>
-          <h2 class="py-6 text-2xl text-white md:pt-4">Economical and friendly environmental,ideal for large volumes and long distances.</h2>
-        </div>
+    <div class="fc reveal up" style="--d:.4s;height:310px;">
+      <img class="fc-img" src="./image/rail.jpg" alt="Rail Freight">
+      <div class="fc-ov"></div>
+      <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Rail Freight</span></div>
+      <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+        <h3 style="font:700 1.18rem/1.3 'DM Sans';color:#e8f0fe;margin-bottom:7px;">Economical long-distance transport</h3>
+        <p style="font-size:.78rem;color:rgba(232,240,254,.68);">Eco-friendly, ideal for large volumes.</p>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section class=" flex-row mb-20 lg:flex md:items-center md:mx-6 md:justify-center md:mb-0">
-      <div class="pl-4 lg:mb-160 reveal-init" data-reveal-delay="0.1s">
-        <h1 class="uppercase text-blue-950"><i class="px-2 text-red-600 fas fa-circle"></i>core values</h1>
-        <h2 class="px-2 pt-6 text-3xl text-blue-950">Built on <span class="text-red-600"> Trust </span> and <span class="text-red-600">Excellence</span></h2>
-        <p class="text-blue-950 text-[18px] px-2 pt-5 md:max-w-140">We foster strong relationships by staying true to our values of integrity, quality, and accountability.</p>
+<!-- ══════════════ FEATURE STRIP ══════════════ -->
+<div class="feature-strip">
+  <img src="./image/bt5.jpg" alt="Swift Freight operations">
+  <div class="feature-strip-ov"></div>
+  <div class="feature-strip-top"></div>
+  <div class="feature-strip-btm"></div>
+  <div class="feature-strip-content">
+    <div>
+      <div class="lbl reveal up" style="justify-content:center;margin-bottom:20px;">Our Promise</div>
+      <h2 class="display reveal up" style="--d:.1s;font-size:clamp(2.8rem,7.5vw,6.5rem);color:var(--text);line-height:.92;">
+        EVERY DELIVERY.<br>
+        <span class="gt">ON TIME.</span> EVERY TIME.
+      </h2>
+      <p class="serif reveal up" style="--d:.2s;font-style:italic;font-size:1.42rem;color:rgba(var(--text-rgb),.68);margin-top:20px;font-weight:300;letter-spacing:.02em;">Precision. Reliability. Excellence.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CORE VALUES ══════════════ -->
+<section class="sec" style="margin:0 auto;">
+  <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:26px;margin-bottom:56px;">
+    <div>
+      <div class="lbl reveal up" style="margin-bottom:20px;">Core Values</div>
+      <h2 class="reveal left" style="--d:.1s;font-size:clamp(2rem,3.8vw,3rem);font-weight:700;color:var(--text);">
+        Built on <span class="gt">Trust</span> &amp; <span class="gt">Excellence</span>
+      </h2>
+    </div>
+    <p class="reveal right" style="--d:.1s;color:var(--muted);font-size:.88rem;line-height:1.82;max-width:390px;font-weight:300;">
+      We foster strong relationships by staying true to our values of integrity, quality, and accountability in every shipment.
+    </p>
+  </div>
+
+  <div class="values-grid">
+
+    <div class="glass lift reveal right" style="--d:.1s;border-radius:3px;padding:32px 34px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;">
+        <div class="ibox"><i class="fas fa-truck-fast"></i></div>
+        <span style="font:700 7.5px/1 'DM Sans';letter-spacing:.32em;text-transform:uppercase;color:var(--accent);">Reliability</span>
       </div>
-      
-      <div class=" mt-16 md:mt-6 md:grid grid-cols-2 flex flex-col items-center justify-center md:gap-10 gap-6">
-        <div class=" bg-white rounded-3xl p-4 shadow-sm border border-blue-100 max-w-85 h-90 bg-gradient-to-br from-blue-600 via-indigo-200 to-purple-200 reveal-from-right" data-reveal-delay="0.1s">
-  
-          <div class="flex justify-between items-center">
-            <div class="mb-5">
-              <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-400 via-indigo-400 to-blue-100 ">
-                <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z" class="animate-pulse"/></svg>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Reliability</span>
-            </div>
-          </div>
-
-          <h1 class="text-2xl font-bold text-gray-900 leading-tight mb-4">Embracing the latest technology for a seamless experience.</h1>
-          
-          <p class="text-gray-500 text-sm leading-relaxed">Real-time tracking, responsive support, and secure freight handling designed for modern logistics</p>
-
-          <div class="grid grid-cols-2 gap-3 ">
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm px-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
-                  <path d="M12 6v6l4 2" stroke-width="2"></path>
-                </svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">24/7</div>
-                <div class="text-[10px] text-gray-400 font-bold uppercase">Tracking</div>
-              </div>
-            </div>
-
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm p-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"></path>
-                </svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">99%</div>
-                <div class="text-[10px] text-gray-600 font-bold uppercase">Delivery Rate</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class=" bg-white rounded-3xl p-4 shadow-sm border border-blue-100 max-w-85 h-90 bg-gradient-to-br from-blue-600 via-indigo-200 to-purple-200 reveal-from-left" data-reveal-delay="0.1s">
-          <div class="flex justify-between items-center">
-            <div class="mb-5">
-              <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-400 via-indigo-400 to-blue-100 ">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M423.5-103.5Q400-127 400-160h160q0 33-23.5 56.5T480-80q-33 0-56.5-23.5ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z" class="animate-pulse"/></svg>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Innovation</span>
-            </div>
-          </div>
-
-          <h1 class="text-2xl font-bold text-gray-900 leading-tight mb-4">Your needs are our priority every mile of the journey.</h1>
-          
-          <p class="text-gray-500 pb-1 text-sm leading-relaxed mb-14">Cutting-edge digital tools and automated systems to keep you updated in real-time.</p>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm p-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="blue"><path d="M686-132 444-376q-20 8-40.5 12t-43.5 4q-100 0-170-70t-70-170q0-36 10-68.5t28-61.5l146 146 72-72-146-146q29-18 61.5-28t68.5-10q100 0 170 70t70 170q0 23-4 43.5T584-516l244 242q12 12 12 29t-12 29l-84 84q-12 12-29 12t-29-12Zm29-85 27-27-256-256q18-20 26-46.5t8-53.5q0-60-38.5-104.5T386-758l74 74q12 12 12 28t-12 28L332-500q-12 12-28 12t-28-12l-74-74q9 57 53.5 95.5T360-440q26 0 52-8t47-25l256 256ZM472-488Z"/></svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">AI-Drive</div>
-                <div class="text-[10px] text-gray-400 font-bold uppercase">Processing</div>
-              </div>
-            </div>
-
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm p-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#2854C5"><path d="M420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Zm60 280q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">Secure</div>
-                <div class="text-[10px] text-gray-600 font-bold uppercase">Encryption</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        
-        <div class=" bg-white rounded-3xl p-4 shadow-sm border border-blue-100 max-w-85 h-90 bg-gradient-to-br from-blue-600 via-indigo-200 to-purple-200 reveal-from-right" data-reveal-delay="0.1s">
-          <div class="flex justify-between items-center">
-            <div class="mb-5">
-              <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-400 via-indigo-400 to-blue-100 ">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="black"><path d="M400-80v-80h520v80H400Zm40-120q0-81 51-141.5T620-416v-25q0-17 11.5-28.5T660-481q17 0 28.5 11.5T700-441v25q77 14 128.5 74.5T880-200H440Zm105-81h228q-19-27-48.5-43.5T660-341q-36 0-66 16.5T545-281Zm114 0ZM40-440v-440h240v58l280-78 320 100v40q0 50-35 85t-85 35h-80v24q0 25-14.5 45.5T628-541L358-440H40Zm80-80h80v-280h-80v280Zm160 0h64l232-85q11-4 17.5-13.5T600-640h-71l-117 38-24-76 125-42h247q9 0 22.5-6.5T796-742l-238-74-278 76v220Z" class="animate-pulse"/></svg>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Customer Focus</span>
-            </div>
-          </div>
-
-          <h1 class="text-2xl font-bold text-gray-900 leading-tight mb-4">Connecting your business to every corner of the globe.</h1>
-          
-          <p class="text-gray-500 pb-6 text-sm leading-relaxed mb-6">Over 150+ countries served with reliable logistics and local expertise.</p>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm p-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#2854C5"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q76 0 144 26.5T745-780q53 47 88 111t44 139q-20-11-42-18t-45-10q-19-75-68.5-132T600-776v16q0 33-23.5 56.5T520-680h-80v80q0 17-11.5 28.5T400-560h-80v80h260q-29 32-44.5 72T520-324q0 78 31 121t80 94q-36 14-74 21.5T480-80Zm-40-82v-78q-33 0-56.5-23.5T360-320v-40L168-552q-3 18-5.5 36t-2.5 36q0 121 79.5 212T440-162Zm362.5-115.5Q820-295 820-320t-17-42.5Q786-380 761-380q-26 0-43.5 17.5T700-320q0 25 17.5 42.5T760-260q25 0 42.5-17.5ZM760-80q-3 0-16-11l-4-7q-22-38-55.5-67.5T627-232q-14-20-20.5-43.5T600-324q0-66 47-111t113-45q66 0 113 45t47 111q0 25-6.5 48.5T893-232q-24 37-57.5 66.5T780-98l-4 7q-2 5-6.5 8t-9.5 3Z"/></svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">150+</div>
-                <div class="text-[10px] text-gray-400 font-bold uppercase">Countries</div>
-              </div>
-            </div>
-
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm p-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#2854C5"><path d="M440-120v-80h320v-284q0-117-81.5-198.5T480-764q-117 0-198.5 81.5T200-484v244h-40q-33 0-56.5-23.5T80-320v-80q0-21 10.5-39.5T120-469l3-53q8-68 39.5-126t79-101q47.5-43 109-67T480-840q68 0 129 24t109 66.5Q766-707 797-649t40 126l3 52q19 9 29.5 27t10.5 38v92q0 20-10.5 38T840-249v49q0 33-23.5 56.5T760-120H440ZM331.5-411.5Q320-423 320-440t11.5-28.5Q343-480 360-480t28.5 11.5Q400-457 400-440t-11.5 28.5Q377-400 360-400t-28.5-11.5Zm240 0Q560-423 560-440t11.5-28.5Q583-480 600-480t28.5 11.5Q640-457 640-440t-11.5 28.5Q617-400 600-400t-28.5-11.5ZM241-462q-7-106 64-182t177-76q89 0 156.5 56.5T720-519q-91-1-167.5-49T435-698q-16 80-67.5 142.5T241-462Z"/></svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">24hrs</div>
-                <div class="text-[10px] text-gray-600 font-bold uppercase">Active Support</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class=" bg-white rounded-3xl p-4 shadow-sm border border-blue-100 max-w-85 h-90 bg-gradient-to-br from-blue-600 via-indigo-200 to-purple-200 reveal-from-left" data-reveal-delay="0.1s">
-  
-          <div class="flex justify-between items-center">
-            <div class="mb-5">
-              <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-400 via-indigo-400 to-blue-100 ">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M440-120v-319q-64 0-123-24.5T213-533q-45-45-69-104t-24-123v-80h80q63 0 122 24.5T426-746q31 31 51.5 68t31.5 79q5-7 11-13.5t13-13.5q45-45 104-69.5T760-720h80v80q0 64-24.5 123T746-413q-45 45-103.5 69T520-320v200h-80Zm0-400q0-48-18.5-91.5T369-689q-34-34-77.5-52.5T200-760q0 48 18 92t52 78q34 34 78 52t92 18Zm80 120q48 0 91.5-18t77.5-52q34-34 52.5-78t18.5-92q-48 0-92 18.5T590-569q-34 34-52 77.5T520-400Zm0 0Zm-80-120Z" class="animate-pulse"/></svg>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Eco-Freindly</span>
-            </div>
-          </div>
-
-          <h1 class="text-2xl font-bold text-gray-900 leading-tight mb-4">Moving freight with a commitment to our planet.</h1>
-          
-          <p class="text-gray-500 text-sm leading-relaxed pb-14">Implementing green shipping routes and carbon-offset programs for all logistics.</p>
-
-          <div class="grid grid-cols-2 gap-3 pt-2">
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm px-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="blue"><path d="M216-176q-45-45-70.5-104T120-402q0-63 24-124.5T222-642q35-35 86.5-60t122-39.5Q501-756 591.5-759t202.5 7q8 106 5 195t-16.5 160.5q-13.5 71.5-38 125T684-182q-53 53-112.5 77.5T450-80q-65 0-127-25.5T216-176Zm112-16q29 17 59.5 24.5T450-160q46 0 91-18.5t86-59.5q18-18 36.5-50.5t32-85Q709-426 716-500.5t2-177.5q-49-2-110.5-1.5T485-670q-61 9-116 29t-90 55q-45 45-62 89t-17 85q0 59 22.5 103.5T262-246q42-80 111-153.5T534-520q-72 63-125.5 142.5T328-192Zm0 0Zm0 0Z"/></svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">50%</div>
-                <div class="text-[10px] text-gray-400 font-bold uppercase">Less CO2</div>
-              </div>
-            </div>
-
-            <div class="bg-indigo-50 shadow-indigo-300 shadow-sm p-4 rounded-2xl flex items-center gap-3">
-              <div class="bg-white p-2 rounded-xl shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#2854C5"><path d="m377-80-57-57 184-183 56 56L377-80Zm199 0-56-57 163-163 57 56L576-80ZM137-520l-57-56 164-164 56 57-163 163Zm0 200-57-57 184-183 56 56-183 184Zm623-21-96-239-78 78 19 94-47 48-71-128-127-70 47-48 94 19 78-78-239-95 60-57 287 45 91-90q9-9 20-13.5t22-4.5q11 0 22 4.5t20 13.5q9 8 13.5 19t4.5 22q0 11-4.5 22.5T862-778l-91 90 45 287-56 60Z"/></svg>
-              </div>
-              <div>
-                <div class="font-bold text-gray-900">Green</div>
-                <div class="text-[10px] text-gray-600 font-bold uppercase">Route</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <h3 style="font:700 1rem/1.4 'DM Sans';color:var(--text);margin-bottom:11px;">Embracing the latest technology for a seamless experience.</h3>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.76;margin-bottom:20px;font-weight:300;">Real-time tracking, responsive support, and secure freight handling designed for modern logistics.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">24/7</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Tracking</div></div>
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">99%</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Delivery</div></div>
       </div>
-    </section>
+    </div>
 
-    <section class=" px-6 mb-20 md:px-16">
-      <div class="text-center reveal-from-bottom" data-reveal-delay="0.1s">
-        <h1 class="uppercase py-5 md:text-[20px] text-blue-950"><i class="text-red-600 fas fa-circle"></i> logistics services</h1>
-        <p class="text-[32px] text-blue-950  text-wrap">Comprehensive<span class="ml-1 text-red-600 text-wrap">Swift Freight Services</span> to Meet Your Unique<span class="ml-1 text-red-600">Needs</span></p>
+    <div class="glass lift reveal left" style="--d:.2s;border-radius:3px;padding:32px 34px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;">
+        <div class="ibox"><i class="fas fa-lightbulb"></i></div>
+        <span style="font:700 7.5px/1 'DM Sans';letter-spacing:.32em;text-transform:uppercase;color:var(--accent);">Innovation</span>
       </div>
-
-    
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md:flex rounded-xl reveal-from-left" data-reveal-delay="0.1s">
-            <div class="items-center justify-between px-8 py-4  md:flex md:gap-6 md:px-4">
-              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
-                <i class="text-2xl text-red-400 fas fa-id-badge"></i>
-              </div>
-              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Customs Brokerage</span>
-            </div>
-
-            <div class=" items-center justify-end px-8 md:flex md:px-3">
-              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Navigating customs with ease,ensuring your goods clear borders swiftly and compliantly.</p>
-              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="text-white fas fa-arrow-right"></i></div>
-              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden"><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
-            </div>
-          </div>
-
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md:flex bg-blue-950 rounded-xl reveal-from-right" data-reveal-delay="0.1s">
-            <div class="items-center justify-between px-8 py-4  md:flex md:gap-6 md:px-4">
-              <div class="mb-4 w-fit bg-blue-100 rounded-[6px] px-3 py-1">
-                <i class="text-2xl fas fa-truck text-blue-950"></i>
-              </div>
-              <span class="md:text-2xl py-5 text-[20px] text-white font-semibold">Warehousing & Distribution</span>
-            </div>
-
-            <div class="items-center justify-end px-8 md:flex md:px-3">
-              <p class="text-[16px] md:text-[18px] text-white max-w-120">Secure storage and efficient distribution and solutions to keep your inventory flowing smoothly</p>
-              <div class="bg-white text-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="text-blue-100 fas fa-arrow-right"></i></div>
-              <button class="bg-blue-100 hover:bg-blue-550 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-blue-950 items-center md:hidden"><a href="quote.html" >Get a Quote</a> <i class="fas fa-arrow-right text-white bg-blue-950 rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
-            </div>
-          </div>
-
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md:flex rounded-xl reveal-from-left" data-reveal-delay="0.1s">
-            <div class="items-center justify-between px-8 py-4  md:flex md:gap-6 md:px-4">
-              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
-                <i class="text-2xl text-red-400 fas fa-network-wired"></i>
-              </div>
-              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Supply Chain Management</span>
-            </div>
-
-            <div class="items-center justify-end px-8 md:flex md:px-3">
-              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Optimizing every step of your supply chain for streamlined,cost-effective operations.</p>
-              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="text-white fas fa-arrow-right"></i></div>
-              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden"><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
-            </div>
-          </div>
-
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md:flex rounded-xl reveal-from-right" data-reveal-delay="0.1s">
-            <div class="items-center justify-between px-8 py-4  md:flex md:gap-6 md:px-4">
-              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
-                <i class="text-2xl text-red-400 fas fa-earth-americas"></i>
-              </div>
-              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Cross-Border Solutions</span>
-            </div>
-
-            <div class="items-center justify-end px-8 md:flex md:px-3">
-              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Seamless cross-border logistics to connect your business with international markets.</p>
-              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="text-white fas fa-arrow-right"></i></div>
-              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden"><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
-            </div>
-          </div>
-
-          <div class="items-center justify-between mt-10 border border-blue-100 shadow-sm md:flex rounded-xl reveal-from-left" data-reveal-delay="0.1s">
-            <div class="items-center justify-between px-8 py-4  md:flex md:gap-6 md:px-4">
-              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
-                <i class="text-2xl text-red-400 fas fa-dolly"></i>
-              </div>
-              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Last-Mile Delivery</span>
-            </div>
-
-            <div class="items-center justify-end px-8 md:flex md:px-3">
-              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Reliable last-mile delivery that gets your products to customers doorsteps with precision.</p>
-              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="text-white fas fa-arrow-right"></i></div>
-              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden"><a href="quote.html" >Get a Quote</a> <i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
-            </div>
-          </div>
-
-          <div class=" items-center justify-between mt-10 border border-blue-100 shadow-sm md:flex rounded-xl reveal-from-right" data-reveal-delay="0.1s">
-            <div class="items-center justify-between px-8 py-4  md:flex md:gap-6 md:px-4">
-              <div class="mb-4 w-fit bg-red-200 rounded-[6px] px-3 py-1">
-                <i class="text-2xl text-red-400 fas fa-boxes-packing"></i>
-              </div>
-              <span class="md:text-2xl py-5 text-[20px] text-blue-950 font-semibold">Project Cargo Handling</span>
-            </div>
-
-            <div class="items-center justify-end px-8 md:flex md:px-3">
-              <p class="text-[16px] md:text-[18px] text-blue-900 max-w-120">Specialized for oversized or complex shipments,with tailored logistics solutions</p>
-              <div class="bg-blue-950 mt-2 w-fit hidden md:block rounded-full aspect-square px-1.5 py-0.5"><i class="text-white fas fa-arrow-right"></i></div>
-              <button class="bg-blue-950 hover:bg-blue-500 hover:scale-105 transition-all duration-1000 my-4 rounded-2xl px-5 py-1.5 text-white items-center md:hidden"><a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right text-blue-950 bg-white rounded-full aspect-square px-1.5 pt-1 text-center ml-3"></i></button>
-            </div>
-          </div>
-
-    </section>
-
-    <section class="px-6 my-20 md:px-16 a-reveal">
-      <div class="items-center justify-between lg:flex">
-        <div class="flex flex-col items-start">
-          <h1 class="uppercase text-blue-950 text-[14px] md:text-[18px] pb-6"><i class="fas fa-circle">testimonials</i></h1>
-          <div class="items-center md:flex">
-          <h2 class="text-4xl text-red-600 ">Trusted</h2><p class="text-4xl text-blue-950">by Worldwide</p></h2>
-          </div>
-        </div>
-
-          <div class="pt-8 max-w-140">
-            <p class="text-blue-950 text-[18px]">Many company already work with us.Praise pleases us, criticism helps us because we want to get better every day.</p>
-          </div>
-  
+      <h3 style="font:700 1rem/1.4 'DM Sans';color:var(--text);margin-bottom:11px;">Your needs are our priority every mile of the journey.</h3>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.76;margin-bottom:20px;font-weight:300;">Cutting-edge digital tools and automated systems keep you updated in real-time, anywhere in the world.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">AI</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Driven</div></div>
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">256-bit</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Encrypted</div></div>
       </div>
+    </div>
 
-      <div class="px-3 py-3 my-10 border border-blue-100 shadow-sm rounded-2xl lg:flex lg:items-center lg:justify-between">
-        <div class="pt reveal-from-left" data-reveal-delay="0.1s">
-          <img src="./image/person4.jpg" alt="person" class="w-80 rounded-2xl">
-        </div>
+    <div class="glass lift reveal right" style="--d:.3s;border-radius:3px;padding:32px 34px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;">
+        <div class="ibox"><i class="fas fa-globe"></i></div>
+        <span style="font:700 7.5px/1 'DM Sans';letter-spacing:.32em;text-transform:uppercase;color:var(--accent);">Global Reach</span>
+      </div>
+      <h3 style="font:700 1rem/1.4 'DM Sans';color:var(--text);margin-bottom:11px;">Connecting your business to every corner of the globe.</h3>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.76;margin-bottom:20px;font-weight:300;">Over 150+ countries served with reliable logistics networks and local market expertise.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">150+</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Countries</div></div>
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">24h</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Support</div></div>
+      </div>
+    </div>
 
-        <div class=" flex flex-col max-w-150">
-          <h1 class="pt-3 text-blue-800">Philadelphia, Pennsylvania</h1>
-          <h2 class="py-4 text-4xl text-blue-950">"Allowing us focus on growth Highly recommended!"</h2>
-          <p class="md:text-[18px] text-blue-800">"Their seamless coordination and proactive communication have made a real difference in our operations. From customers clearance to last-mile delivery,we handled every detail with expertise and care. We couldn't ask for a better logistics partners."</p>
-          <p class="font-semibold md:text-[20px] text-[18px] py-3 text-blue-950">Mike Lander</p>
-          <p class="md:text-[18px] text-blue-800">Retailer</p>
+    <div class="glass lift reveal left" style="--d:.4s;border-radius:3px;padding:32px 34px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;">
+        <div class="ibox"><i class="fas fa-leaf"></i></div>
+        <span style="font:700 7.5px/1 'DM Sans';letter-spacing:.32em;text-transform:uppercase;color:var(--accent);">Eco-Friendly</span>
+      </div>
+      <h3 style="font:700 1rem/1.4 'DM Sans';color:var(--text);margin-bottom:11px;">Moving freight with a commitment to our planet.</h3>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.76;margin-bottom:20px;font-weight:300;">Green shipping routes and carbon-offset programs built into every logistics operation we run.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">50%</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Less CO₂</div></div>
+        <div style="border-radius:2px;padding:13px;text-align:center;background:var(--accent-dim);border:1px solid var(--aborder);clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));"><div style="font:700 .9rem/1 'DM Sans';color:var(--text);">Green</div><div style="font:700 7px/1 'DM Sans';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-top:5px;">Routing</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div style="max-width:1400px;margin:0 auto;padding:0 48px;"><div class="grule"></div></div>
+
+<!-- ══════════════ SERVICES ══════════════ -->
+<section class="sec" style="margin:0 auto;">
+  <div style="text-align:center;margin-bottom:56px;">
+    <div class="lbl reveal up" style="justify-content:center;margin-bottom:20px;">Logistics Services</div>
+    <h2 class="display reveal up" style="--d:.1s;font-size:clamp(2.2rem,4.5vw,3.7rem);color:var(--text);">
+      COMPREHENSIVE <span class="gt">SWIFT FREIGHT</span> SERVICES
+    </h2>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div class="srow reveal left" style="--d:.05s;">
+      <span class="snum">01</span>
+      <div class="ibox"><i class="fas fa-id-badge"></i></div>
+      <div style="flex:1;min-width:0;padding:0 18px;">
+        <h3 style="font:700 .93rem/1 'DM Sans';color:var(--text);">Customs Brokerage</h3>
+        <p style="font-size:.81rem;color:var(--muted);margin-top:5px;line-height:1.64;">Navigating customs with ease — ensuring your goods clear borders swiftly and compliantly.</p>
+      </div>
+      <a href="quote.html" style="flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font:700 .73rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;padding:9px 16px;border:1px solid rgba(var(--accent-rgb),.22);border-radius:2px;transition:all .25s;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));" onmouseover="this.style.background='rgba(59,130,246,.08)';this.style.borderColor='rgba(59,130,246,.45)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(59,130,246,.22)'">Quote <i class="fas fa-arrow-right" style="font-size:.56rem;"></i></a>
+    </div>
+
+    <div class="srow reveal right" style="--d:.1s;">
+      <span class="snum">02</span>
+      <div class="ibox"><i class="fas fa-warehouse"></i></div>
+      <div style="flex:1;min-width:0;padding:0 18px;">
+        <h3 style="font:700 .93rem/1 'DM Sans';color:var(--text);">Warehousing &amp; Distribution</h3>
+        <p style="font-size:.81rem;color:var(--muted);margin-top:5px;line-height:1.64;">Secure storage and efficient distribution solutions to keep your inventory flowing smoothly.</p>
+      </div>
+      <a href="quote.html" style="flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font:700 .73rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;padding:9px 16px;border:1px solid rgba(var(--accent-rgb),.22);border-radius:2px;transition:all .25s;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));" onmouseover="this.style.background='rgba(59,130,246,.08)';this.style.borderColor='rgba(59,130,246,.45)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(59,130,246,.22)'">Quote <i class="fas fa-arrow-right" style="font-size:.56rem;"></i></a>
+    </div>
+
+    <div class="srow reveal left" style="--d:.15s;">
+      <span class="snum">03</span>
+      <div class="ibox"><i class="fas fa-network-wired"></i></div>
+      <div style="flex:1;min-width:0;padding:0 18px;">
+        <h3 style="font:700 .93rem/1 'DM Sans';color:var(--text);">Supply Chain Management</h3>
+        <p style="font-size:.81rem;color:var(--muted);margin-top:5px;line-height:1.64;">Optimizing every step of your supply chain for streamlined, cost-effective operations.</p>
+      </div>
+      <a href="quote.html" style="flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font:700 .73rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;padding:9px 16px;border:1px solid rgba(var(--accent-rgb),.22);border-radius:2px;transition:all .25s;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));" onmouseover="this.style.background='rgba(59,130,246,.08)';this.style.borderColor='rgba(59,130,246,.45)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(59,130,246,.22)'">Quote <i class="fas fa-arrow-right" style="font-size:.56rem;"></i></a>
+    </div>
+
+    <div class="srow reveal right" style="--d:.2s;">
+      <span class="snum">04</span>
+      <div class="ibox"><i class="fas fa-earth-americas"></i></div>
+      <div style="flex:1;min-width:0;padding:0 18px;">
+        <h3 style="font:700 .93rem/1 'DM Sans';color:var(--text);">Cross-Border Solutions</h3>
+        <p style="font-size:.81rem;color:var(--muted);margin-top:5px;line-height:1.64;">Seamless cross-border logistics to connect your business with international markets.</p>
+      </div>
+      <a href="quote.html" style="flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font:700 .73rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;padding:9px 16px;border:1px solid rgba(var(--accent-rgb),.22);border-radius:2px;transition:all .25s;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));" onmouseover="this.style.background='rgba(59,130,246,.08)';this.style.borderColor='rgba(59,130,246,.45)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(59,130,246,.22)'">Quote <i class="fas fa-arrow-right" style="font-size:.56rem;"></i></a>
+    </div>
+
+    <div class="srow reveal left" style="--d:.25s;">
+      <span class="snum">05</span>
+      <div class="ibox"><i class="fas fa-dolly"></i></div>
+      <div style="flex:1;min-width:0;padding:0 18px;">
+        <h3 style="font:700 .93rem/1 'DM Sans';color:var(--text);">Last-Mile Delivery</h3>
+        <p style="font-size:.81rem;color:var(--muted);margin-top:5px;line-height:1.64;">Reliable final-mile delivery that gets your products to customers' doorsteps with precision.</p>
+      </div>
+      <a href="quote.html" style="flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font:700 .73rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;padding:9px 16px;border:1px solid rgba(var(--accent-rgb),.22);border-radius:2px;transition:all .25s;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));" onmouseover="this.style.background='rgba(59,130,246,.08)';this.style.borderColor='rgba(59,130,246,.45)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(59,130,246,.22)'">Quote <i class="fas fa-arrow-right" style="font-size:.56rem;"></i></a>
+    </div>
+
+    <div class="srow reveal right" style="--d:.3s;">
+      <span class="snum">06</span>
+      <div class="ibox"><i class="fas fa-boxes-packing"></i></div>
+      <div style="flex:1;min-width:0;padding:0 18px;">
+        <h3 style="font:700 .93rem/1 'DM Sans';color:var(--text);">Project Cargo Handling</h3>
+        <p style="font-size:.81rem;color:var(--muted);margin-top:5px;line-height:1.64;">Specialized for oversized or complex shipments, with fully tailored logistics solutions.</p>
+      </div>
+      <a href="quote.html" style="flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font:700 .73rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;padding:9px 16px;border:1px solid rgba(var(--accent-rgb),.22);border-radius:2px;transition:all .25s;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));" onmouseover="this.style.background='rgba(59,130,246,.08)';this.style.borderColor='rgba(59,130,246,.45)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(59,130,246,.22)'">Quote <i class="fas fa-arrow-right" style="font-size:.56rem;"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TESTIMONIAL ══════════════ -->
+<section class="sec" style="margin:0 auto;">
+  <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:48px;">
+    <div>
+      <div class="lbl reveal up" style="margin-bottom:18px;">Client Testimonials</div>
+      <h2 class="reveal left" style="--d:.1s;font-size:clamp(1.9rem,3.8vw,2.8rem);font-weight:700;">
+        <span class="gt">Trusted</span> <span style="color:var(--text);">by Businesses Worldwide</span>
+      </h2>
+    </div>
+    <p class="reveal right" style="--d:.1s;max-width:350px;color:var(--muted);font-size:.84rem;line-height:1.82;font-weight:300;">
+      Many companies already work with us. Praise pleases us, criticism helps us grow better every day.
+    </p>
+  </div>
+
+  <div class="glass reveal up" style="--d:.12s;border-radius:3px;padding:52px;clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));">
+    <div class="testi-wrap">
+      <div style="flex-shrink:0;">
+        <div style="position:relative;width:190px;height:234px;border-radius:3px;overflow:hidden;border:1px solid rgba(var(--accent-rgb),.16);">
+          <img src="./image/manager3.jpg" alt="Mike Lander" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(3,8,26,.5),transparent);"></div>
         </div>
       </div>
-    </section>
-
-    <section class="px-6 md:px-16">
-      <div class=" items-center justify-between lg:flex reveal-from-right" data-reveal-delay="0.1s">
-        <div class="max-w-100 text-wrap">
-          <h1 class="text-blue-950"><i class="pr-2 text-red-600 fas fa-circle"></i>LATEST ARTICLE</h1>
-          <h1 class="text-[43px] md:text-5xl text-blue-950 text-wrap font-semibold md:flex items-center gap-2">Industry <span class="text-red-600">Insights </span><span class="pr-2 text-blue-950">And</span><span class="text-red-600">Tips</span></h1>
-        </div>
-
-        <div class="flex flex-col items-start justify-end pt-4 max-w-120">
-          <p class="text-blue-800 text-[14px]">stay informed with the latest industry insights and experts tips to optimize your logistics strategies and stay ahead of market trends.</p>
-
-          <button class="px-4 py-1 my-6 border border-blue-500 rounded-full shadow-sm shadow-blue-400 w-fit text-blue-950 md:ml-50">
-            View All Post
-          </button>
-        </div>
-      </div>
-
-    <div class=" flex flex-col items-center justify-center gap-4 mt-14 md:flex  lg:flex-row lg:justify-between">
-      <div class="relative max-w-[350px] h-[450px] md:h-[400px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
-        <div class="absolute inset-0 bg-[url('./image/gallery.jpg')] bg-cover bg-center"></div>
-          <div class="absolute inset-0 bg-blue-900/40 backdrop-blur-sm"></div>
-            <div class="relative z-10 flex flex-col justify-between h-full">
-              <div class="md:flex items-center justify-between">
-                <span class="px-4 py-1 mb-5 text-sm font-medium text-gray-800 bg-white rounded-full">Logistic Innovation</span>
-              </div>
-
-              <div>
-               <h2 class="mb-4 text-3xl font-bold leading-tight">Streamlining Supply Chains with Innovative Logistics Solutions</h2>
-                <p class="max-w-md text-sm opacity-80">Discover how advanced technology is transforming logistics, making supply chains faster and more efficient.</p>
-              </div>
-
-              <div class="flex items-center justify-between">
-                <span class="font-semibold">Emily Tran</span>
-                <button class="flex items-center gap-2 px-6 py-2 font-bold text-blue-900 transition bg-white rounded-full hover:bg-gray-100">
-                  Read More 
-                  <span class="p-1 text-xs text-white bg-blue-900 rounded-full">→</span>
-                </button>
-              </div>
-
-            </div>
-          </div>
-
-  
-      <div class="relative w-[350px] h-[450px] md:h-[400px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
-        <div class="absolute inset-0 bg-[url('./image/gallery2.jpg')] bg-cover bg-center"></div>
-          <div class="absolute inset-0 bg-blue-900/40 "></div>
-            <div class="relative z-10 flex flex-col justify-between h-full">
-              <div class="flex items-center justify-between">
-                <span class="px-4 py-1 text-sm font-medium text-gray-800 bg-white rounded-full">Delivery Solutions</span>
-              </div>
-
-              <div class="mt-20 ">
-                <h2 class="text-3xl font-bold leading-tight">The Future of Last-Mile Delivery:</h2>
-                <p class="text-3xl font-bold leading-tight">Trends and Challenges</p>
-              </div>
-
-              <div class="flex items-center justify-between">
-                <span class="font-bold">Mark Douglas</span>
-              </div>
-            </div>
-          </div>
-
-
-      <div class=" relative w-[350px] h-[450px] md:h-[400px] overflow-hidden rounded-3xl p-8 flex flex-col justify-between text-white shadow-2xl">
-        <div class="absolute inset-0 bg-[url('./image/gallery3.jpeg')] bg-cover bg-center"></div>
-          <div class="absolute inset-0 bg-blue-900/40"></div>
-            <div class="relative z-10 flex flex-col justify-between h-full">
-              <div class="flex items-center justify-between">
-                <span class="px-4 py-1 text-sm font-medium text-gray-800 bg-white rounded-full">Sustainability</span>
-              </div>
-
-              <div class="mt-20 ">
-                <h2 class="text-3xl font-bold leading-tight">Why Sustainable</h2>
-                <p class="text-3xl font-bold leading-tight">Practice Matter in Logistics</p>
-              </div>
-
-              <div class="flex items-center justify-between">
-                <span class="font-bold">Sarah Lee</span>
-              </div>
-            </div>
-          </div>
-      </div>
-    </section>
-
-    <section class="a-reveal relative flex-col items-center justify-center w-full mx-auto mt-20 text-center">
-      <div class="relative flex items-center justify-center ">
-        <img src="./image/yellowtruck.webp" alt="" class="items-center object-cover  max-w-full h-auto">
-      </div>
-    </section>
-
-    <section class="px-6 my-10 md:px-16">
-      <div class=" md:flex rounded-2xl justify-between bg-blend-multiply bg-blue-600/50 bg-[url('./image/seaimg.jpg')] bg-cover bg-center">
-        <div class="reveal-selection p-8 max-w-100">
-          <h1 class="mb-2 text-4xl text-white">Streamline Your <br>Logistics Today!</h1>
-          <p class="text-white text-[14px]">Discover a world of effortless and seamless losgistics,ready to transform the way you move forward.</p>
-        </div>
-
-        <button class="self-center px-4 py-1 mx-8 mb-5 bg-white rounded-full w-fit text-blue-950 flex-nowrap md:mt-36 hover:bg-slate-500">
-          <a href="quote.html" >Get a Quote</a><i class="fas fa-arrow-right"></i>
-        </button>
-      </div>
-    </section>
-
-    <section class="bg-blue-950 py-17">
-      <div>
-      <div class="items-center justify-between px-6 lg:flex md:px-16">
-        <div class="py-6 max-w-100">
-          <h1 class="pb-2 font-serif text-6xl text-white animate__animated animate__heartBeat animate__slow animate__repeat-1 animate__delay-1s">SWIFT <br>FREIGHT</h1>
-          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
-          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
-
-          <form name="homequote" data-netlify="true" value="logistics-final" method="post" action="/success.html" class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
-            <input type="text" name="email-text" placeholder="Type your email" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-7">
-            <button type="submit" class="px-4 py-3 mx-1 text-white transition-all duration-700 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-95">Get a quote</button>
-          </form>
-        </div>
-
-        
-        
-        
-        <div class="justify-between md:flex-col ">
+      <div style="flex:1;">
+        <div class="serif" style="font-style:italic;font-size:5rem;line-height:.8;color:rgba(var(--accent-rgb),.12);margin-bottom:4px;">"</div>
+        <h3 class="serif" style="font-size:clamp(1.35rem,2.6vw,2rem);font-weight:600;color:var(--text);line-height:1.28;margin-bottom:20px;">"Allowing us to focus on growth. Highly recommended!"</h3>
+        <p style="font-size:.88rem;color:var(--muted);line-height:1.86;font-weight:300;max-width:590px;margin-bottom:28px;">Their seamless coordination and proactive communication have made a real difference in our operations. From customs clearance to last-mile delivery, every detail was handled with expertise and care.</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;">
           <div>
-            <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
+            <div style="font:700 .94rem/1 'DM Sans';color:var(--text);">Mike Lander</div>
+            <div style="font-size:.78rem;color:var(--accent);margin-top:4px;">Senior Retail Executive · Philadelphia, PA</div>
           </div>
-          <div class="grid items-center grid-cols-2 md:flex gap-18 reveal-from-bottom" data-reveal-delay="0.1s">
-            
-            <div class="a-reveal flex-col items-center justify-center gap-10">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
-              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
-              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
-              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
-              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
-            </div>
-
-            <div class="a-reveal flex-col items-center justify-center gap-10 md:pb-6">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
-              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
-              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
-              <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
-            </div>
-
-            <div class="a-reveal flex-col items-center justify-center gap-10">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
-              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
-            </div>
+          <div style="display:flex;gap:3px;">
+            <i class="fas fa-star" style="font-size:.72rem;color:var(--accent);"></i>
+            <i class="fas fa-star" style="font-size:.72rem;color:var(--accent);"></i>
+            <i class="fas fa-star" style="font-size:.72rem;color:var(--accent);"></i>
+            <i class="fas fa-star" style="font-size:.72rem;color:var(--accent);"></i>
+            <i class="fas fa-star" style="font-size:.72rem;color:var(--accent);"></i>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="max-width:1400px;margin:0 auto;padding:0 48px;"><div class="grule"></div></div>
+
+<!-- ══════════════ BLOG ══════════════ -->
+<section class="sec" style="margin:0 auto;">
+  <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:50px;">
+    <div>
+      <div class="lbl reveal up" style="margin-bottom:18px;">Latest Articles</div>
+      <h2 class="display reveal left" style="--d:.1s;font-size:clamp(2.2rem,5vw,3.8rem);color:var(--text);">
+        INDUSTRY <span class="gt">INSIGHTS</span> &amp; TIPS
+      </h2>
+    </div>
+    <div class="reveal right" style="--d:.1s;max-width:300px;display:flex;flex-direction:column;align-items:flex-start;gap:15px;">
+      <p style="font-size:.84rem;color:var(--muted);line-height:1.82;font-weight:300;">Stay informed with the latest insights and expert tips to optimize your logistics strategy.</p>
+      <button class="btn-outline" style="padding:10px 20px;font-size:.7rem;">View All Posts</button>
+    </div>
+  </div>
+
+  <div class="blog-grid">
+    <div class="fc reveal up" style="--d:.1s;height:430px;">
+      <img class="fc-img" src="./image/gallery.jpg" alt="Logistics Innovation" style="height:100%;width:100%;">
+      <div class="fc-ov"></div>
+      <div style="position:absolute;top:18px;left:18px;"><span class="badge-pill">Logistics Innovation</span></div>
+      <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+        <h3 style="font:700 1.05rem/1.36 'DM Sans';color:#e8f0fe;margin-bottom:9px;">Streamlining Supply Chains with Innovative Solutions</h3>
+        <p style="font-size:.77rem;color:rgba(232,240,254,.68);margin-bottom:13px;line-height:1.58;">How advanced technology is transforming logistics globally.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font:600 .75rem/1 'DM Sans';color:rgba(232,240,254,.45);">Emily Tran</span>
+          <button class="btn-primary" style="padding:8px 18px;font-size:.66rem;">Read →</button>
         </div>
-      
-          
-      </section>
+      </div>
+    </div>
 
+    <div class="fc reveal up" style="--d:.2s;height:430px;">
+      <img class="fc-img" src="./image/gallery2.jpg" alt="Last-Mile" style="height:100%;width:100%;">
+      <div class="fc-ov"></div>
+      <div style="position:absolute;top:18px;left:18px;"><span class="badge-pill">Delivery Solutions</span></div>
+      <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+        <h3 style="font:700 1.05rem/1.36 'DM Sans';color:#e8f0fe;margin-bottom:9px;">The Future of Last-Mile Delivery: Trends &amp; Challenges</h3>
+        <p style="font-size:.77rem;color:rgba(232,240,254,.68);margin-bottom:13px;line-height:1.58;">Exploring the evolving landscape of final-mile logistics.</p>
+        <span style="font:600 .75rem/1 'DM Sans';color:rgba(232,240,254,.45);">Mark Douglas</span>
+      </div>
+    </div>
 
-      <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
-        <div class="items-center self-center justify-between py-2 text-center md:flex">
-          <div class="flex items-center justify-center gap-8 text-center  md:gap-14">
-            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
-            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
-            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
-          </div>
+    <div class="fc reveal up" style="--d:.3s;height:430px;">
+      <img class="fc-img" src="./image/gallery3.jpeg" alt="Sustainability" style="height:100%;width:100%;">
+      <div class="fc-ov"></div>
+      <div style="position:absolute;top:18px;left:18px;"><span class="badge-pill">Sustainability</span></div>
+      <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+        <h3 style="font:700 1.05rem/1.36 'DM Sans';color:#e8f0fe;margin-bottom:9px;">Why Sustainable Practices Matter in Logistics</h3>
+        <p style="font-size:.77rem;color:rgba(232,240,254,.68);margin-bottom:13px;line-height:1.58;">The business case for going green in supply chain operations.</p>
+        <span style="font:600 .75rem/1 'DM Sans';color:rgba(232,240,254,.45);">Sarah Lee</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-          <div class="self-center py-2">
-            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
+<!-- ══════════════ CTA BANNER ══════════════ -->
+<section style="padding:0 48px 88px;max-width:1400px;margin:0 auto;">
+  <div class="cta-wrap reveal up">
+    <div class="cta-bg">
+      <img src="./image/shipment.jpg" alt="">
+    </div>
+    <div class="cta-ov"></div>
+    <!-- decorative corner accent -->
+    <div style="position:absolute;top:0;right:0;width:200px;height:200px;z-index:1;pointer-events:none;overflow:hidden;">
+      <div style="position:absolute;top:20px;right:20px;width:60px;height:60px;border-top:1px solid rgba(var(--accent-rgb),.2);border-right:1px solid rgba(var(--accent-rgb),.2);"></div>
+    </div>
+    <div style="position:relative;z-index:2;">
+      <div class="lbl" style="margin-bottom:16px;">Ready to Ship?</div>
+      <h2 class="display" style="font-size:clamp(2.4rem,5vw,4.4rem);color:var(--text);line-height:.92;">STREAMLINE YOUR<br><span class="gt">LOGISTICS TODAY</span></h2>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:16px;max-width:440px;line-height:1.76;font-weight:300;">Discover a world of effortless logistics, ready to transform the way you move freight forward.</p>
+      <a href="quote.html" class="btn-primary" style="margin-top:30px;font-size:.78rem;padding:17px 38px;">
+        Get a Free Quote <i class="fas fa-arrow-right" style="font-size:.6rem;"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+
+      <div>
+        <div style="display:flex;align-items:center;gap:13px;margin-bottom:22px;">
+          <img src="./image/sfl-logo.svg" alt="Swift Freight" width="42" height="42"
+               style="filter:drop-shadow(0 2px 12px rgba(59,130,246,.42));">
+          <div>
+            <div style="font-family:'Bebas Neue';font-size:1.06rem;letter-spacing:.17em;line-height:1.1;"><span class="gt">SWIFT</span><span style="color:rgba(232,240,254,.75);margin-left:5px;">FREIGHT</span></div>
+            <div style="font-size:6px;letter-spacing:.52em;text-transform:uppercase;color:rgba(147,197,253,.35);margin-top:2px;">Logistics</div>
           </div>
         </div>
-      </footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-
-          
-
-
-
-        
-          <div style="display:none;">
-            <form name="quote-request" data-netlify="true">
-              <input type="text" name="full-name">
-              <input type="email" name="email">
-              <input type="text" name="shipment_type">
-              <input type="text" name="weight_kg">
-              <input type="text" name="pickup_location">
-              <input type="text" name="delivery_destination">
-            </form>
-          </div>
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-
-
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-    const menuBtn = document.getElementById('menu-btn');
-    const menuIcon = document.getElementById('menu-icon');
-    const xIcon = document.getElementById('x-icon');
-
-    menuBtn.addEventListener('click', () => {
-    menuIcon.classList.toggle('hidden');
-    xIcon.classList.toggle('hidden');
-    console.log("Button clicked!");
-        });
+        <p style="color:rgba(232,240,254,.44);font-size:.81rem;line-height:1.82;margin-bottom:22px;font-weight:300;">Join our community to unlock exclusive insights and innovative solutions for all your logistics needs.</p>
+        <div id="subscribe-wrap">
+          <form id="subscribe-form" class="footer-form" novalidate>
+            <input type="email" id="sub-email" name="email" placeholder="Your email address" autocomplete="email">
+            <button type="submit" id="sub-btn" class="btn-primary">Subscribe</button>
+          </form>
+          <div id="subscribe-success" style="display:none;"></div>
+        </div>
+        <div class="footer-socials">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="payment.html">Track Shipment</a></li>
+          <li><a href="quote.html">Get a Quote</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#freightSolution">Sea Freight</a></li>
+          <li><a href="#freightSolution">Road Freight</a></li>
+          <li><a href="#freightSolution">Air Freight</a></li>
+          <li><a href="#freightSolution">Rail Freight</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-btm">
+      <div style="display:flex;gap:24px;">
+        <a href="policy.html" class="foot-link">Privacy Policy</a>
+        <a href="#" class="foot-link">Sitemap</a>
+        <a href="#" class="foot-link">Terms of Use</a>
+      </div>
+      <p class="foot-copy">©2025 Swift Freight. All rights reserved · Park James Co.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/18562803438" target="_blank" class="fab-btn"
+   style="position:fixed;bottom:32px;right:32px;z-index:100;width:54px;height:54px;border-radius:2px;display:flex;align-items:center;justify-content:center;text-decoration:none;background:#25D366;box-shadow:0 6px 28px rgba(37,211,102,.32);transition:transform .25s,box-shadow .25s;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));"
+   onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 12px 36px rgba(37,211,102,.48)'"
+   onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 6px 28px rgba(37,211,102,.32)'">
+  <i class="fab fa-whatsapp" style="color:#fff;font-size:1.38rem;"></i>
+</a>
+
+<!-- Hidden Netlify form -->
+<div style="display:none;">
+  <form name="quote-request" data-netlify="true">
+    <input type="text" name="full-name">
+    <input type="email" name="email">
+    <input type="text" name="shipment_type">
+    <input type="text" name="weight_kg">
+    <input type="text" name="pickup_location">
+    <input type="text" name="delivery_destination">
+  </form>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   THEME SYSTEM
+═══════════════════════════════════════════ */
+(function(){
+  var root=document.documentElement,KEY='sfl_theme',DARK='dark',LIGHT='light';
+  var tt=null;
+  function getSaved(){ return localStorage.getItem(KEY); }
+  function getAuto(){ return window.matchMedia('(prefers-color-scheme: dark)').matches?DARK:LIGHT; }
+  function applyTheme(t,animate){
+    if(animate){ if(tt)clearTimeout(tt); root.classList.add('sfl-transitioning'); tt=setTimeout(function(){ root.classList.remove('sfl-transitioning'); },480); }
+    root.setAttribute('data-theme',t); localStorage.setItem(KEY,t);
+    ['themeIconDesktop','themeIconMobile'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el) el.className=t===DARK?'fas fa-sun':'fas fa-moon';
+    });
+  }
+  function toggle(){ applyTheme(root.getAttribute('data-theme')===DARK?LIGHT:DARK,true); }
+  applyTheme(getSaved()||getAuto(),false);
+  ['themeToggleDesktop','themeToggleMobile'].forEach(function(id){
+    var btn=document.getElementById(id);
+    if(btn) btn.addEventListener('click',toggle);
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){
+    if(!getSaved()) applyTheme(e.matches?DARK:LIGHT,false);
+  });
+})();
+
+
+/* ═ LOADER ═ */
+(function(){
+  var ldr=document.getElementById('loader');
+  if(!ldr) return;
+  function dismiss(){
+    ldr.style.transition='opacity .5s ease';
+    ldr.style.opacity='0';
+    ldr.style.pointerEvents='none';
+    setTimeout(function(){ ldr.style.display='none'; },520);
+  }
+  var pg=false,tm=false;
+  function tryDismiss(){ if(pg&&tm) dismiss(); }
+  window.addEventListener('load',function(){ pg=true; tryDismiss(); });
+  setTimeout(function(){ tm=true; tryDismiss(); },1800);
+})();
+
+
+/* ══════════════════════════════════════════
+   MOBILE NAV — full-screen overlay with X close
+═══════════════════════════════════════════ */
+(function(){
+  const menuBtn   = document.getElementById('menuBtn');
+  const closeBtn  = document.getElementById('mobileNavClose');
+  const nav       = document.getElementById('mobile-nav');
+  if(!menuBtn || !nav) return;
+
+  function isMobile(){ return window.innerWidth < 1024; }
+
+  let isOpen = false;
+
+  function openNav(){
+    isOpen = true;
+    menuBtn.classList.add('open');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    nav.classList.add('open');
+    nav.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNav(){
+    isOpen = false;
+    menuBtn.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    nav.classList.remove('open');
+    nav.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  menuBtn.addEventListener('click', () => isOpen ? closeNav() : openNav());
+
+  // X button closes nav
+  if(closeBtn) closeBtn.addEventListener('click', closeNav);
+
+  // Close on nav link click
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+
+  // Close on Escape key
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && isOpen) closeNav();
+  });
+
+  // Close if resized to desktop
+  window.addEventListener('resize', () => {
+    if(!isMobile() && isOpen) closeNav();
+  });
+})();
+
+
+/* ══════════════════════════════════════════
+   HEADER SCROLL STATE
+═══════════════════════════════════════════ */
+(function(){
+  const hdr = document.getElementById('hdr');
+  if(!hdr) return;
+  const onScroll = () => hdr.classList.toggle('scrolled', window.scrollY > 30);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════ */
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  if(!els.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+  els.forEach(el => obs.observe(el));
+})();
+/* ═══════ PRESS-HOLD LOGO 3s → ADMIN ═══════ */
+(function(){
+  var HOLD=3000,timer=null;
+  var css=document.createElement('style');
+  css.textContent='@keyframes sfl-hold-pulse{0%,100%{filter:drop-shadow(0 0 5px rgba(59,130,246,.45))}50%{filter:drop-shadow(0 0 18px rgba(59,130,246,1))}}.sfl-holding>img{animation:sfl-hold-pulse .65s ease-in-out infinite !important;cursor:progress !important;}';
+  document.head.appendChild(css);
+  function start(logo){ if(timer)return; logo.classList.add('sfl-holding'); timer=setTimeout(function(){ timer=null; window.location.href='admin.html'; },HOLD); }
+  function stop(logo){ if(!timer)return; clearTimeout(timer);timer=null; logo.classList.remove('sfl-holding'); }
+  document.querySelectorAll('.logo,.mob-nav-logo').forEach(function(logo){
+    logo.addEventListener('mousedown',function(){start(logo);});
+    logo.addEventListener('mouseup',function(){stop(logo);});
+    logo.addEventListener('mouseleave',function(){stop(logo);});
+    logo.addEventListener('touchstart',function(){start(logo);},{passive:true});
+    logo.addEventListener('touchend',function(){stop(logo);});
+    logo.addEventListener('touchcancel',function(){stop(logo);});
+    logo.addEventListener('contextmenu',function(e){e.preventDefault();stop(logo);});
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const SUPABASE_URL = 'https://oltbgccsceipedoadgka.supabase.co';
+  const ANON_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+
+  const form    = document.getElementById('subscribe-form');
+  const emailEl = document.getElementById('sub-email');
+  const btn     = document.getElementById('sub-btn');
+  const wrap    = document.getElementById('subscribe-wrap');
+  const success = document.getElementById('subscribe-success');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = emailEl.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailEl.style.borderColor = '#f87171';
+      emailEl.style.outline = '0';
+      setTimeout(() => { emailEl.style.borderColor = ''; }, 2200);
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Subscribing…';
+
+    try {
+      await fetch(SUPABASE_URL + '/functions/v1/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ANON_KEY },
+        body: JSON.stringify({ email }),
       });
-    </script>
+    } catch(_) { /* fire and forget */ }
 
+    // Premium success state
+    form.style.transition = 'opacity .35s, transform .35s';
+    form.style.opacity = '0';
+    form.style.transform = 'translateY(-8px)';
+    setTimeout(() => {
+      form.style.display = 'none';
+      success.style.display = 'block';
+      success.innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:20px 0;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:successPop .5s cubic-bezier(.34,1.56,.64,1) both;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12L13.5 4" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div style="font:700 .92rem/1 'DM Sans';color:#e8f0fe;margin-bottom:4px;">You're subscribed!</div>
+              <div style="font:400 .74rem/1.4 'DM Sans';color:rgba(232,240,254,.45);">${email}</div>
+            </div>
+          </div>
+          <p style="font:400 .76rem/1.6 'DM Sans';color:rgba(232,240,254,.38);margin:0;padding-top:4px;border-top:1px solid rgba(232,240,254,.06);width:100%;">
+            Welcome aboard. We'll keep you updated with insights and updates from Swift Freight Logistics.
+          </p>
+        </div>
+        <style>
+          @keyframes successPop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+        </style>`;
+      success.style.opacity = '0';
+      success.style.transition = 'opacity .4s ease';
+      requestAnimationFrame(() => requestAnimationFrame(() => { success.style.opacity = '1'; }));
+    }, 350);
+  });
+})();
+// Ticker fetch
+(function(){
+  const SB_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
+  const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+  fetch(SB_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
+    headers: { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON }
+  }).then(r => r.json()).then(rows => {
+    const text = rows && rows[0] && rows[0].value ? rows[0].value.trim() : '';
+    if (!text) return;
+    const sep = '  ·  ';
+    const full = text + sep + text;
+    document.getElementById('ticker-t1').textContent = full;
+    document.getElementById('ticker-t2').textContent = full;
+    const ticker = document.getElementById('site-ticker');
+    if (ticker) ticker.classList.add('visible');
+  }).catch(() => {});
+})();
+</script>
 
-
-
-
-      
-
-
-      <script>
-          window.addEventListener("load", () => {
-          const loader = document.getElementById("loader-wrapper");
-          
-          // Fade out
-          loader.classList.add("opacity-0");
-          
-          // Remove from DOM after transition finishes so it doesn't block clicks
-          setTimeout(() => {
-            loader.style.display = "none";
-          }, 500); 
-        });
-      </script>
-
-
-
-
-
-      <script>
-             const backToTop = document.getElementById('backToTop');
-          const targetSection = document.querySelector('#section-two'); // Update this selector
-
-          const observerOptions = {
-            root: null, // viewport
-            threshold: 0,
-            rootMargin: "-100px 0px 0px 0px" // Triggers as soon as the top of the section leaves the viewport
-          };
-
-          const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (!entry.isIntersecting) {
-                // User has scrolled past section two
-                backToTop.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-              } else {
-                // User is still within or above section two
-                backToTop.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-              }
-            });
-          }, observerOptions);
-
-          observer.observe(targetSection);
-
-          // Scroll to top functionality
-          backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }); 
-      </script>
-
-
-
-      <script>
-          const menuBtn = document.getElementById('menu-btn');
-          const sideMenu = document.getElementById('side-menu');
-          const overlay = document.getElementById('overlay');
-          const l1 = document.getElementById('line-1');
-          const l2 = document.getElementById('line-2');
-          const l3 = document.getElementById('line-3');
-
-          menuBtn.addEventListener('click', () => {
-              // Toggle the side menu
-              const isOpen = sideMenu.classList.toggle('translate-x-full');
-              
-              if (!isOpen) {
-                  // OPEN STATE
-                  overlay.classList.remove('hidden');
-                  setTimeout(() => overlay.classList.add('opacity-100'), 10);
-                  
-                  // Morph to X
-                  l1.classList.replace('-translate-y-2', 'rotate-45');
-                  l2.classList.add('opacity-0', '-translate-x-2');
-                  l3.classList.replace('translate-y-2', '-rotate-45');
-              } else {
-                  // CLOSE STATE
-                  overlay.classList.remove('opacity-100');
-                  setTimeout(() => overlay.classList.add('hidden'), 500);
-                  
-                  // Morph back to Hamburger
-                  l1.classList.replace('rotate-45', '-translate-y-2');
-                  l2.classList.remove('opacity-0', '-translate-x-2');
-                  l3.classList.replace('-rotate-45', 'translate-y-2');
-              }
-          });
-
-          // Close menu if clicking the blurred area
-          overlay.addEventListener('click', () => menuBtn.click());
-      </script>
-
-      <script>
-        
-    </script>
-
-
-    <script src="script.js"></script>
- 
 </body>
 </html>
-

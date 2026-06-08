@@ -1,362 +1,642 @@
 
+// ══════════════════════════════════════════════════════════════
+//  SUPABASE CONFIG
+//  Fill in your project details from:
+//  Supabase Dashboard → Project Settings → API
+// ══════════════════════════════════════════════════════════════
+const SUPABASE_URL      = 'https://oltbgccsceipedoadgka.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+// ══════════════════════════════════════════════════════════════
 
 
+function switchPayment(method, info) {
+    document.querySelectorAll('.t-pm-card').forEach(c => c.classList.remove('active'));
+    const card = document.querySelector(`.t-pm-card[data-method="${method}"]`);
+    if (card) card.classList.add('active');
 
+    const display = document.getElementById('payment-detail-display');
+    if (!display) return;
+    display.classList.add('t-pp-fade');
+    setTimeout(() => {
+        display.innerHTML = _buildPayDetail(method, info);
+        display.classList.remove('t-pp-fade');
+    }, 180);
+}
 
-          function switchPayment(method, info) {
-                  // Make sure this ID exists inside your newly injected HTML
-          const display = document.getElementById('payment-detail-display');
+function _buildPayDetail(method, info) {
+    const _e = (v) => String(v || '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+    const copyBtn = (val, id) =>
+        `<button class="t-pp-copy-btn" onclick="window._sflCopy('${val.replace(/'/g,"\\'")}','${id}')" id="${id}"><i class="fas fa-copy"></i> Copy</button>`;
 
-          if (!display) {
-          console.error("Could not find payment-detail-display. Check your HTML!");
-          return;
-                  }
+    if (method === 'BTC') return `
+        <div class="t-pp-header"><i class="fab fa-bitcoin" style="color:#f7931a;font-size:1.15rem"></i><span>Bitcoin (BTC)</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Wallet Address</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-btc')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Send the exact invoice amount in BTC. A minimum of 1 block confirmation is required before clearance.</div>`;
 
-                  // GSAP animate the display container out
-          gsap.to(display, { opacity: 0, y: 10, duration: 0.3, onComplete: () => {
-                  // Update the content based on the method
-          if (method === 'BTC') {
-                      display.innerHTML = `<p class="text-blue-400 font-bold mb-1">BITCOIN WALLET</p><span class="break-all font-mono">${info}</span>`;
-          } else if (method === 'USDT') {
-                      display.innerHTML = `<p class="text-green-400 font-bold mb-1">USDT ADDRESS</p><span class="break-all font-mono">${info}</span>`;
-          } else {
-                      // Re-format the WIRE string if it contains commas
-          const formattedWire = info.replace(/Bank: |Name: |Account: /g, '<br>$&');
-          display.innerHTML = `<p class="text-slate-300 font-bold mb-1">LOCAL BANK</p><span class="text-sm">${formattedWire}</span>`;
-                  }
-                  
-                  // GSAP animate it back in
-          gsap.to(display, { opacity: 1, y: 0, duration: 0.3 });
-              }});
-          }
+    if (method === 'USDT') return `
+        <div class="t-pp-header"><i class="fas fa-circle-dollar-to-slot" style="color:#26a17b;font-size:1.1rem"></i><span>USDT Tether</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Wallet Address (TRC20 / ERC20)</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-usdt')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Verify the correct network (TRC20 or ERC20) before sending. Cross-network transfers are unrecoverable.</div>`;
 
-
-          
-
-
-          // 2. MAIN TRACKING ENGINE
-                            async function handleTracking() {
-             const trackingInput = document.getElementById('trackingInput');
-                  const dashboard = document.getElementById('dashboard-target');
-                  const searchGate = document.getElementById('search-gate');
-                  const searchBtn = document.getElementById('search-btn');
-                  const errorMsg = document.getElementById('error-msg');
-
-                  if (!trackingInput || !dashboard || !searchGate || !searchBtn || !errorMsg) return;
-
-                  const trackingNo = trackingInput.value.trim();
-
-                  const showError = (message) => {
-                      errorMsg.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i> ${message}`;
-                      errorMsg.classList.remove('hidden');
-                  };
-
-                  const hideError = () => {
-                      errorMsg.textContent = '';
-                      errorMsg.classList.add('hidden');
-                  };
-
-                  if (!trackingNo) {
-                      dashboard.innerHTML = '';
-                      showError('Please enter your shipment tracking code.');
-                      return;
-                  }
-
-                  searchBtn.disabled = true;
-                  searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Searching...';
-                  hideError();
-
-                  const spaceId = 'i55d4qvuj8ah';
-                  const accessToken = 'e4BFBJQiuGHI2ZIrKdxgmaUXNCmRUi46jSwQjbw0pUg';
-                  const url = `https://cdn.contentful.com/spaces/${spaceId}/entries?access_token=${accessToken}&content_type=shipment&fields.trackingId=${trackingNo}`;
-
-                  try {
-                      const response = await fetch(url);
-                      const resData = await response.json();
-
-                      if (!resData.items || resData.items.length === 0) {
-                          dashboard.innerHTML = '';
-                          searchGate.style.display = 'block';
-                          showError('No shipment found for that ID. Please verify and try again.');
-                          return;
-                      }
-
-                      const shipment = resData.items[0].fields;
-                      const isPaid = shipment.paymentStatus?.toLowerCase() === 'confirmed';
-                      searchGate.style.display = 'none';
-
-                      dashboard.innerHTML = `
-                          <div class="dashboard-panel mx-auto overflow-hidden rounded-[3rem] border border-white/10 bg-slate-950/85 shadow-[0_45px_120px_rgba(15,23,42,0.55)] backdrop-blur-3xl text-slate-100">
-                              <div class="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-950/90 to-cyan-950/95 px-8 py-8">
-                                  <div class="pointer-events-none absolute -left-24 top-8 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl"></div>
-                                  <div class="pointer-events-none absolute -right-28 bottom-12 h-56 w-56 rounded-full bg-blue-500/10 blur-3xl"></div>
-                                  <button onclick="location.reload()" class="premium-top-btn absolute right-8 top-8 z-20 inline-flex items-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-cyan-500/15 to-blue-500/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-[0_24px_80px_rgba(14,165,233,0.18)] backdrop-blur-sm transition duration-300 hover:scale-[1.03] hover:border-cyan-300/40 hover:bg-cyan-500/20">
-                                      <i class="fas fa-arrow-left"></i>
-                                      Return
-                                  </button>
-                                  <div class="header-anim relative z-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                                      <div>
-                                          <p class="text-cyan-300 font-mono text-[10px] tracking-[0.45em] uppercase mb-2">Elite Shipment Profile</p>
-                                          <h2 class="text-4xl font-black uppercase tracking-tight text-white">${trackingNo}</h2>
-                                          <p class="mt-2 text-sm uppercase tracking-[0.24em] text-slate-400">${shipment.serviceType || 'Premium Delivery'}</p>
-                                      </div>
-                                      <button onclick="location.reload()" class="track-again-btn inline-flex items-center justify-center gap-3 rounded-3xl border border-cyan-400/20 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_20px_80px_rgba(14,165,233,0.20)] transition duration-300 hover:scale-[1.02] hover:border-cyan-300/40 hover:bg-cyan-500/15">
-                                          <i class="fas fa-arrow-left text-base"></i>
-                                          Back to Search
-                                      </button>
-                                  </div>
-                              </div>
-
-                              <div class="grid gap-6 lg:grid-cols-[1.25fr_0.9fr] w-full h-auto p-8">
-                                  <div class="space-y-6 relative">
-                                      <div class="panel-card rounded-[2.5rem] border border-white/10 bg-slate-900/70 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.32)] backdrop-blur-xl">
-                                          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                              <div>
-                                                  <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Current Status</p>
-                                                  <h3 class="mt-2 text-3xl font-extrabold text-white">${shipment.status || 'In Transit'}</h3>
-                                              </div>
-                                              <span class="rounded-full bg-green-500 flex px-4 animate-pulse items-center gap-2 text-nowrap py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100"> <svg xmlns="http://www.w3.org/2000/svg" height="34px" viewBox="0 -960 960 960" width="34px" fill="#FDF3D0"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H182l4-17q6-28 27.5-45.5T264-800h456l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-19-273 2-7-84 360 2-7 34-146 46-200ZM20-427l20-80h220l-20 80H20Zm80-146 20-80h260l-20 80H100Zm180 333q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z" class="animated-bounce"/></svg>${shipment.priority || 'Priority'}</span>
-                                          </div>
-                                          <p class="mt-4 text-sm leading-relaxed text-slate-300">Latest location: <span class="font-semibold text-white">${shipment.currentLocation || 'Unknown location'}</span></p>
-                                      </div>
-
-                                        <div class="relative">
-                                            <div class="pointer-events-none absolute top-2  bottom-20 left-[18px] w-1 h-100 rounded-full bg-gradient-to-b from-emerald-400/80 via-green-400/50 to-transparent shadow-[0_0_40px_rgba(52,211,153,0.35)]">
-                                            </div>
-                                        </div>
-                                
-                                      <div class="space-y-4 relative z-10">
-                                          ${renderEliteStep(shipment.status, shipment.currentLocation, 'Picked Up', 'fa-box', true, shipment.transit1textcolor)}
-                                          ${renderEliteStep(shipment.TrasitStep3Name, shipment.TrasitStep3Location, 'Loaded', 'fa-truck', !!shipment.TrasitStep3Name, shipment.transit3textcolor)}
-                                          ${renderEliteStep(shipment.Transitstep2Name, shipment.Transitstep2Location, 'Transit', 'fa-plane', !!shipment.transitStep2Name, shipment.transit2textcolor)}
-                                          ${renderEliteStep(shipment.TransitStep1Name, shipment.TransitStep1Location, 'Arrival', 'fa-box-open', !!shipment.TransitStep1Name, shipment.transit2textcolor)}
-                                      </div>
-
-                                      
-                                  </div>
-
-                                  <div class="space-y-6">
-                                      <div class="panel-card rounded-[2.5rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.20)] backdrop-blur-xl">
-                                          <p class="text-xs uppercase tracking-[0.4em] text-slate-400 mb-4">Shipment Summary</p>
-                                          <ul class="space-y-3 text-sm text-slate-300">
-                                              <li class="flex justify-between gap-3"><span class="font-semibold text-white">Name</span><span>${shipment.name || shipment.shipmentName || shipment.customerName || 'N/A'}</span></li>
-                                              <li class="flex justify-between gap-3"><span class="font-semibold text-white">Destination</span><span>${shipment.destination || 'TBD'}</span></li>
-                                              <li class="flex justify-between gap-3"><span class="font-semibold text-white">Sender's Name</span><span>${shipment.sendersname || 'TBD'}</span></li>
-                                              <li class="flex justify-between gap-3"><span class="font-semibold text-white">Pickup Date</span><span>${shipment.pickupDate || 'Pending'}</span></li>
-                                              <li class="flex justify-between gap-3"><span class="font-semibold text-white">Delivery ETA</span><span>${shipment.eta || 'TBD'}</span></li>
-                                              <li class="flex justify-between gap-3"><span class="font-semibold text-white">Weight</span><span>${shipment.packageDetails || 'N/A'}</span></li>
-                                          </ul>
-                                      </div>
-                                      ${isPaid ? `
-                                          <div class="panel-card rounded-[2.5rem] border border-green-800 bg-green-500/10 p-6 shadow-green-600 shadow-sm backdrop-blur-xl">
-                                              <div class="flex items-center justify-between mb-4">
-                                                  <div>
-                                                      <p class="text-xs uppercase tracking-[0.4em] text-green-300">Shipment Status</p>
-                                                      <h3 class="mt-2 text-3xl font-extrabold text-white">Package Secured</h3>
-                                                  </div>
-                                                  <span class="rounded-full bg-green-500 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-100">${shipment.paymentStatus}</span>
-                                              </div>
-                                              <p class="text-sm leading-relaxed text-slate-200">Your delivery is cleared and proceeding on schedule.</p>
-                                          </div>
-                                      ` : ''}
-                                      <div class="panel-card payment-anim rounded-[2.5rem] border border-white/10 bg-slate-900/80 p-6 shadow-[0_20px_80px_rgba(14,165,233,0.14)] backdrop-blur-xl">
-                                          <div class="flex items-center justify-between mb-4">
-                                              <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Payment</p>
-                                              ${isPaid ? `
-                                              <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-green-600">Comfirmed</span>
-                                              ` : `
-                                              <span class="rounded-full bg-amber-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-200">Pending</span>
-                                              `}
-                                          </div>
-                                          
-                                            
-
-                                          <p class="mt-3 text-sm text-slate-400">${isPaid ? 'Payment confirmed for this shipment.' : 'Payment is pending. Select a secure option below.'}</p>
-
-                                          ${isPaid ? '' : `
-                                            <div class="flex justify-between items-center mb-6">
-                                                <p class="text-green-800 font-semibold text-[18px] uppercase tracking-widest">Service Invoice</p>
-                                                <span class="text-white font-mono text-3xl font-bold">${shipment.amountDue || '$0.00'}</span>
-                                            </div>
-                                              <div class="mt-6 grid gap-3">
-                                                  <button onclick="switchPayment('BTC', '${shipment.btcAddress}')" class="w-full rounded-2xl bg-white/10 px-4 py-3 text-sm uppercase tracking-[0.18em] text-white transition hover:bg-white/20">BTC</button>
-                                                  <button onclick="switchPayment('USDT', '${shipment.usdtAddress}')" class="w-full rounded-2xl bg-white/10 px-4 py-3 text-sm uppercase tracking-[0.18em] text-white transition hover:bg-white/20">USDT</button>
-                                                  <button onclick="switchPayment('WIRE', 'Bank: ${shipment.bankName || 'N/A'}, Name: ${shipment.accountName || 'N/A'}, Account: ${shipment.bankNumber || 'N/A'}')" class="w-full rounded-2xl bg-white/10 px-4 py-3 text-sm uppercase tracking-[0.18em] text-white transition hover:bg-white/20">WIRE</button>
-                                              </div>
-                                              <div id="payment-detail-display" class="mt-5 rounded-2xl border border-white/10 bg-slate-950/80 p-4 text-slate-300 text-sm font-mono min-h-[72px]">Select a payment method to see the secure details.</div>
-                                          `}
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      `;
-
-                      const resultTimeline = gsap.timeline();
-                      resultTimeline.from('.dashboard-panel', { autoAlpha: 0, y: 30, duration: 0.9, ease: 'power3.out' });
-                      resultTimeline.from('.header-anim', { opacity: 0, y: -20, duration: 0.8, ease: 'power4.out' }, '-=0.7');
-                      resultTimeline.from('.dashboard-panel .panel-card:not(.payment-anim)', { opacity: 0, y: 20, stagger: 0.12, duration: 0.7, ease: 'back.out(1.3)' }, '-=0.6');
-                      resultTimeline.from('.step-item', { opacity: 0, x: -20, stagger: 0.12, duration: 0.8, ease: 'power3.out' }, '-=0.5');
-                      resultTimeline.from('.icon-anim', { scale: 0, rotation: -180, stagger: 0.12, duration: 0.8, ease: 'back.out(1.7)' }, '-=0.6');
-                      resultTimeline.from('.payment-anim', { opacity: 0, y: 30, duration: 0.7, ease: 'back.out(1.3)' }, '-=0.4');
-                      resultTimeline.from('.track-again-btn, .dashboard-panel button[onclick="location.reload()"]', { opacity: 0, y: 10, duration: 0.6, ease: 'power2.out' }, '-=0.3');
-                  } catch (e) {
-                      console.error('Elite Tracking System Error:', e);
-                      dashboard.innerHTML = '';
-                      searchGate.style.display = 'block';
-                      showError('Unable to load tracking details. Please try again in a moment.');
-                  } finally {
-                      searchBtn.disabled = false;
-                      searchBtn.innerHTML = '<i class="fab fa-searchengin text-xl"></i> Find Shipment';
-                  }
-              }
-
-          function renderEliteStep(name, loc, label, icon, active, color) {
-          if (!name) return "";
-
-          // If no color is provided in Contentful, default to blue
-          const colorClass = color || "text-blue-500"; 
-          // We replace 'text-' with 'bg-' for the icon background if needed
-          const bgClass = colorClass.replace("text-", "bg-").replace("-500", "-950");
-           
-
-          return `
-          <div class="step-item relative pl-14 group">
-              <div class="absolute left-0 top-1 w-10 h-10 rounded-4xl ${bgClass} border border-white/10 flex items-center justify-center ${colorClass} icon-anim">
-                  <i class="fas ${icon} text-xs text-shadow-2xl  animate-bounce"></i>
-              </div>
-              
-              <div class="bg-white/5 p-5 rounded-[2rem] border border-white/10 shadow-[0_20px_80px_rgba(15,23,42,0.15)] backdrop-blur-xl transition duration-300 hover:-translate-y-1">
-                  <div class="flex justify-between items-center w-full">
-                      <h4 class="font-bold font-mono text-xs uppercase tracking-[0.25em] text-slate-300">${name}</h4>
-                      <span class="font-mono text-[12px] font-bold uppercase text-slate-500 ml-4">${label}</span>
-                  </div>
-                  <p class="text-slate-100 text-[14px] mt-3 font-mono">${loc}</p>
-              </div>
-          </div>`;
+    if (method === 'WIRE') {
+        const [bank, acctName, acctNum] = (info || '').split('|');
+        return `
+        <div class="t-pp-header"><i class="fas fa-building-columns" style="color:#3b82f6;font-size:1.05rem"></i><span>Bank Wire Transfer</span></div>
+        <div class="t-pp-bank-grid">
+          <div class="t-pp-bank-row"><span class="t-pp-bk-label">Bank Name</span><span class="t-pp-bk-val">${_e(bank)}</span></div>
+          <div class="t-pp-bank-row"><span class="t-pp-bk-label">Account Name</span><span class="t-pp-bk-val">${_e(acctName)}</span></div>
+          <div class="t-pp-bank-row"><span class="t-pp-bk-label">Account Number</span><span class="t-pp-bk-val">${_e(acctNum)}&nbsp;&nbsp;${copyBtn(acctNum||'','copy-wire')}</span></div>
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Include your tracking ID in the wire transfer reference/memo for same-day processing.</div>`;
     }
 
-    function initializeRevealAnimations() {
-        const revealElements = document.querySelectorAll('.reveal-init, .reveal-from-left, .reveal-from-right, .reveal-from-bottom');
-        if (revealElements.length === 0) return;
+    if (method === 'PAYPAL') return `
+        <div class="t-pp-header"><i class="fab fa-paypal" style="color:#0070ba;font-size:1.1rem"></i><span>PayPal</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">PayPal Email Address</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-paypal')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Send as "Friends &amp; Family" to avoid fees. Include your tracking ID in the payment note.</div>`;
 
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -120px 0px',
-            threshold: 0.15,
-        };
+    if (method === 'CASHAPP') return `
+        <div class="t-pp-header"><i class="fas fa-mobile-screen-button" style="color:#00d64f;font-size:1.05rem"></i><span>Cash App</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">$Cashtag</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-cashapp')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Open Cash App → tap Pay → enter the $Cashtag above. Add your tracking ID in the note field.</div>`;
 
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                const element = entry.target;
-                element.classList.add('reveal-active');
-                observer.unobserve(element);
-            });
-        }, observerOptions);
+    if (method === 'ZELLE') return `
+        <div class="t-pp-header"><i class="fas fa-bolt" style="color:#6d1ed4;font-size:1.05rem"></i><span>Zelle</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Email / Phone Number</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-zelle')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Open your bank app or the Zelle app, search the address above, and add your tracking ID in the memo.</div>`;
 
-        revealElements.forEach(element => {
-            const delayValue = element.dataset.revealDelay;
-            if (delayValue) {
-                const delay = delayValue.toString().trim();
-                element.style.transitionDelay = delay.endsWith('s') ? delay : `${delay}s`;
-            }
-            revealObserver.observe(element);
-        });
+    if (method === 'WU') return `
+        <div class="t-pp-header"><i class="fas fa-globe" style="color:#ffb300;font-size:1.05rem"></i><span>Western Union</span></div>
+        <div class="t-pp-wu-info">${_e(info).replace(/\n/g,'<br>')}</div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Visit any Western Union agent, or use wu.com / the app. Include your tracking ID as the reference.</div>`;
+
+    return '';
+}
+
+function _buildMethodCard(method, icon, name, sub, color, value) {
+    return `<button class="t-pm-card" data-method="${method}" onclick="switchPayment('${method}','${value.replace(/'/g,"\\'")}')">
+        <div class="t-pm-icon" style="--pm-clr:${color}"><i class="${icon}"></i></div>
+        <div class="t-pm-name">${name}</div>
+        <div class="t-pm-sub">${sub}</div>
+        <div class="t-pm-check"><i class="fas fa-circle-check"></i></div>
+    </button>`;
+}
+
+
+// ── MAIN TRACKING ENGINE ──────────────────────────────────────
+async function handleTracking() {
+    const trackingInput = document.getElementById('trackingInput');
+    const dashboard     = document.getElementById('dashboard-target');
+    const searchGate    = document.getElementById('search-gate');
+    const dashSection   = document.getElementById('t-dashboard');
+    const searchBtn     = document.getElementById('search-btn');
+    const errorMsg      = document.getElementById('error-msg');
+
+    if (!trackingInput || !dashboard || !searchGate || !searchBtn || !errorMsg) return;
+
+    const trackingNo = trackingInput.value.trim().toUpperCase();
+
+    // Escape for safe HTML insertion
+    const esc = (v) => String(v || '').replace(/[<>&"']/g, c =>
+        ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;', "'":'&#39;' }[c]));
+
+    const showError = (msg) => {
+        errorMsg.innerHTML = `<i class="fas fa-exclamation-triangle" style="margin-right:8px;"></i>${msg}`;
+        errorMsg.classList.remove('hidden');
+    };
+    const hideError = () => {
+        errorMsg.textContent = '';
+        errorMsg.classList.add('hidden');
+    };
+    const showSearch = () => {
+        searchGate.style.display = '';
+        if (dashSection) dashSection.style.display = 'none';
+    };
+
+    if (!trackingNo) {
+        dashboard.innerHTML = '';
+        showError('Please enter your shipment tracking code.');
+        return;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const menuBtn = document.getElementById('menu-btn');
-        const sideMenu = document.getElementById('side-menu');
+    if (!SUPABASE_URL || SUPABASE_URL.includes('YOUR_PROJECT_ID')) {
+        showError('Tracking system is not yet configured. Please contact support.');
+        return;
+    }
 
-        if (!menuBtn || !sideMenu) return;
+    searchBtn.disabled = true;
+    searchBtn.innerHTML = `<span class="t-search-spinner"></span> Locating…`;
+    hideError();
 
-        const refreshMenuState = () => {
-            const isOpen = !sideMenu.classList.contains('translate-x-full');
-            sideMenu.classList.toggle('menu-open', isOpen);
-        };
-
-        menuBtn.addEventListener('click', () => {
-            requestAnimationFrame(refreshMenuState);
-        });
-
-        refreshMenuState();
-    });
-    
-
-
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        const body = document.body;
-        const topLinks = Array.from(body.querySelectorAll('a[href="#Top"]'));
-        topLinks.forEach(link => {
-            if (link.textContent.trim().toLowerCase().includes('back to top')) {
-                const parent = link.closest('div, section, footer');
-                if (parent) parent.style.display = 'none';
+    try {
+        const url = `${SUPABASE_URL}/rest/v1/shipments_public?tracking_id=eq.${encodeURIComponent(trackingNo)}&select=*`;
+        const response = await fetch(url, {
+            headers: {
+                'apikey':        SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type':  'application/json',
             }
         });
 
-        const premiumBtn = document.createElement('button');
-        premiumBtn.id = 'premium-back-to-top';
-        premiumBtn.type = 'button';
-        premiumBtn.className = 'premium-back-to-top';
-        premiumBtn.innerHTML = '<span class="back-to-top-icon animate-">↑</span><span class="back-to-top-text"></span>';
-        premiumBtn.style.display = 'none';
-        premiumBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        body.appendChild(premiumBtn);
+        if (!response.ok) throw new Error(`${response.status}`);
 
-        // Choose the second top-level section if available, otherwise the second top-level div
-        let triggerElement = null;
-        try {
-            const sections = Array.from(document.querySelectorAll('section'));
-            const divs = Array.from(document.querySelectorAll('div'));
-            if (sections.length > 1) triggerElement = sections[1];
-            else if (divs.length > 1) triggerElement = divs[1];
-            else triggerElement = document.querySelector('section, div');
-        } catch (err) {
-            console.warn('Trigger selection fallback', err);
-            triggerElement = document.querySelector('section, div');
-        }
+        const resData = await response.json();
 
-        if (!triggerElement) {
-            console.debug('Premium back-to-top: no trigger element found, showing button by default');
-            premiumBtn.style.display = 'flex';
+        if (!Array.isArray(resData) || resData.length === 0) {
+            showSearch();
+            showError('No shipment found for that tracking ID. Please verify and try again.');
             return;
         }
 
-        const updateThreshold = () => triggerElement.getBoundingClientRect().bottom + window.scrollY;
-        let threshold = updateThreshold();
+        const s      = resData[0];
+        const isPaid = (s.payment_status || '').toLowerCase() === 'confirmed';
 
-        const updateButton = () => {
-            threshold = updateThreshold();
-            const show = window.scrollY > threshold;
-            premiumBtn.style.display = show ? 'flex' : 'none';
-            // debug logs
-            if (Math.abs(window.scrollY - threshold) < 50) {
-                console.debug('premium-back-to-top: scrollY', window.scrollY, 'threshold', threshold, 'show', show);
-            }
+        // ── Status badge color ──────────────────────────────────
+        const statusStr = s.status || 'In Transit';
+        const sl        = statusStr.toLowerCase();
+        const statusColor = sl.includes('deliver') ? 'green'
+            : (sl.includes('held') || sl.includes('hold') || sl.includes('customs') || sl.includes('clearance')) ? 'amber'
+            : (sl === 'pending' || sl.includes('pickup')) ? 'gray'
+            : 'blue';
+
+        // ── Status color hex for analytics strip ────────────────
+        const statusColorHex = statusColor === 'green'  ? '#22c55e'
+            : statusColor === 'amber' ? '#f59e0b'
+            : statusColor === 'gray'  ? '#94a3b8'
+            : '#3b82f6';
+
+        // ── Journey / progress calculations ────────────────────
+        const stepList = [
+            { name: s.status,     color: s.step1_color, label: 'Current Status' },
+            s.step2_name ? { name: s.step2_name, color: s.step2_color, label: s.step2_name } : null,
+            s.step3_name ? { name: s.step3_name, color: s.step3_color, label: s.step3_name } : null,
+            s.step4_name ? { name: s.step4_name, color: s.step4_color, label: s.step4_name } : null,
+        ].filter(Boolean);
+        const totalSteps = stepList.length;
+        const doneSteps  = stepList.filter(st => (st.color || '').includes('green')).length;
+        const pct        = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0;
+        const progColor  = pct >= 100 ? '#22c55e' : pct > 60 ? '#3b82f6' : '#f59e0b';
+
+        // ── SVG ring calculations (r=44, viewBox 100x100) ───────
+        const CIRC = 2 * Math.PI * 44;           // ≈ 276.46
+        const ringOffset = CIRC * (1 - pct / 100);
+        const [ringC1, ringC2] = pct >= 100 ? ['#22c55e','#4ade80']
+            : pct > 60 ? ['#3b82f6','#06b6d4']
+            : pct > 0  ? ['#f59e0b','#fb923c']
+            : ['#475569','#64748b'];
+
+        // ── Step dots row ────────────────────────────────────────
+        const ringDots = stepList.map((st, i) => {
+            const isDone   = (st.color || '').includes('green');
+            const isActive = !isDone && i === doneSteps;
+            const cls      = isDone ? 'done' : isActive ? 'active' : 'pending';
+            const connector = i < stepList.length - 1
+                ? `<div class="t-ring-connector${isDone ? ' done' : ''}"></div>` : '';
+            return `<div class="t-ring-dot ${cls}"></div>${connector}`;
+        }).join('');
+
+        // ── Short status / payment for metrics ───────────────────
+        const shortStatus  = statusStr.length > 12 ? statusStr.slice(0, 11) + '…' : statusStr;
+        const payColorHex  = isPaid ? '#22c55e' : '#f59e0b';
+
+        // ── Info row helper — with icon prefix ──────────────────
+        const ICONS = {
+            'Recipient':    'fa-user',
+            'Sender':       'fa-user-tag',
+            'Destination':  'fa-location-dot',
+            'Origin':       'fa-map-pin',
+            'Pickup':       'fa-calendar',
+            'Est. Delivery':'fa-calendar-check',
+            'Package':      'fa-box',
+            'Service':      'fa-truck',
+        };
+        const ir = (key, val, cls = '') => val ? `
+          <li class="t-info-row">
+            <span class="t-info-key"><i class="fas ${ICONS[key] || 'fa-circle-dot'}" style="width:12px;margin-right:6px;color:rgba(59,130,246,.5);font-size:10px;"></i>${key}</span>
+            <span class="t-info-val ${cls}">${esc(val)}</span>
+          </li>` : '';
+
+        const payDelay = isPaid ? 6 : 6;
+
+        // ── Safe inline-onclick values (no single-quotes in addr) ─
+        const btcSafe     = esc(s.btc_address         || '').replace(/'/g, '&#39;');
+        const usdtSafe    = esc(s.usdt_address        || '').replace(/'/g, '&#39;');
+        const wireSafe    = [s.bank_name, s.account_name, s.bank_number]
+            .map(v => esc(v || '').replace(/'/g, '&#39;')).join('|');
+        const paypalSafe  = esc(s.paypal_email        || '').replace(/'/g, '&#39;');
+        const cashappSafe = esc(s.cashapp_tag         || '').replace(/'/g, '&#39;');
+        const zelleSafe   = esc(s.zelle_id            || '').replace(/'/g, '&#39;');
+        const wuSafe      = esc(s.western_union_info  || '').replace(/'/g, '&#39;');
+
+        // ── Copy-to-clipboard helper (injected into page scope) ──
+        window._sflCopy = (val, btnId) => {
+            navigator.clipboard.writeText(val).then(() => {
+                const btn = document.getElementById(btnId);
+                if (!btn) return;
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.style.color = '#22c55e';
+                setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; }, 1800);
+            }).catch(() => {});
         };
 
-        window.addEventListener('scroll', updateButton, { passive: true });
-        window.addEventListener('resize', updateButton);
-        // run once after small delay so layout settles
-        setTimeout(updateButton, 120);
+        // ── Show dashboard, hide search ─────────────────────────
+        searchGate.style.display = 'none';
+        if (dashSection) dashSection.style.display = 'block';
+
+        dashboard.innerHTML = `
+<div class="t-dash-inner">
+
+  <!-- ── HEADER CARD ──────────────────────────────────────── -->
+  <div class="t-hdr-card t-fade-up t-d1">
+    <div>
+      <div class="t-hdr-eyebrow">
+        <i class="fas fa-satellite-dish" style="font-size:9px;"></i> Shipment Profile
+      </div>
+      <div class="t-tracking-id">${esc(trackingNo)}</div>
+      <div class="t-hdr-meta">
+        ${s.service_type ? `<span class="t-hdr-chip">${esc(s.service_type)}</span>` : ''}
+        ${s.priority     ? `<span class="t-hdr-chip">${esc(s.priority)}</span>`     : ''}
+      </div>
+    </div>
+    <div class="t-hdr-right">
+      <div class="t-status-pill ${statusColor}">
+        <span class="t-sdot${statusColor === 'blue' ? ' pulse' : ''}"></span>
+        ${esc(statusStr)}
+      </div>
+      <button class="t-back-btn" onclick="location.reload()">
+        <i class="fas fa-arrow-left"></i> New Search
+      </button>
+    </div>
+  </div>
+
+  <!-- ── CINEMATIC RING ANALYTICS ─────────────────────── -->
+  <div class="t-ring-wrap t-fade-up t-d2">
+    <div class="t-ring-eyebrow">
+      <span><i class="fas fa-chart-line" style="font-size:9px;margin-right:7px;"></i>Shipment Analysis</span>
+      <span class="t-live-tag"><span class="t-live-dot"></span> LIVE</span>
+    </div>
+    <div class="t-ring-body">
+      <div class="t-ring-left">
+        <svg viewBox="0 0 100 100" class="t-ring-svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="sflRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${ringC1}"/>
+              <stop offset="100%" stop-color="${ringC2}"/>
+            </linearGradient>
+            <filter id="sflRingGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,.055)" stroke-width="7"/>
+          <circle cx="50" cy="50" r="44" fill="none" stroke="${ringC1}" stroke-width="5" opacity="0.3"
+                  stroke-dasharray="${CIRC.toFixed(2)}" stroke-dashoffset="${CIRC.toFixed(2)}"
+                  stroke-linecap="round" transform="rotate(-90 50 50)"
+                  filter="url(#sflRingGlow)" class="t-ring-arc" style="transition:none;"/>
+          <circle cx="50" cy="50" r="44" fill="none" stroke="url(#sflRingGrad)" stroke-width="7"
+                  stroke-dasharray="${CIRC.toFixed(2)}" stroke-dashoffset="${CIRC.toFixed(2)}"
+                  stroke-linecap="round" transform="rotate(-90 50 50)"
+                  class="t-ring-arc" id="sflRingArc"/>
+          <text x="50" y="45" text-anchor="middle" dominant-baseline="middle"
+                fill="${progColor}" font-size="20" font-weight="700"
+                font-family="'JetBrains Mono',monospace">${pct}%</text>
+          <text x="50" y="61" text-anchor="middle"
+                fill="rgba(232,240,254,.28)" font-size="7.5"
+                font-family="'DM Sans',sans-serif" letter-spacing="2.5">COMPLETE</text>
+        </svg>
+        <div class="t-ring-dots">${ringDots}</div>
+      </div>
+      <div class="t-ring-right">
+        <div class="t-ring-metric">
+          <div class="t-ring-metric-lbl">Journey Complete</div>
+          <div class="t-ring-metric-val" style="color:${progColor};">${pct}%</div>
+        </div>
+        <div class="t-ring-metric">
+          <div class="t-ring-metric-lbl">Checkpoints</div>
+          <div class="t-ring-metric-val">${doneSteps}<span style="font-size:.78rem;color:var(--t-muted2);"> / ${totalSteps}</span></div>
+        </div>
+        <div class="t-ring-metric">
+          <div class="t-ring-metric-lbl">Payment</div>
+          <div class="t-ring-metric-val" style="color:${payColorHex};">${isPaid ? 'Cleared' : 'Required'}</div>
+        </div>
+        <div class="t-ring-metric">
+          <div class="t-ring-metric-lbl">Status</div>
+          <div class="t-ring-metric-val" style="color:${statusColorHex};">${esc(shortStatus)}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN GRID ─────────────────────────────────────────── -->
+  <div class="t-grid">
+
+    <!-- LEFT: Timeline -->
+    <div class="t-card t-fade-up t-d4">
+      <div class="t-card-top">
+        <span class="t-card-title"><i class="fas fa-route"></i> Transit Timeline</span>
+        <span class="t-live-tag"><span class="t-live-dot"></span> LIVE</span>
+      </div>
+      <div class="t-card-body">
+        <div class="t-timeline">
+          <div class="t-tl-line"></div>
+          ${renderEliteStep(s.status,     s.current_location, 'Current Status', 'fa-box',      s.step1_color, 0)}
+          ${renderEliteStep(s.step2_name, s.step2_location,   s.step2_name || 'Step 2',  'fa-truck',    s.step2_color, 1)}
+          ${renderEliteStep(s.step3_name, s.step3_location,   s.step3_name || 'Step 3',  'fa-plane',    s.step3_color, 2)}
+          ${renderEliteStep(s.step4_name, s.step4_location,   s.step4_name || 'Arrival', 'fa-box-open', s.step4_color, 3)}
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT column -->
+    <div class="t-right-col">
+
+      <!-- Shipment Details -->
+      <div class="t-card t-fade-up t-d5">
+        <div class="t-card-top">
+          <span class="t-card-title"><i class="fas fa-file-invoice"></i> Shipment Details</span>
+        </div>
+        <div class="t-card-body">
+          <ul class="t-info-list">
+            ${ir('Recipient',     s.name)}
+            ${ir('Sender',        s.senders_name)}
+            ${ir('Destination',   s.destination)}
+            ${ir('Origin',        s.origin)}
+            ${ir('Pickup',        s.pickup_date)}
+            ${ir('Est. Delivery', s.eta, 'accent')}
+            ${ir('Package',       s.package_details)}
+            ${ir('Service',       s.service_type)}
+          </ul>
+        </div>
+      </div>
+
+      ${isPaid ? `
+      <!-- Paid banner -->
+      <div class="t-paid-banner t-fade-up t-d5">
+        <div class="t-paid-icon"><i class="fas fa-circle-check"></i></div>
+        <div>
+          <div class="t-paid-title">Payment Confirmed</div>
+          <div class="t-paid-sub">Shipment cleared and proceeding on schedule.</div>
+        </div>
+      </div>` : ''}
+
+      <!-- Payment card (ultra-premium) -->
+      <div class="t-card t-fade-up t-d${payDelay}">
+        <div class="t-card-top">
+          <span class="t-card-title"><i class="fas fa-shield-halved"></i> Secure Payment</span>
+          <span class="t-pay-badge ${isPaid ? 'confirmed' : 'pending'}">${isPaid ? '✓ Cleared' : 'Required'}</span>
+        </div>
+        <div class="t-card-body">
+          ${isPaid
+            ? `<div class="t-pay-confirmed-banner">
+                 <div class="t-pcb-icon"><i class="fas fa-circle-check"></i></div>
+                 <div>
+                   <div class="t-pcb-title">Payment Verified</div>
+                   <div class="t-pcb-sub">Your shipment is fully cleared and proceeding on schedule.</div>
+                 </div>
+               </div>`
+            : `<div class="t-pay-invoice">
+                 <div>
+                   <div class="t-pay-invoice-label">Invoice Total</div>
+                   <div class="t-pay-invoice-amount">${esc(s.amount_due || '$0.00')}</div>
+                 </div>
+                 <div class="t-pay-invoice-info">
+                   <div class="t-pay-invoice-info-item"><i class="fas fa-lock"></i> SSL Secured</div>
+                   <div class="t-pay-invoice-info-item"><i class="fas fa-clock"></i> 24h Processing</div>
+                 </div>
+               </div>
+               <div class="t-pay-divider"><span>Select Payment Method</span></div>
+               <div class="t-pay-method-grid">
+                 ${s.btc_address            ? _buildMethodCard('BTC',    'fab fa-bitcoin',              'Bitcoin',       'BTC',       '#f7931a', btcSafe)     : ''}
+                 ${s.usdt_address           ? _buildMethodCard('USDT',   'fas fa-circle-dollar-to-slot','USDT',          'Tether',    '#26a17b', usdtSafe)    : ''}
+                 ${(s.bank_name||s.bank_number) ? _buildMethodCard('WIRE','fas fa-building-columns',   'Wire',          'Bank',      '#3b82f6', wireSafe)    : ''}
+                 ${s.paypal_email           ? _buildMethodCard('PAYPAL', 'fab fa-paypal',               'PayPal',        'Online',    '#0070ba', paypalSafe)  : ''}
+                 ${s.cashapp_tag            ? _buildMethodCard('CASHAPP','fas fa-mobile-screen-button', 'Cash App',      'Instant',   '#00d64f', cashappSafe) : ''}
+                 ${s.zelle_id               ? _buildMethodCard('ZELLE',  'fas fa-bolt',                 'Zelle',         'Bank',      '#6d1ed4', zelleSafe)   : ''}
+                 ${s.western_union_info     ? _buildMethodCard('WU',     'fas fa-globe',                'Western Union', 'Global',    '#ffb300', wuSafe)      : ''}
+               </div>
+               <div id="payment-detail-display" class="t-pay-panel">
+                 <div class="t-pay-panel-empty"><i class="fas fa-hand-pointer"></i><span>Select a payment method above to view details</span></div>
+               </div>
+               <div class="t-pay-security-bar">
+                 <span><i class="fas fa-lock"></i> 256-bit SSL</span>
+                 <span><i class="fas fa-shield-check"></i> Verified</span>
+                 <span><i class="fas fa-clock"></i> 24h Processing</span>
+                 <span><i class="fas fa-headset"></i> 24/7 Support</span>
+               </div>`
+          }
+        </div>
+      </div>
+
+    </div><!-- /t-right-col -->
+  </div><!-- /t-grid -->
+</div><!-- /t-dash-inner -->
+        `;
+
+        // Animate ring arcs after HTML is painted
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            document.querySelectorAll('.t-ring-arc').forEach(el => {
+                el.style.strokeDashoffset = String(ringOffset.toFixed(2));
+            });
+        }));
+
+    } catch (e) {
+        console.error('Tracking error:', e);
+        showSearch();
+        showError('Unable to load tracking details. Please check your connection and try again.');
+    } finally {
+        searchBtn.disabled = false;
+        searchBtn.innerHTML = `<i class="fas fa-satellite-dish"></i> Track Shipment`;
+    }
+}
+
+
+function renderEliteStep(name, loc, label, icon, colorClass, idx) {
+    if (!name) return '';
+
+    const COLOR_MAP = {
+        'text-blue-500':   '#3b82f6',
+        'text-green-500':  '#22c55e',
+        'text-amber-500':  '#f59e0b',
+        'text-red-500':    '#ef4444',
+        'text-purple-500': '#a855f7',
+        'text-cyan-500':   '#06b6d4',
+    };
+    const col   = COLOR_MAP[colorClass] || '#3b82f6';
+    const delay = (0.3 + (idx || 0) * 0.14).toFixed(2);
+
+    // Sanitise displayed text
+    const esc = (v) => String(v || '').replace(/[<>&"]/g, c =>
+        ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;' }[c]));
+
+    // ── Determine step state ─────────────────────────────────
+    const isGreen = (colorClass || '').includes('green');
+    const isHold  = (colorClass || '').includes('amber') || (colorClass || '').includes('red');
+    let state, stateIcon, stateLabel, contentVariant, iconVariant;
+
+    if (isGreen) {
+        state          = 'completed';
+        stateIcon      = 'fa-circle-check';
+        stateLabel     = `<span class="t-step-state-label" style="color:#22c55e;">&#10003; Completed</span>`;
+        contentVariant = 'completed';
+        iconVariant    = 'done';
+    } else if (isHold) {
+        state          = 'on-hold';
+        stateIcon      = 'fa-triangle-exclamation';
+        stateLabel     = `<span class="t-step-state-label" style="color:#f59e0b;">&#9888; On Hold</span>`;
+        contentVariant = 'on-hold';
+        iconVariant    = 'hold';
+    } else if (idx === 0) {
+        state          = 'active';
+        stateIcon      = icon;
+        stateLabel     = `<span class="t-step-state-label" style="color:#3b82f6;">&#9679; Active Now</span>`;
+        contentVariant = '';
+        iconVariant    = 'is-current';
+    } else {
+        state          = 'upcoming';
+        stateIcon      = 'fa-circle-dot';
+        stateLabel     = `<span class="t-step-state-label" style="color:rgba(232,240,254,.3);">&#9675; Upcoming</span>`;
+        contentVariant = 'upcoming';
+        iconVariant    = '';
+    }
+
+    // ── Icon color / style per state ─────────────────────────
+    const iconColor  = isGreen ? '#22c55e' : isHold ? '#f59e0b' : state === 'upcoming' ? 'rgba(232,240,254,.2)' : col;
+    const iconBg     = isGreen ? 'rgba(34,197,94,.12)'   : isHold ? 'rgba(245,158,11,.12)'  : state === 'upcoming' ? 'rgba(255,255,255,.03)' : `${col}20`;
+    const iconBorder = isGreen ? 'rgba(34,197,94,.3)'    : isHold ? 'rgba(245,158,11,.28)'  : state === 'upcoming' ? 'rgba(255,255,255,.07)' : `${col}60`;
+
+    return `
+    <div class="t-step" style="animation-delay:${delay}s;">
+      <div class="t-step-icon ${iconVariant}"
+           style="color:${iconColor};background:${iconBg};border:1.5px solid ${iconBorder};">
+        <i class="fas ${stateIcon}"></i>
+      </div>
+      <div class="t-step-content ${contentVariant}" style="border-left-color:${isGreen ? 'rgba(34,197,94,.25)' : isHold ? 'rgba(245,158,11,.22)' : state === 'upcoming' ? 'rgba(255,255,255,.04)' : `${col}40`};">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
+          <div class="t-step-seq" style="color:${iconColor};">${esc(label)}</div>
+          ${stateLabel}
+        </div>
+        <div class="t-step-name" style="${state === 'upcoming' ? 'opacity:.5;' : ''}">${esc(name)}</div>
+        ${loc ? `<div class="t-step-loc">
+          <i class="fas fa-location-dot" style="font-size:9px;margin-right:5px;opacity:.5;"></i>${esc(loc)}
+        </div>` : ''}
+      </div>
+    </div>`;
+}
+
+
+function initializeRevealAnimations() {
+    const revealElements = document.querySelectorAll('.reveal-init, .reveal-from-left, .reveal-from-right, .reveal-from-bottom');
+    if (revealElements.length === 0) return;
+
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            el.classList.add('reveal-active');
+            obs.unobserve(el);
+        });
+    }, { root: null, rootMargin: '0px 0px -120px 0px', threshold: 0.15 });
+
+    revealElements.forEach(el => {
+        const delay = el.dataset.revealDelay;
+        if (delay) {
+            const d = delay.toString().trim();
+            el.style.transitionDelay = d.endsWith('s') ? d : `${d}s`;
+        }
+        observer.observe(el);
     });
+}
 
 
-    window.addEventListener('load', () => {
-        const loader = document.getElementById('loader');
-        const hideLoaderAndStartReveals = () => {
-            if (loader) {
-                loader.classList.add('hidden');
-            }
-            initializeRevealAnimations();
-        };
+document.addEventListener('DOMContentLoaded', () => {
+    // Auto-fill tracking ID from ?id= query param and trigger search
+    const params = new URLSearchParams(window.location.search);
+    const prefilledId = params.get('id');
+    if (prefilledId) {
+        const input = document.getElementById('trackingInput');
+        if (input) {
+            input.value = prefilledId.toUpperCase();
+            handleTracking();
+        }
+    }
 
-        if (loader) {
-            setTimeout(hideLoaderAndStartReveals, 1600);
-        } else {
-            initializeRevealAnimations();
+    // Hide old "back to top" links, inject premium button
+    const topLinks = Array.from(document.body.querySelectorAll('a[href="#Top"]'));
+    topLinks.forEach(link => {
+        if (link.textContent.trim().toLowerCase().includes('back to top')) {
+            const parent = link.closest('div, section, footer');
+            if (parent) parent.style.display = 'none';
         }
     });
+
+    const premiumBtn = document.createElement('button');
+    premiumBtn.id        = 'premium-back-to-top';
+    premiumBtn.type      = 'button';
+    premiumBtn.className = 'premium-back-to-top';
+    premiumBtn.innerHTML = '<span class="back-to-top-icon">↑</span><span class="back-to-top-text"></span>';
+    premiumBtn.style.display = 'none';
+    premiumBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    document.body.appendChild(premiumBtn);
+
+    let triggerElement = null;
+    try {
+        const sections = Array.from(document.querySelectorAll('section'));
+        const divs     = Array.from(document.querySelectorAll('div'));
+        if (sections.length > 1)     triggerElement = sections[1];
+        else if (divs.length > 1)    triggerElement = divs[1];
+        else                         triggerElement = document.querySelector('section, div');
+    } catch (err) {
+        triggerElement = document.querySelector('section, div');
+    }
+
+    if (!triggerElement) {
+        premiumBtn.style.display = 'flex';
+        return;
+    }
+
+    const updateBtn = () => {
+        const threshold = triggerElement.getBoundingClientRect().bottom + window.scrollY;
+        premiumBtn.style.display = window.scrollY > threshold ? 'flex' : 'none';
+    };
+    window.addEventListener('scroll', updateBtn, { passive: true });
+    window.addEventListener('resize', updateBtn);
+    setTimeout(updateBtn, 120);
+
+});
+
+
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    const run = () => {
+        if (loader) {
+            loader.style.transition = 'opacity .5s ease';
+            loader.style.opacity = '0';
+            loader.style.pointerEvents = 'none';
+            setTimeout(() => { loader.style.display = 'none'; }, 520);
+        }
+        initializeRevealAnimations();
+    };
+    if (loader) setTimeout(run, 1400);
+    else run();
+});

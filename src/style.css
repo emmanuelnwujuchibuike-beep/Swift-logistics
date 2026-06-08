@@ -304,8 +304,7 @@ html {
 }
   
   .animated-gradient {
-  /* Make the background larger than the container to allow movement */
-  background: linear-gradient(-15deg, #6890e6,white, #e46d6d,white, white);
+  background: linear-gradient(-15deg, #f3f6f9,rgb(158, 191, 238),white,rgb(93, 150, 243), rgb(241, 240, 241),white);
   background-size: 400% 400%;
   animation: gradientShift 10s ease infinite;
 }

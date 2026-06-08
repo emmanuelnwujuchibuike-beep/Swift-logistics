@@ -1,349 +1,1421 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>payment</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="output.css">
-    <link rel="stylesheet" href="input.css">
-    <link rel="icon" type="image/png" href="./image/loadingicon-removebg-preview.png" class="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Shipment — Swift Freight Logistics</title>
+  <meta name="description" content="Track your Swift Freight shipment in real-time. Enter your tracking ID for live status, location, and delivery updates.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Track Your Shipment — Swift Freight Logistics">
+  <meta property="og:description" content="Real-time shipment tracking. Enter your tracking ID for live status and delivery updates.">
+  <meta property="og:image" content="https://swiftfreightlogix.netlify.app/image/sfl-logo.svg">
+  <meta property="og:url" content="https://swiftfreightlogix.netlify.app/payment.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://swiftfreightlogix.netlify.app/image/sfl-logo.svg">
+  <link rel="icon" type="image/svg+xml" href="./image/sfl-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./image/loadingicon-removebg-preview.png">
+  <link rel="apple-touch-icon" href="./image/loadingicon-removebg-preview.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="output.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { display: ['Bebas Neue'], body: ['DM Sans'], mono: ['JetBrains Mono'] } } }
+    }
+  </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <style>
+    /* ══════════════════════════════════════════════════════════
+       SWIFT FREIGHT — PREMIUM TRACKING SYSTEM
+       All classes prefixed "t-" to avoid Tailwind collisions.
+       Animations: opacity + transform ONLY (GPU-composited).
+       Mobile: blur reduced, shadows stripped at ≤480px.
+    ══════════════════════════════════════════════════════════ */
 
-    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
-    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <script>tailwind.config={theme:{extend:{fontFamily:{display:['Bebas Neue'],body:['DM Sans'],mono:['JetBrains Mono']}}}}</script>
+    :root {
+      --t-bg:       #030818;
+      --t-bg2:      #060d20;
+      --t-bg3:      #080f26;
+      --t-surface:  rgba(6,13,32,0.88);
+      --t-accent:   #3b82f6;
+      --t-accent2:  #60a5fa;
+      --t-cyan:     #06b6d4;
+      --t-green:    #10b981;
+      --t-amber:    #f59e0b;
+      --t-red:      #ef4444;
+      --t-border:   rgba(255,255,255,0.07);
+      --t-b2:       rgba(59,130,246,0.2);
+      --t-text:     #e8f0fe;
+      --t-muted:    rgba(232,240,254,0.52);
+      --t-muted2:   rgba(232,240,254,0.3);
+    }
+
+    /* Light palette for tracking UI */
+    [data-theme="light"] {
+      --t-bg:      #f4f6fc;
+      --t-bg2:     #edf1fb;
+      --t-bg3:     #e4eaf6;
+      --t-surface: rgba(255,255,255,0.94);
+      --t-accent:  #1d4ed8;
+      --t-accent2: #2563eb;
+      --t-cyan:    #0891b2;
+      --t-green:   #059669;
+      --t-amber:   #d97706;
+      --t-red:     #dc2626;
+      --t-border:  rgba(5,16,42,0.07);
+      --t-b2:      rgba(29,78,216,0.14);
+      --t-text:    #05102a;
+      --t-muted:   rgba(5,16,42,0.58);
+      --t-muted2:  rgba(5,16,42,0.37);
+    }
+
+    /* ═══════════════════════════════════════════
+       NAV DESIGN SYSTEM (matches body aesthetic)
+    ═══════════════════════════════════════════ */
+    :root {
+      --accent:      #3b82f6;
+      --accent-hi:   #60a5fa;
+      --accent-deep: #1d4ed8;
+      --accent-dim:  rgba(59,130,246,.1);
+      --accent-rgb:  59,130,246;
+      --text:        #e8f0fe;
+      --text-rgb:    232,240,254;
+      --muted:       rgba(232,240,254,.68);
+      --muted2:      rgba(232,240,254,.40);
+      --border:      rgba(232,240,254,.065);
+      --border2:     rgba(232,240,254,.11);
+      --aborder:     rgba(59,130,246,.2);
+      --hdr-bg:      rgba(3,8,26,.88);
+      --nav-drop-bg: rgba(3,8,26,.97);
+      --nav-item:    rgba(232,240,254,.85);
+    }
+    [data-theme="light"] {
+      --accent:      #1d4ed8;
+      --accent-hi:   #3b82f6;
+      --accent-deep: #1e40af;
+      --accent-dim:  rgba(29,78,216,.08);
+      --accent-rgb:  29,78,216;
+      --text:        #05102a;
+      --text-rgb:    5,16,42;
+      --muted:       rgba(5,16,42,.68);
+      --muted2:      rgba(5,16,42,.42);
+      --border:      rgba(5,16,42,.07);
+      --border2:     rgba(5,16,42,.12);
+      --aborder:     rgba(29,78,216,.16);
+      --hdr-bg:      rgba(240,244,252,.92);
+      --nav-drop-bg: rgba(240,244,252,.98);
+      --nav-item:    rgba(5,16,42,.88);
+    }
+    .gt { background: linear-gradient(115deg, var(--accent) 0%, var(--accent-hi) 55%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent) 50%, var(--accent-hi) 100%); background-size: 200% 100%; background-position: left; color: #fff; font: 700 .74rem/1 'DM Sans'; letter-spacing: .12em; text-transform: uppercase; padding: 12px 26px; border-radius: 2px; border: none; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background-position .5s ease, box-shadow .3s, transform .25s; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+    .btn-primary:hover { background-position: right; box-shadow: 0 0 40px rgba(var(--accent-rgb),.38); transform: translateY(-2px); }
+    .btn-outline { display: inline-flex; align-items: center; gap: 9px; background: transparent; color: var(--muted); font: 600 .74rem/1 'DM Sans'; letter-spacing: .1em; text-transform: uppercase; padding: 11px 22px; border-radius: 2px; border: 1px solid var(--border2); cursor: pointer; text-decoration: none; transition: all .3s; white-space: nowrap; clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px)); }
+    .btn-outline:hover, .btn-outline.active { color: var(--accent); border-color: rgba(var(--accent-rgb),.45); background: rgba(var(--accent-rgb),.06); }
+    #hdr { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--hdr-bg); backdrop-filter: blur(32px) saturate(1.6); -webkit-backdrop-filter: blur(32px) saturate(1.6); border-bottom: 1px solid var(--border); transition: background .4s, box-shadow .4s, border-color .4s; }
+    #hdr.scrolled { box-shadow: 0 4px 48px rgba(0,0,0,.4), 0 1px 0 rgba(var(--accent-rgb),.1); border-bottom-color: rgba(var(--accent-rgb),.14); }
+    [data-theme="light"] #hdr { background: rgba(240,244,252,.88); border-bottom: 1px solid rgba(5,16,42,.06); }
+    .hdr-inner { display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 74px; max-width: 1400px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 14px; text-decoration: none; flex-shrink: 0; }
+    .logo img { width: 40px; height: 40px; filter: drop-shadow(0 2px 12px rgba(var(--accent-rgb),.42)); transition: filter .3s; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-name { font-family: 'Bebas Neue'; font-size: 1.08rem; letter-spacing: .18em; line-height: 1.1; }
+    .logo-sub  { font-size: 6px; letter-spacing: .52em; text-transform: uppercase; color: rgba(var(--accent-rgb),.38); margin-top: 2px; }
+    .nav-links { display: flex; align-items: center; gap: 38px; list-style: none; }
+    .nav-links a { font: 500 .78rem/1 'DM Sans'; letter-spacing: .05em; color: var(--muted); text-decoration: none; transition: color .2s; position: relative; padding-bottom: 2px; }
+    .nav-links a::after { content: ''; position: absolute; left: 50%; bottom: -4px; width: 0; height: 1px; background: linear-gradient(90deg, var(--accent), var(--accent-hi)); transition: width .35s, left .35s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; left: 0; }
+    .hdr-actions { display: flex; align-items: center; gap: 12px; }
+    .mobile-controls { display: none; align-items: center; gap: 10px; }
+    .theme-btn { width: 40px; height: 40px; border-radius: 2px; display: flex; align-items: center; justify-content: center; background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.18); color: var(--accent); cursor: pointer; flex-shrink: 0; transition: all .25s; clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)); }
+    .theme-btn:hover { background: rgba(var(--accent-rgb),.16); transform: scale(1.06); }
+    .theme-btn i { font-size: .8rem; pointer-events: none; }
+    .menu-btn { display: none; width: 44px; height: 44px; border-radius: 2px; flex-direction: column; align-items: center; justify-content: center; gap: 5.5px; background: rgba(var(--accent-rgb),.06); border: 1px solid rgba(var(--accent-rgb),.14); cursor: pointer; z-index: 310; flex-shrink: 0; transition: background .25s, border-color .25s; clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px)); }
+    .menu-btn:hover { background: rgba(var(--accent-rgb),.12); border-color: rgba(var(--accent-rgb),.28); }
+    .menu-btn span { display: block; width: 22px; height: 1.5px; background: var(--accent); border-radius: 1px; transition: transform .42s cubic-bezier(.16,1,.3,1), opacity .3s, width .3s; transform-origin: center; }
+    .menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; width: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    #mobile-nav { position: fixed; inset: 0; z-index: 250; background: var(--nav-drop-bg); backdrop-filter: blur(40px) saturate(1.8); -webkit-backdrop-filter: blur(40px) saturate(1.8); overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity .5s cubic-bezier(.76,0,.24,1); display: none; }
+    #mobile-nav.open { opacity: 1; pointer-events: all; }
+    [data-theme="light"] #mobile-nav { background: rgba(240,244,252,.97); }
+    #mobile-nav::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), var(--accent-hi), var(--accent), transparent); opacity: .6; }
+    .mob-nav-inner { position: relative; z-index: 2; padding: 36px 36px 52px; display: flex; flex-direction: column; min-height: 100%; }
+    .mob-nav-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px; }
+    .mob-nav-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+    .mob-nav-logo img { width: 34px; height: 34px; filter: drop-shadow(0 2px 10px rgba(var(--accent-rgb),.4)); }
+    .mob-nav-logo-name { font-family: 'Bebas Neue'; font-size: .95rem; letter-spacing: .18em; }
+    .mob-nav-logo-name span:first-child { -webkit-text-fill-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-hi)); -webkit-background-clip: text; background-clip: text; }
+    .mob-nav-logo-name span:last-child { color: rgba(var(--text-rgb),.75); margin-left: 5px; }
+    .mob-close-btn { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.2); border-radius: 2px; cursor: pointer; color: var(--accent); font-size: .85rem; transition: background .25s, transform .3s; flex-shrink: 0; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+    .mob-close-btn:hover { background: rgba(var(--accent-rgb),.16); transform: rotate(90deg) scale(1.06); }
+    .mob-close-btn i { pointer-events: none; }
+    .mob-nav-label { font: 700 7px/1 'DM Sans'; letter-spacing: .48em; text-transform: uppercase; color: rgba(var(--accent-rgb),.38); margin-bottom: 20px; }
+    .mob-nav-links { list-style: none; display: flex; flex-direction: column; gap: 0; }
+    .mob-nav-links li { border-bottom: 1px solid var(--border); opacity: 0; transform: translateX(-24px); transition: opacity .0s, transform .0s; }
+    #mobile-nav.open .mob-nav-links li { opacity: 1; transform: translateX(0); transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1); }
+    #mobile-nav.open .mob-nav-links li:nth-child(1){transition-delay:.08s}
+    #mobile-nav.open .mob-nav-links li:nth-child(2){transition-delay:.15s}
+    #mobile-nav.open .mob-nav-links li:nth-child(3){transition-delay:.22s}
+    #mobile-nav.open .mob-nav-links li:nth-child(4){transition-delay:.29s}
+    #mobile-nav.open .mob-nav-links li:nth-child(5){transition-delay:.36s}
+    .mob-nav-links a { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; font: 700 2rem/1 'Bebas Neue'; letter-spacing: .08em; color: var(--nav-item); text-decoration: none; transition: color .2s, padding-left .3s; }
+    .mob-nav-links a .nav-arrow { width: 32px; height: 32px; border-radius: 2px; display: flex; align-items: center; justify-content: center; background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.18); color: var(--accent); font-size: .65rem; transition: background .25s, transform .3s; clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px)); }
+    .mob-nav-links a:hover { color: var(--accent); padding-left: 8px; }
+    .mob-nav-links a:hover .nav-arrow { background: rgba(var(--accent-rgb),.18); transform: translateX(4px); }
+    .mob-nav-cta { margin-top: 36px; opacity: 0; transform: translateY(16px); transition: opacity .0s, transform .0s; display: flex; flex-direction: column; gap: 10px; }
+    #mobile-nav.open .mob-nav-cta { opacity: 1; transform: translateY(0); transition: opacity .5s ease .44s, transform .5s cubic-bezier(.16,1,.3,1) .44s; }
+    .mob-nav-cta .btn-primary, .mob-nav-cta .btn-outline { width: 100%; justify-content: center; }
+    .mob-nav-footer { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; opacity: 0; transition: opacity .0s; }
+    #mobile-nav.open .mob-nav-footer { opacity: 1; transition: opacity .5s ease .52s; }
+    .mob-nav-footer p { font: 500 .7rem/1 'DM Sans'; letter-spacing: .04em; color: var(--muted2); }
+    .mob-social-links { display: flex; gap: 10px; }
+    .mob-social-links a { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 2px; border: 1px solid var(--border); color: var(--muted2); font-size: .72rem; transition: color .2s, border-color .2s, background .2s; text-decoration: none; }
+    .mob-social-links a:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),.35); background: rgba(var(--accent-rgb),.07); }
+    @media (max-width: 1023px) {
+      .hdr-inner { padding: 0 24px; }
+      .nav-links, .hdr-actions { display: none !important; }
+      .menu-btn { display: flex !important; }
+      .mobile-controls { display: flex !important; }
+      #mobile-nav { display: block; }
+    }
+    @media (max-width: 767px) {
+      #hdr .hdr-inner { padding: 0 20px; }
+      .mob-nav-inner { padding: 28px 22px 44px; }
+      .mob-nav-topbar { margin-bottom: 44px; }
+      .mob-nav-links a { font-size: 1.7rem; }
+    }
+
+    /* ─── Keyframes ─────────────────────────────────────── */
+    @keyframes t-up {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes t-in {
+      from { opacity:0; }
+      to   { opacity:1; }
+    }
+    @keyframes t-sx {
+      from { opacity:0; transform:translateX(-20px); }
+      to   { opacity:1; transform:translateX(0); }
+    }
+    @keyframes t-zoom {
+      from { opacity:0; transform:scale(0.72); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    @keyframes t-line-v {
+      from { transform:scaleY(0); transform-origin:top; }
+      to   { transform:scaleY(1); transform-origin:top; }
+    }
+    @keyframes t-line-h {
+      from { transform:scaleX(0); transform-origin:left; }
+      to   { transform:scaleX(1); transform-origin:left; }
+    }
+    @keyframes t-pulse-ring {
+      0%   { box-shadow: 0 0 0 0   rgba(59,130,246,.55); }
+      70%  { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
+      100% { box-shadow: 0 0 0 0   rgba(59,130,246,0); }
+    }
+    @keyframes t-scan {
+      0%   { top:-3px; opacity:.7; }
+      100% { top:110%; opacity:0; }
+    }
+    @keyframes t-ticker {
+      from { transform:translateX(0); }
+      to   { transform:translateX(-50%); }
+    }
+    @keyframes t-blink {
+      0%,100% { opacity:1; } 50% { opacity:0; }
+    }
+    @keyframes t-spin {
+      to { transform:rotate(360deg); }
+    }
+
+    /* Utility animation classes */
+    .t-fade-up  { opacity:0; animation:t-up  .65s cubic-bezier(.22,1,.36,1) both; }
+    .t-fade-in  { opacity:0; animation:t-in  .5s ease both; }
+    .t-slide-x  { opacity:0; animation:t-sx  .6s cubic-bezier(.22,1,.36,1) both; }
+    .t-zoom-in  { opacity:0; animation:t-zoom .55s cubic-bezier(.34,1.56,.64,1) both; }
+
+    /* Staggered delays */
+    .t-d0 { animation-delay:.05s; } .t-d1 { animation-delay:.12s; }
+    .t-d2 { animation-delay:.22s; } .t-d3 { animation-delay:.32s; }
+    .t-d4 { animation-delay:.42s; } .t-d5 { animation-delay:.52s; }
+    .t-d6 { animation-delay:.62s; } .t-d7 { animation-delay:.74s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after {
+        animation-duration:.01ms !important;
+        animation-delay:0ms !important;
+        transition-duration:.01ms !important;
+      }
+    }
+
+    /* ─── Page Shell ─────────────────────────────────────── */
+    body { background: var(--t-bg) !important; }
+
+    #t-page {
+      background: var(--t-bg);
+      min-height: 100vh;
+      position: relative;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Subtle CSS grid background */
+    #t-page::before {
+      content:'';
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(59,130,246,.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,.028) 1px, transparent 1px);
+      background-size:52px 52px;
+    }
+    /* Soft radial glow center-top */
+    #t-page::after {
+      content:'';
+      position:fixed; top:-15%; left:50%; transform:translateX(-50%);
+      width:90vw; height:55vh; z-index:0; pointer-events:none;
+      background:radial-gradient(ellipse at center, rgba(59,130,246,.055) 0%, transparent 68%);
+    }
+
+    /* ─── Ticker ─────────────────────────────────────────── */
+    .t-ticker-wrap {
+      position:relative; overflow:hidden;
+      background:rgba(3,8,26,.97);
+      border-bottom:1px solid var(--t-border);
+      height:38px;
+    }
+    .t-ticker-track {
+      display:flex; align-items:center;
+      white-space:nowrap; height:100%;
+      animation:t-ticker 32s linear infinite;
+    }
+    .t-ticker-track:hover { animation-play-state:paused; }
+    .t-ticker-item {
+      display:inline-flex; align-items:center; gap:9px;
+      padding:0 36px; height:100%;
+      font:600 10px/1 'DM Sans'; letter-spacing:.32em; text-transform:uppercase;
+      color:rgba(232,240,254,.48);
+      border-right:1px solid rgba(255,255,255,.05);
+    }
+    .t-ticker-live { width:6px; height:6px; border-radius:50%; background:#22c55e; box-shadow:0 0 8px #22c55e; flex-shrink:0; }
+    .t-ticker-fl,.t-ticker-fr {
+      position:absolute; top:0; bottom:0; width:56px; z-index:2; pointer-events:none;
+    }
+    .t-ticker-fl { left:0;  background:linear-gradient(to right,  rgba(3,8,26,.97), transparent); }
+    .t-ticker-fr { right:0; background:linear-gradient(to left,   rgba(3,8,26,.97), transparent); }
+
+    /* ─── Search Gate ─────────────────────────────────────── */
+    #t-search-wrap {
+      position:relative; z-index:1;
+      display:flex; align-items:center; justify-content:center;
+      min-height:calc(100vh - 112px);
+      padding:48px 20px;
+    }
+
+    .t-search-card {
+      width:100%; max-width:500px;
+      background:rgba(6,13,32,.9);
+      border:1px solid var(--t-b2);
+      border-radius:4px;
+      padding:52px 46px;
+      backdrop-filter:blur(28px);
+      -webkit-backdrop-filter:blur(28px);
+      box-shadow:
+        0 0 0 1px rgba(59,130,246,.08) inset,
+        0 1px 0 rgba(255,255,255,.06) inset,
+        0 48px 120px rgba(0,0,0,.65);
+      position:relative; overflow:hidden;
+    }
+    /* Animated scan line */
+    .t-search-card::after {
+      content:'';
+      position:absolute; left:0; right:0; height:2px; z-index:0;
+      background:linear-gradient(90deg, transparent, rgba(59,130,246,.65), transparent);
+      animation:t-scan 4s ease-in-out infinite;
+      pointer-events:none;
+    }
+    /* Top accent bar */
+    .t-search-card::before {
+      content:'';
+      position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg, var(--t-accent), var(--t-cyan), transparent);
+    }
+
+    .t-search-eyebrow {
+      display:flex; align-items:center; gap:10px;
+      font:600 10px/1 'JetBrains Mono'; letter-spacing:.42em; text-transform:uppercase;
+      color:var(--t-cyan); margin-bottom:16px; position:relative; z-index:1;
+    }
+    .t-search-eyebrow::before {
+      content:''; width:24px; height:1px; background:var(--t-cyan); flex-shrink:0;
+    }
+
+    .t-search-title {
+      font-family:'Bebas Neue';
+      font-size:clamp(2.4rem,7vw,3.6rem);
+      letter-spacing:.055em; line-height:1;
+      color:var(--t-text); margin-bottom:12px;
+      position:relative; z-index:1;
+    }
+    .t-search-title span { color:var(--t-accent); }
+
+    .t-search-sub {
+      font:400 .84rem/1.65 'DM Sans';
+      color:var(--t-muted); margin-bottom:36px;
+      position:relative; z-index:1;
+    }
+
+    /* Input */
+    .t-input-wrap { position:relative; margin-bottom:12px; }
+    .t-input-wrap i {
+      position:absolute; left:16px; top:50%; transform:translateY(-50%);
+      color:rgba(59,130,246,.5); font-size:14px; pointer-events:none;
+    }
+    #trackingInput {
+      width:100%;
+      background:rgba(3,8,26,.75);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:3px;
+      padding:16px 16px 16px 46px;
+      font:600 .88rem/1 'JetBrains Mono';
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--t-text); outline:none;
+      transition:border-color .25s, box-shadow .25s;
+    }
+    #trackingInput:focus {
+      border-color:var(--t-accent);
+      box-shadow:0 0 0 3px rgba(59,130,246,.12);
+    }
+    #trackingInput::placeholder {
+      color:rgba(232,240,254,.24);
+      font-weight:400; letter-spacing:.15em;
+    }
+
+    /* Search button */
+    #search-btn {
+      width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+      background:var(--t-accent); color:#fff; border:none; border-radius:3px;
+      padding:17px 24px;
+      font:700 .78rem/1 'DM Sans'; letter-spacing:.2em; text-transform:uppercase;
+      cursor:pointer; position:relative; overflow:hidden;
+      clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+      transition:background .2s, transform .15s, box-shadow .2s;
+    }
+    #search-btn::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 60%);
+      pointer-events:none;
+    }
+    #search-btn:hover  { background:#2563eb; transform:translateY(-2px); box-shadow:0 18px 52px rgba(59,130,246,.4); }
+    #search-btn:active { transform:translateY(0); }
+    #search-btn:disabled { opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .t-search-spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.25); border-top-color:#fff; border-radius:50%; animation:t-spin .7s linear infinite; }
+
+    /* Error */
+    #error-msg {
+      margin-top:14px; border-radius:3px;
+      border:1px solid rgba(239,68,68,.22);
+      background:rgba(239,68,68,.07);
+      padding:12px 16px;
+      font:600 .71rem/1.5 'DM Sans'; letter-spacing:.14em; text-transform:uppercase;
+      color:#fca5a5;
+    }
+    #error-msg.hidden { display:none !important; }
+
+    /* Hint */
+    .t-hint {
+      display:flex; align-items:flex-start; gap:10px; margin-top:18px;
+      padding:12px 16px; border-radius:3px;
+      border:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.02);
+      font:.78rem/1.55 'DM Sans'; color:var(--t-muted);
+      position:relative; z-index:1;
+    }
+    .t-hint i { color:var(--t-amber); flex-shrink:0; margin-top:2px; font-size:13px; }
+
+    /* ─── Dashboard Wrapper ─────────────────────────────── */
+    #t-dashboard {
+      position:relative; z-index:1;
+      padding:28px 20px 80px;
+    }
+
+    .t-dash-inner { max-width:1120px; margin:0 auto; }
+
+    /* Header card */
+    .t-hdr-card {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      flex-wrap:wrap; gap:20px;
+      padding:28px 32px; margin-bottom:20px;
+      background:var(--t-surface);
+      border:1px solid var(--t-border);
+      border-radius:4px;
+      backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+      position:relative; overflow:hidden;
+    }
+    .t-hdr-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,var(--t-accent),var(--t-cyan),transparent);
+    }
+    .t-hdr-eyebrow {
+      font:600 9px/1 'JetBrains Mono'; letter-spacing:.42em; text-transform:uppercase;
+      color:var(--t-cyan); margin-bottom:10px; display:flex; align-items:center; gap:8px;
+    }
+    .t-hdr-eyebrow::before { content:''; width:18px; height:1px; background:var(--t-cyan); }
+    .t-tracking-id {
+      font-family:'Bebas Neue';
+      font-size:clamp(2rem,5vw,3rem);
+      letter-spacing:.1em; line-height:1;
+      color:var(--t-text); margin-bottom:8px;
+    }
+    .t-hdr-meta {
+      display:flex; align-items:center; gap:10px;
+      flex-wrap:wrap;
+    }
+    .t-hdr-chip {
+      font:500 .68rem/1 'DM Sans'; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--t-muted2);
+      background:rgba(255,255,255,.04); border:1px solid var(--t-border);
+      border-radius:2px; padding:4px 10px;
+    }
+
+    .t-hdr-right { display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+
+    /* Status pill */
+    .t-status-pill {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 16px; border-radius:2px;
+      font:700 .68rem/1 'DM Sans'; letter-spacing:.26em; text-transform:uppercase;
+    }
+    .t-status-pill.blue   { background:rgba(59,130,246,.1);  border:1px solid rgba(59,130,246,.25);  color:#93c5fd; }
+    .t-status-pill.green  { background:rgba(16,185,129,.1);  border:1px solid rgba(16,185,129,.25);  color:#6ee7b7; }
+    .t-status-pill.amber  { background:rgba(245,158,11,.1);  border:1px solid rgba(245,158,11,.25);  color:#fcd34d; }
+    .t-status-pill.red    { background:rgba(239,68,68,.1);   border:1px solid rgba(239,68,68,.25);   color:#fca5a5; }
+    .t-status-pill.gray   { background:rgba(148,163,184,.1); border:1px solid rgba(148,163,184,.15); color:rgba(232,240,254,.5); }
+    .t-sdot {
+      width:7px; height:7px; border-radius:50%; background:currentColor;
+    }
+    .t-sdot.pulse { animation:t-pulse-ring 2s ease infinite; }
+
+    /* Back button */
+    .t-back-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      background:none; border:1px solid var(--t-border); border-radius:3px;
+      padding:9px 18px;
+      font:600 .7rem/1 'DM Sans'; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--t-muted); cursor:pointer; transition:all .2s;
+    }
+    .t-back-btn:hover { border-color:rgba(59,130,246,.4); color:var(--t-text); }
+
+    /* ─── Main Grid ─────────────────────────────────────── */
+    .t-grid {
+      display:grid;
+      grid-template-columns:1.1fr .95fr;
+      gap:18px; align-items:start;
+    }
+    @media(max-width:820px) { .t-grid { grid-template-columns:1fr; } }
+
+    .t-right-col { display:flex; flex-direction:column; gap:16px; }
+
+    /* ─── Cards ─────────────────────────────────────────── */
+    .t-card {
+      background:var(--t-surface);
+      border:1px solid var(--t-border);
+      border-radius:4px;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .t-card-top {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 22px 0;
+    }
+    .t-card-title {
+      font:700 .67rem/1 'DM Sans'; letter-spacing:.3em; text-transform:uppercase;
+      color:var(--t-muted2); display:flex; align-items:center; gap:8px;
+    }
+    .t-card-title i { color:var(--t-accent); opacity:.85; }
+    .t-card-body { padding:16px 22px 22px; }
+
+    /* Live indicator */
+    .t-live-tag {
+      display:inline-flex; align-items:center; gap:6px;
+      font:700 9px/1 'DM Sans'; letter-spacing:.3em; text-transform:uppercase;
+      color:rgba(34,197,94,.8);
+    }
+    .t-live-dot {
+      width:6px; height:6px; border-radius:50%; background:#22c55e;
+      box-shadow:0 0 8px #22c55e; animation:t-blink 1.4s ease infinite;
+    }
+
+    /* ─── Timeline ─────────────────────────────────────── */
+    .t-timeline { position:relative; padding:6px 0; }
+
+    .t-tl-line {
+      position:absolute; left:19px; top:26px; bottom:26px; width:2px;
+      background:linear-gradient(to bottom, rgba(59,130,246,.7), rgba(59,130,246,.08));
+      animation:t-line-v 1.1s cubic-bezier(.22,1,.36,1) both;
+      animation-delay:.5s;
+    }
+
+    .t-step {
+      display:flex; gap:14px;
+      position:relative; z-index:1;
+      margin-bottom:4px;
+      opacity:0; animation:t-sx .55s cubic-bezier(.22,1,.36,1) both;
+    }
+    .t-step:last-child { margin-bottom:0; }
+
+    .t-step-icon {
+      flex-shrink:0; width:40px; height:40px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:13px; position:relative;
+    }
+    .t-step-icon.is-current { animation:t-pulse-ring 2.2s ease infinite; }
+
+    .t-step-content {
+      flex:1; padding:10px 16px; border-radius:3px;
+      border:1px solid rgba(255,255,255,.05);
+      background:rgba(255,255,255,.022);
+      transition:border-color .2s, background .2s;
+    }
+    .t-step-content:hover {
+      border-color:rgba(59,130,246,.2);
+      background:rgba(59,130,246,.04);
+    }
+    .t-step-content.is-current {
+      border-color:rgba(59,130,246,.2);
+      background:rgba(59,130,246,.05);
+    }
+
+    .t-step-seq {
+      font:700 .63rem/1 'DM Sans'; letter-spacing:.28em; text-transform:uppercase;
+      margin-bottom:4px;
+    }
+    .t-step-name {
+      font:600 .84rem/1.3 'DM Sans'; color:var(--t-text); margin-bottom:3px;
+    }
+    .t-step-loc {
+      font:400 .72rem/1.4 'JetBrains Mono'; color:var(--t-muted);
+    }
+
+    /* ─── Info list ─────────────────────────────────────── */
+    .t-info-list { list-style:none; }
+    .t-info-row {
+      display:flex; justify-content:space-between; align-items:baseline;
+      gap:16px; padding:10px 0;
+      border-bottom:1px solid rgba(255,255,255,.04);
+      font-size:.83rem;
+    }
+    .t-info-row:last-child { border-bottom:none; }
+    .t-info-key {
+      font:600 .67rem/1 'DM Sans'; letter-spacing:.2em; text-transform:uppercase;
+      color:var(--t-muted2); flex-shrink:0; white-space:nowrap;
+    }
+    .t-info-val {
+      font:400 .82rem/1.4 'DM Sans'; color:var(--t-text); text-align:right;
+    }
+    .t-info-val.accent { color:var(--t-accent2); font-weight:600; }
+    .t-info-val.mono   { font-family:'JetBrains Mono'; font-size:.76rem; }
+
+    /* ─── Paid banner ────────────────────────────────────── */
+    .t-paid-banner {
+      display:flex; align-items:center; gap:16px;
+      padding:18px 20px; border-radius:4px;
+      background:rgba(16,185,129,.07);
+      border:1px solid rgba(16,185,129,.22);
+    }
+    .t-paid-icon {
+      width:42px; height:42px; border-radius:50%; flex-shrink:0;
+      background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.28);
+      display:flex; align-items:center; justify-content:center;
+      color:#6ee7b7; font-size:17px;
+    }
+    .t-paid-title {
+      font:700 .76rem/1 'DM Sans'; letter-spacing:.18em; text-transform:uppercase;
+      color:#86efac; margin-bottom:5px;
+    }
+    .t-paid-sub { font:400 .77rem/1.4 'DM Sans'; color:rgba(134,239,172,.65); }
+
+    /* ─── Payment card (Ultra-Premium) ──────────────────── */
+    .t-pay-badge {
+      font:700 .63rem/1 'DM Sans'; letter-spacing:.24em; text-transform:uppercase;
+      padding:5px 12px; border-radius:2px;
+    }
+    .t-pay-badge.confirmed { background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.25); color:#86efac; }
+    .t-pay-badge.pending   { background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.22); color:#fcd34d; }
+
+    /* Confirmed banner */
+    .t-pay-confirmed-banner {
+      display:flex; align-items:center; gap:14px; padding:18px 20px;
+      border-radius:6px;
+      background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(16,185,129,.04));
+      border:1px solid rgba(16,185,129,.2);
+    }
+    .t-pcb-icon { font-size:1.4rem; color:#4ade80; flex-shrink:0; }
+    .t-pcb-title { font:700 .82rem/1 'DM Sans'; color:#86efac; letter-spacing:.08em; margin-bottom:5px; }
+    .t-pcb-sub   { font:.76rem/1.45 'DM Sans'; color:rgba(134,239,172,.65); }
+
+    /* Invoice row */
+    .t-pay-invoice {
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+      padding:16px 0 15px; border-bottom:1px solid rgba(255,255,255,.07); margin-bottom:17px;
+    }
+    .t-pay-invoice-label  { font:600 .6rem/1 'DM Sans'; letter-spacing:.32em; text-transform:uppercase; color:var(--t-muted2); margin-bottom:6px; }
+    .t-pay-invoice-amount { font:700 2rem/1 'JetBrains Mono'; color:var(--t-text); letter-spacing:-.03em; }
+    .t-pay-invoice-info   { display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
+    .t-pay-invoice-info-item { font:500 .69rem/1 'DM Sans'; color:var(--t-muted2); display:flex; align-items:center; gap:5px; }
+    .t-pay-invoice-info-item i { color:rgba(59,130,246,.45); font-size:.65rem; }
+
+    /* Divider with label */
+    .t-pay-divider { display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+    .t-pay-divider::before,.t-pay-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.07); }
+    .t-pay-divider span { font:600 .6rem/1 'DM Sans'; letter-spacing:.3em; text-transform:uppercase; color:var(--t-muted2); white-space:nowrap; }
+
+    /* Method grid */
+    .t-pay-method-grid {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+      gap:7px; margin-bottom:14px;
+    }
+
+    /* Method card */
+    .t-pm-card {
+      display:flex; flex-direction:column; align-items:flex-start; gap:7px;
+      padding:13px 12px 11px; border-radius:7px;
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);
+      cursor:pointer; transition:all .2s; position:relative; text-align:left;
+    }
+    .t-pm-card:hover { border-color:rgba(59,130,246,.28); background:rgba(59,130,246,.05); transform:translateY(-1px); }
+    .t-pm-card.active {
+      border-color:rgba(59,130,246,.5); background:rgba(59,130,246,.09);
+      box-shadow:0 0 0 1px rgba(59,130,246,.12) inset;
+    }
+    .t-pm-icon {
+      width:30px; height:30px; border-radius:5px;
+      background:rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.95rem; color:var(--pm-clr,#3b82f6); transition:background .2s;
+    }
+    .t-pm-card.active .t-pm-icon { background:rgba(255,255,255,.1); }
+    .t-pm-name { font:700 .7rem/1 'DM Sans'; letter-spacing:.04em; color:var(--t-text); }
+    .t-pm-sub  { font:400 .64rem/1 'DM Sans'; color:var(--t-muted2); }
+    .t-pm-check {
+      position:absolute; top:7px; right:8px; font-size:.7rem;
+      color:rgba(59,130,246,.85); opacity:0; transition:opacity .2s;
+    }
+    .t-pm-card.active .t-pm-check { opacity:1; }
+
+    /* Detail panel */
+    .t-pay-panel {
+      border-radius:7px; border:1px solid rgba(255,255,255,.08);
+      background:rgba(2,6,20,.72); padding:16px 18px;
+      margin-bottom:13px; min-height:90px; transition:opacity .18s;
+    }
+    .t-pay-panel.t-pp-fade { opacity:0; }
+    .t-pay-panel-empty {
+      display:flex; align-items:center; gap:9px;
+      color:rgba(232,240,254,.22); font:.76rem/1 'DM Sans'; padding:6px 0;
+    }
+    .t-pay-panel-empty i { font-size:.85rem; opacity:.5; }
+
+    .t-pp-header {
+      display:flex; align-items:center; gap:8px; margin-bottom:13px;
+      font:700 .78rem/1 'DM Sans'; color:var(--t-text);
+    }
+    .t-pp-address-box {
+      background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);
+      border-radius:5px; padding:11px 13px; margin-bottom:11px;
+    }
+    .t-pp-addr-label { font:600 .58rem/1 'DM Sans'; letter-spacing:.3em; text-transform:uppercase; color:var(--t-muted2); margin-bottom:6px; }
+    .t-pp-addr-val   { font:400 .76rem/1.55 'JetBrains Mono'; color:var(--t-text); word-break:break-all; margin-bottom:9px; }
+    .t-pp-copy-btn {
+      display:inline-flex; align-items:center; gap:5px; padding:5px 13px; border-radius:3px;
+      background:rgba(59,130,246,.1); border:1px solid rgba(59,130,246,.25);
+      font:600 .65rem/1 'DM Sans'; letter-spacing:.14em; text-transform:uppercase;
+      color:#93c5fd; cursor:pointer; transition:all .2s;
+    }
+    .t-pp-copy-btn:hover { background:rgba(59,130,246,.18); }
+    .t-pp-bank-grid { margin-bottom:11px; }
+    .t-pp-bank-row {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:9px 0; border-bottom:1px solid rgba(255,255,255,.05); gap:10px; flex-wrap:wrap;
+    }
+    .t-pp-bank-row:last-child { border-bottom:none; }
+    .t-pp-bk-label { font:600 .6rem/1 'DM Sans'; letter-spacing:.2em; text-transform:uppercase; color:var(--t-muted2); flex-shrink:0; }
+    .t-pp-bk-val   { font:400 .76rem/1.2 'JetBrains Mono'; color:var(--t-text); word-break:break-all; }
+    .t-pp-wu-info  { font:.78rem/1.7 'DM Sans'; color:var(--t-text); background:rgba(255,255,255,.03); border-radius:4px; padding:11px 13px; margin-bottom:11px; }
+    .t-pp-note {
+      display:flex; align-items:flex-start; gap:7px;
+      font:.7rem/1.55 'DM Sans'; color:var(--t-muted2);
+      background:rgba(255,255,255,.025); border-radius:3px; padding:8px 11px;
+    }
+    .t-pp-note i { color:rgba(59,130,246,.45); font-size:.68rem; margin-top:2px; flex-shrink:0; }
+
+    /* Security bar */
+    .t-pay-security-bar {
+      display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;
+      padding:10px 0 2px; border-top:1px solid rgba(255,255,255,.055);
+      font:.64rem/1 'DM Sans'; letter-spacing:.14em; text-transform:uppercase;
+      color:rgba(232,240,254,.2);
+    }
+    .t-pay-security-bar i { font-size:.63rem; color:rgba(59,130,246,.35); margin-right:3px; }
+
+    .t-pay-cleared {
+      font:.82rem/1.65 'DM Sans'; color:rgba(134,239,172,.8);
+      padding:12px 16px; border-radius:5px;
+      background:rgba(16,185,129,.06); border:1px solid rgba(16,185,129,.15);
+    }
+
+    /* Method grid responsive */
+    @media(max-width:520px) {
+      .t-pay-method-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:6px; }
+      .t-pm-card { padding:11px 10px 9px; }
+      .t-pay-invoice-amount { font-size:1.7rem; }
+    }
+    @media(max-width:380px) {
+      .t-pay-method-grid { grid-template-columns:repeat(3,1fr); }
+      .t-pm-name { font-size:.65rem; }
+    }
+
+    /* ─── Mobile overrides ──────────────────────────────── */
+    @media(max-width:600px) {
+      .t-search-card { padding:32px 22px; }
+      .t-search-card::after { display:none; } /* remove scan on mobile */
+      .t-hdr-card { padding:20px 18px; }
+      .t-tracking-id { font-size:1.75rem; }
+      .t-card-top { padding:16px 16px 0; }
+      .t-card-body { padding:14px 16px 18px; }
+      .t-tl-line { left:15px; }
+      .t-step-icon { width:32px; height:32px; font-size:11px; }
+      .t-step { gap:10px; }
+    }
+    @media(max-width:520px) {
+      .t-hdr-card { flex-direction:column; align-items:flex-start; gap:14px; padding:18px 16px; }
+      .t-hdr-right { width:100%; display:flex; justify-content:space-between; align-items:center; }
+      .t-tracking-id { font-size:clamp(1rem,5vw,1.5rem); }
+      .t-ring-eyebrow { padding:10px 14px 0; }
+    }
+    @media(max-width:480px) {
+      /* Strip backdrop-filter on tiny screens — compositing cost */
+      .t-search-card, .t-card, .t-hdr-card {
+        backdrop-filter:none; -webkit-backdrop-filter:none;
+      }
+      #t-dashboard { padding:16px 12px 60px; }
+      #t-search-wrap { padding:32px 14px; }
+    }
+
+    /* ─── Loader ─────────────────────────────────────────── */
+    #loader {
+      position:fixed; inset:0; z-index:9999;
+      background:var(--t-bg);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:28px;
+    }
+    .loader-wordmark {
+      display:flex; gap:6px;
+      font-family:'Bebas Neue'; font-size:3rem; letter-spacing:.3em; color:var(--t-text);
+    }
+    .loader-wordmark span { animation:t-up .6s cubic-bezier(.22,1,.36,1) both; }
+    .loader-wordmark span:nth-child(1){animation-delay:.1s}
+    .loader-wordmark span:nth-child(2){animation-delay:.18s}
+    .loader-wordmark span:nth-child(3){animation-delay:.26s}
+    .loader-wordmark span:nth-child(4){animation-delay:.34s}
+    .loader-wordmark span:nth-child(5){animation-delay:.42s}
+    .loader-bar { width:160px; height:2px; background:rgba(59,130,246,.15); border-radius:99px; overflow:hidden; }
+    .loader-bar-fill { height:100%; background:linear-gradient(90deg,var(--t-accent),var(--t-cyan)); animation:t-line-h 1s ease .5s both; }
+
+    /* ═══════════════════════════════════════════
+       LIGHT MODE COMPONENT OVERRIDES
+       Applied only when user has toggled — the
+       .sfl-transitioning class enables smooth
+       colour transitions without killing
+       opacity/transform animations.
+    ═══════════════════════════════════════════ */
+
+    /* Animated theme transitions (class added/removed by JS) */
+    .sfl-transitioning body,
+    .sfl-transitioning #t-page,
+    .sfl-transitioning #loader,
+    .sfl-transitioning .t-ticker-wrap,
+    .sfl-transitioning .t-ticker-item,
+    .sfl-transitioning .t-search-card,
+    .sfl-transitioning #trackingInput,
+    .sfl-transitioning .t-hint,
+    .sfl-transitioning .t-hdr-card,
+    .sfl-transitioning .t-card,
+    .sfl-transitioning .t-step-content,
+    .sfl-transitioning .t-info-row,
+    .sfl-transitioning #payment-detail-display,
+    .sfl-transitioning .t-pay-tab,
+    .sfl-transitioning .t-status-pill,
+    .sfl-transitioning .t-back-btn,
+    .sfl-transitioning .t-pay-amount-row,
+    .sfl-transitioning .t-paid-banner,
+    .sfl-transitioning .t-paid-icon,
+    .sfl-transitioning footer,
+    .sfl-transitioning footer a {
+      transition:
+        background-color .4s cubic-bezier(.4,0,.2,1),
+        border-color .4s cubic-bezier(.4,0,.2,1),
+        color .28s ease,
+        box-shadow .4s ease !important;
+    }
+
+    /* Page grid + ambient glow */
+    [data-theme="light"] #t-page::before {
+      background-image:
+        linear-gradient(rgba(29,78,216,.016) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,78,216,.016) 1px, transparent 1px);
+    }
+    [data-theme="light"] #t-page::after {
+      background: radial-gradient(ellipse at center, rgba(29,78,216,.035) 0%, transparent 68%);
+    }
+
+    /* ─── Ticker ─── */
+    [data-theme="light"] .t-ticker-wrap {
+      background: rgba(237,241,251,.99);
+    }
+    [data-theme="light"] .t-ticker-item {
+      color: rgba(5,16,42,.46);
+      border-right-color: rgba(5,16,42,.045);
+    }
+    [data-theme="light"] .t-ticker-item > span { color: rgba(5,16,42,.6) !important; }
+    [data-theme="light"] .t-ticker-fl { background: linear-gradient(to right, rgba(237,241,251,.99), transparent); }
+    [data-theme="light"] .t-ticker-fr { background: linear-gradient(to left, rgba(237,241,251,.99), transparent); }
+
+    /* ─── Search card ─── */
+    [data-theme="light"] .t-search-card {
+      background: rgba(255,255,255,.98);
+      box-shadow:
+        0 0 0 1px rgba(29,78,216,.045) inset,
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 28px 72px rgba(5,16,42,.09),
+        0 2px 6px rgba(5,16,42,.05);
+    }
+
+    /* ─── Input ─── */
+    [data-theme="light"] #trackingInput {
+      background: rgba(237,241,251,.7);
+      border-color: rgba(5,16,42,.1);
+    }
+    [data-theme="light"] #trackingInput::placeholder { color: rgba(5,16,42,.24); }
+    [data-theme="light"] #trackingInput:focus {
+      border-color: var(--t-accent);
+      box-shadow: 0 0 0 3px rgba(29,78,216,.1);
+    }
+
+    /* ─── Error / hint ─── */
+    [data-theme="light"] #error-msg {
+      background: rgba(220,38,38,.05);
+      border-color: rgba(220,38,38,.18);
+      color: #b91c1c;
+    }
+    [data-theme="light"] .t-hint {
+      border-color: rgba(5,16,42,.065);
+      background: rgba(5,16,42,.025);
+    }
+
+    /* ─── Dashboard header ─── */
+    [data-theme="light"] .t-hdr-chip {
+      background: rgba(5,16,42,.04);
+    }
+
+    /* ─── Status pills — boost contrast ─── */
+    [data-theme="light"] .t-status-pill.blue  { color:#1d4ed8; }
+    [data-theme="light"] .t-status-pill.green { color:#059669; }
+    [data-theme="light"] .t-status-pill.amber { color:#b45309; }
+    [data-theme="light"] .t-status-pill.red   { color:#dc2626; }
+    [data-theme="light"] .t-status-pill.gray  { color:rgba(5,16,42,.44); }
+
+    /* ─── Timeline steps ─── */
+    [data-theme="light"] .t-step-content {
+      border-color: rgba(5,16,42,.055);
+      background: rgba(5,16,42,.018);
+    }
+    [data-theme="light"] .t-step-content:hover {
+      border-color: rgba(29,78,216,.18);
+      background: rgba(29,78,216,.035);
+    }
+    [data-theme="light"] .t-step-content.is-current {
+      border-color: rgba(29,78,216,.2);
+      background: rgba(29,78,216,.05);
+    }
+
+    /* ─── Info list ─── */
+    [data-theme="light"] .t-info-row { border-bottom-color: rgba(5,16,42,.05); }
+
+    /* ─── Payment section ─── */
+    [data-theme="light"] .t-pay-invoice { border-bottom-color:rgba(5,16,42,.07); }
+    [data-theme="light"] .t-pay-divider::before,[data-theme="light"] .t-pay-divider::after { background:rgba(5,16,42,.08); }
+    [data-theme="light"] .t-pm-card { background:rgba(5,16,42,.02); border-color:rgba(5,16,42,.08); }
+    [data-theme="light"] .t-pm-card:hover { background:rgba(59,130,246,.05); border-color:rgba(59,130,246,.28); }
+    [data-theme="light"] .t-pm-card.active { background:rgba(59,130,246,.08); border-color:rgba(59,130,246,.4); }
+    [data-theme="light"] .t-pm-icon { background:rgba(5,16,42,.05); }
+    [data-theme="light"] .t-pay-panel { background:rgba(241,245,255,.85); border-color:rgba(5,16,42,.08); }
+    [data-theme="light"] .t-pp-address-box { background:rgba(5,16,42,.02); border-color:rgba(5,16,42,.07); }
+    [data-theme="light"] .t-pp-bank-row { border-bottom-color:rgba(5,16,42,.06); }
+    [data-theme="light"] .t-pp-wu-info { background:rgba(5,16,42,.02); }
+    [data-theme="light"] .t-pp-note { background:rgba(5,16,42,.03); }
+    [data-theme="light"] .t-pay-security-bar { border-top-color:rgba(5,16,42,.07); color:rgba(30,41,59,.3); }
+    [data-theme="light"] .t-pay-security-bar i { color:rgba(59,130,246,.4); }
+    [data-theme="light"] .t-pay-panel-empty { color:rgba(30,41,59,.3); }
+    [data-theme="light"] .t-pp-copy-btn { background:rgba(59,130,246,.08); color:#1d4ed8; border-color:rgba(59,130,246,.2); }
+    [data-theme="light"] .t-pp-copy-btn:hover { background:rgba(59,130,246,.14); }
+    [data-theme="light"] .t-pay-cleared {
+      background: rgba(5,150,105,.05);
+      border-color: rgba(5,150,105,.18);
+      color: #065f46;
+    }
+
+    /* ─── Paid banner ─── */
+    [data-theme="light"] .t-paid-banner {
+      background: rgba(5,150,105,.06);
+      border-color: rgba(5,150,105,.2);
+    }
+    [data-theme="light"] .t-paid-title { color:#047857; }
+    [data-theme="light"] .t-paid-sub   { color:rgba(4,120,87,.72); }
+    [data-theme="light"] .t-paid-icon  {
+      background: rgba(5,150,105,.1);
+      border-color: rgba(5,150,105,.24);
+      color:#059669;
+    }
+
+    /* ─── Footer ─── */
+    [data-theme="light"] footer { background: var(--t-bg) !important; }
+    [data-theme="light"] footer a { color:rgba(5,16,42,.52) !important; }
+    [data-theme="light"] footer a:hover { color:#05102a !important; }
+    [data-theme="light"] footer div[style*="border-top"] {
+      border-top-color: rgba(5,16,42,.06) !important;
+    }
+
+    /* ─── Loader (light) ─── */
+    [data-theme="light"] #loader { background: var(--t-bg); }
+
+    /* ─── Cinematic Ring Analytics ─────────────────────────── */
+    .t-ring-wrap {
+      background:var(--t-surface); border:1px solid var(--t-border);
+      border-radius:4px; overflow:hidden; margin-bottom:16px;
+      position:relative; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    }
+    .t-ring-wrap::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,var(--t-accent),var(--t-cyan),transparent); z-index:1;
+    }
+    .t-ring-eyebrow {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 20px 0; font:600 .6rem/1 'DM Sans'; letter-spacing:.3em;
+      text-transform:uppercase; color:var(--t-muted2);
+    }
+    .t-ring-body { display:flex; align-items:stretch; }
+    .t-ring-left {
+      flex-shrink:0; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:14px;
+      padding:22px 28px 24px; border-right:1px solid var(--t-border);
+    }
+    .t-ring-svg { width:128px; height:128px; display:block; }
+    .t-ring-arc { transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1) .6s; will-change:stroke-dashoffset; }
+    .t-ring-dots { display:flex; align-items:center; gap:0; }
+    .t-ring-dot {
+      width:10px; height:10px; border-radius:50%; flex-shrink:0;
+      transition:background .4s, box-shadow .4s;
+    }
+    .t-ring-dot.done { background:#22c55e; box-shadow:0 0 8px rgba(34,197,94,.6); }
+    .t-ring-dot.active { background:var(--t-accent); box-shadow:0 0 10px rgba(59,130,246,.7); animation:t-pulse-ring 2.2s ease infinite; }
+    .t-ring-dot.pending { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.14); }
+    .t-ring-connector { flex:1; height:2px; background:rgba(255,255,255,.07); min-width:8px; }
+    .t-ring-connector.done { background:rgba(34,197,94,.35); }
+    .t-ring-right {
+      flex:1; display:grid; grid-template-columns:1fr 1fr;
+      grid-template-rows:1fr 1fr; gap:1px; background:var(--t-border); min-width:0;
+    }
+    .t-ring-metric {
+      background:var(--t-surface); backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px); padding:18px 22px; min-width:0;
+    }
+    .t-ring-metric-lbl {
+      font:500 .56rem/1 'DM Sans'; letter-spacing:.25em; text-transform:uppercase;
+      color:var(--t-muted2); margin-bottom:9px;
+    }
+    .t-ring-metric-val {
+      font:700 1.22rem/1 'JetBrains Mono'; color:var(--t-text);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    @media(max-width:620px) {
+      .t-ring-body { flex-direction:column; }
+      .t-ring-left { border-right:none; border-bottom:1px solid var(--t-border); padding:18px 20px; flex-direction:row; gap:20px; align-items:center; }
+      .t-ring-svg { width:90px; height:90px; flex-shrink:0; }
+      .t-ring-right { grid-template-columns:1fr 1fr; grid-template-rows:auto auto; }
+      .t-ring-metric { padding:14px 16px; }
+    }
+    @media(max-width:420px) {
+      .t-ring-left { flex-direction:column; padding:16px; }
+      .t-ring-svg { width:100px; height:100px; }
+      .t-ring-right { grid-template-columns:1fr 1fr; }
+      .t-ring-metric { padding:12px 14px; }
+      .t-ring-metric-val { font-size:1rem; }
+    }
+
+    /* ─── Step state variants ──────────────────────────────── */
+    .t-step-state-label {
+      font:600 .6rem/1 'DM Sans'; letter-spacing:.18em; text-transform:uppercase;
+    }
+    .t-step-content.completed {
+      border-color:rgba(34,197,94,.25) !important;
+      background:rgba(34,197,94,.04) !important;
+    }
+    .t-step-content.on-hold {
+      border-color:rgba(245,158,11,.22) !important;
+      background:rgba(245,158,11,.04) !important;
+    }
+    .t-step-content.upcoming {
+      border-color:rgba(255,255,255,.04) !important;
+      background:rgba(255,255,255,.014) !important;
+      opacity:.65;
+    }
+    .t-step-icon.done { animation:none !important; }
+
+    /* Light mode — ring analytics */
+    [data-theme="light"] .t-ring-wrap { background:rgba(255,255,255,.95); border-color:rgba(5,16,42,.06); }
+    [data-theme="light"] .t-ring-left { border-color:rgba(5,16,42,.06); background:rgba(255,255,255,.7); }
+    [data-theme="light"] .t-ring-metric { background:rgba(255,255,255,.96); }
+    [data-theme="light"] .t-ring-right { background:rgba(5,16,42,.06); }
+    [data-theme="light"] .t-ring-connector { background:rgba(5,16,42,.1); }
+    [data-theme="light"] .t-ring-dot.pending { background:rgba(5,16,42,.1); border-color:rgba(5,16,42,.18); }
+    [data-theme="light"] .t-step-content.upcoming { border-color:rgba(5,16,42,.04) !important; }
+
+    /* ─── Admin padlock (press-hold 3s) ─── */
+    .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; }
+    .admin-padlock-btn { background:none; border:none; cursor:pointer; padding:0; outline:none; -webkit-tap-highlight-color:transparent; position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center; user-select:none; }
+    .admin-padlock-ico { font-size:13px; color:transparent; transition:color .2s; position:relative; z-index:1; pointer-events:none; }
+    .admin-padlock-ring { position:absolute; inset:0; width:40px; height:40px; overflow:visible; pointer-events:none; }
+    .pad-ring-track { fill:none; stroke:transparent; stroke-width:1.5; }
+    .pad-ring-fill  { fill:none; stroke:#3b82f6; stroke-width:1.5; stroke-linecap:round;
+                      stroke-dasharray:106.8; stroke-dashoffset:106.8; transition:stroke .4s; }
+    .admin-padlock-btn.unlocking .admin-padlock-ico { animation:padUnlock .75s cubic-bezier(.34,1.56,.64,1) forwards; }
+    [data-theme="light"] .admin-padlock-ico { color:transparent; }
+    @keyframes padUnlock {
+      0%   { transform:scale(1) rotate(0deg);    color:transparent; }
+      25%  { transform:scale(1.8) rotate(-22deg); color:rgba(59,130,246,.8); }
+      55%  { transform:scale(1.5) rotate(8deg);  color:rgba(34,197,94,.9); }
+      80%  { transform:scale(1.35) rotate(-4deg);color:rgba(34,197,94,.95); }
+      100% { transform:scale(1.2) rotate(0deg);  color:rgba(34,197,94,.95); }
+    }
+  </style>
 </head>
-<body class=" font-sans overflow-x-hidden antialiased">
 
-   <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50 animated-gradient">
-      <section class="bg-gradient-to-br from-blue-50 via-blue-300 to-indigo-50">
-        <nav class=" flex w-full items-center justify-between px-6 bg-transparent">
-          <div class="flex justify-between w-full items-center">
-              <div class="flex items-center pt-3">
-                <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
-              </div>
+<body class="font-body overflow-x-hidden antialiased" style="background:var(--t-bg);">
 
-              <div class="uppercase font-semibold lg:hidden">
-                <h1 class="text-blue-950 text-[13px] italic mt-2 font-serif reveal-from-left">swift Freight Logix</h1>
-              </div>
-              
-               <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 lg:hidden ">
-                  <div class="relative h-5 w-6">
-                      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
-                       
-                      <svg id="x-icon" class="hidden w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                      </svg>
-                  </div>
-              </button>
-          </div>
-          
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-wordmark">
+      <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
+    </div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
 
-          <div class="lg:flex md:hidden md:justify-between md:gap-8 md:items-center">
-            <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-              <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
-              <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
-              <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
-              <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
-            </nav>
-
-            <div id="navButtons" class="w-full text-nowrap flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
-                    <a href="quote.html">Get a Free Quote</a> 
-                <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-              </button>
-                        
-              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
-                <i class="fas fa-location-dot"></i>
-                    <a href="payment.html">Track Shipment</a> 
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        <div id="overlay" class="fixed inset-0 z-[80] hidden bg-black/20 backdrop-blur-[5px] transition-opacity duration-500 opacity-0"></div>
-
-        <div id="side-menu" class="fixed top-0 right-0 z-[90] h-screen w-[65%] translate-x-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
-            <div class="flex flex-col h-full pt-32 px-10">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-10">Menu</h2>
-                <ul class="space-y-6">
-                    <li><a href="index.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Home</a></li>
-                    <li><a href="payment.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Track Shipment</a></li>
-                    <li><a href="services.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Our Services</a></li>
-                    <li><a href="contact.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">Contact</a></li>
-                    <li><a href="about.html" class="text-2xl font-bold text-blue-950 hover:text-blue-600 transition-colors">about Us</a></li>
-                </ul>
-                
-                <div class="mt-auto mb-32">
-                    <button class="w-full rounded-xl bg-blue-950 py-4 text-white font-bold shadow-xl hover:bg-blue-900 transition-all">
-                       <a href="quote.html">Get a Quote</a> 
-                    </button>
-                </div>
-            </div>
+  <!-- ══════════ HEADER ══════════ -->
+  <header id="hdr">
+    <div class="hdr-inner">
+      <a href="index.html" class="logo">
+        <img src="./image/sfl-logo.svg" alt="Swift Freight Logistics">
+        <div class="logo-text">
+          <div class="logo-name"><span class="gt">SWIFT</span><span style="color:rgba(var(--text-rgb),.8);margin-left:6px;">FREIGHT</span></div>
+          <div class="logo-sub">Logistics</div>
         </div>
-                
-      </section>
-        <div id="" class="w-full bg-slate-900 border-y border-white/10 py-2.5 overflow-hidden relative">
-          <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
-          <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-900 to-transparent z-10"></div>
+      </a>
 
-          <div id="a-ticker" class="flex items-center whitespace-nowrap uppercase tracking-widest text-[10px] font-bold">
-            <div class="flex items-center px-12 text-white/80">
-              <span class="relative flex h-2 w-2 mr-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              SwiftFreight <span class="text-green-500 ml-2">Network Active</span>
-            </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-plane-up mr-3 text-blue-400"></i>
-              Air Freight <span class="text-white ml-2">Priority Dispatched</span>
-            </div>
+      <div class="hdr-actions">
+        <button class="theme-btn" id="themeToggleDesktop" aria-label="Toggle theme">
+          <i class="fas fa-sun" id="themeIconDesktop"></i>
+        </button>
+        <a href="payment.html" class="btn-outline active" style="padding:11px 22px;font-size:.71rem;">
+          <i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track
+        </a>
+        <a href="quote.html" class="btn-primary" style="padding:12px 26px;font-size:.73rem;">
+          Get a Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i>
+        </a>
+      </div>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-shield-halved mr-3 text-yellow-500"></i>
-              Cargo <span class="text-white ml-2">Fully Insured</span>
-            </div>
+      <div class="mobile-controls">
+        <button class="theme-btn" id="themeToggleMobile" aria-label="Toggle theme">
+          <i class="fas fa-sun" id="themeIconMobile"></i>
+        </button>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-earth-africa mr-3 text-green-400"></i>
-              International Shipment <span class="text-green-500 ml-2">Operating 24/7</span>
-            </div>
+    <div class="t-ticker-wrap">
+      <div class="t-ticker-fl"></div>
+      <div class="t-ticker-fr"></div>
+      <div class="t-ticker-track">
+        <div class="t-ticker-item"><div class="t-ticker-live"></div>SwiftFreight <span style="color:#22c55e;margin-left:5px;">Network Active</span></div>
+        <div class="t-ticker-item"><i class="fas fa-plane-up" style="color:#60a5fa;"></i>Air Freight <span style="color:#e8f0fe;margin-left:5px;">Priority Dispatched</span></div>
+        <div class="t-ticker-item"><i class="fas fa-shield-halved" style="color:#fbbf24;"></i>Cargo <span style="color:#e8f0fe;margin-left:5px;">Fully Insured</span></div>
+        <div class="t-ticker-item"><i class="fas fa-earth-africa" style="color:#4ade80;"></i>International <span style="color:#e8f0fe;margin-left:5px;">Operating 24/7</span></div>
+        <div class="t-ticker-item"><i class="fas fa-satellite-dish" style="color:#60a5fa;"></i>Live Tracking <span style="color:#e8f0fe;margin-left:5px;">Real-Time Updates</span></div>
+        <div class="t-ticker-item"><i class="fas fa-lock" style="color:#fbbf24;"></i>Encrypted <span style="color:#e8f0fe;margin-left:5px;">Secure Transit</span></div>
+        <div class="t-ticker-item"><div class="t-ticker-live"></div>SwiftFreight <span style="color:#22c55e;margin-left:5px;">Network Active</span></div>
+        <div class="t-ticker-item"><i class="fas fa-plane-up" style="color:#60a5fa;"></i>Air Freight <span style="color:#e8f0fe;margin-left:5px;">Priority Dispatched</span></div>
+        <div class="t-ticker-item"><i class="fas fa-shield-halved" style="color:#fbbf24;"></i>Cargo <span style="color:#e8f0fe;margin-left:5px;">Fully Insured</span></div>
+        <div class="t-ticker-item"><i class="fas fa-earth-africa" style="color:#4ade80;"></i>International <span style="color:#e8f0fe;margin-left:5px;">Operating 24/7</span></div>
+        <div class="t-ticker-item"><i class="fas fa-satellite-dish" style="color:#60a5fa;"></i>Live Tracking <span style="color:#e8f0fe;margin-left:5px;">Real-Time Updates</span></div>
+        <div class="t-ticker-item"><i class="fas fa-lock" style="color:#fbbf24;"></i>Encrypted <span style="color:#e8f0fe;margin-left:5px;">Secure Transit</span></div>
+      </div>
+    </div>
+  </header>
 
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <span class="relative flex h-2 w-2 mr-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              SwiftFreight <span class="text-green-500 ml-2">Network Active</span>
-            </div>
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-plane-up mr-3 text-blue-400"></i>
-              Air Freight <span class="text-white ml-2">Priority Dispatched</span>
-            </div>
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-shield-halved mr-3 text-yellow-500"></i>
-              Cargo <span class="text-white ml-2">Fully Insured</span>
-            </div>
-            <div class="flex items-center px-12 text-white/80 border-l border-white/10">
-              <i class="fa-solid fa-earth-africa mr-3 text-green-400"></i>
-              World Wide <span class="text-white ml-2">Operating 24/7</span>
-            </div>
-          </div>
+  <!-- ══════════ MOBILE NAV ══════════ -->
+  <nav id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
+    <div class="mob-nav-inner">
+      <div class="mob-nav-topbar">
+        <a href="index.html" class="mob-nav-logo">
+          <img src="./image/sfl-logo.svg" alt="Swift Freight">
+          <div class="mob-nav-logo-name"><span>SWIFT</span><span>FREIGHT</span></div>
+        </a>
+        <button class="mob-close-btn" id="mobileNavClose" aria-label="Close menu">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+      <p class="mob-nav-label">Navigation</p>
+      <ul class="mob-nav-links">
+        <li><a href="index.html">Home <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+        <li><a href="payment.html">Track Shipment <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+        <li><a href="services.html">Our Services <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+        <li><a href="contact.html">Contact <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+        <li><a href="about.html">About Us <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      </ul>
+      <div class="mob-nav-cta">
+        <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.6rem;"></i></a>
+        <a href="payment.html" class="btn-outline"><i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track Shipment</a>
+      </div>
+      <div class="mob-nav-footer">
+        <p>©2025 Swift Freight Logistics</p>
+        <div class="mob-social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
+      </div>
+    </div>
+  </nav>
 
-    </header>
-    
+  <!-- ══════════ TRACKING PAGE ══════════ -->
+  <div id="t-page" style="padding-top:112px;">
 
- 
-    <section id="" class="bg-white/5 backdrop-blur-2xl mt-14 border border-white/10 py-10  bg-blend-multiply bg-[url('./image/contactpage.jpg')] object-cover bg-cover object-top overflow-hidden">
-      <!-- <div class="bg-white/5 backdrop-blur-2xl border border-white/10 w-full shadow-2xl mt-20 rounded-3xl"> -->
-        <div id="app-container" class=" max-w-300 w-fit mt-12 mx-auto py-12 px-4">
-            <div id="search-gate" class="relative w-fit overflow-hidden rounded-[3rem] border border-white/10 bg-gradient-to-br from-slate-950/95 via-slate-900/80 to-slate-950/95 p-10 shadow-[0_35px_120px_rgba(15,23,42,0.45)] backdrop-blur-3xl">
-                <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.25),_transparent_35%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.16),_transparent_28%)]"></div>
-                <div class="relative z-10">
-                    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                        <div class="reveal-from-bottom">
-                            <p class="text-cyan-300 font-mono text-[10px] tracking-[0.45em] uppercase mb-2">Premium Tracking</p>
-                            <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">Track Your Shipment</h2>
-                        </div>
-                        <span class="inline-flex items-center gap-2 rounded-full border border-cyan-400/10 bg-cyan-400/10 px-4 py-2 text-[11px] uppercase tracking-[0.3em] text-cyan-200 shadow-[0_12px_40px_rgba(6,182,212,0.10)]">Secure · Fast · Premium</span>
-                    </div>
-                    <p class="text-slate-400 text-sm mb-8">Enter your tracking code to unlock the full shipment status overview with premium delivery analytics.</p>
-                    <input type="text" id="trackingInput" placeholder="ENTER YOUR CODE" class="w-full rounded-3xl border border-white/10 bg-slate-950/80 p-5 text-white placeholder:text-slate-500 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 font-semibold uppercase tracking-[0.2em] mb-4">
-                    <button id="search-btn" onclick="handleTracking()" class="relative inline-flex w-full border bg-gradient-to-br from-blue-50 via-cyan-700 to-amber-600 items-center hover:bg-green-950 justify-center gap-3 rounded-3xl px-6 py-5 text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_20px_60px_rgba(34,211,238,0.22)] transition duration-300 hover:scale-[1.01] hover:shadow-[0_24px_70px_rgba(34,211,238,0.28)] active:scale-[0.99]">
-                        <i class="fas fa-search text-lg"></i>
-                        Find Shipment
-                    </button>
-                    <p id="error-msg" class="hidden mt-5 rounded-3xl border border-red-500/20 bg-red-500/10 px-5 py-4 text-center text-red-100 font-semibold uppercase tracking-[0.18em] text-[10px]"></p>
-                    <div class="mt-6 rounded-3xl border border-white/10 bg-slate-950/70 p-4 text-[13px] text-slate-300 backdrop-blur-xl">
-                      <div class="flex items-center gap-3">
-                        <i class="fas fa-circle-info text-amber-400 text-[14px]"></i>
-                        <span>Your tracking ID was sent in the shipment confirmation email.</span>
-                      </div>
-                    </div>
-                </div>
-            </div>
+    <!-- SEARCH SECTION -->
+    <section id="search-gate">
+      <div id="t-search-wrap">
+        <div class="t-search-card">
+          <div class="t-search-eyebrow"><i class="fas fa-satellite-dish" style="font-size:11px;"></i> Live Tracking</div>
+          <h1 class="t-search-title">Track Your <span>Shipment</span></h1>
+          <p class="t-search-sub">Enter your unique tracking code to access real-time status, transit milestones, and delivery details.</p>
 
-            <div id="dashboard-target" class="w-full"></div>
+          <div class="t-input-wrap">
+            <i class="fas fa-barcode"></i>
+            <input type="text" id="trackingInput" placeholder="e.g. SFL-123456789" autocomplete="off" spellcheck="false"
+              onkeydown="if(event.key==='Enter') handleTracking()">
+          </div>
+
+          <button id="search-btn" onclick="handleTracking()">
+            <i class="fas fa-satellite-dish"></i>
+            Track Shipment
+          </button>
+
+          <p id="error-msg" class="hidden"></p>
+
+          <div class="t-hint">
+            <i class="fas fa-circle-info"></i>
+            <span>Tracking IDs follow the format <strong style="color:var(--t-text);font-family:'JetBrains Mono';">SFL-XXXXXXXXX</strong> and were emailed at dispatch.</span>
+          </div>
         </div>
       </div>
     </section>
 
-    
-    <section class="bg-blue-950 pt-8 -m-1 relative z-10">
-      <div>
-      <div class="items-center justify-between px-6 lg:flex md:px-16">
-        <div class="py-6 max-w-100">
-          <h1 class="pb-2 font-serif text-6xl text-white reveal-init">SWIFT <br>FREIGHT</h1>
-          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
-          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
-
-          <form name="aboutquote" data-netlify="true" value="logistics-final" method="post" action="/success.html" class="flex items-center px-2 mt-4 text-center bg-white rounded-full">
-            <input type="text" name="email-text" placeholder="Type your message" class="w-full pb-5 mt-6 text-center text-gray-600 bg-transparent border-none rounded-full outline-none px-7">
-            <button type="submit" class="px-4 py-3 mx-1 text-white transition-all duration-700 rounded-full text-nowrap bg-blue-950 hover:bg-blue-900 hover:scale-95">Send A Message</button>
-          </form>
-        </div>
-
-        
-        
-        
-        <div class="justify-between md:flex-col ">
-          <div>
-            <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
-          </div>
-          <div class="grid items-center grid-cols-2 md:flex reveal-from-bottom gap-18">
-            
-            <div class="a-reveal flex-col items-center justify-center gap-10">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
-              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
-              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
-              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
-              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
-            </div>
-
-            <div class="a-reveal flex-col items-center justify-center gap-10 md:pb-6">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
-              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
-              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
-              <h1><a href="payment.html" class="text-gray-400 text-[14px]">Careers</a></h1>
-            </div>
-
-            <div class="a-reveal flex-col items-center justify-center gap-10">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
-              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
-            </div>
-          </div>
-        </div>
-        </div>
-      
-          
-      </section>
-
-
-      <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
-        <div class="items-center self-center justify-between py-2 text-center md:flex">
-          <div class="flex items-center justify-center gap-8 text-center  md:gap-14">
-            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
-            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
-            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
-          </div>
-
-          <div class="self-center py-2">
-            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
-          </div>
-        </div>
-      </footer>
-
-
-      
-       <!-- LOADER -->
-    <section>
-        <div id="loader">
-          <div class="loader-wordmark">
-            <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
-          </div>
-          <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-        </div>
+    <!-- DASHBOARD -->
+    <section id="t-dashboard" style="display:none;">
+      <div id="dashboard-target"></div>
     </section>
 
+  </div>
 
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer style="background:var(--t-bg);border-top:1px solid var(--t-border);padding:44px 24px 28px;position:relative;z-index:1;">
+    <div style="max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;gap:36px;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-family:'Bebas Neue';font-size:1.45rem;letter-spacing:.22em;color:var(--t-text);margin-bottom:10px;"><span style="color:var(--t-accent);">SWIFT</span> FREIGHT</div>
+        <p style="font:.78rem/1.7 'DM Sans';color:var(--t-muted2);max-width:260px;">World-class logistics. Reliable, secure, on-time delivery worldwide.</p>
+      </div>
+      <div style="display:flex;gap:52px;flex-wrap:wrap;">
+        <div>
+          <p style="font:.66rem/1 'DM Sans';letter-spacing:.32em;text-transform:uppercase;color:var(--t-muted2);margin-bottom:18px;">Company</p>
+          <div style="display:flex;flex-direction:column;gap:11px;">
+            <a href="about.html"    style="font:.82rem/1 'DM Sans';color:var(--t-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#e8f0fe'" onmouseout="this.style.color='rgba(232,240,254,.52)'">About Us</a>
+            <a href="contact.html"  style="font:.82rem/1 'DM Sans';color:var(--t-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#e8f0fe'" onmouseout="this.style.color='rgba(232,240,254,.52)'">Contact</a>
+            <a href="services.html" style="font:.82rem/1 'DM Sans';color:var(--t-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#e8f0fe'" onmouseout="this.style.color='rgba(232,240,254,.52)'">Services</a>
+          </div>
+        </div>
+        <div>
+          <p style="font:.66rem/1 'DM Sans';letter-spacing:.32em;text-transform:uppercase;color:var(--t-muted2);margin-bottom:18px;">Shipments</p>
+          <div style="display:flex;flex-direction:column;gap:11px;">
+            <a href="payment.html" style="font:.82rem/1 'DM Sans';color:var(--t-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#e8f0fe'" onmouseout="this.style.color='rgba(232,240,254,.52)'">Track Shipment</a>
+            <a href="quote.html"   style="font:.82rem/1 'DM Sans';color:var(--t-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#e8f0fe'" onmouseout="this.style.color='rgba(232,240,254,.52)'">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1120px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <p style="font:.71rem/1 'DM Sans';color:var(--t-muted2);">© 2025 Swift Freight Logistics. All rights reserved.</p>
+      <div style="display:flex;gap:20px;">
+        <a href="policy.html" style="font:.71rem/1 'DM Sans';color:var(--t-muted2);text-decoration:none;">Privacy Policy</a>
+        <a href="terms"       style="font:.71rem/1 'DM Sans';color:var(--t-muted2);text-decoration:none;">Terms of Use</a>
+      </div>
+    </div>
+    <!-- Admin padlock — press-hold 3s to unlock -->
+    <div class="admin-padlock-wrap" aria-hidden="true">
+      <button class="admin-padlock-btn" id="adminPadlockBtn" tabindex="-1" aria-hidden="true">
+        <svg class="admin-padlock-ring" viewBox="0 0 40 40">
+          <circle class="pad-ring-track" cx="20" cy="20" r="17"/>
+          <circle class="pad-ring-fill"  cx="20" cy="20" r="17" id="padlockRing"
+                  transform="rotate(-90 20 20)"/>
+        </svg>
+        <i class="fas fa-lock admin-padlock-ico" id="adminPadlockIco"></i>
+      </button>
+    </div>
+  </footer>
 
+  <script>
+  /* ═══════════════ THEME TOGGLE ═══════════════ */
+  (function(){
+    var root=document.documentElement, KEY='sfl_theme', DARK='dark', LIGHT='light';
+    var transitTimer=null;
+    function getSaved(){ return localStorage.getItem(KEY); }
+    function getAuto(){ return window.matchMedia('(prefers-color-scheme: dark)').matches?DARK:LIGHT; }
+    function applyTheme(t, animate){
+      if(animate){
+        if(transitTimer) clearTimeout(transitTimer);
+        root.classList.add('sfl-transitioning');
+        transitTimer=setTimeout(function(){ root.classList.remove('sfl-transitioning'); },480);
+      }
+      root.setAttribute('data-theme',t); localStorage.setItem(KEY,t);
+      ['themeIconDesktop','themeIconMobile'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el) el.className=t===DARK?'fas fa-sun':'fas fa-moon';
+      });
+    }
+    function toggle(){ applyTheme(root.getAttribute('data-theme')===DARK?LIGHT:DARK, true); }
+    applyTheme(getSaved()||getAuto(), false);
+    ['themeToggleDesktop','themeToggleMobile'].forEach(function(id){
+      var btn=document.getElementById(id);
+      if(btn) btn.addEventListener('click',toggle);
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){
+      if(!getSaved()) applyTheme(e.matches?DARK:LIGHT, false);
+    });
+  })();
+  /* ═══════════════ MOBILE NAV ═══════════════ */
+  (function(){
+    var menuBtn=document.getElementById('menuBtn');
+    var closeBtn=document.getElementById('mobileNavClose');
+    var nav=document.getElementById('mobile-nav');
+    if(!menuBtn||!nav) return;
+    var isOpen=false;
+    function openNav(){ isOpen=true; menuBtn.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); nav.classList.add('open'); nav.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeNav(){ isOpen=false; menuBtn.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); nav.classList.remove('open'); nav.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    menuBtn.addEventListener('click',function(){ isOpen?closeNav():openNav(); });
+    if(closeBtn) closeBtn.addEventListener('click',closeNav);
+    nav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeNav); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&isOpen) closeNav(); });
+    window.addEventListener('resize',function(){ if(window.innerWidth>=1024&&isOpen) closeNav(); });
+  })();
+  /* ═══════════════ HEADER SCROLL ═══════════════ */
+  (function(){
+    var hdr=document.getElementById('hdr');
+    if(!hdr) return;
+    var fn=function(){ hdr.classList.toggle('scrolled',window.scrollY>30); };
+    window.addEventListener('scroll',fn,{passive:true});
+    fn();
+  })();
+  /* ═══════════════ ADMIN PADLOCK — press-hold 3s ═══════════════ */
+  (function(){
+    var btn  = document.getElementById('adminPadlockBtn');
+    var ico  = document.getElementById('adminPadlockIco');
+    var ring = document.getElementById('padlockRing');
+    if (!btn || !ico || !ring) return;
 
+    var HOLD   = 3000;          // hold duration ms
+    var CIRC   = 2 * Math.PI * 17; // circumference (r=17) ≈ 106.8
+    var timer  = null;
+    var rafId  = null;
+    var t0     = null;
 
+    var trackEl = btn.querySelector('.pad-ring-track');
 
+    function tick() {
+      var pct = Math.min((Date.now() - t0) / HOLD, 1);
+      ring.style.strokeDashoffset = CIRC * (1 - pct);
+      ico.style.color = 'rgba(59,130,246,' + (0.3 + pct * 0.7) + ')';
+      if (trackEl) trackEl.style.stroke = 'rgba(59,130,246,' + (0.1 + pct * 0.2) + ')';
+      if (pct < 1) rafId = requestAnimationFrame(tick);
+    }
 
+    function startHold() {
+      if (timer) return;
+      t0 = Date.now();
+      rafId = requestAnimationFrame(tick);
+      timer = setTimeout(function() {
+        timer = null;
+        cancelAnimationFrame(rafId);
+        doUnlock();
+      }, HOLD);
+    }
 
-      <script>
-          window.addEventListener("load", () => {
-          const loader = document.getElementById("loader-wrapper");
-          
-          // Fade out
-          loader.classList.add("opacity-0");
-          
+    function cancelHold() {
+      if (!timer && t0 === null) return;
+      clearTimeout(timer);      timer = null;
+      cancelAnimationFrame(rafId); rafId = null;
+      t0 = null;
+      /* snap ring back smoothly */
+      ring.style.transition = 'stroke-dashoffset .35s ease, stroke .4s';
+      ring.style.strokeDashoffset = CIRC;
+      ico.style.color = 'transparent';
+      if (trackEl) { trackEl.style.transition = 'stroke .35s'; trackEl.style.stroke = 'transparent'; }
+      setTimeout(function(){ ring.style.transition = ''; if (trackEl) trackEl.style.transition = ''; }, 420);
+    }
 
-          setTimeout(() => {
-            loader.style.display = "none";
-          }, 20); 
-        });
-      </script>
+    function doUnlock() {
+      t0 = null;
+      ring.style.stroke = '#22c55e';
+      ring.style.strokeDashoffset = '0';
+      btn.classList.add('unlocking');
+      ico.className = 'fas fa-lock-open admin-padlock-ico';
+      setTimeout(function(){ window.location.href = 'admin.html'; }, 820);
+    }
 
+    btn.addEventListener('mousedown',  startHold);
+    btn.addEventListener('mouseup',    cancelHold);
+    btn.addEventListener('mouseleave', cancelHold);
+    btn.addEventListener('touchstart', function(e){ e.preventDefault(); startHold(); }, {passive:false});
+    btn.addEventListener('touchend',   function(e){ e.preventDefault(); cancelHold(); }, {passive:false});
+    btn.addEventListener('touchcancel',cancelHold);
+    btn.addEventListener('contextmenu',function(e){ e.preventDefault(); cancelHold(); });
+  })();
+  </script>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        const menuBtn = document.getElementById('menu-btn');
-        const menuIcon = document.getElementById('menu-icon');
-        const xIcon = document.getElementById('x-icon');
-
-        menuBtn.addEventListener('click', () => {
-        menuIcon.classList.toggle('hidden');
-        xIcon.classList.toggle('hidden');
-        console.log("Button clicked!");
-            });
-          });
-      </script>
-
-        <script>
-        
-          const menuBtn = document.getElementById('menu-btn');
-          const sideMenu = document.getElementById('side-menu');
-          const overlay = document.getElementById('overlay');
-          const l1 = document.getElementById('line-1');
-          const l2 = document.getElementById('line-2');
-          const l3 = document.getElementById('line-3');
-
-          menuBtn.addEventListener('click', () => {
-              // Toggle the side menu
-              const isOpen = sideMenu.classList.toggle('translate-x-full');
-              
-              if (!isOpen) {
-                  // OPEN STATE
-                  overlay.classList.remove('hidden');
-                  setTimeout(() => overlay.classList.add('opacity-100'), 10);
-                  
-                  // Morph to X
-                  l1.classList.replace('-translate-y-2', 'rotate-45');
-                  l2.classList.add('opacity-0', '-translate-x-2');
-                  l3.classList.replace('translate-y-2', '-rotate-45');
-              } else {
-                  // CLOSE STATE
-                  overlay.classList.remove('opacity-100');
-                  setTimeout(() => overlay.classList.add('hidden'), 500);
-                  
-                  // Morph back to Hamburger
-                  l1.classList.replace('rotate-45', '-translate-y-2');
-                  l2.classList.remove('opacity-0', '-translate-x-2');
-                  l3.classList.replace('-rotate-45', 'translate-y-2');
-              }
-          });
-
-          // Close menu if clicking the blurred area
-          overlay.addEventListener('click', () => menuBtn.click());
-    
-      </script>
-
-
-
-    <script src="./script.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>
-
-

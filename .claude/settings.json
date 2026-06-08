@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(Remove-Item -Recurse -Force \"c:\\\\Users\\\\u\\\\OneDrive\\\\Documents\\\\logistics site\\\\tracking-app\")",
+      "Bash(Write-Output \"Done\")",
+      "Read(//c/Users/u/.claude/projects/c--Users-u-OneDrive-Documents-logistics-site/memory/**)",
+      "Bash(grep -v \"//\")",
+      "Bash(mkdir -p \"c:/Users/u/OneDrive/Documents/logistics site/supabase/functions/_shared\" \"c:/Users/u/OneDrive/Documents/logistics site/supabase/migrations\" \"c:/Users/u/OneDrive/Documents/logistics site/.vscode\")",
+      "Bash(supabase --version)",
+      "Bash(supabase link *)",
+      "Bash(supabase secrets *)",
+      "Bash(supabase functions *)",
+      "Bash(curl -s -X POST https://oltbgccsceipedoadgka.supabase.co/functions/v1/register-shipment -H 'Content-Type: application/json' -H 'x-admin-secret: SFL-ADMIN-2025-Xp7kZ3mN' -d '{\"name\":\"Test User\",\"customer_email\":\"test@test.com\",\"destination\":\"London, UK\",\"status\":\"Pending\",\"origin\":\"Lagos, Nigeria\"}')",
+      "Bash(curl -s -X POST https://oltbgccsceipedoadgka.supabase.co/functions/v1/register-shipment -H 'Content-Type: application/json' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94' -H 'x-admin-secret: SFL-ADMIN-2025-Xp7kZ3mN' -d '{\"name\":\"Test User\",\"customer_email\":\"swiftfreightlogix@gmail.com\",\"destination\":\"London, UK\",\"status\":\"Pending\",\"origin\":\"Lagos, Nigeria\"}')",
+      "Bash(npx supabase *)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\u\\.claude\\projects\\c--Users-u-OneDrive-Documents-logistics-site\\memory",
+      "c:\\Users\\u\\OneDrive\\Documents\\logistics site"
+    ]
+  }
+}

@@ -1,189 +1,775 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Quote</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="output.css">
-    <link rel="stylesheet" href="input.css">
-    <link rel="icon" type="image/png" href="./image/loadingicon-removebg-preview.png" class="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get a Quote — Swift Freight Logistics</title>
+  <meta name="description" content="Get a freight quote from Swift Freight Logistics — competitive rates for air, ocean, and ground shipping worldwide.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Get a Quote — Swift Freight Logistics">
+  <meta property="og:description" content="Competitive freight rates for air, ocean, and ground shipping worldwide.">
+  <meta property="og:image" content="https://swiftfreightlogix.netlify.app/image/sfl-logo.svg">
+  <meta property="og:url" content="https://swiftfreightlogix.netlify.app/quote.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://swiftfreightlogix.netlify.app/image/sfl-logo.svg">
+  <link rel="icon" type="image/svg+xml" href="./image/sfl-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./image/loadingicon-removebg-preview.png">
+  <link rel="apple-touch-icon" href="./image/loadingicon-removebg-preview.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <style>
+    /* ═══════════════════════════════════════════
+       SWIFT FREIGHT — ULTRA PREMIUM DESIGN SYSTEM
+    ═══════════════════════════════════════════ */
 
-    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
-    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    :root {
+      --accent:       #3b82f6;
+      --accent-hi:    #60a5fa;
+      --accent-deep:  #1d4ed8;
+      --accent-dim:   rgba(59,130,246,.1);
+      --accent-rgb:   59,130,246;
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <script>tailwind.config={theme:{extend:{fontFamily:{display:['Bebas Neue'],body:['DM Sans'],mono:['JetBrains Mono']}}}}</script>
+      --bg:           #03081a;
+      --bg2:          #060d20;
+      --bg3:          #080f26;
+      --bg-rgb:       3,8,26;
+
+      --surface:      rgba(255,255,255,.03);
+      --surface2:     rgba(255,255,255,.055);
+      --surface3:     rgba(255,255,255,.085);
+
+      --text:         #e8f0fe;
+      --text-rgb:     232,240,254;
+      --muted:        rgba(232,240,254,.68);
+      --muted2:       rgba(232,240,254,.40);
+
+      --border:       rgba(232,240,254,.065);
+      --border2:      rgba(232,240,254,.11);
+      --aborder:      rgba(59,130,246,.2);
+
+      --hdr-bg:       rgba(3,8,26,.88);
+      --card-bg:      rgba(255,255,255,.035);
+      --footer-bg:    #020612;
+
+      --nav-drop-bg:  rgba(3,8,26,.97);
+      --nav-item:     rgba(232,240,254,.85);
+
+      --shadow-lg:    0 32px 80px rgba(0,0,0,.55), 0 8px 24px rgba(0,0,0,.3);
+    }
+
+    [data-theme="light"] {
+      --accent:       #1d4ed8;
+      --accent-hi:    #3b82f6;
+      --accent-deep:  #1e40af;
+      --accent-dim:   rgba(29,78,216,.08);
+      --accent-rgb:   29,78,216;
+
+      --bg:           #f0f4fc;
+      --bg2:          #e6edf9;
+      --bg3:          #dce7f6;
+      --bg-rgb:       240,244,252;
+
+      --surface:      rgba(255,255,255,.72);
+      --surface2:     rgba(255,255,255,.88);
+      --surface3:     rgba(255,255,255,.98);
+
+      --text:         #05102a;
+      --text-rgb:     5,16,42;
+      --muted:        rgba(5,16,42,.68);
+      --muted2:       rgba(5,16,42,.42);
+
+      --border:       rgba(5,16,42,.07);
+      --border2:      rgba(5,16,42,.12);
+      --aborder:      rgba(29,78,216,.16);
+
+      --hdr-bg:       rgba(240,244,252,.92);
+      --card-bg:      rgba(255,255,255,.78);
+      --footer-bg:    #020612;
+
+      --nav-drop-bg:  rgba(240,244,252,.98);
+      --nav-item:     rgba(5,16,42,.88);
+
+      --shadow-lg:    0 32px 80px rgba(5,16,42,.14), 0 8px 24px rgba(5,16,42,.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Noise grain */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.032'/%3E%3C/svg%3E");
+      opacity: .22;
+    }
+
+    /* Ambient background */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(59,130,246,.055) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 90%, rgba(59,130,246,.04) 0%, transparent 55%);
+    }
+    [data-theme="light"] body::after {
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(29,78,216,.045) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 90%, rgba(29,78,216,.03) 0%, transparent 55%);
+    }
+
+    header, section, footer, nav, .fab-btn { position: relative; z-index: 1; }
+
+    /* ── Gradient text ── */
+    .gt {
+      background: linear-gradient(115deg, var(--accent) 0%, var(--accent-hi) 55%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Typography ── */
+    .display { font-family: 'Bebas Neue'; letter-spacing: .03em; line-height: .92; }
+
+    /* ── Section label ── */
+    .lbl {
+      display: inline-flex; align-items: center; gap: 12px;
+      font: 700 8px/1 'DM Sans'; letter-spacing: .48em; text-transform: uppercase;
+      color: var(--accent); opacity: .9;
+    }
+    .lbl::before, .lbl::after {
+      content: ''; width: 22px; height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent); opacity: .5;
+    }
+    .lbl::after { background: linear-gradient(270deg, var(--accent), transparent); }
+
+    /* ── Gradient divider ── */
+    .grule {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),.16), rgba(var(--accent-rgb),.06), transparent);
+    }
+
+    /* ── Orb ── */
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(110px);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent) 50%, var(--accent-hi) 100%);
+      background-size: 200% 100%; background-position: left;
+      color: #fff; font: 700 .74rem/1 'DM Sans'; letter-spacing: .12em; text-transform: uppercase;
+      padding: 15px 32px; border-radius: 2px; border: none; cursor: pointer;
+      text-decoration: none; white-space: nowrap;
+      transition: background-position .5s ease, box-shadow .3s, transform .25s;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .btn-primary:hover {
+      background-position: right;
+      box-shadow: 0 0 40px rgba(var(--accent-rgb),.38), 0 8px 32px rgba(var(--accent-rgb),.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: transparent; color: var(--muted);
+      font: 600 .74rem/1 'DM Sans'; letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px 28px; border-radius: 2px;
+      border: 1px solid var(--border2); cursor: pointer; text-decoration: none;
+      transition: all .3s; white-space: nowrap;
+      clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+    }
+    .btn-outline:hover {
+      color: var(--accent); border-color: rgba(var(--accent-rgb),.45);
+      background: rgba(var(--accent-rgb),.06);
+    }
+
+    /* ── Glass card ── */
+    .glass {
+      background: var(--card-bg);
+      backdrop-filter: blur(28px) saturate(1.5);
+      -webkit-backdrop-filter: blur(28px) saturate(1.5);
+      border: 1px solid var(--aborder);
+    }
+    [data-theme="light"] .glass {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      box-shadow: 0 8px 48px rgba(5,16,42,.07), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    /* ── Icon box ── */
+    .ibox {
+      width: 46px; height: 46px; border-radius: 3px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent-dim); border: 1px solid var(--aborder);
+      color: var(--accent); font-size: .88rem;
+      transition: background .3s, box-shadow .3s;
+    }
+
+
+    /* ══════════════════════════════
+       LOADER
+    ══════════════════════════════ */
+    @keyframes ldr-up {
+      from { opacity:0; transform:translateY(18px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes ldr-bar {
+      from { transform:scaleX(0); transform-origin:left; }
+      to   { transform:scaleX(1); transform-origin:left; }
+    }
+    #loader {
+      position:fixed; inset:0; z-index:9999;
+      background: var(--bg);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:28px;
+    }
+    .loader-wordmark {
+      display:flex; gap:6px;
+      font-family:'Bebas Neue'; font-size:3rem; letter-spacing:.3em; color:var(--text);
+    }
+    .loader-wordmark span { display:inline-block; animation:ldr-up .6s cubic-bezier(.22,1,.36,1) both; }
+    .loader-wordmark span:nth-child(1){animation-delay:.08s}
+    .loader-wordmark span:nth-child(2){animation-delay:.16s}
+    .loader-wordmark span:nth-child(3){animation-delay:.24s}
+    .loader-wordmark span:nth-child(4){animation-delay:.32s}
+    .loader-wordmark span:nth-child(5){animation-delay:.40s}
+    .loader-bar { width:160px; height:2px; background:rgba(var(--accent-rgb),.13); border-radius:99px; overflow:hidden; }
+    .loader-bar-fill {
+      height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-hi));
+      animation:ldr-bar 1s ease .42s both;
+      box-shadow:0 0 8px rgba(var(--accent-rgb),.4);
+    }
+
+    /* ══════════════════════════════
+       THEME TRANSITION
+    ══════════════════════════════ */
+    .sfl-transitioning body,
+    .sfl-transitioning #hdr,
+    .sfl-transitioning footer,
+    .sfl-transitioning .glass,
+    .sfl-transitioning .form-input,
+    .sfl-transitioning section { transition: background-color .4s cubic-bezier(.4,0,.2,1), border-color .4s cubic-bezier(.4,0,.2,1), color .28s ease, box-shadow .4s ease !important; }
+
+
+    /* ══════════════════════════════
+       HEADER
+    ══════════════════════════════ */
+    #hdr {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: var(--hdr-bg);
+      backdrop-filter: blur(32px) saturate(1.6);
+      -webkit-backdrop-filter: blur(32px) saturate(1.6);
+      border-bottom: 1px solid var(--border);
+      transition: background .4s, box-shadow .4s, border-color .4s;
+    }
+    #hdr.scrolled { box-shadow: 0 4px 48px rgba(0,0,0,.4), 0 1px 0 rgba(var(--accent-rgb),.1); border-bottom-color: rgba(var(--accent-rgb),.14); }
+    [data-theme="light"] #hdr { background: rgba(240,244,252,.88); border-bottom: 1px solid rgba(5,16,42,.06); box-shadow: 0 1px 0 rgba(255,255,255,.8); }
+    [data-theme="light"] #hdr.scrolled { box-shadow: 0 4px 40px rgba(5,16,42,.1), 0 1px 0 rgba(255,255,255,.9); border-bottom-color: rgba(var(--accent-rgb),.12); }
+    .hdr-inner { display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 74px; max-width: 1400px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 14px; text-decoration: none; flex-shrink: 0; cursor: pointer; }
+    .logo img { width: 40px; height: 40px; filter: drop-shadow(0 2px 12px rgba(var(--accent-rgb),.42)); transition: filter .3s; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-name { font-family: 'Bebas Neue'; font-size: 1.08rem; letter-spacing: .18em; line-height: 1.1; }
+    .logo-sub  { font-size: 6px; letter-spacing: .52em; text-transform: uppercase; color: rgba(var(--accent-rgb),.38); margin-top: 2px; }
+    .nav-links { display: flex; align-items: center; gap: 38px; list-style: none; }
+    .nav-links a { font: 500 .78rem/1 'DM Sans'; letter-spacing: .05em; color: var(--muted); text-decoration: none; transition: color .2s; position: relative; padding-bottom: 2px; }
+    .nav-links a::after { content: ''; position: absolute; left: 50%; bottom: -4px; width: 0; height: 1px; background: linear-gradient(90deg, var(--accent), var(--accent-hi)); transition: width .35s, left .35s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; left: 0; }
+    .hdr-actions { display: flex; align-items: center; gap: 12px; }
+    .mobile-controls { display: none; align-items: center; gap: 10px; }
+    .theme-btn {
+      width: 40px; height: 40px; border-radius: 2px; display: flex; align-items: center; justify-content: center;
+      background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.18);
+      color: var(--accent); cursor: pointer; flex-shrink: 0; transition: all .25s;
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    }
+    .theme-btn:hover { background: rgba(var(--accent-rgb),.16); transform: scale(1.06); }
+    .theme-btn i { font-size: .8rem; pointer-events: none; }
+    .menu-btn {
+      display: none; width: 44px; height: 44px; border-radius: 2px;
+      flex-direction: column; align-items: center; justify-content: center; gap: 5.5px;
+      background: rgba(var(--accent-rgb),.06); border: 1px solid rgba(var(--accent-rgb),.14);
+      cursor: pointer; z-index: 310; flex-shrink: 0; transition: background .25s, border-color .25s;
+      clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+    }
+    .menu-btn:hover { background: rgba(var(--accent-rgb),.12); border-color: rgba(var(--accent-rgb),.28); }
+    .menu-btn span { display: block; width: 22px; height: 1.5px; background: var(--accent); border-radius: 1px; transition: transform .42s cubic-bezier(.16,1,.3,1), opacity .3s, width .3s; transform-origin: center; }
+    .menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; width: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile nav */
+    #mobile-nav {
+      position: fixed; inset: 0; z-index: 250;
+      background: var(--nav-drop-bg);
+      backdrop-filter: blur(40px) saturate(1.8); -webkit-backdrop-filter: blur(40px) saturate(1.8);
+      overflow-y: auto; opacity: 0; pointer-events: none;
+      transition: opacity .5s cubic-bezier(.76,0,.24,1); display: none;
+    }
+    #mobile-nav.open { opacity: 1; pointer-events: all; }
+    [data-theme="light"] #mobile-nav { background: rgba(240,244,252,.97); }
+    #mobile-nav::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), var(--accent-hi), var(--accent), transparent); opacity: .6; }
+    .mob-nav-inner { position: relative; z-index: 2; padding: 36px 36px 52px; display: flex; flex-direction: column; min-height: 100%; }
+    .mob-nav-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px; }
+    .mob-nav-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+    .mob-nav-logo img { width: 34px; height: 34px; filter: drop-shadow(0 2px 10px rgba(var(--accent-rgb),.4)); }
+    .mob-nav-logo-name { font-family: 'Bebas Neue'; font-size: .95rem; letter-spacing: .18em; }
+    .mob-nav-logo-name span:first-child { -webkit-text-fill-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-hi)); -webkit-background-clip: text; background-clip: text; }
+    .mob-nav-logo-name span:last-child { color: rgba(var(--text-rgb),.75); margin-left: 5px; }
+    .mob-close-btn {
+      width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
+      background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.2);
+      border-radius: 2px; cursor: pointer; color: var(--accent); font-size: .85rem;
+      transition: background .25s, transform .3s; flex-shrink: 0;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .mob-close-btn:hover { background: rgba(var(--accent-rgb),.16); transform: rotate(90deg) scale(1.06); }
+    .mob-close-btn i { pointer-events: none; }
+    .mob-nav-label { font: 700 7px/1 'DM Sans'; letter-spacing: .48em; text-transform: uppercase; color: rgba(var(--accent-rgb),.38); margin-bottom: 20px; }
+    .mob-nav-links { list-style: none; display: flex; flex-direction: column; gap: 0; }
+    .mob-nav-links li { border-bottom: 1px solid var(--border); opacity: 0; transform: translateX(-24px); transition: opacity .0s, transform .0s; }
+    #mobile-nav.open .mob-nav-links li { opacity: 1; transform: translateX(0); transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1); }
+    #mobile-nav.open .mob-nav-links li:nth-child(1){transition-delay:.08s}
+    #mobile-nav.open .mob-nav-links li:nth-child(2){transition-delay:.15s}
+    #mobile-nav.open .mob-nav-links li:nth-child(3){transition-delay:.22s}
+    #mobile-nav.open .mob-nav-links li:nth-child(4){transition-delay:.29s}
+    #mobile-nav.open .mob-nav-links li:nth-child(5){transition-delay:.36s}
+    .mob-nav-links a { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; font: 700 2rem/1 'Bebas Neue'; letter-spacing: .08em; color: var(--nav-item); text-decoration: none; transition: color .2s, padding-left .3s; }
+    .mob-nav-links a .nav-arrow { width: 32px; height: 32px; border-radius: 2px; display: flex; align-items: center; justify-content: center; background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.18); color: var(--accent); font-size: .65rem; transition: background .25s, transform .3s; clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px)); }
+    .mob-nav-links a:hover { color: var(--accent); padding-left: 8px; }
+    .mob-nav-links a:hover .nav-arrow { background: rgba(var(--accent-rgb),.18); transform: translateX(4px); }
+    .mob-nav-cta { margin-top: 36px; opacity: 0; transform: translateY(16px); transition: opacity .0s, transform .0s; display: flex; flex-direction: column; gap: 10px; }
+    #mobile-nav.open .mob-nav-cta { opacity: 1; transform: translateY(0); transition: opacity .5s ease .44s, transform .5s cubic-bezier(.16,1,.3,1) .44s; }
+    .mob-nav-cta .btn-primary, .mob-nav-cta .btn-outline { width: 100%; justify-content: center; }
+    .mob-nav-footer { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; opacity: 0; transition: opacity .0s; }
+    #mobile-nav.open .mob-nav-footer { opacity: 1; transition: opacity .5s ease .52s; }
+    .mob-nav-footer p { font: 500 .7rem/1 'DM Sans'; letter-spacing: .04em; color: var(--muted2); }
+    .mob-social-links { display: flex; gap: 10px; }
+    .mob-social-links a { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 2px; border: 1px solid var(--border); color: var(--muted2); font-size: .72rem; transition: color .2s, border-color .2s, background .2s; text-decoration: none; }
+    .mob-social-links a:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),.35); background: rgba(var(--accent-rgb),.07); }
+
+    /* Press-hold admin trigger */
+    .sfl-holding .logo { filter: drop-shadow(0 0 14px rgba(var(--accent-rgb),.7)); animation: holdPulse .6s ease infinite alternate; }
+    @keyframes holdPulse { from { filter: drop-shadow(0 0 8px rgba(var(--accent-rgb),.4)); } to { filter: drop-shadow(0 0 22px rgba(var(--accent-rgb),.9)); } }
+
+
+    /* ══════════════════════════════
+       QUOTE HERO
+    ══════════════════════════════ */
+    .quote-hero {
+      min-height: 100vh;
+      padding: 120px 48px 88px;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .quote-inner {
+      max-width: 1400px; width: 100%; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+      position: relative; z-index: 2;
+    }
+
+    /* ── Quote hero left (text) ── */
+    .quote-hero-text h1 {
+      font-family: 'Bebas Neue';
+      font-size: clamp(3rem, 6vw, 5.6rem);
+      line-height: .92; letter-spacing: .03em;
+      color: var(--text);
+      margin: 20px 0 26px;
+    }
+    .quote-hero-text p {
+      font-size: .95rem; color: var(--muted);
+      line-height: 1.82; max-width: 440px; font-weight: 300;
+      margin-bottom: 44px;
+    }
+    .quote-features { display: flex; flex-direction: column; gap: 20px; }
+    .quote-feature {
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .quote-feature .ibox { margin-top: 2px; }
+    .quote-feature-text strong {
+      display: block; font: 600 .88rem/1 'DM Sans'; color: var(--text); margin-bottom: 4px;
+    }
+    .quote-feature-text span {
+      font-size: .78rem; color: var(--muted2); line-height: 1.5;
+    }
+
+    /* ── Quote form card ── */
+    .quote-card {
+      border-radius: 3px; padding: 44px;
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    }
+    .quote-card-head { margin-bottom: 32px; }
+    .quote-card-head h2 { font: 700 1.3rem/1.3 'DM Sans'; color: var(--text); margin-top: 10px; }
+    .quote-card-head p { font-size: .82rem; color: var(--muted); margin-top: 7px; line-height: 1.6; }
+
+    /* ── Form elements ── */
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-of-type { margin-bottom: 0; }
+    .form-label {
+      display: block;
+      font: 600 .72rem/1 'DM Sans'; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 9px;
+    }
+    .form-input {
+      width: 100%; background: var(--surface);
+      border: 1px solid var(--border2); border-radius: 2px;
+      padding: 13px 16px;
+      font: 400 .88rem/1 'DM Sans'; color: var(--text); outline: none;
+      transition: border-color .25s, box-shadow .25s;
+      clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+    }
+    .form-input::placeholder { color: var(--muted2); }
+    .form-input:focus {
+      border-color: rgba(var(--accent-rgb),.5);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.08);
+    }
+    [data-theme="light"] .form-input { background: rgba(255,255,255,.88); border-color: var(--border2); }
+    select.form-input { cursor: pointer; }
+    select.form-input option { background: #0a1530; color: #e8f0fe; }
+    [data-theme="light"] select.form-input option { background: #fff; color: #05102a; }
+    .form-submit {
+      width: 100%; justify-content: center;
+      padding: 16px 32px; font-size: .78rem;
+      margin-top: 26px;
+    }
+
+
+    /* ══════════════════════════════
+       STATS STRIP
+    ══════════════════════════════ */
+    .stats-strip {
+      background: var(--footer-bg);
+      border-top: 1px solid rgba(var(--accent-rgb),.06);
+      border-bottom: 1px solid rgba(var(--accent-rgb),.06);
+    }
+    .stats-strip-inner {
+      max-width: 1400px; margin: 0 auto; padding: 0 48px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+    }
+    .stat-c {
+      padding: 40px 28px; border-right: 1px solid rgba(255,255,255,.05);
+      text-align: center;
+    }
+    .stat-c:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Bebas Neue'; font-size: 2.8rem; letter-spacing: .05em;
+      background: linear-gradient(115deg, var(--accent) 0%, var(--accent-hi) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .stat-lbl {
+      font: 700 7.5px/1 'DM Sans'; letter-spacing: .3em; text-transform: uppercase;
+      color: rgba(232,240,254,.35);
+    }
+
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer { background: var(--footer-bg); margin-top: 0; }
+    .footer-inner { max-width: 1400px; margin: 0 auto; padding: 88px 48px 44px; }
+    .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 52px; padding-bottom: 64px; }
+    .footer-btm { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 0; border-top: 1px solid rgba(255,255,255,.05); }
+    footer h4 { color: rgba(232,240,254,.7); font: 700 .7rem/1 'DM Sans'; letter-spacing: .34em; text-transform: uppercase; margin-bottom: 24px; }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    footer ul a { color: rgba(232,240,254,.48); font-size: .82rem; text-decoration: none; transition: color .2s, padding-left .25s; display: inline-flex; align-items: center; gap: 7px; }
+    footer ul a::before { content: '—'; font-size: .6rem; color: rgba(var(--accent-rgb),.3); opacity: 0; transition: opacity .2s; }
+    footer ul a:hover { color: var(--accent); padding-left: 6px; }
+    footer ul a:hover::before { opacity: 1; }
+    footer p.foot-copy { color: rgba(232,240,254,.38); font-size: .7rem; letter-spacing: .04em; }
+    footer a.foot-link { color: rgba(232,240,254,.42); font-size: .72rem; text-decoration: none; transition: color .2s; }
+    footer a.foot-link:hover { color: rgba(232,240,254,.85); }
+    .footer-form { display: flex; border-radius: 3px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.028); }
+    .footer-form input { flex: 1; padding: 13px 18px; background: transparent; font: 400 .8rem/1 'DM Sans'; color: rgba(232,240,254,.55); outline: none; border: none; }
+    .footer-form input::placeholder { color: rgba(232,240,254,.28); }
+    .footer-form button { border-radius: 0; padding: 12px 22px; font-size: .7rem; clip-path: none; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 22px; }
+    .footer-socials a { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 2px; border: 1px solid rgba(255,255,255,.08); color: rgba(232,240,254,.4); font-size: .72rem; transition: color .2s, border-color .2s, background .2s; text-decoration: none; }
+    .footer-socials a:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),.35); background: rgba(var(--accent-rgb),.08); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb),.25); border-radius: 2px; }
+
+    /* Reveal animations */
+    .reveal { opacity: 0; visibility: hidden; transition: opacity .42s ease, transform .48s cubic-bezier(.25,.46,.45,.94); transition-delay: var(--d, 0s); will-change: opacity, transform; }
+    .reveal.up    { transform: translate3d(0, 24px, 0); }
+    .reveal.left  { transform: translate3d(-24px, 0, 0); }
+    .reveal.right { transform: translate3d(24px, 0, 0); }
+    .reveal.on    { opacity: 1 !important; visibility: visible !important; transform: translate3d(0,0,0) !important; }
+
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 1023px) {
+      .hdr-inner { padding: 0 24px; }
+      .nav-links, .hdr-actions { display: none !important; }
+      .menu-btn { display: flex !important; }
+      .mobile-controls { display: flex !important; }
+      #mobile-nav { display: block; }
+
+      .quote-hero { padding: 100px 28px 72px; min-height: auto; }
+      .quote-inner { grid-template-columns: 1fr; gap: 52px; }
+      .quote-hero-text h1 { font-size: clamp(2.6rem, 8vw, 4.2rem); }
+      .quote-hero-text p { max-width: 100%; margin-bottom: 32px; }
+      .quote-features { gap: 16px; }
+      .quote-card { padding: 36px 28px; }
+
+      .stats-strip-inner { grid-template-columns: repeat(2, 1fr); padding: 0 28px; }
+      .stat-c:nth-child(2) { border-right: none; }
+      .stat-c:nth-child(3) { border-right: 1px solid rgba(255,255,255,.05); border-top: 1px solid rgba(255,255,255,.05); }
+      .stat-c:nth-child(4) { border-top: 1px solid rgba(255,255,255,.05); }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 38px; }
+      .footer-inner { padding: 60px 28px 44px; }
+    }
+
+    @media (max-width: 767px) {
+      .hdr-inner { padding: 0 20px; }
+      .mob-nav-inner { padding: 28px 22px 44px; }
+      .mob-nav-topbar { margin-bottom: 44px; }
+      .mob-nav-links a { font-size: 1.7rem; }
+
+      .quote-hero { padding: 88px 20px 60px; }
+      .quote-inner { gap: 40px; }
+      .quote-card { padding: 28px 20px; clip-path: none; }
+      .form-grid-2 { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+      .form-grid-2 .form-group { margin-bottom: 16px; }
+
+      .stats-strip-inner { padding: 0 20px; }
+      .stat-c { padding: 28px 16px; }
+      .stat-num { font-size: 2.2rem; }
+
+      .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+      .footer-inner { padding: 52px 20px 36px; }
+      .footer-btm { flex-direction: column; align-items: flex-start; }
+      .footer-form { flex-direction: column; }
+      .footer-form button { width: 100%; justify-content: center; clip-path: none; }
+    }
+
+    @media (max-width: 479px) {
+      .hdr-inner { padding: 0 16px; }
+      .mob-nav-inner { padding: 22px 16px 36px; }
+      .mob-nav-footer { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .mob-nav-links a { font-size: 1.45rem; }
+
+      .quote-hero { padding: 80px 16px 52px; }
+      .quote-card { padding: 24px 16px; }
+      .quote-card-head h2 { font-size: 1.1rem; }
+
+      .stats-strip-inner { grid-template-columns: 1fr 1fr; padding: 0 16px; }
+      .stat-c { padding: 22px 10px; }
+      .stat-num { font-size: 1.9rem; }
+
+      .footer-inner { padding: 44px 16px 28px; }
+    }
+  </style>
 </head>
-<body class="overflow-x-hidden">
-    <header class="fixed z-50 top-0 left-0 right-0  bg-slate-50 animated-gradient">
-      <section class="bg-gradient-to-br from-blue-50 via-blue-300 to-indigo-50">
-        <nav class=" flex w-full items-center justify-between px-6 bg-transparent">
-          <div class="flex justify-between w-full items-center">
-              <div class="flex items-center pt-3 self-center">
-                <img src="./image/loadingicon-removebg-preview.png" alt="logo" class="w-12 h-12 md:w-16 md:h-16" >
-              </div>
+<body>
 
-              <div class="uppercase font-semibold md:hidden mt-2">
-                <h1 class="text-blue-950 text-[13px] italic font-serif reveal-from-left">swift Freight Quote</h1>
-              </div>
+<!-- ══════════════ LOADER ══════════════ -->
+<div id="loader">
+  <div class="loader-wordmark">
+    <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
+  </div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
 
-              <button id="menu-btn" class="relative z-[110] h-12 w-12 flex items-center justify-center rounded-xl bg-blue-white transition-all hover:scale-110 active:scale-95 md:hidden ">
-                  <div class="relative h-5 w-6">
-                      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#173660"><path d="M120-680v-80h720v80H120Zm0 480v-80h720v80H120Zm0-240v-80h720v80H120Z"/></svg>
-                       
-                      <svg id="x-icon" class="hidden w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                      </svg>
-                  </div>
-              </button>
+<!-- ══════════════ HEADER ══════════════ -->
+<header id="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="logo">
+      <img src="./image/sfl-logo.svg" alt="Swift Freight Logistics">
+      <div class="logo-text">
+        <div class="logo-name"><span class="gt">SWIFT</span><span style="color:rgba(var(--text-rgb),.8);margin-left:6px;">FREIGHT</span></div>
+        <div class="logo-sub">Logistics</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="hdr-actions">
+      <button class="theme-btn" id="themeToggleDesktop" aria-label="Toggle theme">
+        <i class="fas fa-sun" id="themeIconDesktop"></i>
+      </button>
+      <a href="payment.html" class="btn-outline" style="padding:11px 22px;font-size:.71rem;">
+        <i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track
+      </a>
+      <a href="quote.html" class="btn-primary" style="padding:12px 26px;font-size:.73rem;">
+        Get a Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i>
+      </a>
+    </div>
+    <div class="mobile-controls">
+      <button class="theme-btn" id="themeToggleMobile" aria-label="Toggle theme">
+        <i class="fas fa-sun" id="themeIconMobile"></i>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ MOBILE NAV ══════════════ -->
+<nav id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="mob-nav-inner">
+    <div class="mob-nav-topbar">
+      <a href="index.html" class="mob-nav-logo">
+        <img src="./image/sfl-logo.svg" alt="Swift Freight">
+        <div class="mob-nav-logo-name"><span>SWIFT</span><span>FREIGHT</span></div>
+      </a>
+      <button class="mob-close-btn" id="mobileNavClose" aria-label="Close menu">
+        <i class="fas fa-xmark"></i>
+      </button>
+    </div>
+    <p class="mob-nav-label">Navigation</p>
+    <ul class="mob-nav-links">
+      <li><a href="index.html">Home <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="payment.html">Track Shipment <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="services.html">Our Services <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="contact.html">Contact <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="about.html">About Us <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+    </ul>
+    <div class="mob-nav-cta">
+      <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.6rem;"></i></a>
+      <a href="payment.html" class="btn-outline"><i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track Shipment</a>
+    </div>
+    <div class="mob-nav-footer">
+      <p>©2025 Swift Freight Logistics</p>
+      <div class="mob-social-links">
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ══════════════ QUOTE HERO ══════════════ -->
+<section class="quote-hero">
+  <!-- Ambient orbs -->
+  <div class="orb" style="width:640px;height:640px;background:rgba(var(--accent-rgb),.06);top:-160px;left:-220px;"></div>
+  <div class="orb" style="width:500px;height:500px;background:rgba(var(--accent-rgb),.04);bottom:-120px;right:-180px;"></div>
+  <div class="orb" style="width:320px;height:320px;background:rgba(var(--accent-rgb),.05);top:40%;left:45%;"></div>
+
+  <div class="quote-inner">
+
+    <!-- Left: Hero text -->
+    <div class="quote-hero-text">
+      <div class="lbl reveal up" style="margin-bottom:20px;">Request a Quote</div>
+      <h1 class="reveal up" style="--d:.1s;">READY TO MOVE <br><span class="gt">YOUR CARGO?</span></h1>
+      <p class="reveal up" style="--d:.2s;">Fill out the form and receive a custom freight quote within 24 hours. Our specialists handle every complexity — from single parcels to full charter loads.</p>
+
+      <div class="quote-features reveal up" style="--d:.3s;">
+        <div class="quote-feature">
+          <div class="ibox"><i class="fas fa-location-dot"></i></div>
+          <div class="quote-feature-text">
+            <strong>Real-Time GPS Tracking</strong>
+            <span>Live shipment visibility from origin to destination</span>
           </div>
-          
-
-          <div class="md:flex md:justify-between md:gap-8 md:items-center">
-            <nav id="navLinks" class="flex-col items-start justify-between hidden w-full gap-5 my-4  peer-checked:flex md:flex md:flex-row md:items-center md:gap-8 md:my-0 md:w-fit">
-              <a href="index.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1E124A"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>Home</a>
-              <a href="about.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM480-80 373-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587L480-80Zm0-144 64-96h256v-480H160v480h256l64 96Zm0-336Z"/></svg>About</a>
-              <a href="services.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M195-195q-35-35-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35q-50 0-85-35Zm442-245h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z"/></svg>Services</a>
-              <a href="contact.html" class="font-semibold text-[16px] text-blue-950 md:hover:underline md:hover:text-blue-400 w-full py-2 px-2 hover:text-blue-800 text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E124A"><path d="M560-520h280v-200H560v200Zm140-50-100-70v-40l100 70 100-70v40l-100 70ZM80-120q-33 0-56.5-23.5T0-200v-560q0-33 23.5-56.5T80-840h800q33 0 56.5 23.5T960-760v560q0 33-23.5 56.5T880-120H80Zm556-80h244v-560H80v560h4q42-75 116-117.5T360-360q86 0 160 42.5T636-200ZM445-435q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM182-200h356q-34-38-80.5-59T360-280q-51 0-97 21t-81 59Zm149.5-291.5Q320-503 320-520t11.5-28.5Q343-560 360-560t28.5 11.5Q400-537 400-520t-11.5 28.5Q377-480 360-480t-28.5-11.5ZM480-480Z"/></svg>Contact</a>
-            </nav>
-
-            <div id="navButtons" class="w-full text-nowrap flex-col hidden gap-8 peer-checked:flex md:flex md:flex-row md:items-center md:w-fit">
-              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit py-4 bg-blue-950 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-900/20 transition-all duration-300 group">
-                    <a href="quote.html">Get a Free Quote</a> 
-                <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-              </button>
-                        
-              <button class="px-8 hover:scale-95 justify-center w-full md:w-fit p py-4 bg-red-600 text-white rounded-full font-semibold flex items-center gap-3 hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/20 transition-all duration-300">
-                <i class="fas fa-location-dot"></i>
-                    <a href="payment.html">Track Shipment</a> 
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        <div id="overlay" class="fixed inset-0 z-[80] hidden bg-black/20 backdrop-blur-sm transition-opacity duration-500 opacity-0"></div>
-
-        <div id="side-menu" class="fixed top-0 right-0 z-[90] h-screen w-[65%] translate-x-full bg-blue-950 shadow-[-20px_0_50px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-in-out">
-            <div class="flex flex-col h-full pt-32 px-10">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-10">Menu</h2>
-                <ul class="space-y-6">
-                    <li><a href="index.html" class="text-2xl menu-item font-bold text-white hover:text-blue-600 transition-all duration-700 delay-100">Home</a></li>
-                    <li><a href="payment.html" class="text-2xl menu-item font-bold text-white hover:text-blue-600 transition-colors">Track Shipment</a></li>
-                    <li><a href="services.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">Our Services</a></li>
-                    <li><a href="contact.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">Contact</a></li>
-                    <li><a href="about.html" class="text-2xl font-bold text-white hover:text-blue-600 transition-colors">about Us</a></li>
-                </ul>
-                
-                <div class="mt-auto mb-12">
-                    <button class="w-full rounded-xl bg-gradient-to-br from-blue-400 via-indigo-100 to-blue-200 py-4 text-blue-950 font-bold shadow-xl hover:bg-blue-900 transition-all">
-                       <a href="quote.html">Get a Quote</a> 
-                    </button>
-                </div>
-            </div>
         </div>
-                
-      </section>
-
-    </header>
-
-    <section class="mt-10 pt-20 bg-blend-multiply bg-[url('./image/bt2.jpg')] object-cover bg-cover text-white py-12 px-6 flex items-center justify-center relative overflow-hidden">
-  
-      <div class="absolute top-0 -left-20 w-96 h-96 bg-blue-800/20 rounded-full blur-[120px]"></div>
-      <div class="absolute bottom-0 -right-20 w-96 h-96 bg-red-900/10 rounded-full blur-[120px]"></div>
-
-      <div class="max-w-5xl w-full grid lg:grid-cols-2 gap-12 relative z-10">
-      
-      <div id="" class="flex flex-col justify-center">
-        <div id="welcome" class="flex items-center gap-2 mb-6">
-          <span class="w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
-          <span class="uppercase tracking-[0.2em] text-xs font-bold text-blue-600 [text-shadow:0_1px_2px]">Fast & Reliable</span>
-        </div>
-        <h1 id="welcome" class="text-4xl md:text-6xl font-bold mb-6 [text-shadow:0_1px_3px]">Ready to move <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">your cargo?</span>
-        </h1>
-        <p id="welcome" class="text-lg mb-8 font-semibold text-blue-950 max-w-md">Fill out the form to receive a custom quote for your logistics needs. Our team will get back to you within 24 hours.</p>
-
-        <div class="space-y-4">
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <p class="font-medium text-blue-950">Real-time GPS Tracking</p>
+        <div class="quote-feature">
+          <div class="ibox"><i class="fas fa-headset"></i></div>
+          <div class="quote-feature-text">
+            <strong>24/7 Dedicated Support</strong>
+            <span>Logistics experts available around the clock for your account</span>
           </div>
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <p class="font-medium text-blue-950">24/7 Delivery Support</p>
+        </div>
+        <div class="quote-feature">
+          <div class="ibox"><i class="fas fa-shield-halved"></i></div>
+          <div class="quote-feature-text">
+            <strong>Full Cargo Insurance</strong>
+            <span>Comprehensive coverage on every shipment we handle</span>
+          </div>
+        </div>
+        <div class="quote-feature">
+          <div class="ibox"><i class="fas fa-clock-rotate-left"></i></div>
+          <div class="quote-feature-text">
+            <strong>24-Hour Response</strong>
+            <span>Competitive pricing delivered to your inbox by the next business day</span>
           </div>
         </div>
       </div>
+    </div>
 
-    <div class="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl">
-      <form name="logistics-final" method="POST" data-netlify="true" action="/success">
-        <input type="hidden" name="form-name" value="logistics-final" placeholder=""/>
+    <!-- Right: Form card -->
+    <div class="glass quote-card reveal right" style="--d:.15s;">
+      <div class="quote-card-head">
+        <div class="lbl">Quote Request</div>
+        <h2>Request Your Freight Quote</h2>
+        <p>We respond within 24 hours with competitive, transparent pricing.</p>
+      </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-semibold mb-2 text-blue-800">Full Name</label>
-            <input type="text" name="name" placeholder="John Doe" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+      <form id="quote-form" novalidate>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="q-name">Full Name</label>
+            <input id="q-name" type="text" name="name" placeholder="John Doe" required class="form-input">
           </div>
-
-          <div>
-            <label class="block text-sm font-semibold mb-2 text-blue-800">Email Address</label>
-            <input type="email" name="email" placeholder="@example.mail" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
+          <div class="form-group">
+            <label class="form-label" for="q-email">Email Address</label>
+            <input id="q-email" type="email" name="email" placeholder="you@example.com" required class="form-input">
           </div>
         </div>
 
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-semibold mb-2 text-blue-800">Shipment Type</label>
-              <select name="shipment_type" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
-                <option value="Air Freight">Air Freight</option>
-                <option value="Sea Freight">Sea Freight</option>
-                <option value="Road Freight">Road Freight</option>
-                <option value="Road Freight">Rail Freight</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-semibold mb-2 text-blue-800">Weight (kg)</label>
-              <input type="text" name="weight" placeholder="e.g. 500" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
-            </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="q-type">Shipment Type</label>
+            <select id="q-type" name="shipment_type" required class="form-input">
+              <option value="" disabled selected>Select type…</option>
+              <option value="Air Freight">Air Freight</option>
+              <option value="Sea Freight">Sea Freight</option>
+              <option value="Road Freight">Road Freight</option>
+              <option value="Rail Freight">Rail Freight</option>
+            </select>
           </div>
-
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-semibold mb-2 text-blue-800">Pickup Location</label>
-              <input type="text" name="pickup_location" placeholder="Address" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
-            </div>
-            <div>
-              <label class="block text-sm font-semibold mb-2 text-blue-800">Delivery Destination</label>
-              <input type="text" name="delivery_destination" placeholder="Address" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold mb-2 text-blue-800">Phone Number</label>
-              <input type="number" name="cellphonenumber" placeholder="123****" required class="w-full bg-blue-900/30 border border-white/10 rounded-xl px-4 py-3">
-            </div>
+          <div class="form-group">
+            <label class="form-label" for="q-weight">Weight (kg)</label>
+            <input id="q-weight" type="text" name="weight" placeholder="e.g. 500" required class="form-input">
           </div>
+        </div>
 
-        <button type="submit" class="w-full mt-4 bg-red-600 hover:bg-red-900 hover:scale-95 text-white font-bold py-4 rounded-xl">Request Quote</button>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="q-pickup">Pickup Location</label>
+            <input id="q-pickup" type="text" name="pickup_location" placeholder="City / Address" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="q-dest">Delivery Destination</label>
+            <input id="q-dest" type="text" name="delivery_destination" placeholder="City / Address" required class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="q-phone">Phone Number</label>
+          <input id="q-phone" type="tel" name="cellphonenumber" placeholder="+1 (555) 000-0000" required class="form-input">
+        </div>
+
+        <button type="submit" class="btn-primary form-submit">
+          Request Quote &nbsp;<i class="fas fa-paper-plane" style="font-size:.62rem;"></i>
+        </button>
       </form>
     </div>
 
@@ -191,217 +777,247 @@
 </section>
 
 
+<!-- ══════════════ STATS STRIP ══════════════ -->
+<div class="stats-strip">
+  <div class="stats-strip-inner">
+    <div class="stat-c">
+      <div class="stat-num">150+</div>
+      <div class="stat-lbl">Countries Served</div>
+    </div>
+    <div class="stat-c">
+      <div class="stat-num">24/7</div>
+      <div class="stat-lbl">Live Support</div>
+    </div>
+    <div class="stat-c">
+      <div class="stat-num">99%</div>
+      <div class="stat-lbl">On-Time Delivery</div>
+    </div>
+    <div class="stat-c">
+      <div class="stat-num">15yr</div>
+      <div class="stat-lbl">Industry Experience</div>
+    </div>
+  </div>
+</div>
 
-  
-  <section class="bg-blue-950 py-17">
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+
       <div>
-      <div class="items-center justify-between px-6 lg:flex md:px-16">
-        <div class="py-6 max-w-100">
-          <h1 class="pb-2 font-serif text-6xl text-white animate__animated animate__heartBeat animate__slow animate__repeat-1 animate__delay-1s">SWIFT <br>FREIGHT</h1>
-          <h1 class="text-white text-[20px] py-3">Stay Connected</h1>
-          <p class="text-[14px] text-gray-400">Join our community to unlock exclusive insight and innovative solutions for all your logistics needs</p>
-
-          
-        </div>
-
-        
-        
-        
-        <div class="justify-between md:flex-col ">
+        <div style="display:flex;align-items:center;gap:13px;margin-bottom:22px;">
+          <img src="./image/sfl-logo.svg" alt="Swift Freight" width="42" height="42"
+               style="filter:drop-shadow(0 2px 12px rgba(59,130,246,.42));">
           <div>
-            <h1 class="self-end py-2 text-3xl font-semibold text-white">The Future of Urban<br>Delivery Starts Here</h1>
-          </div>
-          <div class="grid items-center grid-cols-2 md:flex gap-18">
-            
-            <div class="a-reveal flex-col items-center justify-center gap-10">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Company</h1>
-              <h1><a href="blog" class="text-gray-400 text-[14px] ">Blog</a></h1>
-              <h1></h1><a href="contact.html" class="text-gray-400 text-[14px]">Contact Us</a></h1>
-              <h1><a href="about.html" class="text-gray-400 text-[14px]">About Us</a></h1>
-              <h1><a href="careers" class="text-gray-400 text-[14px]">Careers</a></h1>
-            </div>
-
-            <div class="a-reveal flex-col items-center justify-center gap-10 md:pb-6">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Support</h1>
-              <h1></h1><a href="Faq" class="text-gray-400 text-[14px]">FAQ</a></h1>
-              <h1><a href="support.html" class="text-gray-400 text-[14px]">About Us</a></h1>
-              <h1><a href="Tracking.html" class="text-gray-400 text-[14px]">Careers</a></h1>
-            </div>
-
-            <div class="a-reveal flex-col items-center justify-center gap-10">
-              <h1 class="pt-5 pb-3 text-[20px] text-white">Services</h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px] ">Road Freight</a></h1>
-              <h1></h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Air Freight</a></h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Sea freight</a></h1>
-              <h1><a href="#freightSolution" class="text-gray-400 text-[14px]">Rail Freight</a></h1>
-            </div>
+            <div style="font-family:'Bebas Neue';font-size:1.06rem;letter-spacing:.17em;line-height:1.1;"><span class="gt">SWIFT</span><span style="color:rgba(232,240,254,.75);margin-left:5px;">FREIGHT</span></div>
+            <div style="font-size:6px;letter-spacing:.52em;text-transform:uppercase;color:rgba(147,197,253,.35);margin-top:2px;">Logistics</div>
           </div>
         </div>
+        <p style="color:rgba(232,240,254,.44);font-size:.81rem;line-height:1.82;margin-bottom:22px;font-weight:300;">Join our community to unlock exclusive insights and innovative solutions for all your logistics needs.</p>
+        <form name="quotepage-subscribe" data-netlify="true" method="post" action="/success" class="footer-form">
+          <input type="email" name="email" placeholder="Your email address">
+          <button type="submit" class="btn-primary">Subscribe</button>
+        </form>
+        <div class="footer-socials">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
-      
-          
-      </section>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="payment.html">Track Shipment</a></li>
+          <li><a href="quote.html">Get a Quote</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html">Sea Freight</a></li>
+          <li><a href="services.html">Road Freight</a></li>
+          <li><a href="services.html">Air Freight</a></li>
+          <li><a href="services.html">Rail Freight</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-btm">
+      <div style="display:flex;gap:24px;">
+        <a href="policy.html" class="foot-link">Privacy Policy</a>
+        <a href="#" class="foot-link">Sitemap</a>
+        <a href="#" class="foot-link">Terms of Use</a>
+      </div>
+      <p class="foot-copy">©2025 Swift Freight. All rights reserved · Park James Co.</p>
+    </div>
+  </div>
+</footer>
 
 
-      <footer class="items-center px-6 border-t-2 border-gray-400 bg-blue-950 md:px-16">
-        <div class="items-center self-center justify-between py-2 text-center md:flex">
-          <div class="flex items-center justify-center gap-8 text-center  md:gap-14">
-            <a href="policy.html" class="text-gray-400 text-[14px]">Privacy policy</a>
-            <a href="sitemap" class="text-gray-400 text-[14px]">Sitemap</a>
-            <a href="terms" class="text-gray-400 text-[14px]">Terms of Use</a>
-          </div>
-
-          <div class="self-center py-2">
-            <p class="text-gray-400 text-[12px]">©️2025 Swift Freight .All rights reserved|by Park James.Co</p>
-          </div>
-        </div>
-      </footer>
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/18562803438" target="_blank" rel="noopener"
+   style="position:fixed;bottom:32px;right:32px;z-index:100;width:54px;height:54px;border-radius:2px;display:flex;align-items:center;justify-content:center;text-decoration:none;background:#25D366;color:#fff;font-size:1.35rem;box-shadow:0 6px 28px rgba(37,211,102,.32);transition:transform .25s,box-shadow .25s;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));"
+   onmouseover="this.style.transform='translateY(-3px) scale(1.05)';this.style.boxShadow='0 10px 36px rgba(37,211,102,.44)'"
+   onmouseout="this.style.transform='';this.style.boxShadow='0 6px 28px rgba(37,211,102,.32)'">
+  <i class="fab fa-whatsapp"></i>
+</a>
 
 
+<script src="script.js"></script>
 
+<script>
+/* ═══════════════ THEME TOGGLE ═══════════════ */
+(function(){
+  var root=document.documentElement,KEY='sfl_theme',DARK='dark',LIGHT='light';
+  var tt=null;
+  function getSaved(){ return localStorage.getItem(KEY); }
+  function getAuto(){ return window.matchMedia('(prefers-color-scheme: dark)').matches?DARK:LIGHT; }
+  function applyTheme(t,animate){
+    if(animate){ if(tt)clearTimeout(tt); root.classList.add('sfl-transitioning'); tt=setTimeout(function(){ root.classList.remove('sfl-transitioning'); },480); }
+    root.setAttribute('data-theme',t); localStorage.setItem(KEY,t);
+    ['themeIconDesktop','themeIconMobile'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el) el.className=t===DARK?'fas fa-sun':'fas fa-moon';
+    });
+  }
+  function toggle(){ applyTheme(root.getAttribute('data-theme')===DARK?LIGHT:DARK,true); }
+  applyTheme(getSaved()||getAuto(),false);
+  ['themeToggleDesktop','themeToggleMobile'].forEach(function(id){
+    var btn=document.getElementById(id);
+    if(btn) btn.addEventListener('click',toggle);
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){
+    if(!getSaved()) applyTheme(e.matches?DARK:LIGHT,false);
+  });
+})();
 
+/* ═══════════════ MOBILE NAV ═══════════════ */
+(function(){
+  var menuBtn=document.getElementById('menuBtn');
+  var closeBtn=document.getElementById('mobileNavClose');
+  var nav=document.getElementById('mobile-nav');
+  if(!menuBtn||!nav) return;
+  var isOpen=false;
+  function openNav(){ isOpen=true; menuBtn.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); nav.classList.add('open'); nav.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function closeNav(){ isOpen=false; menuBtn.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); nav.classList.remove('open'); nav.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  menuBtn.addEventListener('click',function(){ isOpen?closeNav():openNav(); });
+  if(closeBtn) closeBtn.addEventListener('click',closeNav);
+  nav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeNav); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&isOpen) closeNav(); });
+  window.addEventListener('resize',function(){ if(window.innerWidth>=1024&&isOpen) closeNav(); });
+})();
 
-      
+/* ═══════════════ HEADER SCROLL ═══════════════ */
+(function(){
+  var hdr=document.getElementById('hdr');
+  if(!hdr) return;
+  var fn=function(){ hdr.classList.toggle('scrolled',window.scrollY>30); };
+  window.addEventListener('scroll',fn,{passive:true});
+  fn();
+})();
 
+/* ═══════════════ PRESS-HOLD ADMIN ═══════════════ */
+(function(){
+  var logos=document.querySelectorAll('.logo,.mob-nav-logo');
+  logos.forEach(function(el){
+    var t=null;
+    el.addEventListener('mousedown',function(){ t=setTimeout(function(){ window.location.href='admin.html'; },3000); document.documentElement.classList.add('sfl-holding'); });
+    el.addEventListener('mouseup',function(){ clearTimeout(t); document.documentElement.classList.remove('sfl-holding'); });
+    el.addEventListener('mouseleave',function(){ clearTimeout(t); document.documentElement.classList.remove('sfl-holding'); });
+    el.addEventListener('touchstart',function(e){ e.preventDefault(); t=setTimeout(function(){ window.location.href='admin.html'; },3000); document.documentElement.classList.add('sfl-holding'); },{passive:false});
+    el.addEventListener('touchend',function(){ clearTimeout(t); document.documentElement.classList.remove('sfl-holding'); });
+  });
+})();
 
+/* ═══════════════ QUOTE FORM ═══════════════ */
+(function(){
+  var form=document.getElementById('quote-form');
+  if(!form) return;
+  var btn=form.querySelector('button[type="submit"]');
 
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
 
+    // Basic HTML5 validation
+    if(!form.checkValidity()){ form.reportValidity(); return; }
 
+    var data={
+      name:        form.querySelector('[name="name"]')?.value.trim()        || '',
+      email:       form.querySelector('[name="email"]')?.value.trim()       || '',
+      phone:       form.querySelector('[name="cellphonenumber"]')?.value.trim() || '',
+      origin:      form.querySelector('[name="pickup_location"]')?.value.trim() || '',
+      destination: form.querySelector('[name="delivery_destination"]')?.value.trim() || '',
+      cargo_type:  form.querySelector('[name="shipment_type"]')?.value      || '',
+      weight:      form.querySelector('[name="weight"]')?.value.trim()      || '',
+    };
 
+    if(!data.name||!data.email){ alert('Please enter your name and email.'); return; }
 
+    var fnUrl=(typeof SUPABASE_URL!=='undefined'&&!SUPABASE_URL.includes('YOUR_PROJECT_ID'))
+      ? SUPABASE_URL.replace(/\/$/, '')+'/functions/v1/quote-request'
+      : null;
 
+    if(!fnUrl){
+      alert('Tracking system not yet configured. Please contact us directly.');
+      return;
+    }
 
-       
-        <!-- LOADER -->
-    <section>
-        <div id="loader">
-          <div class="loader-wordmark">
-            <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
-          </div>
-          <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-        </div>
-    </section>
+    if(btn){ btn.disabled=true; btn.textContent='Sending…'; }
 
+    fetch(fnUrl,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey': (typeof SUPABASE_ANON_KEY!=='undefined'?SUPABASE_ANON_KEY:''),
+      },
+      body:JSON.stringify(data),
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res.error) throw new Error(res.error);
+      // Success state
+      form.innerHTML='<div style="text-align:center;padding:32px 0;">'
+        +'<div style="font-size:2rem;margin-bottom:12px;">✓</div>'
+        +'<p style="color:var(--text);font-size:1rem;font-weight:600;margin-bottom:8px;">Quote Request Sent!</p>'
+        +'<p style="color:var(--muted);font-size:.85rem;line-height:1.7;">We\'ve received your request and will respond within 24 hours.<br>Check your inbox for a confirmation email.</p>'
+        +'</div>';
+    })
+    .catch(function(e){
+      console.error(e);
+      if(btn){ btn.disabled=false; btn.innerHTML='Request Quote &nbsp;<i class="fas fa-paper-plane" style="font-size:.62rem;"></i>'; }
+      alert('Something went wrong. Please try again or contact us directly.');
+    });
+  });
+})();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        const menuBtn = document.getElementById('menu-btn');
-        const menuIcon = document.getElementById('menu-icon');
-        const xIcon = document.getElementById('x-icon');
-
-        menuBtn.addEventListener('click', () => {
-        menuIcon.classList.toggle('hidden');
-        xIcon.classList.toggle('hidden');
-        console.log("Button clicked!");
-            });
-          });
-      </script>
-
-
-
-      <script>
-          window.addEventListener("load", () => {
-            const loader = document.getElementById("loader");
-            if (!loader) return;
-
-            loader.classList.add("hidden");
-            loader.style.pointerEvents = "none";
-            setTimeout(() => {
-              if (loader.parentNode) loader.parentNode.removeChild(loader);
-            }, 700);
-          });
-      </script>
-
-      <script src="script.js"></script>
-
-      <script>
-        const form = document.querySelector('form[name="quote-request"]');
-
-        form.addEventListener("submit", (e) => {
-          e.preventDefault();
-
-          const formData = new FormData(form);
-
-          fetch("/", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(formData).toString(),
-          })
-            .then(() => {
-              // This forces the browser to go to your success page
-              window.location.href = "success.html";
-            })
-            .catch((error) => alert(error));
-        });
-      </script>
-
-
-      <script>
-        
-          const menuBtn = document.getElementById('menu-btn');
-          const sideMenu = document.getElementById('side-menu');
-          const overlay = document.getElementById('overlay');
-          const l1 = document.getElementById('line-1');
-          const l2 = document.getElementById('line-2');
-          const l3 = document.getElementById('line-3');
-
-          menuBtn.addEventListener('click', () => {
-              // Toggle the side menu
-              const isOpen = sideMenu.classList.toggle('translate-x-full');
-              
-              if (!isOpen) {
-                  // OPEN STATE
-                  overlay.classList.remove('hidden');
-                  setTimeout(() => overlay.classList.add('opacity-100'), 10);
-                  
-                  // Morph to X
-                  l1.classList.replace('-translate-y-2', 'rotate-45');
-                  l2.classList.add('opacity-0', '-translate-x-2');
-                  l3.classList.replace('translate-y-2', '-rotate-45');
-              } else {
-                  // CLOSE STATE
-                  overlay.classList.remove('opacity-100');
-                  setTimeout(() => overlay.classList.add('hidden'), 500);
-                  
-                  // Morph back to Hamburger
-                  l1.classList.replace('rotate-45', '-translate-y-2');
-                  l2.classList.remove('opacity-0', '-translate-x-2');
-                  l3.classList.replace('-rotate-45', 'translate-y-2');
-              }
-          });
-
-          // Close menu if clicking the blurred area
-          overlay.addEventListener('click', () => menuBtn.click());
-    
-      </script>
+/* ═══════════════ SCROLL REVEAL ═══════════════ */
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!els.length) return;
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('on'); obs.unobserve(e.target); }
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -36px 0px'});
+  els.forEach(function(el){ obs.observe(el); });
+})();
+</script>
 
 </body>
 </html>
