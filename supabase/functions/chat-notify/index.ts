@@ -1,10 +1,10 @@
 import { CORS_HEADERS, json, err } from '../_shared/cors.ts';
 import { sendEmail }               from '../_shared/resend.ts';
 
-const ADMIN_EMAIL  = 'swiftfreightlogix@gmail.com';
-const SITE         = 'https://swiftfreightlogix.netlify.app';
-const ADMIN_PANEL  = `${SITE}/src/admin.html`;
-const TRACK_URL    = `${SITE}/payment.html`;
+const ADMIN_EMAIL = 'swiftfreightlogix@gmail.com';
+const SITE        = 'https://swiftfreightlogix.netlify.app';
+const ADMIN_PANEL = `${SITE}/src/admin.html`;
+const TRACK_URL   = `${SITE}/payment.html`;
 
 /* ══════════════════════════════════════════════════════════════════════════
    HELPERS
@@ -22,12 +22,14 @@ function firstName(name: string): string {
   return esc(name.split(' ')[0] || name);
 }
 
-/* ── Ultra-premium email shell ──────────────────────────────────────────── */
+/* ── Ultra-premium shell: white · blue · purple ─────────────────────────
+   Stripe: e0e7ff → 93c5fd → 3b82f6 → 7c3aed → c084fc
+   Header: deep indigo-navy gradient
+   Body:   rich dark navy
+   ──────────────────────────────────────────────────────────────────────── */
 function shell(opts: {
   preheader : string;
   badge     : string;
-  c1        : string;   /* gradient start colour  */
-  c2        : string;   /* gradient end / accent  */
   body      : string;
 }): string {
   return `<!DOCTYPE html>
@@ -39,54 +41,65 @@ function shell(opts: {
   <meta name="supported-color-schemes" content="dark light">
   <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
   <style>
-    @media (prefers-color-scheme:dark){.em-bg{background:#010810!important}}
+    @media (prefers-color-scheme:dark){.em-bg{background:#03060f!important}}
     @media only screen and (max-width:620px){
       .em-card{width:100%!important;border-radius:0!important}
-      .em-pad{padding:28px 24px!important}
+      .em-pad{padding:30px 22px!important}
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background:#010810;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<body style="margin:0;padding:0;background:#03060f;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
-<!-- Preheader (hidden) -->
-<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;visibility:hidden;opacity:0;color:transparent;height:0;width:0;font-size:1px;">
-  ${esc(opts.preheader)}&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+<!-- Preheader (hidden preview text) -->
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;visibility:hidden;opacity:0;
+            color:transparent;height:0;width:0;font-size:1px;">
+  ${esc(opts.preheader)}&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
 </div>
 
-<!-- Wrapper -->
+<!-- Outer wrapper -->
 <table role="presentation" class="em-bg" width="100%" border="0" cellpadding="0" cellspacing="0"
-  style="background:#010810;min-height:100vh;">
-<tr><td align="center" valign="top" style="padding:48px 16px 72px;">
+       style="background:#03060f;min-height:100vh;">
+<tr><td align="center" valign="top" style="padding:52px 16px 80px;">
+
 <table role="presentation" class="em-card" width="600" border="0" cellpadding="0" cellspacing="0"
-  style="max-width:600px;width:100%;">
+       style="max-width:600px;width:100%;">
 
   <!-- ── Eyebrow ── -->
-  <tr><td align="center" style="padding:0 0 18px;">
-    <p style="margin:0;font-size:9px;letter-spacing:.46em;text-transform:uppercase;
-       font-family:Arial,Helvetica,sans-serif;color:rgba(99,141,255,.32);">
-      Swift Freight Logistics &nbsp;&bull;&nbsp; Live Support
+  <tr><td align="center" style="padding:0 0 22px;">
+    <p style="margin:0;font-size:9px;letter-spacing:.56em;text-transform:uppercase;
+       font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.28);">
+      Swift Freight Logistics &nbsp;&bull;&nbsp; Support Centre
     </p>
   </td></tr>
 
-  <!-- ── Header card ── -->
-  <tr><td style="background:#040e22;border:1px solid rgba(37,99,235,.2);border-bottom:none;
-                 border-radius:10px 10px 0 0;padding:30px 44px 26px;">
+  <!-- ── Header ── -->
+  <tr><td style="background:linear-gradient(145deg,#130e2e 0%,#0d1048 55%,#090b28 100%);
+                 border:1px solid rgba(124,58,237,.3);border-bottom:none;
+                 border-radius:14px 14px 0 0;padding:36px 52px 30px;">
     <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td valign="bottom">
-          <p style="margin:0 0 3px;font-size:8px;letter-spacing:.56em;text-transform:uppercase;
-             font-family:Arial,Helvetica,sans-serif;color:rgba(99,141,255,.38);">SWIFT FREIGHT</p>
-          <p style="margin:0;font-size:0;line-height:0;">
-            <span style="font-size:26px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;
-                  font-family:Arial,Helvetica,sans-serif;color:#e8f0fe;line-height:1;">
-              <span style="color:${opts.c2};">SFL</span>&thinsp;LOGISTICS
-            </span>
+        <td valign="middle">
+          <!-- Micro-label -->
+          <p style="margin:0 0 5px;font-size:8px;letter-spacing:.62em;text-transform:uppercase;
+             font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.38);">
+            OFFICIAL NOTIFICATION
+          </p>
+          <!-- Wordmark -->
+          <p style="margin:0;line-height:1;font-size:0;">
+            <span style="font-size:25px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;
+                  font-family:Arial,Helvetica,sans-serif;color:#a78bfa;">SFL</span><span
+                  style="font-size:25px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;
+                  font-family:Arial,Helvetica,sans-serif;color:#dde5ff;">&thinsp;LOGISTICS</span>
           </p>
         </td>
         <td align="right" valign="middle">
-          <span style="display:inline-block;padding:6px 15px;border:1px solid rgba(99,141,255,.22);
-                border-radius:3px;font-size:8px;letter-spacing:.26em;text-transform:uppercase;
-                font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.38);">
+          <!-- Badge pill -->
+          <span style="display:inline-block;padding:8px 18px;
+                background:rgba(124,58,237,.13);
+                border:1px solid rgba(167,139,250,.3);
+                border-radius:4px;font-size:8px;letter-spacing:.3em;text-transform:uppercase;
+                font-family:Arial,Helvetica,sans-serif;color:rgba(199,210,254,.72);
+                white-space:nowrap;">
             ${esc(opts.badge)}
           </span>
         </td>
@@ -94,32 +107,46 @@ function shell(opts: {
     </table>
   </td></tr>
 
-  <!-- Accent stripe -->
-  <tr><td height="3" style="height:3px;line-height:3px;font-size:0;
-      background:linear-gradient(90deg,${opts.c1} 0%,${opts.c2} 55%,transparent 100%);">
+  <!-- ── Gradient accent stripe: white → blue → purple ── -->
+  <tr><td height="5" style="height:5px;line-height:5px;font-size:0;
+      background:linear-gradient(90deg,#e0e7ff 0%,#93c5fd 14%,#3b82f6 38%,#6d28d9 68%,#c084fc 100%);">
     &zwnj;
   </td></tr>
 
   <!-- ── Body ── -->
-  <tr><td class="em-pad" style="background:#06111f;border-left:1px solid rgba(37,99,235,.12);
-                                border-right:1px solid rgba(37,99,235,.12);padding:44px 44px 40px;">
+  <tr><td class="em-pad"
+          style="background:linear-gradient(180deg,#090d26 0%,#06091c 100%);
+                 border-left:1px solid rgba(124,58,237,.15);
+                 border-right:1px solid rgba(124,58,237,.15);
+                 padding:52px 52px 46px;">
     ${opts.body}
   </td></tr>
 
   <!-- ── Footer ── -->
-  <tr><td style="background:#020914;border:1px solid rgba(37,99,235,.1);border-top:none;
-                 border-radius:0 0 10px 10px;padding:22px 44px 28px;" align="center">
-    <p style="margin:0 0 10px;font-size:11px;color:rgba(232,240,254,.2);line-height:2.2;
+  <tr><td style="background:#040712;border:1px solid rgba(124,58,237,.14);border-top:none;
+                 border-radius:0 0 14px 14px;padding:26px 52px 32px;" align="center">
+    <!-- Thin divider line in footer -->
+    <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
+           style="margin-bottom:18px;">
+      <tr><td height="1" style="height:1px;line-height:1px;font-size:0;
+          background:linear-gradient(90deg,transparent,rgba(124,58,237,.25),transparent);">
+        &zwnj;
+      </td></tr>
+    </table>
+    <p style="margin:0 0 12px;font-size:11px;color:rgba(199,210,254,.22);line-height:2.5;
        letter-spacing:.03em;font-family:Arial,Helvetica,sans-serif;">
-      <a href="${SITE}"      style="color:rgba(99,141,255,.4);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">swiftfreightlogix.netlify.app</a>
+      <a href="${SITE}" style="color:rgba(167,139,250,.5);text-decoration:none;
+         font-family:Arial,Helvetica,sans-serif;">swiftfreightlogix.netlify.app</a>
       &nbsp;&bull;&nbsp;
-      <a href="${TRACK_URL}" style="color:rgba(99,141,255,.4);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">Track Shipment</a>
+      <a href="${TRACK_URL}" style="color:rgba(167,139,250,.5);text-decoration:none;
+         font-family:Arial,Helvetica,sans-serif;">Track Shipment</a>
       &nbsp;&bull;&nbsp;
-      <a href="mailto:${ADMIN_EMAIL}" style="color:rgba(99,141,255,.4);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">Contact Support</a>
+      <a href="mailto:${ADMIN_EMAIL}" style="color:rgba(167,139,250,.5);text-decoration:none;
+         font-family:Arial,Helvetica,sans-serif;">Contact Support</a>
     </p>
-    <p style="margin:0;font-size:8px;color:rgba(232,240,254,.1);letter-spacing:.14em;
+    <p style="margin:0;font-size:8px;color:rgba(199,210,254,.1);letter-spacing:.18em;
        text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">
-      Automated message &nbsp;&bull;&nbsp; Do not reply to this email
+      Automated notification &nbsp;&bull;&nbsp; Please do not reply to this email
     </p>
   </td></tr>
 
@@ -130,15 +157,29 @@ function shell(opts: {
 </html>`;
 }
 
-/* ── Components ─────────────────────────────────────────────────────────── */
+/* ── Shared components ───────────────────────────────────────────────────── */
+
+function contextPill(text: string): string {
+  return `
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+    <tr>
+      <td style="padding:8px 20px;background:rgba(124,58,237,.1);
+                 border:1px solid rgba(167,139,250,.24);border-radius:99px;">
+        <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.18em;
+           color:rgba(167,139,250,.9);font-family:Arial,Helvetica,sans-serif;
+           text-transform:uppercase;">${esc(text)}</p>
+      </td>
+    </tr>
+  </table>`;
+}
 
 function heading(title: string, subtitle: string): string {
   return `
-  <h1 style="margin:0 0 10px;font-size:26px;font-weight:900;letter-spacing:.03em;
-     color:#e8f0fe;font-family:Arial,Helvetica,sans-serif;line-height:1.2;">
+  <h1 style="margin:0 0 12px;font-size:28px;font-weight:900;letter-spacing:.02em;
+     color:#eef2ff;font-family:Arial,Helvetica,sans-serif;line-height:1.2;">
     ${title}
   </h1>
-  <p style="margin:0 0 36px;font-size:14px;color:rgba(232,240,254,.4);line-height:1.85;
+  <p style="margin:0 0 38px;font-size:14px;color:rgba(199,210,254,.52);line-height:1.95;
      font-family:Arial,Helvetica,sans-serif;">${subtitle}</p>`;
 }
 
@@ -147,11 +188,11 @@ function fieldRow(label: string, value: string): string {
   <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
          style="margin-bottom:8px;">
     <tr>
-      <td style="padding:13px 18px 15px;background:rgba(3,11,28,.9);
-                 border:1px solid rgba(37,99,235,.14);border-radius:5px;">
-        <p style="margin:0 0 5px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
-           font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">${esc(label)}</p>
-        <p style="margin:0;font-size:14px;color:#dde9ff;letter-spacing:.01em;
+      <td style="padding:15px 22px 17px;background:#050818;
+                 border:1px solid rgba(124,58,237,.18);border-radius:7px;">
+        <p style="margin:0 0 5px;font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+           font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.5);">${esc(label)}</p>
+        <p style="margin:0;font-size:14px;color:#dde5ff;letter-spacing:.01em;
            font-family:Arial,Helvetica,sans-serif;line-height:1.5;word-break:break-word;">${esc(value)}</p>
       </td>
     </tr>
@@ -164,52 +205,57 @@ function fieldPair(a: [string, string], b: [string, string]): string {
          style="margin-bottom:8px;">
     <tr>
       <td width="49%" valign="top"
-          style="padding:13px 18px 15px;background:rgba(3,11,28,.9);
-                 border:1px solid rgba(37,99,235,.14);border-radius:5px;">
-        <p style="margin:0 0 5px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
-           font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">${esc(a[0])}</p>
-        <p style="margin:0;font-size:14px;color:#dde9ff;letter-spacing:.01em;
+          style="padding:15px 22px 17px;background:#050818;
+                 border:1px solid rgba(124,58,237,.18);border-radius:7px;">
+        <p style="margin:0 0 5px;font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+           font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.5);">${esc(a[0])}</p>
+        <p style="margin:0;font-size:14px;color:#dde5ff;letter-spacing:.01em;
            font-family:Arial,Helvetica,sans-serif;line-height:1.5;word-break:break-word;">${esc(a[1])}</p>
       </td>
       <td width="2%">&nbsp;</td>
       <td width="49%" valign="top"
-          style="padding:13px 18px 15px;background:rgba(3,11,28,.9);
-                 border:1px solid rgba(37,99,235,.14);border-radius:5px;">
-        <p style="margin:0 0 5px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
-           font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">${esc(b[0])}</p>
-        <p style="margin:0;font-size:14px;color:#dde9ff;letter-spacing:.01em;
+          style="padding:15px 22px 17px;background:#050818;
+                 border:1px solid rgba(124,58,237,.18);border-radius:7px;">
+        <p style="margin:0 0 5px;font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+           font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.5);">${esc(b[0])}</p>
+        <p style="margin:0;font-size:14px;color:#dde5ff;letter-spacing:.01em;
            font-family:Arial,Helvetica,sans-serif;line-height:1.5;word-break:break-word;">${esc(b[1])}</p>
       </td>
     </tr>
   </table>`;
 }
 
-function messageBubble(content: string, borderColor: string, label: string): string {
+function messageBubble(content: string, label: string): string {
   return `
   <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
-         style="margin:30px 0 0;">
-    <tr><td style="padding-bottom:8px;">
-      <p style="margin:0;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
-         font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">${esc(label)}</p>
+         style="margin:32px 0 0;">
+    <tr><td style="padding-bottom:9px;">
+      <p style="margin:0;font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+         font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.45);">${esc(label)}</p>
     </td></tr>
-    <tr><td style="padding:22px 26px 24px;background:rgba(37,99,235,.05);
-                   border:1px solid rgba(37,99,235,.2);border-left:3px solid ${borderColor};
-                   border-radius:0 6px 6px 0;">
-      <p style="margin:0;font-size:15px;line-height:1.9;color:rgba(232,240,254,.88);
-         font-family:Arial,Helvetica,sans-serif;word-break:break-word;">${esc(content)}</p>
-    </td></tr>
+    <tr>
+      <td style="padding:26px 30px 28px;
+                 background:rgba(109,40,217,.06);
+                 border:1px solid rgba(124,58,237,.18);
+                 border-left:3px solid #7c3aed;
+                 border-radius:0 8px 8px 0;">
+        <p style="margin:0;font-size:15px;line-height:1.95;color:rgba(224,231,255,.9);
+           font-family:Arial,Helvetica,sans-serif;word-break:break-word;">${esc(content)}</p>
+      </td>
+    </tr>
   </table>`;
 }
 
-function ctaButton(href: string, label: string, bg1: string, bg2: string): string {
+function ctaButton(href: string, label: string): string {
   return `
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-top:38px;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-top:40px;">
     <tr>
-      <td style="border-radius:5px;background:linear-gradient(135deg,${bg1},${bg2});
-                 box-shadow:0 8px 32px rgba(37,99,235,.3);">
+      <td style="border-radius:7px;
+                 background:linear-gradient(135deg,#1d4ed8 0%,#4f46e5 48%,#7c3aed 100%);
+                 box-shadow:0 10px 40px rgba(124,58,237,.5);">
         <a href="${href}"
-           style="display:inline-block;padding:16px 40px;font-size:11px;font-weight:700;
-                  letter-spacing:.24em;text-transform:uppercase;color:#ffffff;text-decoration:none;
+           style="display:inline-block;padding:18px 50px;font-size:11px;font-weight:700;
+                  letter-spacing:.28em;text-transform:uppercase;color:#ffffff;text-decoration:none;
                   font-family:Arial,Helvetica,sans-serif;mso-padding-alt:0;">
           ${label} &nbsp;&rarr;
         </a>
@@ -221,29 +267,33 @@ function ctaButton(href: string, label: string, bg1: string, bg2: string): strin
 function divider(): string {
   return `
   <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
-         style="margin:34px 0;">
+         style="margin:38px 0;">
     <tr><td height="1" style="height:1px;line-height:1px;font-size:0;
-        background:rgba(37,99,235,.1);">&zwnj;</td></tr>
+        background:linear-gradient(90deg,transparent,rgba(124,58,237,.18),transparent);">
+      &zwnj;
+    </td></tr>
   </table>`;
 }
 
 function statusSteps(steps: Array<{ emoji: string; label: string; active: boolean }>): string {
   const cols = steps.map(s => `
     <td width="${Math.floor(96 / steps.length)}%" align="center" valign="middle"
-        style="padding:16px 8px;
-               background:${s.active ? 'rgba(34,197,94,.07)' : 'rgba(255,255,255,.025)'};
-               border:1px solid ${s.active ? 'rgba(34,197,94,.22)' : 'rgba(255,255,255,.06)'};
-               border-radius:6px;">
-      <p style="margin:0 0 7px;font-size:20px;line-height:1;">${s.emoji}</p>
-      <p style="margin:0;font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+        style="padding:20px 8px;
+               background:${s.active ? 'rgba(124,58,237,.12)' : 'rgba(255,255,255,.02)'};
+               border:1px solid ${s.active ? 'rgba(167,139,250,.32)' : 'rgba(255,255,255,.05)'};
+               border-radius:8px;">
+      <p style="margin:0 0 9px;font-size:22px;line-height:1;">${s.emoji}</p>
+      <p style="margin:0;font-size:8px;letter-spacing:.22em;text-transform:uppercase;
          font-family:Arial,Helvetica,sans-serif;
-         color:${s.active ? 'rgba(34,197,94,.82)' : 'rgba(232,240,254,.25)'};">${esc(s.label)}</p>
+         color:${s.active ? 'rgba(167,139,250,.88)' : 'rgba(199,210,254,.22)'};">
+        ${esc(s.label)}
+      </p>
     </td>
   `).join('<td width="2%" style="font-size:0;">&nbsp;</td>');
 
   return `
   <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
-         style="margin-bottom:30px;">
+         style="margin-bottom:32px;">
     <tr>${cols}</tr>
   </table>`;
 }
@@ -257,24 +307,30 @@ function adminNewConversationEmail(p: {
   visitorName: string; visitorEmail: string;
   content: string; sessionId: string; pageUrl: string;
 }): { subject: string; html: string } {
-  const subject   = `💬 New Chat Started — ${p.visitorName}`;
-  const preheader = `${p.visitorName} (${p.visitorEmail}) just started a live chat on your site.`;
+  const subject   = `✦ New Chat — ${p.visitorName} · Swift Freight`;
+  const preheader = `${p.visitorName} just started a live chat. Open the admin panel to respond now.`;
 
   const body = `
+    ${contextPill('✦ New Conversation')}
+
     ${heading(
-      'New Support Conversation',
-      `A visitor has started a live chat. Reply promptly — fast responses drive trust and conversions.`
+      'A visitor started a live chat.',
+      `<strong style="color:rgba(224,231,255,.78);">${esc(p.visitorName)}</strong> opened a new support conversation on your site. Fast responses drive trust — reply now from the admin panel.`
     )}
+
+    <!-- Info grid -->
     ${fieldPair(['Visitor Name', p.visitorName], ['Email Address', p.visitorEmail])}
-    ${fieldRow('Page', p.pageUrl || SITE)}
+    ${fieldRow('Landing Page', p.pageUrl || SITE)}
     ${fieldRow('Session ID', p.sessionId)}
-    ${messageBubble(p.content, '#3b82f6', "Visitor's Opening Message")}
-    ${ctaButton(ADMIN_PANEL, 'Open Admin Panel to Reply', '#1e3a8a', '#3b82f6')}
+
+    ${messageBubble(p.content, "Visitor's Opening Message")}
+
+    ${ctaButton(ADMIN_PANEL, 'Open Admin Panel &amp; Reply')}
   `;
 
   return {
     subject,
-    html: shell({ preheader, badge: 'New Conversation', c1: '#1d4ed8', c2: '#60a5fa', body }),
+    html: shell({ preheader, badge: 'New Conversation', body }),
   };
 }
 
@@ -283,46 +339,53 @@ function adminFollowUpEmail(p: {
   visitorName: string; visitorEmail: string;
   content: string; sessionId: string; pageUrl: string;
 }): { subject: string; html: string } {
-  const subject   = `💬 Message from ${p.visitorName}`;
-  const preheader = `${p.visitorName}: "${p.content.slice(0, 88)}"`;
+  const subject   = `💬 New Message · ${p.visitorName} — Swift Freight`;
+  const preheader = `${p.visitorName}: "${p.content.slice(0, 90)}"`;
 
   const body = `
+    ${contextPill('💬 Follow-up Message')}
+
     ${heading(
-      'New Message Received',
-      `${esc(p.visitorName)} sent a follow-up message in an active conversation.`
+      'New message in active conversation.',
+      `<strong style="color:rgba(224,231,255,.78);">${esc(p.visitorName)}</strong> sent a follow-up in an ongoing conversation. They are still engaged — reply while the conversation is warm.`
     )}
+
     ${fieldPair(['Visitor Name', p.visitorName], ['Email Address', p.visitorEmail])}
     ${fieldRow('Session ID', p.sessionId)}
-    ${messageBubble(p.content, '#3b82f6', 'Message')}
-    ${ctaButton(ADMIN_PANEL, 'Reply in Admin Panel', '#1e3a8a', '#3b82f6')}
+
+    ${messageBubble(p.content, 'Message')}
+
+    ${ctaButton(ADMIN_PANEL, 'Reply in Admin Panel')}
   `;
 
   return {
     subject,
-    html: shell({ preheader, badge: 'New Message', c1: '#1d4ed8', c2: '#60a5fa', body }),
+    html: shell({ preheader, badge: 'New Message', body }),
   };
 }
 
-/* 3 ── Visitor: conversation confirmation (sent on first message) ───────── */
+/* 3 ── Visitor: conversation confirmation (first message) ───────────────── */
 function visitorConfirmationEmail(p: {
   visitorName: string; content: string; sessionId: string; pageUrl: string;
 }): { subject: string; html: string } {
   const fn        = firstName(p.visitorName);
-  const subject   = `We received your message — Swift Freight Logistics`;
-  const preheader = `Hi ${fn}, our support team has been notified and will reply shortly.`;
+  const subject   = `✓ Message received · Swift Freight Logistics`;
+  const preheader = `Hi ${fn}, your message has been received. Our team will reply shortly — typically within minutes.`;
   const initial   = esc((p.visitorName.charAt(0) || 'V').toUpperCase());
 
   const body = `
-    <!-- Visitor avatar -->
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-bottom:26px;">
+    <!-- Avatar -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
       <tr>
         <td>
-          <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-            style="height:52px;width:52px;v-text-anchor:middle;" arcsize="50%"
-            fillcolor="#1d4ed8" strokecolor="none"><w:anchorlock/><center><![endif]-->
-          <div style="width:52px;height:52px;background:linear-gradient(135deg,#1e3a8a,#3b82f6);
-                      border-radius:50%;text-align:center;line-height:52px;font-size:22px;
-                      font-weight:900;font-family:Arial,Helvetica,sans-serif;color:#fff;">
+          <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+            style="height:56px;width:56px;v-text-anchor:middle;" arcsize="50%"
+            fillcolor="#3730a3" strokecolor="none"><w:anchorlock/><center><![endif]-->
+          <div style="width:56px;height:56px;
+                      background:linear-gradient(135deg,#1d4ed8 0%,#4f46e5 50%,#7c3aed 100%);
+                      border-radius:50%;text-align:center;line-height:56px;
+                      font-size:24px;font-weight:900;font-family:Arial,Helvetica,sans-serif;
+                      color:#fff;box-shadow:0 6px 28px rgba(124,58,237,.45);">
             ${initial}
           </div>
           <!--[if mso]></center></v:roundrect><![endif]-->
@@ -330,36 +393,57 @@ function visitorConfirmationEmail(p: {
       </tr>
     </table>
 
+    ${contextPill('✓ Message Received')}
+
     ${heading(
-      `Message received, ${fn}.`,
-      `Thank you for contacting Swift Freight Logistics support. Our team has been notified and will respond to you as soon as possible — typically within minutes.`
+      `We got your message, ${fn}.`,
+      `Thank you for reaching out to Swift Freight Logistics support. Your conversation has been logged and our team has been notified. We typically reply within minutes.`
     )}
 
+    <!-- Status journey -->
     ${statusSteps([
-      { emoji: '✅', label: 'Received',     active: true  },
+      { emoji: '✦', label: 'Received',     active: true  },
       { emoji: '⚡', label: 'In Queue',     active: false },
       { emoji: '💬', label: 'Reply Coming', active: false },
     ])}
 
-    ${messageBubble(p.content, '#3b82f6', 'Your Message')}
+    <!-- Message recap -->
+    ${messageBubble(p.content, 'Your Message')}
 
     ${divider()}
 
-    <p style="margin:0 0 10px;font-size:13px;color:rgba(232,240,254,.38);line-height:2;
-       font-family:Arial,Helvetica,sans-serif;">
-      ⏱&nbsp; <strong style="color:rgba(232,240,254,.62);">Typical reply time:</strong> under 10 minutes
-    </p>
-    <p style="margin:0;font-size:13px;color:rgba(232,240,254,.38);line-height:2;
-       font-family:Arial,Helvetica,sans-serif;">
-      📬&nbsp; We will email you the moment we reply. You can also return to the chat widget on our site to continue the conversation in real time.
-    </p>
+    <!-- Meta info -->
+    <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="padding:14px 22px;background:#050818;border:1px solid rgba(124,58,237,.16);
+                   border-radius:7px 7px 0 0;border-bottom:none;">
+          <p style="margin:0;font-size:13px;color:rgba(199,210,254,.5);line-height:1.8;
+             font-family:Arial,Helvetica,sans-serif;">
+            &#9679;&ensp;
+            <strong style="color:rgba(224,231,255,.72);">Typical reply time:</strong>
+            &nbsp;Under 10 minutes during business hours
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:14px 22px;background:#050818;border:1px solid rgba(124,58,237,.16);
+                   border-radius:0 0 7px 7px;">
+          <p style="margin:0;font-size:13px;color:rgba(199,210,254,.5);line-height:1.8;
+             font-family:Arial,Helvetica,sans-serif;">
+            &#9679;&ensp;
+            <strong style="color:rgba(224,231,255,.72);">Next step:</strong>
+            &nbsp;We will email you the moment our team responds
+          </p>
+        </td>
+      </tr>
+    </table>
 
-    ${ctaButton(p.pageUrl || SITE, 'Return to Live Chat', '#065f46', '#22c55e')}
+    ${ctaButton(p.pageUrl || SITE, 'Return to Live Chat')}
   `;
 
   return {
     subject,
-    html: shell({ preheader, badge: 'Message Received', c1: '#059669', c2: '#34d399', body }),
+    html: shell({ preheader, badge: 'Message Received', body }),
   };
 }
 
@@ -368,34 +452,35 @@ function visitorReplyEmail(p: {
   visitorName: string; content: string; sessionId: string; pageUrl: string; sentAt?: string;
 }): { subject: string; html: string } {
   const fn        = firstName(p.visitorName);
-  const subject   = `💬 You have 1 unread message — Swift Freight Support`;
-  const preheader = `Hi ${fn}, our support team replied. Your chat is still open and waiting for you.`;
+  const subject   = `💜 1 unread message · Swift Freight Support`;
+  const preheader = `Hi ${fn}, our support team just replied. Your chat is still open — open it to continue.`;
 
   /* Format sent time */
   let sentLabel = 'Just now';
   if (p.sentAt) {
     try {
       const diff = Date.now() - new Date(p.sentAt).getTime();
-      if      (diff < 90_000)      sentLabel = 'Just now';
-      else if (diff < 3_600_000)   sentLabel = `${Math.round(diff / 60_000)} minutes ago`;
-      else if (diff < 86_400_000)  sentLabel = `${Math.round(diff / 3_600_000)} hours ago`;
-      else                          sentLabel = new Date(p.sentAt).toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+      if      (diff < 90_000)     sentLabel = 'Just now';
+      else if (diff < 3_600_000)  sentLabel = `${Math.round(diff / 60_000)} min ago`;
+      else if (diff < 86_400_000) sentLabel = `${Math.round(diff / 3_600_000)} hr ago`;
+      else                         sentLabel = new Date(p.sentAt).toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
     } catch { /* keep default */ }
   }
 
   const body = `
-
-    <!-- Notification icon -->
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 auto 28px;">
+    <!-- Notification badge circle -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 auto 30px;">
       <tr>
         <td align="center">
-          <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-            style="height:64px;width:64px;v-text-anchor:middle;" arcsize="50%"
-            fillcolor="#052e16" strokecolor="#16a34a"><w:anchorlock/><center><![endif]-->
-          <div style="width:64px;height:64px;background:rgba(22,163,74,.12);
-                      border:2px solid rgba(34,197,94,.35);border-radius:50%;
-                      text-align:center;line-height:64px;font-size:28px;margin:0 auto;">
-            💬
+          <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+            style="height:68px;width:68px;v-text-anchor:middle;" arcsize="50%"
+            fillcolor="#2e1065" strokecolor="#7c3aed"><w:anchorlock/><center><![endif]-->
+          <div style="width:68px;height:68px;
+                      background:linear-gradient(135deg,#1e1b4b,#2e1065);
+                      border:2px solid rgba(167,139,250,.4);border-radius:50%;
+                      text-align:center;line-height:68px;font-size:28px;margin:0 auto;
+                      box-shadow:0 0 32px rgba(124,58,237,.3);">
+            💜
           </div>
           <!--[if mso]></center></v:roundrect><![endif]-->
         </td>
@@ -403,56 +488,66 @@ function visitorReplyEmail(p: {
     </table>
 
     <!-- Heading -->
-    <h1 style="margin:0 0 6px;font-size:26px;font-weight:900;letter-spacing:.03em;
-       color:#e8f0fe;font-family:Arial,Helvetica,sans-serif;line-height:1.2;text-align:center;">
+    <h1 style="margin:0 0 8px;font-size:27px;font-weight:900;letter-spacing:.02em;
+       color:#eef2ff;font-family:Arial,Helvetica,sans-serif;line-height:1.2;text-align:center;">
       You have 1 unread message, ${fn}.
     </h1>
-    <p style="margin:0 0 36px;font-size:14px;color:rgba(232,240,254,.4);line-height:1.85;
+    <p style="margin:0 0 38px;font-size:14px;color:rgba(199,210,254,.5);line-height:1.95;
        font-family:Arial,Helvetica,sans-serif;text-align:center;">
       The Swift Freight Logistics support team replied to your conversation.<br>
-      Your chat is <strong style="color:rgba(34,197,94,.75);">still open</strong> and waiting for you.
+      Your chat is <strong style="color:rgba(167,139,250,.85);">still open</strong> and waiting for you.
     </p>
 
     <!-- Message card -->
     <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
-           style="margin-bottom:28px;">
+           style="margin-bottom:24px;">
       <tr>
-        <td style="padding:0;background:rgba(5,46,22,.5);border:1px solid rgba(34,197,94,.25);
-                   border-top:3px solid #22c55e;border-radius:0 8px 8px 8px;">
+        <td style="background:rgba(109,40,217,.07);
+                   border:1px solid rgba(124,58,237,.24);
+                   border-top:3px solid #7c3aed;
+                   border-radius:0 10px 10px 10px;">
 
-          <!-- Card header: agent identity -->
+          <!-- Card header -->
           <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
-              <td style="padding:14px 20px 12px;border-bottom:1px solid rgba(34,197,94,.1);">
+              <td style="padding:16px 22px 14px;
+                         border-bottom:1px solid rgba(124,58,237,.12);">
                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                   <tr>
-                    <td style="padding-right:10px;">
-                      <!--[if mso]><v:roundrect style="height:34px;width:34px;v-text-anchor:middle;" arcsize="50%"
-                        fillcolor="#14532d" strokecolor="none"><w:anchorlock/><center><![endif]-->
-                      <div style="width:34px;height:34px;background:linear-gradient(135deg,#14532d,#16a34a);
-                                  border-radius:50%;text-align:center;line-height:34px;
-                                  font-size:13px;font-weight:900;color:#fff;
-                                  font-family:Arial,Helvetica,sans-serif;letter-spacing:.04em;">
+                    <!-- Agent avatar -->
+                    <td style="padding-right:12px;">
+                      <!--[if mso]><v:roundrect style="height:38px;width:38px;v-text-anchor:middle;"
+                        arcsize="50%" fillcolor="#3730a3" strokecolor="none">
+                        <w:anchorlock/><center><![endif]-->
+                      <div style="width:38px;height:38px;
+                                  background:linear-gradient(135deg,#1d4ed8,#6d28d9);
+                                  border-radius:50%;text-align:center;line-height:38px;
+                                  font-size:11px;font-weight:900;color:#fff;
+                                  font-family:Arial,Helvetica,sans-serif;letter-spacing:.06em;">
                         SFL
                       </div>
                       <!--[if mso]></center></v:roundrect><![endif]-->
                     </td>
+                    <!-- Agent name + status -->
                     <td valign="middle">
-                      <p style="margin:0 0 2px;font-size:12px;font-weight:700;color:#4ade80;
-                         font-family:Arial,Helvetica,sans-serif;letter-spacing:.04em;">
-                        Swift Freight Support
-                      </p>
-                      <p style="margin:0;font-size:10px;color:rgba(232,240,254,.32);
-                         font-family:Arial,Helvetica,sans-serif;letter-spacing:.06em;">
+                      <p style="margin:0 0 3px;font-size:12px;font-weight:700;
+                         color:rgba(167,139,250,.9);font-family:Arial,Helvetica,sans-serif;
+                         letter-spacing:.04em;">Swift Freight Support</p>
+                      <p style="margin:0;font-size:10px;color:rgba(199,210,254,.35);
+                         font-family:Arial,Helvetica,sans-serif;letter-spacing:.05em;">
                         &#9679;&ensp;Online &nbsp;&bull;&nbsp; ${esc(sentLabel)}
                       </p>
                     </td>
+                    <!-- UNREAD badge -->
                     <td align="right" valign="middle">
-                      <span style="display:inline-block;padding:3px 10px;background:rgba(34,197,94,.15);
-                                   border:1px solid rgba(34,197,94,.3);border-radius:99px;
-                                   font-size:8px;letter-spacing:.18em;text-transform:uppercase;
-                                   color:rgba(74,222,128,.9);font-family:Arial,Helvetica,sans-serif;
-                                   font-weight:700;">UNREAD</span>
+                      <span style="display:inline-block;padding:4px 12px;
+                                   background:rgba(124,58,237,.18);
+                                   border:1px solid rgba(167,139,250,.32);
+                                   border-radius:99px;font-size:8px;letter-spacing:.2em;
+                                   text-transform:uppercase;color:rgba(167,139,250,.95);
+                                   font-family:Arial,Helvetica,sans-serif;font-weight:700;">
+                        UNREAD
+                      </span>
                     </td>
                   </tr>
                 </table>
@@ -463,8 +558,8 @@ function visitorReplyEmail(p: {
           <!-- Message content -->
           <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
-              <td style="padding:18px 22px 22px;">
-                <p style="margin:0;font-size:16px;line-height:1.9;color:rgba(232,240,254,.9);
+              <td style="padding:20px 24px 24px;">
+                <p style="margin:0;font-size:16px;line-height:1.95;color:rgba(224,231,255,.92);
                    font-family:Arial,Helvetica,sans-serif;word-break:break-word;">
                   ${esc(p.content)}
                 </p>
@@ -475,59 +570,52 @@ function visitorReplyEmail(p: {
       </tr>
     </table>
 
-    <!-- Status row -->
+    <!-- Status meta row -->
     <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
-           style="margin-bottom:34px;">
+           style="margin-bottom:10px;">
       <tr>
-        <td width="50%" style="padding:12px 16px;background:rgba(3,11,28,.9);
-                               border:1px solid rgba(37,99,235,.14);border-radius:5px 0 0 5px;
-                               border-right:none;">
-          <p style="margin:0 0 4px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
-             font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">Conversation</p>
-          <p style="margin:0;font-size:13px;color:#4ade80;font-weight:600;
+        <td width="50%" style="padding:14px 18px;background:#050818;
+                               border:1px solid rgba(124,58,237,.16);
+                               border-radius:7px 0 0 7px;border-right:none;">
+          <p style="margin:0 0 4px;font-size:8px;letter-spacing:.26em;text-transform:uppercase;
+             font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.45);">
+            Conversation
+          </p>
+          <p style="margin:0;font-size:13px;color:rgba(167,139,250,.9);font-weight:600;
              font-family:Arial,Helvetica,sans-serif;">&#9679; Still Open</p>
         </td>
-        <td width="50%" style="padding:12px 16px;background:rgba(3,11,28,.9);
-                               border:1px solid rgba(37,99,235,.14);border-radius:0 5px 5px 0;">
-          <p style="margin:0 0 4px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
-             font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">Message sent</p>
-          <p style="margin:0;font-size:13px;color:#dde9ff;font-weight:600;
+        <td width="50%" style="padding:14px 18px;background:#050818;
+                               border:1px solid rgba(124,58,237,.16);border-radius:0 7px 7px 0;">
+          <p style="margin:0 0 4px;font-size:8px;letter-spacing:.26em;text-transform:uppercase;
+             font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.45);">
+            Message Sent
+          </p>
+          <p style="margin:0;font-size:13px;color:#dde5ff;font-weight:600;
              font-family:Arial,Helvetica,sans-serif;">${esc(sentLabel)}</p>
         </td>
       </tr>
     </table>
 
-    <!-- CTA -->
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0"
-           style="margin:0 auto 28px;">
-      <tr>
-        <td style="border-radius:6px;background:linear-gradient(135deg,#065f46,#22c55e);
-                   box-shadow:0 8px 32px rgba(34,197,94,.3);">
-          <a href="${p.pageUrl || SITE}"
-             style="display:inline-block;padding:17px 48px;font-size:12px;font-weight:700;
-                    letter-spacing:.24em;text-transform:uppercase;color:#ffffff;text-decoration:none;
-                    font-family:Arial,Helvetica,sans-serif;">
-            Open Chat &amp; Reply &nbsp;&rarr;
-          </a>
-        </td>
-      </tr>
-    </table>
+    ${ctaButton(p.pageUrl || SITE, 'Open Chat &amp; Reply Now')}
 
     ${divider()}
 
     <!-- Reassurance -->
-    <p style="margin:0 0 10px;font-size:12px;color:rgba(232,240,254,.32);line-height:2;
+    <p style="margin:0 0 8px;font-size:12px;color:rgba(199,210,254,.3);line-height:2;
        font-family:Arial,Helvetica,sans-serif;text-align:center;">
-      Your conversation will remain open until you return or until marked resolved.<br>
-      Can't open the chat? Email us directly at
-      <a href="mailto:${ADMIN_EMAIL}" style="color:rgba(99,141,255,.6);text-decoration:none;
+      This conversation will remain open until you return or it is marked resolved.
+    </p>
+    <p style="margin:0;font-size:12px;color:rgba(199,210,254,.28);line-height:2;
+       font-family:Arial,Helvetica,sans-serif;text-align:center;">
+      Can't open the chat? Reply directly to
+      <a href="mailto:${ADMIN_EMAIL}" style="color:rgba(167,139,250,.6);text-decoration:none;
          font-family:Arial,Helvetica,sans-serif;">${ADMIN_EMAIL}</a>
     </p>
   `;
 
   return {
     subject,
-    html: shell({ preheader, badge: 'Unread · 1', c1: '#065f46', c2: '#34d399', body }),
+    html: shell({ preheader, badge: 'Unread · 1', body }),
   };
 }
 
@@ -570,7 +658,6 @@ Deno.serve(async (req: Request) => {
         sendEmail({ to: ADMIN_EMAIL, subject: adminEmail.subject, html: adminEmail.html }),
       ];
 
-      /* Also send visitor a confirmation on their very first message */
       if (body.isFirst && p.visitorEmail) {
         const vEmail = visitorConfirmationEmail(p);
         tasks.push(sendEmail({ to: p.visitorEmail, subject: vEmail.subject, html: vEmail.html }));
