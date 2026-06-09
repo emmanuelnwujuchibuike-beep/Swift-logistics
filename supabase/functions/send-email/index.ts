@@ -6,8 +6,7 @@ Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
   if (req.method !== 'POST')   return err('Method not allowed', 405);
 
-  // Auth: require ADMIN_SECRET header
-  const adminSecret = Deno.env.get('ADMIN_SECRET');
+  const adminSecret = Deno.env.get('ADMIN_API_SECRET') || Deno.env.get('ADMIN_SECRET');
   if (adminSecret) {
     const auth = req.headers.get('x-admin-secret') ?? '';
     if (auth !== adminSecret) return err('Unauthorized', 401);

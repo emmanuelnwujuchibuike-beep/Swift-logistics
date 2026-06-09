@@ -507,6 +507,9 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
       <div class="sidebar-section">Actions</div>
       <div class="nav-item" data-view="form-new"><i class="fas fa-circle-plus"></i> New Shipment</div>
       <div class="nav-divider"></div>
+      <div class="sidebar-section">Communication</div>
+      <div class="nav-item" data-view="chat"><i class="fas fa-comments"></i> Live Chat <span class="sidebar-badge" id="chat-unread-badge" style="display:none">0</span></div>
+      <div class="nav-divider"></div>
       <div class="sidebar-section">System</div>
       <div class="nav-item" data-view="settings"><i class="fas fa-gear"></i> Settings</div>
     </nav>
@@ -856,9 +859,13 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
         </div>
 
         <div class="form-card">
-          <div class="settings-title"></div>
+          <div class="settings-title"><i class="fas fa-database" style="color:var(--accent);margin-right:8px"></i> Database Setup SQL</div>
+          <div class="info-box" style="margin-bottom:16px">
+            <strong>Run this SQL in your Supabase dashboard:</strong><br>
+            Go to <strong>supabase.com → your project → SQL Editor → New query</strong>, paste the code below, and click <strong>Run</strong>. This creates all required tables and is safe to re-run at any time.
+          </div>
           <div class="sql-wrap">
-            <button class="sql-copy-btn" onclick="copySql()"><i class="fas fa-copy"></i> Copy</button>
+            <button class="sql-copy-btn" onclick="copySql()"><i class="fas fa-copy"></i> Copy All</button>
             <pre class="sql-block" id="setup-sql">-- ══════════════════════════════════════════════
 -- Swift Freight Logistics — Database Setup
 -- Run in Supabase SQL Editor (safe to re-run)
@@ -871,6 +878,7 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
   updated_at timestamptz DEFAULT now()
 );
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public can read settings" ON public.site_settings;
 CREATE POLICY "Public can read settings"
   ON public.site_settings FOR SELECT USING (true);
 INSERT INTO public.site_settings (key, value)
@@ -937,8 +945,10 @@ ALTER TABLE public.shipments
 
 -- ── Row Level Security ───────────────────────
 ALTER TABLE public.shipments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read shipments" ON public.shipments;
 CREATE POLICY "Public read shipments"
   ON public.shipments FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Service role full access" ON public.shipments;
 CREATE POLICY "Service role full access"
   ON public.shipments USING (auth.role() = 'service_role');
 
@@ -990,16 +1000,67 @@ CREATE TRIGGER set_updated_at
 
 -- ── Indexes ───────────────────────────────────
 CREATE INDEX IF NOT EXISTS shipments_tracking_id_idx ON public.shipments (tracking_id);
-CREATE INDEX IF NOT EXISTS shipments_email_idx       ON public.shipments (customer_email);</pre>
+CREATE INDEX IF NOT EXISTS shipments_email_idx       ON public.shipments (customer_email);
+
+-- ── Live Chat ─────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.chat_messages (
+  id            BIGSERIAL PRIMARY KEY,
+  session_id    TEXT NOT NULL,
+  role          TEXT NOT NULL CHECK (role IN ('visitor','agent')),
+  content       TEXT NOT NULL,
+  visitor_name  TEXT,
+  visitor_email TEXT,
+  page_url      TEXT,
+  created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.chat_messages ADD COLUMN IF NOT EXISTS visitor_email TEXT;
+CREATE INDEX IF NOT EXISTS chat_msg_session_idx ON public.chat_messages (session_id, created_at);
+ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "chat_open_access" ON public.chat_messages;
+CREATE POLICY "chat_open_access" ON public.chat_messages FOR ALL USING (true) WITH CHECK (true);
+GRANT ALL ON public.chat_messages TO anon, authenticated;
+GRANT USAGE, SELECT ON SEQUENCE public.chat_messages_id_seq TO anon, authenticated;
+
+-- ── Chat Sessions (status tracking) ──────────────────────────
+CREATE TABLE IF NOT EXISTS public.chat_sessions (
+  session_id    TEXT PRIMARY KEY,
+  status        TEXT DEFAULT 'open' CHECK (status IN ('open','resolved')),
+  visitor_name  TEXT,
+  visitor_email TEXT,
+  created_at    TIMESTAMPTZ DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.chat_sessions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "chat_sessions_access" ON public.chat_sessions;
+CREATE POLICY "chat_sessions_access" ON public.chat_sessions FOR ALL USING (true) WITH CHECK (true);
+GRANT ALL ON public.chat_sessions TO anon, authenticated;
+
+-- ── Image URL column on chat_messages ─────────────────────────
+ALTER TABLE public.chat_messages ADD COLUMN IF NOT EXISTS image_url TEXT;
+
+-- ── Supabase Storage: chat-images bucket ──────────────────────
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('chat-images', 'chat-images', true)
+ON CONFLICT (id) DO NOTHING;
+
+DROP POLICY IF EXISTS "chat_images_upload" ON storage.objects;
+CREATE POLICY "chat_images_upload" ON storage.objects
+  FOR INSERT TO anon, authenticated
+  WITH CHECK (bucket_id = 'chat-images');
+
+DROP POLICY IF EXISTS "chat_images_read" ON storage.objects;
+CREATE POLICY "chat_images_read" ON storage.objects
+  FOR SELECT TO anon, authenticated
+  USING (bucket_id = 'chat-images');</pre>
           </div>
         </div>
 
         <div class="form-card">
           <div class="settings-title"><i class="fas fa-shield-halved" style="color:var(--accent);margin-right:8px"></i> Security &amp; Credentials</div>
           <div class="info-box" style="margin-bottom:0">
-            All credentials are stored securely in <strong>Netlify Environment Variables</strong> — never in the page source code.<br><br>
-            To change the admin password, API secret, or any other credential:<br>
-            <strong>Netlify Dashboard → your site → Site Settings → Environment Variables</strong><br><br>
+            All credentials are stored securely in <strong>Supabase Edge Function Secrets</strong> — never in the page source code.<br><br>
+            To set or change credentials:<br>
+            <strong>Supabase Dashboard → your project → Edge Functions → Secrets</strong><br><br>
             Required variables:
             <ul style="margin:10px 0 0 16px;line-height:2;font-family:'JetBrains Mono';font-size:.78rem">
               <li><code>ADMIN_PASSWORD</code> — login password for this panel</li>
@@ -1010,6 +1071,47 @@ CREATE INDEX IF NOT EXISTS shipments_email_idx       ON public.shipments (custom
           </div>
         </div>
 
+      </div>
+
+      <!-- ── LIVE CHAT ── -->
+      <div class="view" id="view-chat">
+        <div class="page-hdr">
+          <div class="page-hdr-left"><h1>Live Chat</h1><p>Respond to visitor conversations in real time.</p></div>
+          <button class="btn-secondary" onclick="adminChatRefreshSessions()" style="gap:8px"><i class="fas fa-arrows-rotate"></i> Refresh</button>
+        </div>
+        <div id="admin-chat-layout" style="display:grid;grid-template-columns:300px 1fr;gap:16px;height:calc(100vh - 180px);min-height:400px;">
+          <!-- Session list -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column;overflow:hidden;">
+            <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;gap:5px;flex-shrink:0;" id="chat-filter-tabs">
+              <button class="chat-ftab active" data-filter="open"     onclick="setChatFilter('open')">Open</button>
+              <button class="chat-ftab"        data-filter="resolved" onclick="setChatFilter('resolved')">Resolved</button>
+              <button class="chat-ftab"        data-filter="all"      onclick="setChatFilter('all')">All</button>
+              <span id="chat-count-label" style="margin-left:auto;font-size:.68rem;color:var(--muted2);align-self:center"></span>
+            </div>
+            <div id="admin-session-list" style="flex:1;overflow-y:auto;padding:6px 0;">
+              <div style="padding:24px 16px;text-align:center;color:var(--muted2);font-size:.82rem;">Loading conversations…</div>
+            </div>
+          </div>
+          <!-- Conversation panel -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column;overflow:hidden;">
+            <div id="admin-convo-hdr" style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;min-height:53px;">
+              <i class="fas fa-comments" style="color:var(--muted2);font-size:.9rem"></i>
+              <span style="color:var(--muted2);font-size:.82rem;">Select a conversation from the left to read &amp; reply</span>
+            </div>
+            <div id="admin-messages" style="flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;">
+              <div id="admin-msg-placeholder" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:.35;pointer-events:none">
+                <i class="fas fa-message" style="font-size:2.2rem;color:var(--accent)"></i>
+                <p style="font-size:.8rem;color:var(--muted2);text-align:center;line-height:1.7;max-width:200px">Click any conversation on the left to open it and type a reply below</p>
+              </div>
+            </div>
+            <div id="admin-reply-area" style="padding:12px 14px;border-top:1px solid var(--border);display:none;gap:8px;flex-shrink:0;background:rgba(255,255,255,.02);">
+              <textarea id="admin-reply-input" class="f-textarea" placeholder="Type a reply… (Enter to send, Shift+Enter for new line)" rows="2" style="resize:none;font-size:.83rem;min-height:48px;max-height:120px;margin-bottom:8px;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();adminSendReply()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+              <div style="display:flex;justify-content:flex-end">
+                <button class="btn-primary" id="admin-reply-btn" onclick="adminSendReply()" style="gap:8px;padding:10px 20px;font-size:.78rem;"><i class="fas fa-paper-plane" style="font-size:.7rem"></i> Send Reply</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </main>
@@ -1037,6 +1139,7 @@ CREATE INDEX IF NOT EXISTS shipments_email_idx       ON public.shipments (custom
       <li><button class="amn-link amn-active" data-view="dashboard">Dashboard<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
       <li><button class="amn-link" data-view="shipments">Shipments<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
       <li><button class="amn-link" data-view="form-new">New Shipment<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
+      <li><button class="amn-link" data-view="chat">Live Chat<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
       <li><button class="amn-link" data-view="settings">Settings<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
     </ul>
     <div class="amn-footer">
@@ -1784,6 +1887,542 @@ async function doMarkDelivered(tid) {
     toast('Error: ' + e.message, 'error');
   }
 }
+</script>
+
+<!-- ══════════════ LIVE CHAT ADMIN ══════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ── Admin Live Chat ── */
+(function () {
+  'use strict';
+
+  /* Re-use same Supabase credentials as the main admin panel */
+  const SUPABASE_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+
+  let sbAdmin        = null;
+  let activeSid      = null;
+  let activeChanSub  = null;
+  let globalChanSub  = null;
+  let sessions       = {};   /* sid -> { name, email, lastMsg, lastTime, unread, status } */
+  let chatFilter     = 'open'; /* 'open' | 'resolved' | 'all' */
+
+  /* ── CSS for chat panels (injected once) ── */
+  var style = document.createElement('style');
+  style.textContent = `
+    #admin-session-list::-webkit-scrollbar{width:3px}
+    #admin-session-list::-webkit-scrollbar-thumb{background:rgba(59,130,246,.2);border-radius:2px}
+    #admin-messages::-webkit-scrollbar{width:3px}
+    #admin-messages::-webkit-scrollbar-thumb{background:rgba(59,130,246,.2);border-radius:2px}
+    .ac-session-item{
+      padding:12px 16px;cursor:pointer;border-left:3px solid transparent;
+      transition:background .2s,border-color .2s;
+    }
+    .ac-session-item:hover{background:rgba(59,130,246,.06)}
+    .ac-session-item.active{background:rgba(59,130,246,.1);border-left-color:var(--accent)}
+    .ac-session-name{font-size:.84rem;font-weight:600;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px;justify-content:space-between}
+    .ac-session-preview{font-size:.75rem;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+    .ac-session-time{font-size:.65rem;color:rgba(232,240,254,.3);white-space:nowrap}
+    .ac-unread-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+    .ac-msg{display:flex;flex-direction:column;max-width:75%;animation:sfl-msg-in .25s ease both}
+    @keyframes sfl-msg-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    .ac-msg.visitor{align-self:flex-end;align-items:flex-end}
+    .ac-msg.agent{align-self:flex-start;align-items:flex-start}
+    .ac-bubble{
+      padding:9px 13px;border-radius:3px;font-size:.82rem;line-height:1.6;word-break:break-word;
+      clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));
+    }
+    .ac-msg.visitor .ac-bubble{
+      background:rgba(59,130,246,.18);color:rgba(232,240,254,.9);
+      border:1px solid rgba(59,130,246,.28);
+      clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,0 100%);
+    }
+    .ac-msg.agent .ac-bubble{
+      background:linear-gradient(135deg,#1e3a8a,#1d4ed8);color:#fff;
+      box-shadow:0 4px 12px rgba(59,130,246,.28);
+      clip-path:polygon(0 0,100% 0,100% 100%,5px 100%,0 calc(100% - 5px));
+    }
+    .ac-msg-time{font-size:.62rem;color:rgba(232,240,254,.3);margin-top:3px}
+    .ac-msg-sender{font-size:.62rem;color:rgba(59,130,246,.65);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+    .ac-bubble-img{padding:4px}
+    .ac-chat-img{display:block;max-width:220px;max-height:180px;border-radius:3px;object-fit:cover;cursor:pointer;transition:opacity .18s}
+    .ac-chat-img:hover{opacity:.82}
+    /* Filter tabs */
+    .chat-ftab{
+      padding:5px 12px;border-radius:3px;border:1px solid transparent;
+      font:600 .7rem/1 'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;
+      cursor:pointer;background:transparent;color:var(--muted2);transition:all .18s;
+    }
+    .chat-ftab:hover{background:rgba(59,130,246,.08);color:var(--accent)}
+    .chat-ftab.active{background:rgba(59,130,246,.14);border-color:rgba(59,130,246,.28);color:var(--accent)}
+    /* Resolved session */
+    .ac-session-item.resolved{opacity:.55}
+    .ac-session-item.resolved:hover{opacity:.85}
+    .ac-resolved-badge{
+      font-size:.6rem;padding:2px 7px;border-radius:99px;white-space:nowrap;
+      background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22);color:#4ade80;
+      letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    }
+    /* Action buttons in convo header */
+    .ac-hdr-actions{display:flex;gap:6px;flex-shrink:0;margin-left:auto}
+    @media(max-width:767px){#admin-chat-layout{grid-template-columns:1fr!important;height:auto!important}}
+  `;
+  document.head.appendChild(style);
+
+  /* ── Get Supabase client ── */
+  function getSb() {
+    return new Promise(function (resolve, reject) {
+      if (sbAdmin) { resolve(sbAdmin); return; }
+      function tryInit() {
+        if (window.supabase && window.supabase.createClient) {
+          sbAdmin = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+          resolve(sbAdmin);
+        } else {
+          setTimeout(tryInit, 80);
+        }
+      }
+      tryInit();
+    });
+  }
+
+  /* ── Load all sessions (grouped by session_id) ── */
+  window.adminChatRefreshSessions = async function () {
+    try {
+      const sb = await getSb();
+      /* Load messages + session statuses in parallel */
+      const [msgRes, sesRes] = await Promise.all([
+        sb.from('chat_messages')
+          .select('session_id,role,content,image_url,visitor_name,visitor_email,created_at')
+          .order('created_at', { ascending: false }),
+        sb.from('chat_sessions').select('session_id,status'),
+      ]);
+      if (msgRes.error) throw msgRes.error;
+
+      /* Build status map */
+      var statusMap = {};
+      (sesRes.data || []).forEach(function(r){ statusMap[r.session_id] = r.status || 'open'; });
+
+      /* Group messages into sessions */
+      var smap = {};
+      (msgRes.data || []).forEach(function (row) {
+        var sid = row.session_id;
+        if (!smap[sid]) {
+          smap[sid] = {
+            sid: sid,
+            name: row.visitor_name || 'Visitor',
+            email: row.visitor_email || '',
+            lastMsg: row.content,
+            lastTime: row.created_at,
+            status: statusMap[sid] || 'open',
+            unread: 0,
+          };
+        }
+        if (row.role === 'visitor') {
+          if (row.visitor_name)  smap[sid].name  = row.visitor_name;
+          if (row.visitor_email) smap[sid].email = row.visitor_email;
+        }
+        if (sessions[sid]) smap[sid].unread = sessions[sid].unread;
+      });
+      sessions = smap;
+      renderSessionList();
+    } catch (e) {
+      console.error('[Admin Chat] Session load error:', e);
+    }
+  };
+
+  /* ── Filter tab handler ── */
+  window.setChatFilter = function(f) {
+    chatFilter = f;
+    document.querySelectorAll('.chat-ftab').forEach(function(b){
+      b.classList.toggle('active', b.dataset.filter === f);
+    });
+    renderSessionList();
+  };
+
+  function renderSessionList() {
+    var list = document.getElementById('admin-session-list');
+    if (!list) return;
+
+    /* Apply filter */
+    var allSids = Object.keys(sessions);
+    var sids = allSids.filter(function(sid) {
+      var st = sessions[sid].status || 'open';
+      if (chatFilter === 'open')     return st === 'open';
+      if (chatFilter === 'resolved') return st === 'resolved';
+      return true; /* 'all' */
+    });
+
+    /* Update count label */
+    var lbl = document.getElementById('chat-count-label');
+    if (lbl) lbl.textContent = sids.length + (sids.length === 1 ? ' chat' : ' chats');
+
+    if (sids.length === 0) {
+      list.innerHTML = '<div style="padding:24px 16px;text-align:center;color:var(--muted2);font-size:.82rem;">' +
+        (allSids.length === 0 ? 'No conversations yet.' : 'No ' + chatFilter + ' conversations.') +
+        '</div>';
+      return;
+    }
+
+    /* Sort: unread first, then by time desc */
+    sids.sort(function(a, b) {
+      var ua = sessions[a].unread || 0, ub = sessions[b].unread || 0;
+      if (ub !== ua) return ub - ua;
+      return new Date(sessions[b].lastTime) - new Date(sessions[a].lastTime);
+    });
+
+    list.innerHTML = '';
+    sids.forEach(function(sid) {
+      var s = sessions[sid];
+      var isResolved = s.status === 'resolved';
+      var item = document.createElement('div');
+      item.className = 'ac-session-item' +
+        (sid === activeSid ? ' active' : '') +
+        (isResolved ? ' resolved' : '');
+      item.dataset.sid = sid;
+      var preview = (s.lastMsg || '').slice(0, 55) + ((s.lastMsg || '').length > 55 ? '…' : '');
+      var t = s.lastTime ? formatAdminTime(s.lastTime) : '';
+      item.innerHTML =
+        '<div class="ac-session-name">' +
+          '<span>' + esc(s.name) + '</span>' +
+          (s.unread > 0 ? '<span class="ac-unread-dot"></span>' : '') +
+          (isResolved ? '<span class="ac-resolved-badge">Resolved</span>' : '') +
+          '<span class="ac-session-time">' + t + '</span>' +
+        '</div>' +
+        (s.email ? '<div style="font-size:.67rem;color:rgba(232,240,254,.32);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(s.email) + '</div>' : '') +
+        '<div class="ac-session-preview">' + esc(preview) + '</div>';
+      item.addEventListener('click', function(){ openSession(sid, s.name); });
+      list.appendChild(item);
+    });
+
+    /* Global unread badge */
+    var totalUnread = Object.values(sessions).reduce(function(a,s){ return a + (s.unread||0); }, 0);
+    updateChatBadge(totalUnread);
+  }
+
+  /* ── Open session ── */
+  function openSession(sid, name) {
+    activeSid = sid;
+    if (sessions[sid]) sessions[sid].unread = 0;
+    renderSessionList();
+
+    /* Header */
+    var hdr = document.getElementById('admin-convo-hdr');
+    var sess = sessions[sid] || {};
+    var isResolved = sess.status === 'resolved';
+    if (hdr) {
+      hdr.innerHTML =
+        '<div style="width:36px;height:36px;border-radius:3px;background:linear-gradient(135deg,#1e40af,#3b82f6);display:flex;align-items:center;justify-content:center;font-family:\'Bebas Neue\',sans-serif;font-size:.95rem;color:#fff;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));flex-shrink:0">' + esc(name.charAt(0).toUpperCase()) + '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-size:.86rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px">' +
+            esc(name) +
+            (isResolved ? '<span class="ac-resolved-badge">Resolved</span>' : '') +
+          '</div>' +
+          (sess.email ? '<div style="font-size:.7rem;color:var(--accent);margin-top:1px">' + esc(sess.email) + '</div>' : '') +
+          '<div style="font-size:.62rem;color:var(--muted2);font-family:\'JetBrains Mono\';margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(sid) + '</div>' +
+        '</div>' +
+        '<div class="ac-hdr-actions">' +
+          '<button onclick="resolveSession(\'' + sid + '\')" class="btn-secondary" style="padding:6px 11px;font-size:.7rem;gap:5px;white-space:nowrap" title="' + (isResolved ? 'Reopen conversation' : 'Mark as resolved') + '">' +
+            (isResolved
+              ? '<i class="fas fa-rotate-left"></i> Reopen'
+              : '<i class="fas fa-circle-check"></i> Resolve') +
+          '</button>' +
+          '<button onclick="deleteSession(\'' + sid + '\')" class="btn-danger" style="padding:6px 11px;font-size:.7rem;gap:5px" title="Delete conversation">' +
+            '<i class="fas fa-trash-can"></i> Delete' +
+          '</button>' +
+        '</div>';
+    }
+
+    /* Show reply area */
+    var replyArea = document.getElementById('admin-reply-area');
+    if (replyArea) replyArea.style.display = 'flex';
+    replyArea.style.flexDirection = 'column';
+
+    /* Hide placeholder */
+    var ph = document.getElementById('admin-msg-placeholder');
+    if (ph) ph.style.display = 'none';
+
+    loadConversation(sid);
+    subscribeToSession(sid);
+  }
+
+  /* ── Load conversation messages ── */
+  async function loadConversation(sid) {
+    var msgArea = document.getElementById('admin-messages');
+    if (!msgArea) return;
+    msgArea.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted2);font-size:.8rem;"><span class="spinner"></span> Loading…</div>';
+    try {
+      var sb = await getSb();
+      var { data, error } = await sb
+        .from('chat_messages')
+        .select('*')
+        .eq('session_id', sid)
+        .order('created_at', { ascending: true });
+      if (error) throw error;
+      msgArea.innerHTML = '';
+      (data || []).forEach(function (m) { appendAdminMsg(m, false); });
+      msgArea.scrollTop = msgArea.scrollHeight;
+    } catch (e) {
+      console.error('[Admin Chat] Load convo error:', e);
+      msgArea.innerHTML = '<div style="padding:20px;text-align:center;color:#f87171;font-size:.8rem;">Error loading messages.</div>';
+    }
+  }
+
+  /* ── Subscribe to active session ── */
+  async function subscribeToSession(sid) {
+    if (activeChanSub) {
+      try { activeChanSub.unsubscribe(); } catch (_) {}
+      activeChanSub = null;
+    }
+    try {
+      var sb = await getSb();
+      activeChanSub = sb
+        .channel('admin-convo-' + sid)
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: 'session_id=eq.' + sid,
+        }, function (payload) {
+          var msg = payload.new;
+          if (msg.role === 'visitor') {
+            appendAdminMsg(msg, true);
+          }
+        })
+        .subscribe();
+    } catch (e) {
+      console.error('[Admin Chat] Sub error:', e);
+    }
+  }
+
+  /* ── Resolve / Reopen session ── */
+  window.resolveSession = async function(sid) {
+    var sess = sessions[sid];
+    if (!sess) return;
+    var newStatus = sess.status === 'resolved' ? 'open' : 'resolved';
+    try {
+      var sb = await getSb();
+      await sb.from('chat_sessions').upsert({
+        session_id:    sid,
+        status:        newStatus,
+        visitor_name:  sess.name  || '',
+        visitor_email: sess.email || '',
+        updated_at:    new Date().toISOString(),
+      }, { onConflict: 'session_id' });
+      sessions[sid].status = newStatus;
+      renderSessionList();
+      /* Re-render header buttons */
+      openSession(sid, sess.name);
+      toast('Conversation ' + (newStatus === 'resolved' ? 'marked as resolved' : 'reopened'), 'success');
+    } catch(e) {
+      console.error('[Admin Chat] Resolve error:', e);
+      toast('Failed: ' + (e.message || e), 'error');
+    }
+  };
+
+  /* ── Delete session ── */
+  window.deleteSession = function(sid) {
+    var sess = sessions[sid] || {};
+    openConfirm(
+      'Delete Conversation',
+      'Permanently delete all messages from ' + (sess.name || 'this visitor') + '? This cannot be undone.',
+      'Delete', 'btn-danger',
+      async function() {
+        try {
+          var sb = await getSb();
+          await Promise.all([
+            sb.from('chat_messages').delete().eq('session_id', sid),
+            sb.from('chat_sessions').delete().eq('session_id', sid),
+          ]);
+          delete sessions[sid];
+          /* If this was the active session, clear the panel */
+          if (activeSid === sid) {
+            activeSid = null;
+            if (activeChanSub) { try { activeChanSub.unsubscribe(); } catch(_){} activeChanSub = null; }
+            var msgs = document.getElementById('admin-messages');
+            if (msgs) msgs.innerHTML = '<div id="admin-msg-placeholder" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:.35;pointer-events:none"><i class="fas fa-message" style="font-size:2.2rem;color:var(--accent)"></i><p style="font-size:.8rem;color:var(--muted2);text-align:center;line-height:1.7;max-width:200px">Click any conversation on the left to open it and type a reply below</p></div>';
+            var hdr = document.getElementById('admin-convo-hdr');
+            if (hdr) hdr.innerHTML = '<i class="fas fa-comments" style="color:var(--muted2);font-size:.9rem"></i><span style="color:var(--muted2);font-size:.82rem;">Select a conversation from the left to read &amp; reply</span>';
+            var ra = document.getElementById('admin-reply-area');
+            if (ra) ra.style.display = 'none';
+          }
+          renderSessionList();
+          toast('Conversation deleted', 'success');
+        } catch(e) {
+          console.error('[Admin Chat] Delete error:', e);
+          toast('Failed to delete: ' + (e.message || e), 'error');
+        }
+      }
+    );
+  };
+
+  /* ── Global subscription to detect new conversations ── */
+  async function subscribeGlobal() {
+    try {
+      var sb = await getSb();
+      globalChanSub = sb
+        .channel('admin-global-chat')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+        }, function (payload) {
+          var msg = payload.new;
+          var sid = msg.session_id;
+          /* Update sessions map */
+          if (!sessions[sid]) {
+            sessions[sid] = { sid: sid, name: msg.visitor_name || 'Visitor', email: msg.visitor_email || '', lastMsg: msg.content, lastTime: msg.created_at, status: 'open', unread: 0 };
+          } else {
+            sessions[sid].lastMsg  = msg.content;
+            sessions[sid].lastTime = msg.created_at;
+            if (msg.visitor_name)  sessions[sid].name  = msg.visitor_name;
+            if (msg.visitor_email) sessions[sid].email = msg.visitor_email;
+          }
+          /* Increment unread if not the active session */
+          if (msg.role === 'visitor' && sid !== activeSid) {
+            sessions[sid].unread = (sessions[sid].unread || 0) + 1;
+          }
+          renderSessionList();
+        })
+        .subscribe();
+    } catch (e) {
+      console.error('[Admin Chat] Global sub error:', e);
+    }
+  }
+
+  /* ── Send reply ── */
+  window.adminSendReply = async function () {
+    if (!activeSid) return;
+    var input = document.getElementById('admin-reply-input');
+    var content = (input && input.value.trim()) || '';
+    if (!content) return;
+    var btn = document.getElementById('admin-reply-btn');
+    if (btn) btn.disabled = true;
+    input.value = '';
+    input.style.height = 'auto';
+    /* Render immediately (optimistic) */
+    appendAdminMsg({ session_id: activeSid, role: 'agent', content: content, visitor_name: 'Support Agent', created_at: new Date().toISOString() }, true);
+    try {
+      var sb = await getSb();
+      var { error } = await sb.from('chat_messages').insert({
+        session_id:   activeSid,
+        role:         'agent',
+        content:      content,
+        visitor_name: 'Support Agent',
+      });
+      if (error) throw error;
+      /* Email visitor about the reply */
+      var sess = sessions[activeSid] || {};
+      if (sess.email) {
+        fetch(SUPABASE_URL + '/functions/v1/chat-notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON },
+          body: JSON.stringify({
+            role: 'agent', content: content,
+            visitorName: sess.name || 'Visitor', visitorEmail: sess.email,
+            sessionId: activeSid,
+          }),
+        }).catch(function(e){ console.error('[Admin Chat] Email notify:', e); });
+      }
+    } catch (e) {
+      console.error('[Admin Chat] Reply error:', e);
+      toast('Failed to send reply: ' + (e.message || e), 'error');
+    } finally {
+      if (btn) btn.disabled = false;
+      document.getElementById('admin-reply-input').focus();
+    }
+  };
+
+  /* ── Append message to admin convo panel ── */
+  function appendAdminMsg(msg, doScroll) {
+    var msgArea = document.getElementById('admin-messages');
+    if (!msgArea) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'ac-msg ' + msg.role;
+
+    var time = formatAdminTime(msg.created_at);
+
+    if (msg.role === 'visitor') {
+      var sender = document.createElement('div');
+      sender.className = 'ac-msg-sender';
+      sender.textContent = msg.visitor_name || 'Visitor';
+      wrap.appendChild(sender);
+    }
+
+    var bubble = document.createElement('div');
+    bubble.className = 'ac-bubble' + (msg.image_url ? ' ac-bubble-img' : '');
+    if (msg.image_url) {
+      var imgEl = document.createElement('img');
+      imgEl.src = msg.image_url;
+      imgEl.className = 'ac-chat-img';
+      imgEl.setAttribute('loading', 'lazy');
+      imgEl.setAttribute('alt', 'Shared image');
+      imgEl.onclick = function() { window.open(msg.image_url, '_blank'); };
+      bubble.appendChild(imgEl);
+      if (msg.content && msg.content !== '📷 Photo') {
+        var cap = document.createElement('div');
+        cap.style.cssText = 'font-size:.8rem;margin-top:6px;opacity:.9';
+        cap.textContent = msg.content;
+        bubble.appendChild(cap);
+      }
+    } else {
+      bubble.textContent = msg.content;
+    }
+    wrap.appendChild(bubble);
+
+    var timeEl = document.createElement('div');
+    timeEl.className = 'ac-msg-time';
+    timeEl.textContent = time;
+    wrap.appendChild(timeEl);
+
+    msgArea.appendChild(wrap);
+    if (doScroll) msgArea.scrollTop = msgArea.scrollHeight;
+  }
+
+  /* ── Helpers ── */
+  function formatAdminTime(iso) {
+    try {
+      var d = new Date(iso);
+      var now = new Date();
+      var diff = now - d;
+      if (diff < 60000) return 'just now';
+      if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+      if (diff < 86400000) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    } catch (_) { return ''; }
+  }
+
+  function updateChatBadge(n) {
+    var badge = document.getElementById('chat-unread-badge');
+    if (!badge) return;
+    if (n > 0) {
+      badge.textContent = n > 9 ? '9+' : n;
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  function esc(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ── Init when the chat view is opened ── */
+  var origSwitchView = window.switchView;
+  window.switchView = function (name) {
+    origSwitchView && origSwitchView(name);
+    if (name === 'chat') {
+      adminChatRefreshSessions();
+      if (!globalChanSub) subscribeGlobal();
+    }
+  };
+
+  /* Also start global sub immediately so we catch new messages even before visiting the chat view */
+  document.addEventListener('DOMContentLoaded', function () {
+    subscribeGlobal();
+  });
+
+})();
 </script>
 </body>
 </html>
