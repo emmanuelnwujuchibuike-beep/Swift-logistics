@@ -161,7 +161,6 @@
     'padding:36px 26px 28px!important;overflow-y:auto!important;',
     'transition:opacity .26s ease,transform .26s ease!important;}',
   '#sfl-panel .sf-gate.fading{opacity:0!important;transform:translateY(-10px)!important;pointer-events:none!important;}',
-  '#sfl-panel .sf-gate.gone{display:none!important;}',
 
   /* gate icon */
   '#sfl-panel .sf-gate-ico{',
@@ -515,17 +514,29 @@
     var gate = ge('sfl-gate');
     gate.classList.add('fading');
     setTimeout(function () {
-      gate.classList.add('gone');
+      hideGate(gate);
       showBody();
       subscribe();
       setTimeout(function () { ge('sfl-ta').focus(); }, 60);
     }, 260);
   }
 
+  /* Inline !important is the highest CSS priority — guaranteed to beat
+     any stylesheet rule including our own display:flex!important */
+  function hideGate(el) {
+    el = el || ge('sfl-gate');
+    el.style.setProperty('display', 'none', 'important');
+  }
+
+  function showGate(el) {
+    el = el || ge('sfl-gate');
+    el.style.removeProperty('display');
+    el.classList.remove('fading');
+  }
+
   function restoreSession() {
     isFirstMsg = false;
-    var gate = ge('sfl-gate');
-    gate.classList.add('gone');
+    hideGate();
     ge('sfl-body').classList.add('active');
     ge('sfl-vname').textContent  = visitorName;
     ge('sfl-vemail').textContent = visitorEmail;
@@ -551,8 +562,7 @@
     ge('sfl-msgs').innerHTML = '';
     ge('sfl-inp-name').value = ''; ge('sfl-inp-email').value = '';
     ge('sfl-body').classList.remove('active');
-    var gate = ge('sfl-gate');
-    gate.classList.remove('fading', 'gone');
+    showGate();
     setTimeout(function () { ge('sfl-inp-name').focus(); }, 60);
   }
 
