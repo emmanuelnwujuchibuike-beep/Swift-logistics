@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="luxury-upgrade.css">
 
   <style>
     /* ═══════════════════════════════════════════
@@ -840,7 +841,7 @@
       <div>
         <h4>Support</h4>
         <ul>
-          <li><a href="#">FAQ</a></li>
+          <li><a href="faq.html">FAQ</a></li>
           <li><a href="payment.html">Track Shipment</a></li>
           <li><a href="quote.html">Get a Quote</a></li>
         </ul>
@@ -862,7 +863,7 @@
       <div style="display:flex;gap:24px;">
         <a href="policy.html" class="foot-link">Privacy Policy</a>
         <a href="#" class="foot-link">Sitemap</a>
-        <a href="#" class="foot-link">Terms of Use</a>
+        <a href="terms.html" class="foot-link">Terms of Use</a>
       </div>
       <p class="foot-copy">©2025 Swift Freight. All rights reserved · Park James Co.</p>
     </div>
@@ -893,13 +894,13 @@
     });
   }
   function toggle(){ applyTheme(root.getAttribute('data-theme')===DARK?LIGHT:DARK,true); }
-  applyTheme(getSaved()||getAuto(),false);
+  applyTheme(getAuto(),false);
   ['themeToggleDesktop','themeToggleMobile'].forEach(function(id){
     var btn=document.getElementById(id);
     if(btn) btn.addEventListener('click',toggle);
   });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){
-    if(!getSaved()) applyTheme(e.matches?DARK:LIGHT,false);
+    applyTheme(e.matches?DARK:LIGHT,true);
   });
 })();
 

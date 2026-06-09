@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — Swift Freight Logistics</title>
+  <meta name="description" content="Frequently asked questions about Swift Freight Logistics — tracking, shipping, payments, and support.">
+  <link rel="icon" type="image/svg+xml" href="./image/sfl-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./image/loadingicon-removebg-preview.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="luxury-upgrade.css">
+  <style>
+    :root {
+      --accent:#3b82f6; --accent-hi:#60a5fa; --accent-deep:#1d4ed8;
+      --accent-dim:rgba(59,130,246,.1); --accent-rgb:59,130,246;
+      --gold:#c9a84c; --gold-hi:#e8c96a; --gold-dim:rgba(201,168,76,.08); --gold-rgb:201,168,76;
+      --violet:#7c3aed; --violet-hi:#a78bfa; --violet-dim:rgba(124,58,237,.1);
+      --lux-red:#c41230; --lux-red-hi:#e8294a; --lux-red-rgb:196,18,48;
+      --bg:#030812; --bg2:#060d20; --bg3:#080f26; --bg-rgb:3,8,18;
+      --surface:rgba(255,255,255,.03); --surface2:rgba(255,255,255,.055); --surface3:rgba(255,255,255,.085);
+      --text:#eef2ff; --text-rgb:238,242,255; --muted:rgba(238,242,255,.62); --muted2:rgba(238,242,255,.36);
+      --border:rgba(238,242,255,.06); --border2:rgba(238,242,255,.1); --aborder:rgba(59,130,246,.18);
+      --hdr-bg:rgba(3,8,18,.9); --card-bg:rgba(255,255,255,.03); --footer-bg:#020610;
+      --shadow-lg:0 32px 80px rgba(0,0,0,.6),0 8px 24px rgba(0,0,0,.35);
+    }
+    [data-theme="light"] {
+      --accent:#1d4ed8; --accent-hi:#3b82f6; --accent-deep:#1e40af;
+      --accent-dim:rgba(29,78,216,.08); --accent-rgb:29,78,216;
+      --gold:#a87c28; --gold-hi:#c9a84c; --gold-dim:rgba(168,124,40,.07); --gold-rgb:168,124,40;
+      --violet:#6d28d9; --violet-hi:#8b5cf6; --violet-dim:rgba(109,40,217,.08);
+      --bg:#f0f4fc; --bg2:#e6edf9; --bg3:#dce7f6; --bg-rgb:240,244,252;
+      --surface:rgba(255,255,255,.72); --surface2:rgba(255,255,255,.88); --surface3:rgba(255,255,255,.98);
+      --text:#05102a; --text-rgb:5,16,42; --muted:rgba(5,16,42,.65); --muted2:rgba(5,16,42,.38);
+      --border:rgba(5,16,42,.07); --border2:rgba(5,16,42,.12); --aborder:rgba(29,78,216,.15);
+      --hdr-bg:rgba(240,244,252,.92); --card-bg:rgba(255,255,255,.78); --footer-bg:#020610;
+      --shadow-lg:0 32px 80px rgba(5,16,42,.12),0 8px 24px rgba(5,16,42,.07);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.028'/%3E%3C/svg%3E");opacity:.18}
+    body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:radial-gradient(ellipse 70% 55% at 15% 0%,rgba(124,58,237,.07) 0%,transparent 60%),
+                 radial-gradient(ellipse 55% 45% at 90% 85%,rgba(201,168,76,.06) 0%,transparent 55%),
+                 radial-gradient(ellipse 40% 35% at 75% 15%,rgba(59,130,246,.05) 0%,transparent 55%)}
+    header,section,footer,nav,.fab-btn{position:relative;z-index:1}
+    .gt{background:linear-gradient(115deg,var(--accent) 0%,var(--accent-hi) 40%,var(--gold-hi) 80%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .display{font-family:'Bebas Neue';letter-spacing:.03em;line-height:.92}
+    .lbl{display:inline-flex;align-items:center;gap:12px;font:700 8px/1 'DM Sans';letter-spacing:.48em;text-transform:uppercase;color:var(--gold);opacity:.9}
+    .lbl::before,.lbl::after{content:'';width:22px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:.5}
+    .lbl::after{background:linear-gradient(270deg,var(--gold),transparent)}
+    .orb{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+    .btn-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--accent-deep) 0%,var(--accent) 50%,var(--accent-hi) 100%);background-size:200% 100%;background-position:left;color:#fff;font:700 .74rem/1 'DM Sans';letter-spacing:.12em;text-transform:uppercase;padding:15px 32px;border-radius:2px;border:none;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-position .5s ease,box-shadow .3s,transform .25s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+    .btn-primary:hover{background-position:right;box-shadow:0 0 40px rgba(var(--accent-rgb),.38),0 8px 32px rgba(var(--accent-rgb),.2);transform:translateY(-2px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--muted);font:600 .74rem/1 'DM Sans';letter-spacing:.1em;text-transform:uppercase;padding:14px 28px;border-radius:2px;border:1px solid var(--border2);cursor:pointer;text-decoration:none;transition:all .3s;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,7px 100%,0 calc(100% - 7px))}
+    .btn-outline:hover{color:var(--accent);border-color:rgba(var(--accent-rgb),.45);background:rgba(var(--accent-rgb),.06)}
+    .glass{background:var(--card-bg);backdrop-filter:blur(28px) saturate(1.5);-webkit-backdrop-filter:blur(28px) saturate(1.5);border:1px solid var(--aborder)}
+    [data-theme="light"] .glass{background:var(--surface2);border:1px solid var(--border2);box-shadow:0 8px 48px rgba(5,16,42,.07),inset 0 1px 0 rgba(255,255,255,.9)}
+    .theme-btn{width:40px;height:40px;border-radius:2px;display:flex;align-items:center;justify-content:center;background:rgba(var(--accent-rgb),.07);border:1px solid rgba(var(--accent-rgb),.18);color:var(--accent);cursor:pointer;flex-shrink:0;transition:all .25s;clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))}
+    .theme-btn:hover{background:rgba(var(--accent-rgb),.16);transform:scale(1.06)}
+    .theme-btn i{font-size:.8rem;pointer-events:none}
+    .sfl-transitioning *{transition:background-color .4s,border-color .4s,color .28s,box-shadow .4s!important}
+
+    /* ── Header ── */
+    #hdr{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--hdr-bg);backdrop-filter:blur(32px) saturate(1.6);-webkit-backdrop-filter:blur(32px) saturate(1.6);border-bottom:1px solid var(--border);transition:background .4s,box-shadow .4s,border-color .4s}
+    #hdr.scrolled{box-shadow:0 4px 48px rgba(0,0,0,.4),0 1px 0 rgba(var(--gold-rgb),.14);border-bottom-color:rgba(var(--gold-rgb),.18)}
+    [data-theme="light"] #hdr{background:rgba(240,244,252,.88);border-bottom:1px solid rgba(5,16,42,.06)}
+    [data-theme="light"] #hdr.scrolled{box-shadow:0 4px 40px rgba(5,16,42,.1),0 1px 0 rgba(255,255,255,.9)}
+    .hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:74px;max-width:1400px;margin:0 auto}
+    .logo{display:flex;align-items:center;gap:14px;text-decoration:none;flex-shrink:0;cursor:pointer}
+    .logo img{width:40px;height:40px;filter:drop-shadow(0 2px 12px rgba(var(--accent-rgb),.42));transition:filter .3s}
+    .logo-text{display:flex;flex-direction:column}
+    .logo-name{font-family:'Bebas Neue';font-size:1.08rem;letter-spacing:.18em;line-height:1.1}
+    .logo-sub{font-size:6px;letter-spacing:.52em;text-transform:uppercase;color:rgba(var(--gold-rgb),.38);margin-top:2px}
+    .nav-links{display:flex;align-items:center;gap:38px;list-style:none}
+    .nav-links a{font:500 .78rem/1 'DM Sans';letter-spacing:.05em;color:var(--muted);text-decoration:none;transition:color .2s;position:relative;padding-bottom:2px}
+    .nav-links a::after{content:'';position:absolute;left:50%;bottom:-4px;width:0;height:1px;background:linear-gradient(90deg,var(--gold),var(--gold-hi));transition:width .35s,left .35s}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%;left:0}
+    .hdr-actions{display:flex;align-items:center;gap:12px}
+    .mobile-controls{display:none;align-items:center;gap:10px}
+    .menu-btn{display:none;width:44px;height:44px;border-radius:2px;flex-direction:column;align-items:center;justify-content:center;gap:5.5px;background:rgba(var(--accent-rgb),.06);border:1px solid rgba(var(--accent-rgb),.14);cursor:pointer;z-index:310;flex-shrink:0;transition:background .25s,border-color .25s;clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,7px 100%,0 calc(100% - 7px))}
+    .menu-btn span{display:block;width:22px;height:1.5px;background:var(--accent);border-radius:1px;transition:transform .42s cubic-bezier(.16,1,.3,1),opacity .3s,width .3s;transform-origin:center}
+    .menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .menu-btn.open span:nth-child(2){opacity:0;width:0}
+    .menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    #mobile-nav{position:fixed;inset:0;z-index:250;background:var(--hdr-bg);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(.76,0,.24,1);display:none}
+    #mobile-nav.open{opacity:1;pointer-events:all}
+    #mobile-nav::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-hi),var(--gold),transparent);opacity:.6}
+    .mob-nav-inner{position:relative;z-index:2;padding:36px 36px 52px;display:flex;flex-direction:column;min-height:100%}
+    .mob-nav-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:56px}
+    .mob-nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+    .mob-nav-logo img{width:34px;height:34px;filter:drop-shadow(0 2px 10px rgba(var(--accent-rgb),.4))}
+    .mob-nav-logo-name{font-family:'Bebas Neue';font-size:.95rem;letter-spacing:.18em}
+    .mob-nav-logo-name span:first-child{-webkit-text-fill-color:transparent;background:linear-gradient(135deg,var(--gold),var(--gold-hi));-webkit-background-clip:text;background-clip:text}
+    .mob-nav-logo-name span:last-child{color:rgba(var(--text-rgb),.75);margin-left:5px}
+    .mob-close-btn{width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:rgba(var(--gold-rgb),.07);border:1px solid rgba(var(--gold-rgb),.2);border-radius:2px;cursor:pointer;color:var(--gold);font-size:.85rem;transition:background .25s,transform .3s;flex-shrink:0;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+    .mob-close-btn:hover{background:rgba(var(--gold-rgb),.16);transform:rotate(90deg) scale(1.06)}
+    .mob-nav-label{font:700 7px/1 'DM Sans';letter-spacing:.48em;text-transform:uppercase;color:rgba(var(--gold-rgb),.38);margin-bottom:20px}
+    .mob-nav-links{list-style:none;display:flex;flex-direction:column;gap:0}
+    .mob-nav-links li{border-bottom:1px solid var(--border);opacity:0;transform:translateX(-24px);transition:opacity .0s,transform .0s}
+    #mobile-nav.open .mob-nav-links li{opacity:1;transform:translateX(0);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+    #mobile-nav.open .mob-nav-links li:nth-child(1){transition-delay:.08s}
+    #mobile-nav.open .mob-nav-links li:nth-child(2){transition-delay:.15s}
+    #mobile-nav.open .mob-nav-links li:nth-child(3){transition-delay:.22s}
+    #mobile-nav.open .mob-nav-links li:nth-child(4){transition-delay:.29s}
+    #mobile-nav.open .mob-nav-links li:nth-child(5){transition-delay:.36s}
+    .mob-nav-links a{display:flex;align-items:center;justify-content:space-between;padding:20px 0;font:700 2rem/1 'Bebas Neue';letter-spacing:.08em;color:var(--text);text-decoration:none;transition:color .2s,padding-left .3s}
+    .mob-nav-links a:hover{color:var(--gold);padding-left:8px}
+    .mob-nav-links a .nav-arrow{width:32px;height:32px;border-radius:2px;display:flex;align-items:center;justify-content:center;background:rgba(var(--gold-rgb),.07);border:1px solid rgba(var(--gold-rgb),.18);color:var(--gold);font-size:.65rem;transition:background .25s,transform .3s;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px))}
+    .mob-nav-links a:hover .nav-arrow{background:rgba(var(--gold-rgb),.18);transform:translateX(4px)}
+    .mob-nav-cta{margin-top:36px;opacity:0;transform:translateY(16px);transition:opacity .0s,transform .0s;display:flex;flex-direction:column;gap:10px}
+    #mobile-nav.open .mob-nav-cta{opacity:1;transform:translateY(0);transition:opacity .5s ease .44s,transform .5s cubic-bezier(.16,1,.3,1) .44s}
+    .mob-nav-cta .btn-primary,.mob-nav-cta .btn-outline{width:100%;justify-content:center}
+
+    /* ── HERO ── */
+    .faq-hero{padding:148px 48px 88px;position:relative;overflow:hidden;text-align:center}
+    .faq-hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:2}
+    .faq-hero h1{font-family:'Bebas Neue';font-size:clamp(3.5rem,8vw,7rem);line-height:.88;letter-spacing:.04em;color:var(--text);margin:18px 0 28px}
+    .faq-hero p{font-size:1rem;color:var(--muted);line-height:1.88;max-width:580px;margin:0 auto 52px;font-weight:300}
+    .hero-stripe{height:3px;background:linear-gradient(90deg,transparent,var(--violet) 20%,var(--accent) 45%,var(--gold) 75%,var(--gold-hi) 90%,transparent);border-radius:2px;width:320px;margin:0 auto 40px;opacity:.7}
+    .hero-badge{display:inline-flex;align-items:center;gap:10px;padding:9px 22px;border:1px solid rgba(var(--gold-rgb),.28);border-radius:99px;background:rgba(var(--gold-rgb),.06);margin-bottom:24px}
+    .hero-badge span{font:700 8px/1 'DM Sans';letter-spacing:.38em;text-transform:uppercase;color:var(--gold-hi)}
+
+    /* ── Category filter ── */
+    .cat-bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:68px}
+    .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:99px;border:1px solid var(--border2);background:transparent;color:var(--muted);font:600 .78rem/1 'DM Sans';letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .28s}
+    .cat-btn:hover{color:var(--text);border-color:rgba(var(--gold-rgb),.35);background:rgba(var(--gold-rgb),.06)}
+    .cat-btn.active{color:var(--gold);border-color:rgba(var(--gold-rgb),.45);background:rgba(var(--gold-rgb),.08)}
+    .cat-btn i{font-size:.7rem}
+
+    /* ── FAQ Sections ── */
+    .faq-wrap{max-width:900px;margin:0 auto;padding:0 48px 120px}
+    .faq-section{margin-bottom:72px}
+    .faq-section-head{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid rgba(var(--gold-rgb),.12)}
+    .faq-section-icon{width:44px;height:44px;border-radius:3px;display:flex;align-items:center;justify-content:center;background:rgba(var(--gold-rgb),.08);border:1px solid rgba(var(--gold-rgb),.2);color:var(--gold);font-size:.88rem;flex-shrink:0}
+    .faq-section-title{font:700 1rem/1 'DM Sans';letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
+    .faq-section-count{font:500 .72rem/1 'DM Sans';color:var(--muted2);letter-spacing:.06em}
+    .faq-list{display:flex;flex-direction:column;gap:12px}
+
+    /* ── Accordion item ── */
+    .faq-item{border:1px solid var(--border2);border-radius:4px;overflow:hidden;transition:border-color .3s,box-shadow .3s;background:var(--card-bg)}
+    .faq-item:hover{border-color:rgba(var(--gold-rgb),.25)}
+    .faq-item.open{border-color:rgba(var(--gold-rgb),.38);box-shadow:0 8px 40px rgba(var(--gold-rgb),.07),0 0 0 1px rgba(var(--gold-rgb),.1) inset}
+    [data-theme="light"] .faq-item{background:rgba(255,255,255,.82);border-color:rgba(5,16,42,.1)}
+    [data-theme="light"] .faq-item.open{border-color:rgba(var(--gold-rgb),.38)}
+    .faq-q{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 26px;cursor:pointer;user-select:none;transition:background .25s}
+    .faq-q:hover{background:rgba(var(--gold-rgb),.04)}
+    .faq-item.open .faq-q{background:rgba(var(--gold-rgb),.05)}
+    .faq-q-text{font:600 .94rem/1.45 'DM Sans';color:var(--text)}
+    .faq-item.open .faq-q-text{color:var(--gold-hi)}
+    .faq-icon{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s,background .3s,transform .4s cubic-bezier(.34,1.56,.64,1);color:var(--muted2);font-size:.6rem}
+    .faq-item.open .faq-icon{border-color:rgba(var(--gold-rgb),.45);background:rgba(var(--gold-rgb),.1);color:var(--gold);transform:rotate(45deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.16,1,.3,1)}
+    .faq-item.open .faq-a{max-height:600px}
+    .faq-a-inner{padding:0 26px 26px;border-top:1px solid rgba(var(--gold-rgb),.1)}
+    .faq-a-inner p{font-size:.9rem;color:var(--muted);line-height:1.9;padding-top:18px}
+    .faq-a-inner ul{list-style:none;padding-top:14px;display:flex;flex-direction:column;gap:8px}
+    .faq-a-inner ul li{font-size:.88rem;color:var(--muted);line-height:1.7;display:flex;align-items:flex-start;gap:10px}
+    .faq-a-inner ul li::before{content:'✦';font-size:.5rem;color:var(--gold);margin-top:6px;flex-shrink:0}
+    .faq-a-inner .note{margin-top:14px;padding:12px 18px;background:rgba(var(--gold-rgb),.06);border-left:2px solid var(--gold);border-radius:0 4px 4px 0;font-size:.82rem;color:rgba(var(--text-rgb),.55);line-height:1.75}
+
+    /* ── CTA Strip ── */
+    .cta-strip{background:var(--footer-bg);border-top:1px solid rgba(var(--gold-rgb),.1);border-bottom:1px solid rgba(var(--gold-rgb),.1)}
+    .cta-inner{max-width:1400px;margin:0 auto;padding:80px 48px;display:grid;grid-template-columns:1fr auto;gap:52px;align-items:center}
+    .cta-text h2{font-family:'Bebas Neue';font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.04em;color:var(--text);margin-bottom:12px}
+    .cta-text p{font-size:.9rem;color:var(--muted);line-height:1.8;max-width:480px}
+    .cta-actions{display:flex;gap:14px;flex-shrink:0}
+
+    /* ── Footer ── */
+    footer{background:var(--footer-bg)}
+    .footer-inner{max-width:1400px;margin:0 auto;padding:88px 48px 44px}
+    .footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:52px;padding-bottom:64px}
+    .footer-btm{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:22px 0;border-top:1px solid rgba(255,255,255,.05)}
+    footer h4{color:rgba(232,240,254,.7);font:700 .7rem/1 'DM Sans';letter-spacing:.34em;text-transform:uppercase;margin-bottom:24px}
+    footer ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+    footer ul a{color:rgba(232,240,254,.48);font-size:.82rem;text-decoration:none;transition:color .2s,padding-left .25s;display:inline-flex;align-items:center;gap:7px}
+    footer ul a:hover{color:var(--gold);padding-left:6px}
+    footer p.foot-copy{color:rgba(232,240,254,.38);font-size:.7rem;letter-spacing:.04em}
+    footer a.foot-link{color:rgba(232,240,254,.42);font-size:.72rem;text-decoration:none;transition:color .2s}
+    footer a.foot-link:hover{color:var(--gold)}
+    .footer-form{display:flex;border-radius:3px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.028)}
+    .footer-form input{flex:1;padding:13px 18px;background:transparent;font:400 .8rem/1 'DM Sans';color:rgba(232,240,254,.55);outline:none;border:none}
+    .footer-form input::placeholder{color:rgba(232,240,254,.28)}
+    .footer-form button{border-radius:0;padding:12px 22px;font-size:.7rem;clip-path:none}
+    .footer-socials{display:flex;gap:10px;margin-top:22px}
+    .footer-socials a{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:2px;border:1px solid rgba(255,255,255,.08);color:rgba(232,240,254,.4);font-size:.72rem;transition:color .2s,border-color .2s,background .2s;text-decoration:none}
+    .footer-socials a:hover{color:var(--gold);border-color:rgba(var(--gold-rgb),.35);background:rgba(var(--gold-rgb),.08)}
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:rgba(var(--gold-rgb),.25);border-radius:2px}
+    .reveal{opacity:0;visibility:hidden;transition:opacity .42s ease,transform .48s cubic-bezier(.25,.46,.45,.94);transition-delay:var(--d,0s);will-change:opacity,transform}
+    .reveal.up{transform:translate3d(0,24px,0)}
+    .reveal.on{opacity:1!important;visibility:visible!important;transform:translate3d(0,0,0)!important}
+
+    @media(max-width:1023px){
+      .hdr-inner{padding:0 24px}
+      .nav-links,.hdr-actions{display:none!important}
+      .menu-btn{display:flex!important}
+      .mobile-controls{display:flex!important}
+      #mobile-nav{display:block}
+      .faq-hero{padding:118px 28px 64px}
+      .faq-wrap{padding:0 28px 88px}
+      .cta-inner{grid-template-columns:1fr;gap:32px}
+      .cta-actions{flex-wrap:wrap}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:38px}
+      .footer-inner{padding:60px 28px 44px}
+    }
+    @media(max-width:767px){
+      .faq-hero{padding:100px 20px 52px}
+      .faq-wrap{padding:0 20px 72px}
+      .cta-inner{padding:56px 20px}
+      .footer-grid{grid-template-columns:1fr;gap:36px}
+      .footer-inner{padding:52px 20px 36px}
+      .footer-btm{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header id="hdr">
+  <div class="hdr-inner">
+    <a href="index.html" class="logo">
+      <img src="./image/sfl-logo.svg" alt="Swift Freight Logistics">
+      <div class="logo-text">
+        <div class="logo-name"><span class="gt">SWIFT</span><span style="color:rgba(var(--text-rgb),.8);margin-left:6px;">FREIGHT</span></div>
+        <div class="logo-sub">Logistics</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="hdr-actions">
+      <button class="theme-btn" id="themeToggleDesktop" aria-label="Toggle theme"><i class="fas fa-sun" id="themeIconDesktop"></i></button>
+      <a href="payment.html" class="btn-outline" style="padding:11px 22px;font-size:.71rem;"><i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track</a>
+      <a href="quote.html" class="btn-primary" style="padding:12px 26px;font-size:.73rem;">Get a Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i></a>
+    </div>
+    <div class="mobile-controls">
+      <button class="theme-btn" id="themeToggleMobile" aria-label="Toggle theme"><i class="fas fa-sun" id="themeIconMobile"></i></button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MOBILE NAV ══ -->
+<nav id="mobile-nav" aria-hidden="true">
+  <div class="mob-nav-inner">
+    <div class="mob-nav-topbar">
+      <a href="index.html" class="mob-nav-logo"><img src="./image/sfl-logo.svg" alt="Swift Freight"><div class="mob-nav-logo-name"><span>SWIFT</span><span>FREIGHT</span></div></a>
+      <button class="mob-close-btn" id="mobileNavClose"><i class="fas fa-xmark"></i></button>
+    </div>
+    <p class="mob-nav-label">Navigation</p>
+    <ul class="mob-nav-links">
+      <li><a href="index.html">Home <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="payment.html">Track Shipment <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="services.html">Our Services <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="contact.html">Contact <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+      <li><a href="about.html">About Us <span class="nav-arrow"><i class="fas fa-arrow-right"></i></span></a></li>
+    </ul>
+    <div class="mob-nav-cta">
+      <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.6rem;"></i></a>
+      <a href="payment.html" class="btn-outline"><i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track Shipment</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="faq-hero">
+  <div class="orb" style="width:700px;height:700px;background:rgba(124,58,237,.06);top:-250px;left:-220px;"></div>
+  <div class="orb" style="width:500px;height:500px;background:rgba(201,168,76,.05);bottom:-100px;right:-180px;"></div>
+  <div class="faq-hero-inner">
+    <div class="hero-badge reveal up"><span>✦ &nbsp; Knowledge Base &nbsp; ✦</span></div>
+    <h1 class="reveal up" style="--d:.1s;">FREQUENTLY <span class="gt">ASKED</span><br>QUESTIONS</h1>
+    <div class="hero-stripe reveal up" style="--d:.15s;"></div>
+    <p class="reveal up" style="--d:.2s;">Everything you need to know about Swift Freight Logistics — from tracking and shipping to payments and support. Can't find your answer? Our team is one message away.</p>
+    <div class="cat-bar reveal up" style="--d:.28s;">
+      <button class="cat-btn active" data-cat="all"><i class="fas fa-border-all"></i> All Topics</button>
+      <button class="cat-btn" data-cat="general"><i class="fas fa-circle-info"></i> General</button>
+      <button class="cat-btn" data-cat="tracking"><i class="fas fa-location-dot"></i> Tracking</button>
+      <button class="cat-btn" data-cat="shipping"><i class="fas fa-ship"></i> Shipping</button>
+      <button class="cat-btn" data-cat="payments"><i class="fas fa-credit-card"></i> Payments</button>
+      <button class="cat-btn" data-cat="support"><i class="fas fa-headset"></i> Support</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ CONTENT ══ -->
+<div class="faq-wrap">
+
+  <!-- GENERAL -->
+  <div class="faq-section" data-section="general">
+    <div class="faq-section-head">
+      <div class="faq-section-icon"><i class="fas fa-circle-info"></i></div>
+      <div>
+        <div class="faq-section-title">General</div>
+        <div class="faq-section-count">5 questions</div>
+      </div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What is Swift Freight Logistics?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Swift Freight Logistics is a full-service international freight and logistics company specialising in air, sea, road, and rail freight. We manage the entire shipping journey — from origin pickup through customs clearance to final-mile delivery — serving clients across 150+ countries worldwide.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">Which countries do you serve?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>We operate across 150+ countries on every continent. Our global network of partners, agents, and owned facilities allows us to reach even remote or restricted destinations. Contact our team for a route-specific assessment if you're shipping to an unusual location.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">How do I get started with Swift Freight?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Getting started is simple:</p><ul><li>Submit a quote request on our website with your shipment details</li><li>Receive a personalised quote within 24 hours from a dedicated specialist</li><li>Approve the quote and we register your shipment with a live tracking ID</li><li>We coordinate pickup, transit, customs, and delivery end-to-end</li></ul></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What types of freight do you handle?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>We handle all major freight categories:</p><ul><li><strong style="color:var(--text)">Air Freight</strong> — time-critical or high-value cargo</li><li><strong style="color:var(--text)">Sea Freight</strong> — FCL and LCL ocean shipments</li><li><strong style="color:var(--text)">Road Freight</strong> — domestic and cross-border trucking</li><li><strong style="color:var(--text)">Rail Freight</strong> — cost-effective long-distance overland routes</li><li><strong style="color:var(--text)">Special Cargo</strong> — hazmat, oversized, temperature-controlled, and high-security loads</li></ul></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">Is my cargo insured during transit?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Yes. All shipments handled by Swift Freight are covered by our standard cargo liability policy. For high-value goods we strongly recommend comprehensive all-risk cargo insurance, which we can arrange on your behalf at a competitive rate. Ask your account manager for details when booking.</p><div class="note">✦ &nbsp; Cargo insurance covers loss, theft, and damage from origin to delivery. Always declare accurate cargo value when booking.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACKING -->
+  <div class="faq-section" data-section="tracking">
+    <div class="faq-section-head">
+      <div class="faq-section-icon"><i class="fas fa-location-dot"></i></div>
+      <div>
+        <div class="faq-section-title">Tracking</div>
+        <div class="faq-section-count">5 questions</div>
+      </div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">How do I track my shipment?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Use the <a href="payment.html" style="color:var(--gold);text-decoration:none;font-weight:600;">Track Shipment</a> page and enter the SFL-XXXXXXXXX tracking number from your confirmation email. The dashboard displays real-time status, current location, checkpoint history, estimated delivery date, and any payment or customs holds on your shipment.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">How often is tracking information updated?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Tracking data is refreshed every time your shipment passes a checkpoint — typically at origin pickup, departure hub, transit hubs, customs clearance, and final-mile handoff. For active shipments, you can expect updates every 12–24 hours on average, with more frequent updates near delivery.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">My tracking shows no update for 2 days. What should I do?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Gaps in updates are normal during long ocean or rail legs where checkpoints are less frequent. However, if your shipment has not updated in more than 72 hours, please contact our support team with your tracking ID. We will investigate immediately and provide a status report within 4 hours.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What does "Customs Hold" mean on my tracking?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>A customs hold means your shipment is undergoing inspection by the destination country's customs authority. This is a standard procedure for international freight. In most cases no action is required from you, and the hold is resolved within 2–5 business days. We will notify you by email if any documentation or duties are required.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">Can I share my tracking link with a recipient?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Yes. Your tracking page URL (swiftfreightlogix.netlify.app/payment.html?id=SFL-XXXXX) can be shared with anyone — recipients, business partners, or customs agents. The page is publicly accessible with your tracking ID and shows all status information in real time.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHIPPING -->
+  <div class="faq-section" data-section="shipping">
+    <div class="faq-section-head">
+      <div class="faq-section-icon"><i class="fas fa-ship"></i></div>
+      <div>
+        <div class="faq-section-title">Shipping</div>
+        <div class="faq-section-count">5 questions</div>
+      </div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What items are prohibited from shipping?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>We do not ship items that are illegal under international law or restricted by destination country regulations. This includes, but is not limited to:</p><ul><li>Narcotics and controlled substances</li><li>Weapons, firearms, and explosives</li><li>Counterfeit goods and pirated materials</li><li>Currency, negotiable instruments, or bearer bonds</li><li>Live animals without proper permits</li><li>Perishable goods without temperature-controlled arrangement</li></ul><div class="note">✦ &nbsp; Hazardous materials may be shipped under specific IATA/IMDG certifications. Contact us for a compliance assessment.</div></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What are your packaging requirements?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Cargo must be properly packaged to withstand international transit. For fragile or high-value items, we recommend professional crating or export-grade cartons. All packages must be clearly labelled with the recipient's full name, address, and our tracking ID. Packing lists and commercial invoices must accompany all international shipments.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">How long does delivery take?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Transit times vary by mode and route:</p><ul><li><strong style="color:var(--text)">Air Freight</strong> — 1–7 business days</li><li><strong style="color:var(--text)">Sea Freight (FCL)</strong> — 10–30 days depending on route</li><li><strong style="color:var(--text)">Road Freight</strong> — 2–14 days within region</li><li><strong style="color:var(--text)">Rail Freight</strong> — 10–20 days (Europe–Asia corridors)</li></ul><p style="padding-top:12px;">Customs clearance can add 2–5 business days. Your quote will include an estimated delivery window.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">Do you handle door-to-door shipments?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Yes. We offer full door-to-door service including origin pickup, packing assistance, export documentation, freight, customs clearance at destination, import duties management, and final-mile delivery. You can also choose port-to-port or door-to-port arrangements for partial service.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">Can you ship oversized or project cargo?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Yes. Our project cargo division handles heavy lifts, breakbulk, out-of-gauge (OOG) cargo, and industrial equipment. We coordinate specialised vessels, flatbed trailers, cranes, and port operations. Contact our team for a bespoke project logistics plan.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENTS -->
+  <div class="faq-section" data-section="payments">
+    <div class="faq-section-head">
+      <div class="faq-section-icon"><i class="fas fa-credit-card"></i></div>
+      <div>
+        <div class="faq-section-title">Payments</div>
+        <div class="faq-section-count">4 questions</div>
+      </div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What payment methods do you accept?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>We accept multiple payment methods to suit clients globally:</p><ul><li>Wire bank transfer (SWIFT/IBAN)</li><li>Bitcoin (BTC)</li><li>USDT (TRC20 and ERC20)</li><li>Approved corporate credit accounts (for registered businesses)</li></ul><div class="note">✦ &nbsp; Payment details are provided in your secure tracking dashboard and confirmation email. Never send payment to any address not verified through our official system.</div></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">When is payment required?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Payment terms depend on your service arrangement. For new clients, freight charges are typically required before dispatch or at a defined transit milestone. Established corporate accounts may qualify for 30-day net payment terms. Any outstanding balance must be settled before final delivery is released.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">My shipment shows "Payment Required" — what do I do?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Open your tracking page and scroll to the Payment section for the exact amount due and accepted payment methods. Complete payment and send the transaction reference to <a href="mailto:swiftfreightlogix@gmail.com" style="color:var(--gold);text-decoration:none;">swiftfreightlogix@gmail.com</a> with your tracking ID. Your shipment will resume within 24 hours of payment confirmation.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">Are there hidden fees?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>We operate with full pricing transparency. Your quote includes all known charges: freight, fuel surcharges, handling, and documentation. Import duties, destination customs taxes, and port storage fees are the responsibility of the consignee and may not be known in advance. We will notify you immediately if any unexpected charges arise during transit.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPPORT -->
+  <div class="faq-section" data-section="support">
+    <div class="faq-section-head">
+      <div class="faq-section-icon"><i class="fas fa-headset"></i></div>
+      <div>
+        <div class="faq-section-title">Support</div>
+        <div class="faq-section-count">4 questions</div>
+      </div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">How do I contact customer support?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>You can reach our support team through multiple channels:</p><ul><li>Live chat on any page of our website (bottom-right corner)</li><li>Email: <a href="mailto:swiftfreightlogix@gmail.com" style="color:var(--gold);text-decoration:none;">swiftfreightlogix@gmail.com</a></li><li>Contact form on our <a href="contact.html" style="color:var(--gold);text-decoration:none;">Contact page</a></li></ul><p style="padding-top:10px;">Our support team operates 24 hours a day, 7 days a week.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What is your response time?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Live chat responses typically arrive within minutes during active hours. Email and contact form enquiries receive a response within 24 hours. Urgent shipment-related issues (delays, customs holds, lost cargo) are escalated and addressed within 4 hours regardless of time zone.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">What if my shipment is lost or damaged?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>If you believe your shipment is lost or damaged, contact support immediately with your tracking ID. We will open a formal investigation within 24 hours. Claims for lost cargo must be submitted within 14 days of the expected delivery date. Damage claims must be reported within 48 hours of receipt with photographic evidence. Our insurance team will guide you through the claims process.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-text">Can I modify or cancel my shipment after booking?</span><div class="faq-icon"><i class="fas fa-plus"></i></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Modifications (address changes, weight updates, service level changes) are possible before cargo is dispatched from origin. Once in transit, changes may incur additional fees. Cancellations before pickup are generally accepted without charge. Post-dispatch cancellations are subject to our freight recovery policy. Contact your account manager as soon as possible to discuss your options.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.faq-wrap -->
+
+<!-- ══ CTA STRIP ══ -->
+<div class="cta-strip">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Still have questions?<br><span class="gt">We're here 24/7.</span></h2>
+      <p>Our logistics specialists are available around the clock. Whether it's a quick question or a complex freight challenge, we're ready to help immediately.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn-primary">Contact Support <i class="fas fa-headset" style="font-size:.62rem;"></i></a>
+      <a href="quote.html" class="btn-outline">Get a Quote</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div style="display:flex;align-items:center;gap:13px;margin-bottom:22px;">
+          <img src="./image/sfl-logo.svg" alt="Swift Freight" width="42" height="42" style="filter:drop-shadow(0 2px 12px rgba(59,130,246,.42));">
+          <div>
+            <div style="font-family:'Bebas Neue';font-size:1.06rem;letter-spacing:.17em;line-height:1.1;"><span class="gt">SWIFT</span><span style="color:rgba(232,240,254,.75);margin-left:5px;">FREIGHT</span></div>
+            <div style="font-size:6px;letter-spacing:.52em;text-transform:uppercase;color:rgba(201,168,76,.35);margin-top:2px;">Logistics</div>
+          </div>
+        </div>
+        <p style="color:rgba(232,240,254,.44);font-size:.81rem;line-height:1.82;margin-bottom:22px;font-weight:300;">Premium global freight solutions, delivered with precision and transparency.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="payment.html">Track Shipment</a></li>
+          <li><a href="quote.html">Get a Quote</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html">Sea Freight</a></li>
+          <li><a href="services.html">Road Freight</a></li>
+          <li><a href="services.html">Air Freight</a></li>
+          <li><a href="services.html">Rail Freight</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-btm">
+      <div style="display:flex;gap:24px;">
+        <a href="policy.html" class="foot-link">Privacy Policy</a>
+        <a href="terms.html" class="foot-link">Terms of Use</a>
+        <a href="faq.html" class="foot-link">FAQ</a>
+      </div>
+      <p class="foot-copy">©2025 Swift Freight Logistics. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="chat.js"></script>
+<script src="script.js"></script>
+<script>
+(function(){
+  var root=document.documentElement,DARK='dark',LIGHT='light';
+  var tt=null;
+  function getAuto(){return window.matchMedia('(prefers-color-scheme: dark)').matches?DARK:LIGHT}
+  function applyTheme(t,animate){
+    if(animate){if(tt)clearTimeout(tt);root.classList.add('sfl-transitioning');tt=setTimeout(function(){root.classList.remove('sfl-transitioning');},480);}
+    root.setAttribute('data-theme',t);
+    ['themeIconDesktop','themeIconMobile'].forEach(function(id){var el=document.getElementById(id);if(el)el.className=t===DARK?'fas fa-sun':'fas fa-moon';});
+  }
+  applyTheme(getAuto(),false);
+  ['themeToggleDesktop','themeToggleMobile'].forEach(function(id){var btn=document.getElementById(id);if(btn)btn.addEventListener('click',function(){applyTheme(root.getAttribute('data-theme')===DARK?LIGHT:DARK,true);});});
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){applyTheme(e.matches?DARK:LIGHT,true);});
+})();
+(function(){
+  var menuBtn=document.getElementById('menuBtn'),closeBtn=document.getElementById('mobileNavClose'),nav=document.getElementById('mobile-nav');
+  if(!menuBtn||!nav)return;
+  var isOpen=false;
+  function openNav(){isOpen=true;menuBtn.classList.add('open');nav.classList.add('open');nav.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function closeNav(){isOpen=false;menuBtn.classList.remove('open');nav.classList.remove('open');nav.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  menuBtn.addEventListener('click',function(){isOpen?closeNav():openNav();});
+  if(closeBtn)closeBtn.addEventListener('click',closeNav);
+  nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeNav);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&isOpen)closeNav();});
+})();
+(function(){
+  var hdr=document.getElementById('hdr');
+  if(!hdr)return;
+  window.addEventListener('scroll',function(){hdr.classList.toggle('scrolled',window.scrollY>30);},{passive:true});
+})();
+
+/* Accordion */
+(function(){
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    q.addEventListener('click',function(){
+      var item=this.closest('.faq-item');
+      var isOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function(o){o.classList.remove('open');});
+      if(!isOpen)item.classList.add('open');
+    });
+  });
+})();
+
+/* Category filter */
+(function(){
+  document.querySelectorAll('.cat-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('active');});
+      this.classList.add('active');
+      var cat=this.dataset.cat;
+      document.querySelectorAll('.faq-section').forEach(function(s){
+        s.style.display=(cat==='all'||s.dataset.section===cat)?'block':'none';
+      });
+    });
+  });
+})();
+
+/* Reveal */
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!els.length)return;
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}});},{threshold:0.1,rootMargin:'0px 0px -36px 0px'});
+  els.forEach(function(el){obs.observe(el);});
+})();
+</script>
+</body>
+</html>

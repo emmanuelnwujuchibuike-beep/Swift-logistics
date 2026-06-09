@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="output.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="luxury-upgrade.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -1282,7 +1283,7 @@
       <p style="font:.71rem/1 'DM Sans';color:var(--t-muted2);">© 2025 Swift Freight Logistics. All rights reserved.</p>
       <div style="display:flex;gap:20px;">
         <a href="policy.html" style="font:.71rem/1 'DM Sans';color:var(--t-muted2);text-decoration:none;">Privacy Policy</a>
-        <a href="terms"       style="font:.71rem/1 'DM Sans';color:var(--t-muted2);text-decoration:none;">Terms of Use</a>
+        <a href="terms.html"  style="font:.71rem/1 'DM Sans';color:var(--t-muted2);text-decoration:none;">Terms of Use</a>
       </div>
     </div>
     <!-- Admin padlock — press-hold 3s to unlock -->
@@ -1318,13 +1319,13 @@
       });
     }
     function toggle(){ applyTheme(root.getAttribute('data-theme')===DARK?LIGHT:DARK, true); }
-    applyTheme(getSaved()||getAuto(), false);
+    applyTheme(getAuto(), false);
     ['themeToggleDesktop','themeToggleMobile'].forEach(function(id){
       var btn=document.getElementById(id);
       if(btn) btn.addEventListener('click',toggle);
     });
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){
-      if(!getSaved()) applyTheme(e.matches?DARK:LIGHT, false);
+      applyTheme(e.matches?DARK:LIGHT, true);
     });
   })();
   /* ═══════════════ MOBILE NAV ═══════════════ */

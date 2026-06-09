@@ -1,7 +1,7 @@
-import { createClient }           from 'jsr:@supabase/supabase-js@2';
-import { CORS_HEADERS, json, err } from '../_shared/cors.ts';
-import { sendEmail }               from '../_shared/resend.ts';
-import { quoteReceivedEmail }      from '../_shared/templates.ts';
+import { createClient }                              from 'jsr:@supabase/supabase-js@2';
+import { CORS_HEADERS, json, err }                   from '../_shared/cors.ts';
+import { sendEmail }                                 from '../_shared/resend.ts';
+import { quoteReceivedEmail, contactNotificationEmail } from '../_shared/templates.ts';
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
@@ -57,15 +57,24 @@ Deno.serve(async (req: Request) => {
     await sendEmail({ to: body.email, subject, html });
 
     // Notify admin if ADMIN_EMAIL is set
-    const adminEmail = Deno.env.get('ADMIN_EMAIL');
-    if (adminEmail) {
-      await sendEmail({
-        to:      adminEmail,
-        subject: `New Quote Request from ${body.name} — ${refCode}`,
-        html: `<pre style="font-family:monospace;background:#111;color:#ccc;padding:20px;border-radius:4px;">
-${JSON.stringify({ ...body, ref: refCode }, null, 2)}
-        </pre>`,
+    const adminEmailAddr = Deno.env.get('ADMIN_EMAIL');
+    if (adminEmailAddr) {
+      const { subject: aSubj, html: aHtml } = contactNotificationEmail({
+        name:          body.name,
+        email:         body.email,
+        phone:         body.phone,
+        inquiryType:   'Quote Request',
+        message:       [
+          `Origin: ${body.origin ?? '—'}`,
+          `Destination: ${body.destination ?? '—'}`,
+          `Cargo Type: ${body.cargo_type ?? '—'}`,
+          `Weight: ${body.weight ?? '—'}`,
+          body.message ? `Notes: ${body.message}` : '',
+          `Ref Code: ${refCode}`,
+        ].filter(Boolean).join('\n'),
+        submittedAt:   new Date().toUTCString(),
       });
+      await sendEmail({ to: adminEmailAddr, subject: aSubj, html: aHtml });
     }
 
     return json({ success: true, refCode });
