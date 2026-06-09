@@ -1038,6 +1038,13 @@ GRANT ALL ON public.chat_sessions TO anon, authenticated;
 -- ── Image URL column on chat_messages ─────────────────────────
 ALTER TABLE public.chat_messages ADD COLUMN IF NOT EXISTS image_url TEXT;
 
+-- ── Enable Supabase Realtime on chat tables ───────────────────
+-- Without these two lines, the live chat will NOT receive messages in real time.
+ALTER TABLE public.chat_messages REPLICA IDENTITY FULL;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.chat_messages;
+ALTER TABLE public.chat_sessions  REPLICA IDENTITY FULL;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.chat_sessions;
+
 -- ── Supabase Storage: chat-images bucket ──────────────────────
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('chat-images', 'chat-images', true)
@@ -1900,10 +1907,9 @@ async function doMarkDelivered(tid) {
   const SUPABASE_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
 
-  let sbAdmin        = null;
-  let activeSid      = null;
-  let activeChanSub  = null;
-  let globalChanSub  = null;
+  let sbAdmin       = null;
+  let activeSid     = null;
+  let globalChanSub = null;
   let sessions       = {};   /* sid -> { name, email, lastMsg, lastTime, unread, status } */
   let chatFilter     = 'open'; /* 'open' | 'resolved' | 'all' */
 
@@ -2142,7 +2148,7 @@ async function doMarkDelivered(tid) {
     if (ph) ph.style.display = 'none';
 
     loadConversation(sid);
-    subscribeToSession(sid);
+    /* Real-time delivery is handled by subscribeGlobal — no per-session sub needed */
   }
 
   /* ── Load conversation messages ── */
@@ -2164,33 +2170,6 @@ async function doMarkDelivered(tid) {
     } catch (e) {
       console.error('[Admin Chat] Load convo error:', e);
       msgArea.innerHTML = '<div style="padding:20px;text-align:center;color:#f87171;font-size:.8rem;">Error loading messages.</div>';
-    }
-  }
-
-  /* ── Subscribe to active session ── */
-  async function subscribeToSession(sid) {
-    if (activeChanSub) {
-      try { activeChanSub.unsubscribe(); } catch (_) {}
-      activeChanSub = null;
-    }
-    try {
-      var sb = await getSb();
-      activeChanSub = sb
-        .channel('admin-convo-' + sid)
-        .on('postgres_changes', {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat_messages',
-          filter: 'session_id=eq.' + sid,
-        }, function (payload) {
-          var msg = payload.new;
-          if (msg.role === 'visitor') {
-            appendAdminMsg(msg, true);
-          }
-        })
-        .subscribe();
-    } catch (e) {
-      console.error('[Admin Chat] Sub error:', e);
     }
   }
 
@@ -2237,7 +2216,6 @@ async function doMarkDelivered(tid) {
           /* If this was the active session, clear the panel */
           if (activeSid === sid) {
             activeSid = null;
-            if (activeChanSub) { try { activeChanSub.unsubscribe(); } catch(_){} activeChanSub = null; }
             var msgs = document.getElementById('admin-messages');
             if (msgs) msgs.innerHTML = '<div id="admin-msg-placeholder" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:.35;pointer-events:none"><i class="fas fa-message" style="font-size:2.2rem;color:var(--accent)"></i><p style="font-size:.8rem;color:var(--muted2);text-align:center;line-height:1.7;max-width:200px">Click any conversation on the left to open it and type a reply below</p></div>';
             var hdr = document.getElementById('admin-convo-hdr');
@@ -2255,8 +2233,9 @@ async function doMarkDelivered(tid) {
     );
   };
 
-  /* ── Global subscription to detect new conversations ── */
+  /* ── Global subscription — handles ALL real-time chat events ── */
   async function subscribeGlobal() {
+    if (globalChanSub) return; /* already subscribed */
     try {
       var sb = await getSb();
       globalChanSub = sb
@@ -2265,27 +2244,43 @@ async function doMarkDelivered(tid) {
           event: 'INSERT',
           schema: 'public',
           table: 'chat_messages',
+          /* No filter — unfiltered subscriptions work without REPLICA IDENTITY FULL.
+             We handle all session routing here so subscribeToSession is not needed. */
         }, function (payload) {
           var msg = payload.new;
           var sid = msg.session_id;
-          /* Update sessions map */
+
+          /* ── Update sessions list ── */
           if (!sessions[sid]) {
-            sessions[sid] = { sid: sid, name: msg.visitor_name || 'Visitor', email: msg.visitor_email || '', lastMsg: msg.content, lastTime: msg.created_at, status: 'open', unread: 0 };
+            sessions[sid] = { sid: sid, name: msg.visitor_name || 'Visitor', email: msg.visitor_email || '', lastMsg: msg.content || '📷 Photo', lastTime: msg.created_at, status: 'open', unread: 0 };
           } else {
-            sessions[sid].lastMsg  = msg.content;
+            sessions[sid].lastMsg  = msg.content || '📷 Photo';
             sessions[sid].lastTime = msg.created_at;
             if (msg.visitor_name)  sessions[sid].name  = msg.visitor_name;
             if (msg.visitor_email) sessions[sid].email = msg.visitor_email;
           }
-          /* Increment unread if not the active session */
+
+          /* ── Unread counter (only for visitor msgs in non-active sessions) ── */
           if (msg.role === 'visitor' && sid !== activeSid) {
             sessions[sid].unread = (sessions[sid].unread || 0) + 1;
           }
+
+          /* ── Show in active conversation panel ──
+             Only visitor messages are rendered here — agent messages sent by the admin
+             are already rendered optimistically by adminSendReply, so skip them to
+             avoid duplicates. ── */
+          if (msg.role === 'visitor' && sid === activeSid) {
+            appendAdminMsg(msg, true);
+          }
+
           renderSessionList();
         })
-        .subscribe();
+        .subscribe(function(status) {
+          if (status === 'SUBSCRIBED') console.log('[Admin Chat] Realtime connected ✓');
+          if (status === 'CHANNEL_ERROR') console.error('[Admin Chat] Realtime error — check PUBLICATION/REPLICA IDENTITY SQL');
+        });
     } catch (e) {
-      console.error('[Admin Chat] Global sub error:', e);
+      console.error('[Admin Chat] subscribeGlobal error:', e);
     }
   }
 

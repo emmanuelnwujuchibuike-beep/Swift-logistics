@@ -449,23 +449,29 @@
     const btn = $('sfl-send');
     btn.disabled = true; ta.value = ''; ta.style.height = 'auto';
 
+    /* Capture first-message state NOW (sync) before any async boundary */
+    const wasFirst = isFirstMsg;
+    if (wasFirst) { isFirstMsg = false; skipWelcomeOnce = true; }
+
     const now = new Date().toISOString();
-    if (isFirstMsg) {
-      isFirstMsg = false; skipWelcomeOnce = true;
+    if (wasFirst) {
       appendMsg({ role:'agent', content:WELCOME, visitor_name:'Support Agent', created_at:now });
     }
     appendMsg({ role:'visitor', content:text, visitor_name:visitorName, created_at:now });
 
     getSb().then(function(sb) {
-      if (skipWelcomeOnce) {
-        sb.from('chat_messages').insert({ session_id:sessionId, role:'agent', content:WELCOME, visitor_name:'Support Agent', visitor_email:'', page_url:location.href })
+      /* Use captured wasFirst (stable closure), not the shared flag, to decide inserts */
+      if (wasFirst) {
+        sb.from('chat_messages')
+          .insert({ session_id:sessionId, role:'agent', content:WELCOME, visitor_name:'Support Agent', visitor_email:'', page_url:location.href })
           .catch(e => console.error('[SFL] welcome insert', e));
       }
-      sb.from('chat_messages').insert({ session_id:sessionId, role:'visitor', content:text, visitor_name:visitorName, visitor_email:visitorEmail, page_url:location.href })
+      sb.from('chat_messages')
+        .insert({ session_id:sessionId, role:'visitor', content:text, visitor_name:visitorName, visitor_email:visitorEmail, page_url:location.href })
         .catch(e => console.error('[SFL] msg insert', e));
-      notifyAdmin(text, skipWelcomeOnce);
+      notifyAdmin(text, wasFirst);
     }).catch(e => console.error('[SFL] getSb', e))
-      .finally(() => { btn.disabled = false; $('sfl-input').focus(); });
+      .finally(function() { btn.disabled = false; $('sfl-input').focus(); });
   }
 
   /* ── Image upload + send ── */
@@ -484,9 +490,12 @@
     imgBtn.classList.add('uploading');
     bar.classList.add('active');
 
+    /* Capture first-message state NOW (sync) */
+    const wasFirst = isFirstMsg;
+    if (wasFirst) { isFirstMsg = false; skipWelcomeOnce = true; }
+
     const now = new Date().toISOString();
-    if (isFirstMsg) {
-      isFirstMsg = false; skipWelcomeOnce = true;
+    if (wasFirst) {
       appendMsg({ role:'agent', content:WELCOME, visitor_name:'Support Agent', created_at:now });
     }
 
@@ -494,16 +503,16 @@
       const sb  = await getSb();
       const url = await uploadImage(sb, file);
 
-      /* Render optimistically */
-      appendMsg({ role:'visitor', content:'', image_url:url, visitor_name:visitorName, created_at:now });
+      /* Render optimistically — content must be non-empty to satisfy NOT NULL */
+      appendMsg({ role:'visitor', content:'📷 Photo', image_url:url, visitor_name:visitorName, created_at:now });
 
       /* Persist */
-      if (skipWelcomeOnce) {
+      if (wasFirst) {
         await sb.from('chat_messages').insert({ session_id:sessionId, role:'agent', content:WELCOME, visitor_name:'Support Agent', visitor_email:'', page_url:location.href });
       }
       await sb.from('chat_messages').insert({ session_id:sessionId, role:'visitor', content:'📷 Photo', image_url:url, visitor_name:visitorName, visitor_email:visitorEmail, page_url:location.href });
 
-      notifyAdmin('📷 [Photo attached]', skipWelcomeOnce);
+      notifyAdmin('📷 [Photo]', wasFirst);
     } catch(e) {
       console.error('[SFL] image upload', e);
       appendMsg({ role:'agent', content:'⚠ Failed to send image: ' + (e.message || 'Please try again'), visitor_name:'Support', created_at:new Date().toISOString() });
