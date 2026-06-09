@@ -92,11 +92,10 @@
     'transform:scale(0)!important;transition:transform .3s cubic-bezier(.34,1.56,.64,1)!important;}',
   '#sfl-badge.show{transform:scale(1)!important;}',
 
-  /* Panel shell */
+  /* Panel shell — tall like WhatsApp: anchored top+bottom so it fills the viewport */
   '#sfl-panel{',
-    'position:fixed!important;bottom:106px!important;right:28px!important;z-index:2147483639!important;',
-    'width:380px!important;max-width:calc(100vw - 24px)!important;',
-    'max-height:min(600px,calc(100vh - 126px))!important;',
+    'position:fixed!important;top:12px!important;bottom:100px!important;right:28px!important;z-index:2147483639!important;',
+    'width:390px!important;max-width:calc(100vw - 24px)!important;',
     'display:flex!important;flex-direction:column!important;overflow:hidden!important;',
     'background:#04091c!important;',
     'border:1px solid rgba(59,130,246,.18)!important;',
@@ -356,15 +355,16 @@
     'font:400 .58rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
     'color:rgba(226,238,255,.15)!important;letter-spacing:.1em!important;text-transform:uppercase!important;}',
 
-  /* ── Mobile ── */
-  '@media(max-width:500px){',
+  /* ── Mobile — full-height bottom sheet ── */
+  '@media(max-width:520px){',
     '#sfl-panel{',
-      'bottom:0!important;right:0!important;left:0!important;width:100%!important;max-width:100%!important;',
-      'border-radius:20px 20px 0 0!important;max-height:90vh!important;',
+      'top:0!important;bottom:0!important;right:0!important;left:0!important;',
+      'width:100%!important;max-width:100%!important;',
+      'border-radius:0!important;',
     '}',
-    '#sfl-fab,#sfl-pulse{bottom:20px!important;right:20px!important;}',
-    '#sfl-badge{bottom:68px!important;right:14px!important;}',
-    '#sfl-panel .sf-cimg{max-width:170px!important;}',
+    '#sfl-fab,#sfl-pulse{bottom:18px!important;right:18px!important;z-index:2147483642!important;}',
+    '#sfl-badge{bottom:68px!important;right:12px!important;}',
+    '#sfl-panel .sf-cimg{max-width:160px!important;}',
   '}',
 
   ].join('');
