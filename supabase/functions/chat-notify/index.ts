@@ -363,35 +363,171 @@ function visitorConfirmationEmail(p: {
   };
 }
 
-/* 4 ── Visitor: agent reply notification ───────────────────────────────── */
+/* 4 ── Visitor: unread message waiting notification ────────────────────── */
 function visitorReplyEmail(p: {
-  visitorName: string; content: string; sessionId: string; pageUrl: string;
+  visitorName: string; content: string; sessionId: string; pageUrl: string; sentAt?: string;
 }): { subject: string; html: string } {
   const fn        = firstName(p.visitorName);
-  const subject   = `Reply from Swift Freight Support`;
-  const preheader = `Hi ${fn}, the Swift Freight support team just replied to your message.`;
+  const subject   = `💬 You have 1 unread message — Swift Freight Support`;
+  const preheader = `Hi ${fn}, our support team replied. Your chat is still open and waiting for you.`;
+
+  /* Format sent time */
+  let sentLabel = 'Just now';
+  if (p.sentAt) {
+    try {
+      const diff = Date.now() - new Date(p.sentAt).getTime();
+      if      (diff < 90_000)      sentLabel = 'Just now';
+      else if (diff < 3_600_000)   sentLabel = `${Math.round(diff / 60_000)} minutes ago`;
+      else if (diff < 86_400_000)  sentLabel = `${Math.round(diff / 3_600_000)} hours ago`;
+      else                          sentLabel = new Date(p.sentAt).toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+    } catch { /* keep default */ }
+  }
 
   const body = `
-    ${heading(
-      `You have a reply, ${fn}.`,
-      `The Swift Freight Logistics support team has responded to your message. Open the chat to continue your conversation.`
-    )}
 
-    ${messageBubble(p.content, '#22c55e', 'Support Agent Reply')}
+    <!-- Notification icon -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 auto 28px;">
+      <tr>
+        <td align="center">
+          <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+            style="height:64px;width:64px;v-text-anchor:middle;" arcsize="50%"
+            fillcolor="#052e16" strokecolor="#16a34a"><w:anchorlock/><center><![endif]-->
+          <div style="width:64px;height:64px;background:rgba(22,163,74,.12);
+                      border:2px solid rgba(34,197,94,.35);border-radius:50%;
+                      text-align:center;line-height:64px;font-size:28px;margin:0 auto;">
+            💬
+          </div>
+          <!--[if mso]></center></v:roundrect><![endif]-->
+        </td>
+      </tr>
+    </table>
+
+    <!-- Heading -->
+    <h1 style="margin:0 0 6px;font-size:26px;font-weight:900;letter-spacing:.03em;
+       color:#e8f0fe;font-family:Arial,Helvetica,sans-serif;line-height:1.2;text-align:center;">
+      You have 1 unread message, ${fn}.
+    </h1>
+    <p style="margin:0 0 36px;font-size:14px;color:rgba(232,240,254,.4);line-height:1.85;
+       font-family:Arial,Helvetica,sans-serif;text-align:center;">
+      The Swift Freight Logistics support team replied to your conversation.<br>
+      Your chat is <strong style="color:rgba(34,197,94,.75);">still open</strong> and waiting for you.
+    </p>
+
+    <!-- Message card -->
+    <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
+           style="margin-bottom:28px;">
+      <tr>
+        <td style="padding:0;background:rgba(5,46,22,.5);border:1px solid rgba(34,197,94,.25);
+                   border-top:3px solid #22c55e;border-radius:0 8px 8px 8px;">
+
+          <!-- Card header: agent identity -->
+          <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="padding:14px 20px 12px;border-bottom:1px solid rgba(34,197,94,.1);">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding-right:10px;">
+                      <!--[if mso]><v:roundrect style="height:34px;width:34px;v-text-anchor:middle;" arcsize="50%"
+                        fillcolor="#14532d" strokecolor="none"><w:anchorlock/><center><![endif]-->
+                      <div style="width:34px;height:34px;background:linear-gradient(135deg,#14532d,#16a34a);
+                                  border-radius:50%;text-align:center;line-height:34px;
+                                  font-size:13px;font-weight:900;color:#fff;
+                                  font-family:Arial,Helvetica,sans-serif;letter-spacing:.04em;">
+                        SFL
+                      </div>
+                      <!--[if mso]></center></v:roundrect><![endif]-->
+                    </td>
+                    <td valign="middle">
+                      <p style="margin:0 0 2px;font-size:12px;font-weight:700;color:#4ade80;
+                         font-family:Arial,Helvetica,sans-serif;letter-spacing:.04em;">
+                        Swift Freight Support
+                      </p>
+                      <p style="margin:0;font-size:10px;color:rgba(232,240,254,.32);
+                         font-family:Arial,Helvetica,sans-serif;letter-spacing:.06em;">
+                        &#9679;&ensp;Online &nbsp;&bull;&nbsp; ${esc(sentLabel)}
+                      </p>
+                    </td>
+                    <td align="right" valign="middle">
+                      <span style="display:inline-block;padding:3px 10px;background:rgba(34,197,94,.15);
+                                   border:1px solid rgba(34,197,94,.3);border-radius:99px;
+                                   font-size:8px;letter-spacing:.18em;text-transform:uppercase;
+                                   color:rgba(74,222,128,.9);font-family:Arial,Helvetica,sans-serif;
+                                   font-weight:700;">UNREAD</span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Message content -->
+          <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="padding:18px 22px 22px;">
+                <p style="margin:0;font-size:16px;line-height:1.9;color:rgba(232,240,254,.9);
+                   font-family:Arial,Helvetica,sans-serif;word-break:break-word;">
+                  ${esc(p.content)}
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Status row -->
+    <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
+           style="margin-bottom:34px;">
+      <tr>
+        <td width="50%" style="padding:12px 16px;background:rgba(3,11,28,.9);
+                               border:1px solid rgba(37,99,235,.14);border-radius:5px 0 0 5px;
+                               border-right:none;">
+          <p style="margin:0 0 4px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
+             font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">Conversation</p>
+          <p style="margin:0;font-size:13px;color:#4ade80;font-weight:600;
+             font-family:Arial,Helvetica,sans-serif;">&#9679; Still Open</p>
+        </td>
+        <td width="50%" style="padding:12px 16px;background:rgba(3,11,28,.9);
+                               border:1px solid rgba(37,99,235,.14);border-radius:0 5px 5px 0;">
+          <p style="margin:0 0 4px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;
+             font-family:Arial,Helvetica,sans-serif;color:rgba(232,240,254,.28);">Message sent</p>
+          <p style="margin:0;font-size:13px;color:#dde9ff;font-weight:600;
+             font-family:Arial,Helvetica,sans-serif;">${esc(sentLabel)}</p>
+        </td>
+      </tr>
+    </table>
+
+    <!-- CTA -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0"
+           style="margin:0 auto 28px;">
+      <tr>
+        <td style="border-radius:6px;background:linear-gradient(135deg,#065f46,#22c55e);
+                   box-shadow:0 8px 32px rgba(34,197,94,.3);">
+          <a href="${p.pageUrl || SITE}"
+             style="display:inline-block;padding:17px 48px;font-size:12px;font-weight:700;
+                    letter-spacing:.24em;text-transform:uppercase;color:#ffffff;text-decoration:none;
+                    font-family:Arial,Helvetica,sans-serif;">
+            Open Chat &amp; Reply &nbsp;&rarr;
+          </a>
+        </td>
+      </tr>
+    </table>
 
     ${divider()}
 
-    <p style="margin:0;font-size:13px;color:rgba(232,240,254,.38);line-height:2;
-       font-family:Arial,Helvetica,sans-serif;">
-      Click the button below to return to our site and continue the conversation in the live chat widget.
+    <!-- Reassurance -->
+    <p style="margin:0 0 10px;font-size:12px;color:rgba(232,240,254,.32);line-height:2;
+       font-family:Arial,Helvetica,sans-serif;text-align:center;">
+      Your conversation will remain open until you return or until marked resolved.<br>
+      Can't open the chat? Email us directly at
+      <a href="mailto:${ADMIN_EMAIL}" style="color:rgba(99,141,255,.6);text-decoration:none;
+         font-family:Arial,Helvetica,sans-serif;">${ADMIN_EMAIL}</a>
     </p>
-
-    ${ctaButton(p.pageUrl || SITE, 'Continue Conversation', '#065f46', '#22c55e')}
   `;
 
   return {
     subject,
-    html: shell({ preheader, badge: 'Support Reply', c1: '#065f46', c2: '#34d399', body }),
+    html: shell({ preheader, badge: 'Unread · 1', c1: '#065f46', c2: '#34d399', body }),
   };
 }
 
@@ -411,6 +547,7 @@ Deno.serve(async (req: Request) => {
       sessionId    : string;
       pageUrl?     : string;
       isFirst?     : boolean;
+      sentAt?      : string;
     };
 
     if (!body.role || !body.content) return err('Missing required fields');
@@ -421,6 +558,7 @@ Deno.serve(async (req: Request) => {
       content      : body.content,
       sessionId    : body.sessionId    || '',
       pageUrl      : body.pageUrl      || SITE,
+      sentAt       : body.sentAt,
     };
 
     if (body.role === 'visitor') {

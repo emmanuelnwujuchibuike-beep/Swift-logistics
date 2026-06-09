@@ -2363,16 +2363,20 @@ async function doMarkDelivered(tid) {
         visitor_name: 'Support Agent',
       });
       if (error) throw error;
-      /* Email visitor about the reply */
+      /* Email visitor — only when conversation is still open */
       var sess = sessions[activeSid] || {};
-      if (sess.email) {
+      if (sess.email && sess.status !== 'resolved') {
         fetch(SUPABASE_URL + '/functions/v1/chat-notify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON },
           body: JSON.stringify({
-            role: 'agent', content: content,
-            visitorName: sess.name || 'Visitor', visitorEmail: sess.email,
-            sessionId: activeSid,
+            role:         'agent',
+            content:      content,
+            visitorName:  sess.name  || 'Visitor',
+            visitorEmail: sess.email,
+            sessionId:    activeSid,
+            pageUrl:      'https://swiftfreightlogix.netlify.app',
+            sentAt:       new Date().toISOString(),
           }),
         }).catch(function(e){ console.error('[Admin Chat] Email notify:', e); });
       }
