@@ -20,6 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="luxury-upgrade.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css' rel='stylesheet'>
 
   <style>
     /* ═══════════════════════════════════════════
@@ -301,6 +302,15 @@
       box-shadow: 0 8px 40px rgba(var(--accent-rgb),.1);
     }
     .snum { font: 500 .65rem/1 'JetBrains Mono'; color: rgba(var(--accent-rgb),.35); letter-spacing: .06em; flex-shrink: 0; width: 26px; }
+
+    /* ── Service row — mobile column layout ── */
+    @media (max-width: 640px) {
+      .srow { flex-direction: column; align-items: flex-start; padding: 22px 20px; gap: 14px; }
+      .srow:hover { transform: none; }
+      .srow .snum { position: absolute; top: 16px; right: 16px; width: auto; }
+      .srow > div { padding: 0 !important; width: 100%; }
+      .srow > a { width: 100% !important; justify-content: center !important; }
+    }
 
     /* ── Icon box ── */
     .ibox {
@@ -685,10 +695,9 @@
     .hero-bg img {
       width: 100%; height: 100%; object-fit: cover;
       display: block;
-      opacity: .58;
-      filter: brightness(.88) saturate(.85);
+      opacity: 0;
+      filter: brightness(.93) saturate(.96);
     }
-    [data-theme="light"] .hero-bg img { opacity: .52; filter: brightness(.95) saturate(.85); }
 
     .hero-fade-v {
       position: absolute; inset: 0;
@@ -1107,22 +1116,29 @@
     </div>
   </div>
 
-  <div class="ticker-strip">
-    <div class="ticker-fade-l"></div>
-    <div class="ticker-fade-r"></div>
-    <div class="ticker-track">
-      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Network Active</span></div>
-      <div class="ticker-item"><i class="fas fa-plane-up"></i>Air Freight <span style="color:var(--muted2);">Priority Dispatched</span></div>
-      <div class="ticker-item"><i class="fas fa-shield-halved"></i>Cargo <span style="color:var(--muted2);">Fully Insured</span></div>
-      <div class="ticker-item"><i class="fas fa-earth-africa"></i>International <span style="color:var(--muted2);">Operating 24/7</span></div>
-      <div class="ticker-item"><i class="fas fa-ship"></i>Sea Routes <span style="color:var(--muted2);">150+ Countries</span></div>
-      <div class="ticker-item"><i class="fas fa-truck-fast"></i>Road Freight <span style="color:var(--muted2);">On-Time Delivery</span></div>
-      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Network Active</span></div>
-      <div class="ticker-item"><i class="fas fa-plane-up"></i>Air Freight <span style="color:var(--muted2);">Priority Dispatched</span></div>
-      <div class="ticker-item"><i class="fas fa-shield-halved"></i>Cargo <span style="color:var(--muted2);">Fully Insured</span></div>
-      <div class="ticker-item"><i class="fas fa-earth-africa"></i>International <span style="color:var(--muted2);">Operating 24/7</span></div>
-      <div class="ticker-item"><i class="fas fa-ship"></i>Sea Routes <span style="color:var(--muted2);">150+ Countries</span></div>
-      <div class="ticker-item"><i class="fas fa-truck-fast"></i>Road Freight <span style="color:var(--muted2);">On-Time Delivery</span></div>
+  <div class="lux-ticker" aria-label="Swift Freight live network status">
+    <div class="lux-ticker-badge"><span class="lux-pulse"></span><span class="lux-ticker-live">SFL&thinsp;LIVE</span></div>
+    <div class="lux-ticker-vp">
+      <div class="lux-ticker-fl"></div>
+      <div class="lux-ticker-track">
+        <span class="lti"><i class="fas fa-signal lti-icon"></i><span class="lti-label">Swift Freight</span><span class="lti-dot">·</span><span class="lti-val">Network Active</span></span>
+        <span class="lti"><i class="fas fa-plane-up lti-icon"></i><span class="lti-label">Air Freight</span><span class="lti-dot">·</span><span class="lti-val">Priority Dispatch</span></span>
+        <span class="lti"><i class="fas fa-ship lti-icon"></i><span class="lti-label">Ocean Routes</span><span class="lti-dot">·</span><span class="lti-val">150+ Countries</span></span>
+        <span class="lti"><i class="fas fa-shield-halved lti-icon"></i><span class="lti-label">Cargo Insured</span><span class="lti-dot">·</span><span class="lti-val">Full Coverage</span></span>
+        <span class="lti"><i class="fas fa-truck-fast lti-icon"></i><span class="lti-label">Last Mile</span><span class="lti-dot">·</span><span class="lti-val">99.4% On-Time</span></span>
+        <span class="lti"><i class="fas fa-bolt lti-icon"></i><span class="lti-label">Supply Chain</span><span class="lti-dot">·</span><span class="lti-val">24/7 Operations</span></span>
+        <span class="lti"><i class="fas fa-stamp lti-icon"></i><span class="lti-label">Customs</span><span class="lti-dot">·</span><span class="lti-val">Expedited Clearance</span></span>
+        <span class="lti"><i class="fas fa-location-dot lti-icon"></i><span class="lti-label">Tracking</span><span class="lti-dot">·</span><span class="lti-val">Real-Time Global</span></span>
+        <span class="lti"><i class="fas fa-signal lti-icon"></i><span class="lti-label">Swift Freight</span><span class="lti-dot">·</span><span class="lti-val">Network Active</span></span>
+        <span class="lti"><i class="fas fa-plane-up lti-icon"></i><span class="lti-label">Air Freight</span><span class="lti-dot">·</span><span class="lti-val">Priority Dispatch</span></span>
+        <span class="lti"><i class="fas fa-ship lti-icon"></i><span class="lti-label">Ocean Routes</span><span class="lti-dot">·</span><span class="lti-val">150+ Countries</span></span>
+        <span class="lti"><i class="fas fa-shield-halved lti-icon"></i><span class="lti-label">Cargo Insured</span><span class="lti-dot">·</span><span class="lti-val">Full Coverage</span></span>
+        <span class="lti"><i class="fas fa-truck-fast lti-icon"></i><span class="lti-label">Last Mile</span><span class="lti-dot">·</span><span class="lti-val">99.4% On-Time</span></span>
+        <span class="lti"><i class="fas fa-bolt lti-icon"></i><span class="lti-label">Supply Chain</span><span class="lti-dot">·</span><span class="lti-val">24/7 Operations</span></span>
+        <span class="lti"><i class="fas fa-stamp lti-icon"></i><span class="lti-label">Customs</span><span class="lti-dot">·</span><span class="lti-val">Expedited Clearance</span></span>
+        <span class="lti"><i class="fas fa-location-dot lti-icon"></i><span class="lti-label">Tracking</span><span class="lti-dot">·</span><span class="lti-val">Real-Time Global</span></span>
+      </div>
+      <div class="lux-ticker-fr"></div>
     </div>
   </div>
 </header>
@@ -1176,6 +1192,9 @@
 <section id="hero">
   <div class="hero-bg">
     <img src="./image/background.jpg" alt="" aria-hidden="true">
+    <img src="./image/mainbg1.webp" alt="" aria-hidden="true">
+    <img src="./image/seaimg.jpg" alt="" aria-hidden="true">
+    <img src="./image/cargoplane.jpg" alt="" aria-hidden="true">
     <div class="hero-fade-v"></div>
     <div class="hero-fade-h"></div>
   </div>
@@ -1200,10 +1219,10 @@
         We prioritize reliability, precision, and strong partnerships in every shipment — ensuring a seamless and efficient logistics experience from start to finish.
       </p>
 
-      <div class="hero-btns reveal up" style="--d:.28s;display:flex;flex-wrap:wrap;gap:13px;margin-top:38px;">
-        <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i></a>
-        <a href="payment.html" class="btn-outline"><i class="fas fa-location-dot" style="font-size:.63rem;"></i> Track Shipment</a>
-        <a href="about.html" class="btn-outline" style="border-color:rgba(var(--text-rgb),.14);color:rgba(var(--text-rgb),.58);">Learn More <i class="fas fa-arrow-right" style="font-size:.58rem;"></i></a>
+      <div class="hero-btns reveal up" style="--d:.28s;display:flex;flex-wrap:wrap;gap:14px;margin-top:38px;">
+        <a href="quote.html" class="hero-btn-red">Get a Free Quote <i class="fas fa-paper-plane"></i></a>
+        <a href="payment.html" class="hero-btn-crystal"><i class="fas fa-location-dot"></i> Track Shipment</a>
+        <a href="about.html" class="hero-btn-ghost">Learn More <i class="fas fa-arrow-right"></i></a>
       </div>
 
       <div class="stats-row reveal up" style="--d:.38s;display:flex;max-width:640px;margin-top:56px;border:1px solid var(--border);border-radius:3px;overflow:hidden;backdrop-filter:blur(16px);">
@@ -1553,7 +1572,7 @@
         <p style="font-size:.77rem;color:rgba(232,240,254,.68);margin-bottom:13px;line-height:1.58;">How advanced technology is transforming logistics globally.</p>
         <div style="display:flex;align-items:center;justify-content:space-between;">
           <span style="font:600 .75rem/1 'DM Sans';color:rgba(232,240,254,.45);">Emily Tran</span>
-          <button class="btn-primary" style="padding:8px 18px;font-size:.66rem;">Read →</button>
+          <a href="services.html" class="btn-primary" style="padding:8px 18px;font-size:.66rem;text-decoration:none;">Read →</a>
         </div>
       </div>
     </div>
@@ -1578,6 +1597,34 @@
         <p style="font-size:.77rem;color:rgba(232,240,254,.68);margin-bottom:13px;line-height:1.58;">The business case for going green in supply chain operations.</p>
         <span style="font:600 .75rem/1 'DM Sans';color:rgba(232,240,254,.45);">Sarah Lee</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SEAPORT 3D MAP ══════════════ -->
+<section class="sec" id="port-map-section" style="max-width:1400px;margin:0 auto;">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-bottom:40px;">
+    <div>
+      <div class="lbl reveal up" style="margin-bottom:14px;">US Gateway Operations</div>
+      <h2 class="display reveal up" style="--d:.06s;font-size:clamp(2rem,4.5vw,3.4rem);color:var(--text);">PORT OF<br><span class="gt">LOS ANGELES</span></h2>
+    </div>
+    <p class="reveal up" style="--d:.12s;font:300 .88rem/1.8 'DM Sans';color:var(--muted);max-width:400px;padding-bottom:6px;">America's busiest seaport — our primary US gateway handling over 9.9M TEUs annually, connecting global supply chains to North American markets.</p>
+  </div>
+  <div class="sfl-map-block reveal up" style="--d:.18s;">
+    <div id="sfl-port-map"></div>
+    <div class="sfl-map-corner sfl-mc-tl"></div>
+    <div class="sfl-map-corner sfl-mc-tr"></div>
+    <div class="sfl-map-corner sfl-mc-bl"></div>
+    <div class="sfl-map-corner sfl-mc-br"></div>
+    <div class="sfl-map-badge"><span class="sfl-map-pulse"></span>PORT OF LOS ANGELES &nbsp;·&nbsp; SAN PEDRO, CA</div>
+    <div class="sfl-map-stats">
+      <div class="sfl-map-stat"><div class="sfl-map-stat-val">9.9M</div><div class="sfl-map-stat-lbl">TEUs / Year</div></div>
+      <div class="sfl-map-stat-sep"></div>
+      <div class="sfl-map-stat"><div class="sfl-map-stat-val">270+</div><div class="sfl-map-stat-lbl">Ships Monthly</div></div>
+      <div class="sfl-map-stat-sep"></div>
+      <div class="sfl-map-stat"><div class="sfl-map-stat-val">7,500</div><div class="sfl-map-stat-lbl">Acres of Port</div></div>
+      <div class="sfl-map-stat-sep"></div>
+      <div class="sfl-map-stat"><div class="sfl-map-stat-val">#1</div><div class="sfl-map-stat-lbl">US Port by Volume</div></div>
     </div>
   </div>
 </section>
@@ -1785,7 +1832,7 @@
   // Close if resized to desktop
   window.addEventListener('resize', () => {
     if(!isMobile() && isOpen) closeNav();
-  });
+  }, { passive: true });
 })();
 
 
@@ -1917,6 +1964,119 @@
     const ticker = document.getElementById('site-ticker');
     if (ticker) ticker.classList.add('visible');
   }).catch(() => {});
+})();
+</script>
+
+<script>
+/* ── Hero adaptive text: samples image brightness, updates data-img-theme ── */
+(function(){
+  var hero = document.getElementById('hero') || document.getElementById('page-hero');
+  if (!hero) return;
+  var imgs = [].slice.call(hero.querySelectorAll('.hero-bg img'));
+  if (!imgs.length) return;
+
+  var CYCLE = 24000, N = imgs.length, STEP = CYCLE / N;
+  var lum = new Array(N).fill(40); /* default: assume dark */
+
+  function sample(img, idx) {
+    try {
+      var c = document.createElement('canvas');
+      c.width = c.height = 24;
+      var ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, 24, 24);
+      var d = ctx.getImageData(0, 0, 24, 24).data, s = 0, px = d.length / 4;
+      for (var i = 0; i < d.length; i += 4)
+        s += 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+      lum[idx] = s / px;
+    } catch(e) {}
+  }
+
+  imgs.forEach(function(img, i) {
+    if (img.complete && img.naturalWidth > 0) { sample(img, i); }
+    else { img.addEventListener('load', function(){ sample(img, i); }); }
+  });
+
+  var cur = 0;
+  function apply(i) {
+    hero.setAttribute('data-img-theme', lum[i] > 125 ? 'bright' : 'dark');
+  }
+
+  apply(0);
+  setInterval(function(){ cur = (cur + 1) % N; apply(cur); }, STEP);
+})();
+</script>
+
+<!-- Mapbox GL JS — 3D Seaport Map -->
+<script src='https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js'></script>
+<script>
+(function(){
+  var mapEl = document.getElementById('sfl-port-map');
+  if (!mapEl || typeof mapboxgl === 'undefined') return;
+  /* Free token — replace with your own at account.mapbox.com (50k loads/month free) */
+  mapboxgl.accessToken = 'pk.eyJ1Ijoic3dpZnRmcmVpZ2h0bG9naXgiLCJhIjoiY21xNnhoZ3AwMDdhcjJycjU2bndyNGFhbyJ9.SUrLgNUXCy-PuDZu79Httw';
+  var PORT = [-118.2720, 33.7395]; // Port of Los Angeles, San Pedro CA
+  var map = new mapboxgl.Map({
+    container: 'sfl-port-map',
+    style: 'mapbox://styles/mapbox/dark-v11',
+    center: PORT,
+    zoom: 12.5,
+    pitch: 56,
+    bearing: 18,
+    antialias: true,
+    attributionControl: false
+  });
+  map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
+  map.addControl(new mapboxgl.NavigationControl({ showCompass: true, visualizePitch: true }), 'top-right');
+  map.on('load', function() {
+    var layers = map.getStyle().layers, firstLabelId;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol' && layers[i].layout && layers[i].layout['text-field']) {
+        firstLabelId = layers[i].id; break;
+      }
+    }
+    map.addLayer({
+      id: 'sfl-3d-buildings',
+      source: 'composite',
+      'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'],
+      type: 'fill-extrusion',
+      minzoom: 11,
+      paint: {
+        'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'],
+          0, '#0c1b44', 30, '#132258', 70, '#1a2e80', 120, '#2040b8'],
+        'fill-extrusion-height': ['get', 'height'],
+        'fill-extrusion-base': ['get', 'min_height'],
+        'fill-extrusion-opacity': 0.82
+      }
+    }, firstLabelId);
+    var section = document.getElementById('port-map-section'), flown = false;
+    if (section && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !flown) {
+          flown = true;
+          map.flyTo({ center: PORT, zoom: 14.5, pitch: 62, bearing: 18, speed: 0.45, curve: 1.5, essential: true });
+        }
+      }, { threshold: 0.25 }).observe(section);
+    }
+    var rotating = false;
+    setTimeout(function() {
+      rotating = true;
+      (function spin() {
+        if (!rotating) return;
+        map.easeTo({ bearing: map.getBearing() + 0.10, duration: 150, easing: function(t){ return t; } });
+        requestAnimationFrame(spin);
+      })();
+    }, 5500);
+    map.on('mousedown', function(){ rotating = false; });
+    map.on('touchstart', function(){ rotating = false; });
+  });
+  var markerEl = document.createElement('div');
+  markerEl.className = 'sfl-port-marker';
+  new mapboxgl.Marker({ element: markerEl, anchor: 'center' })
+    .setLngLat(PORT)
+    .setPopup(new mapboxgl.Popup({ offset: 18, closeButton: false, maxWidth: '220px' })
+      .setHTML('<div style="font:700 .7rem/1 \'DM Sans\',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:7px;"><i class="fas fa-anchor" style="margin-right:5px;font-size:.6rem;opacity:.7;"></i>Port of Los Angeles</div><div style="font:400 .7rem/1.6 \'DM Sans\',sans-serif;color:rgba(232,240,254,.75);">San Pedro, California<br>Primary US Freight Gateway<br><span style="color:rgba(96,165,250,.8);">33°44\'N &nbsp;118°16\'W</span></div>'))
+    .addTo(map);
 })();
 </script>
 

@@ -203,7 +203,7 @@
       font: 600 .74rem/1 'DM Sans'; letter-spacing: .1em; text-transform: uppercase;
       padding: 14px 28px; border-radius: 2px;
       border: 1px solid var(--border2); cursor: pointer; text-decoration: none;
-      transition: all .3s; white-space: nowrap;
+      transition: background .3s, color .3s, border-color .3s, box-shadow .3s; white-space: nowrap;
       clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
     }
     .btn-outline:hover {
@@ -266,7 +266,7 @@
       padding: 24px 30px; border-radius: 3px;
       border: 1px solid var(--border);
       background: var(--surface);
-      transition: all .3s;
+      transition: transform .3s cubic-bezier(.25,.46,.45,.94), background .3s, border-color .3s, box-shadow .3s;
       position: relative; overflow: hidden;
     }
     .srow::before {
@@ -420,7 +420,7 @@
       display: flex; align-items: center; justify-content: center;
       background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.18);
       color: var(--accent); cursor: pointer; flex-shrink: 0;
-      transition: all .25s;
+      transition: background .25s, border-color .25s;
       clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
     }
     .theme-btn:hover { background: rgba(var(--accent-rgb),.16); transform: scale(1.06); }
@@ -544,8 +544,7 @@
       overflow: hidden; padding-top: 120px;
     }
     .hero-bg { position: absolute; inset: 0; z-index: 0; }
-    .hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .58; filter: brightness(.88) saturate(.85); }
-    [data-theme="light"] .hero-bg img { opacity: .52; filter: brightness(.95) saturate(.85); }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; filter: brightness(.93) saturate(.96); }
     .hero-fade-v { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(var(--bg-rgb),.55) 0%, rgba(var(--bg-rgb),.04) 22%, rgba(var(--bg-rgb),.04) 76%, rgba(var(--bg-rgb),.65) 100%); }
     [data-theme="light"] .hero-fade-v { background: linear-gradient(to bottom, rgba(var(--bg-rgb),.22) 0%, rgba(var(--bg-rgb),.02) 22%, rgba(var(--bg-rgb),.02) 76%, rgba(var(--bg-rgb),.28) 100%); }
     .hero-fade-h { position: absolute; inset: 0; background: linear-gradient(to right, rgba(var(--bg-rgb),.72) 0%, rgba(var(--bg-rgb),.32) 48%, transparent 100%); }
@@ -702,6 +701,47 @@
       .about-img-wrap img { height: 300px; }
       .ticker-item { padding: 0 22px; font-size: 8px; }
       .testi-wrap { gap: 28px; }
+      /* Tablet: compact timeline rows */
+      .srow { gap: 14px; padding: 20px 22px; }
+      .srow:hover { transform: translateX(4px); }
+      .snum { font-size: .6rem; opacity: .35; }
+    }
+
+    @media (max-width: 639px) {
+      /* Grid overrides flex — inline flex:1 on children becomes irrelevant */
+      .srow {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        padding: 22px 18px 16px !important;
+        gap: 0 !important;
+      }
+      .srow:hover { transform: none !important; }
+
+      /* Left accent bar: always on at mobile */
+      .srow::before { transform: scaleY(1) !important; opacity: .2; transition: opacity .3s; }
+      .srow:active::before { opacity: .55; }
+
+      /* Year number: hidden — timeline context is in the title */
+      .snum { display: none !important; }
+
+      /* Icon: top of card, fixed size */
+      .ibox {
+        width: 46px !important; height: 46px !important;
+        margin-bottom: 14px !important;
+      }
+
+      /* Content div: grid child, full width automatically */
+      .srow > div:not(.ibox):not(.badge-pill) { padding: 0 !important; }
+      .srow > div:not(.ibox):not(.badge-pill) h3 { font-size: 1rem !important; line-height: 1.3 !important; }
+      .srow > div:not(.ibox):not(.badge-pill) p  { font-size: .82rem !important; line-height: 1.72 !important; margin-top: 6px !important; }
+
+      /* Badge pill: bottom-left */
+      .srow > .badge-pill {
+        margin-top: 14px !important;
+        clip-path: none !important;
+        border-radius: 2px !important;
+        justify-self: start !important;
+      }
     }
 
     @media (max-width: 479px) {
@@ -791,22 +831,29 @@
     </div>
   </div>
 
-  <div class="ticker-strip">
-    <div class="ticker-fade-l"></div>
-    <div class="ticker-fade-r"></div>
-    <div class="ticker-track">
-      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Est. 1999</span></div>
-      <div class="ticker-item"><i class="fas fa-users"></i>724+ <span style="color:var(--muted2);">Dedicated Employees</span></div>
-      <div class="ticker-item"><i class="fas fa-trophy"></i>Industry <span style="color:var(--muted2);">Leader Since 2020</span></div>
-      <div class="ticker-item"><i class="fas fa-earth-africa"></i>Global Reach <span style="color:var(--muted2);">150+ Countries</span></div>
-      <div class="ticker-item"><i class="fas fa-star"></i>18,804+ <span style="color:var(--muted2);">Satisfied Clients</span></div>
-      <div class="ticker-item"><i class="fas fa-shield-halved"></i>99% <span style="color:var(--muted2);">On-Time Delivery</span></div>
-      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Est. 1999</span></div>
-      <div class="ticker-item"><i class="fas fa-users"></i>724+ <span style="color:var(--muted2);">Dedicated Employees</span></div>
-      <div class="ticker-item"><i class="fas fa-trophy"></i>Industry <span style="color:var(--muted2);">Leader Since 2020</span></div>
-      <div class="ticker-item"><i class="fas fa-earth-africa"></i>Global Reach <span style="color:var(--muted2);">150+ Countries</span></div>
-      <div class="ticker-item"><i class="fas fa-star"></i>18,804+ <span style="color:var(--muted2);">Satisfied Clients</span></div>
-      <div class="ticker-item"><i class="fas fa-shield-halved"></i>99% <span style="color:var(--muted2);">On-Time Delivery</span></div>
+  <div class="lux-ticker" aria-label="Swift Freight live network status">
+    <div class="lux-ticker-badge"><span class="lux-pulse"></span><span class="lux-ticker-live">SFL&thinsp;LIVE</span></div>
+    <div class="lux-ticker-vp">
+      <div class="lux-ticker-fl"></div>
+      <div class="lux-ticker-track">
+        <span class="lti"><i class="fas fa-signal lti-icon"></i><span class="lti-label">Swift Freight</span><span class="lti-dot">·</span><span class="lti-val">Network Active</span></span>
+        <span class="lti"><i class="fas fa-plane-up lti-icon"></i><span class="lti-label">Air Freight</span><span class="lti-dot">·</span><span class="lti-val">Priority Dispatch</span></span>
+        <span class="lti"><i class="fas fa-ship lti-icon"></i><span class="lti-label">Ocean Routes</span><span class="lti-dot">·</span><span class="lti-val">150+ Countries</span></span>
+        <span class="lti"><i class="fas fa-shield-halved lti-icon"></i><span class="lti-label">Cargo Insured</span><span class="lti-dot">·</span><span class="lti-val">Full Coverage</span></span>
+        <span class="lti"><i class="fas fa-truck-fast lti-icon"></i><span class="lti-label">Last Mile</span><span class="lti-dot">·</span><span class="lti-val">99.4% On-Time</span></span>
+        <span class="lti"><i class="fas fa-bolt lti-icon"></i><span class="lti-label">Supply Chain</span><span class="lti-dot">·</span><span class="lti-val">24/7 Operations</span></span>
+        <span class="lti"><i class="fas fa-stamp lti-icon"></i><span class="lti-label">Customs</span><span class="lti-dot">·</span><span class="lti-val">Expedited Clearance</span></span>
+        <span class="lti"><i class="fas fa-location-dot lti-icon"></i><span class="lti-label">Tracking</span><span class="lti-dot">·</span><span class="lti-val">Real-Time Global</span></span>
+        <span class="lti"><i class="fas fa-signal lti-icon"></i><span class="lti-label">Swift Freight</span><span class="lti-dot">·</span><span class="lti-val">Network Active</span></span>
+        <span class="lti"><i class="fas fa-plane-up lti-icon"></i><span class="lti-label">Air Freight</span><span class="lti-dot">·</span><span class="lti-val">Priority Dispatch</span></span>
+        <span class="lti"><i class="fas fa-ship lti-icon"></i><span class="lti-label">Ocean Routes</span><span class="lti-dot">·</span><span class="lti-val">150+ Countries</span></span>
+        <span class="lti"><i class="fas fa-shield-halved lti-icon"></i><span class="lti-label">Cargo Insured</span><span class="lti-dot">·</span><span class="lti-val">Full Coverage</span></span>
+        <span class="lti"><i class="fas fa-truck-fast lti-icon"></i><span class="lti-label">Last Mile</span><span class="lti-dot">·</span><span class="lti-val">99.4% On-Time</span></span>
+        <span class="lti"><i class="fas fa-bolt lti-icon"></i><span class="lti-label">Supply Chain</span><span class="lti-dot">·</span><span class="lti-val">24/7 Operations</span></span>
+        <span class="lti"><i class="fas fa-stamp lti-icon"></i><span class="lti-label">Customs</span><span class="lti-dot">·</span><span class="lti-val">Expedited Clearance</span></span>
+        <span class="lti"><i class="fas fa-location-dot lti-icon"></i><span class="lti-label">Tracking</span><span class="lti-dot">·</span><span class="lti-val">Real-Time Global</span></span>
+      </div>
+      <div class="lux-ticker-fr"></div>
     </div>
   </div>
 </header>
@@ -852,6 +899,9 @@
 <section id="hero">
   <div class="hero-bg">
     <img src="./image/bt5.jpg" alt="" aria-hidden="true">
+    <img src="./image/abt.jpg" alt="" aria-hidden="true">
+    <img src="./image/aboutimg.jpg" alt="" aria-hidden="true">
+    <img src="./image/bt7.jpg" alt="" aria-hidden="true">
     <div class="hero-fade-v"></div>
     <div class="hero-fade-h"></div>
   </div>
@@ -875,10 +925,10 @@
         Since 1999, we have connected businesses to a world of seamless, reliable logistics — prioritizing precision, innovation, and strong partnerships every mile of the journey.
       </p>
 
-      <div class="hero-btns reveal up" style="--d:.28s;display:flex;flex-wrap:wrap;gap:13px;margin-top:38px;">
-        <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i></a>
-        <a href="#who-we-are" class="btn-outline">Our Story <i class="fas fa-arrow-down" style="font-size:.58rem;"></i></a>
-        <a href="contact.html" class="btn-outline" style="border-color:rgba(var(--text-rgb),.14);color:rgba(var(--text-rgb),.58);">Get in Touch <i class="fas fa-arrow-right" style="font-size:.58rem;"></i></a>
+      <div class="hero-btns reveal up" style="--d:.28s;display:flex;flex-wrap:wrap;gap:14px;margin-top:38px;">
+        <a href="quote.html" class="hero-btn-red">Get a Free Quote <i class="fas fa-paper-plane"></i></a>
+        <a href="#who-we-are" class="hero-btn-crystal">Our Story <i class="fas fa-arrow-down"></i></a>
+        <a href="contact.html" class="hero-btn-ghost">Get in Touch <i class="fas fa-arrow-right"></i></a>
       </div>
 
       <!-- Stats row identical to index.html -->
@@ -1453,7 +1503,7 @@
   if(closeBtn) closeBtn.addEventListener('click', closeNav);
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && isOpen) closeNav(); });
-  window.addEventListener('resize', () => { if(window.innerWidth >= 1024 && isOpen) closeNav(); });
+  window.addEventListener('resize', () => { if(window.innerWidth >= 1024 && isOpen) closeNav(); }, { passive: true });
 })();
 
 
@@ -1529,6 +1579,34 @@
     logo.addEventListener('touchcancel',function(){stop(logo);});
     logo.addEventListener('contextmenu',function(e){e.preventDefault();stop(logo);});
   });
+})();
+</script>
+
+<script>
+(function(){
+  var hero = document.getElementById('hero') || document.getElementById('page-hero');
+  if (!hero) return;
+  var imgs = [].slice.call(hero.querySelectorAll('.hero-bg img'));
+  if (!imgs.length) return;
+  var CYCLE = 24000, N = imgs.length, STEP = CYCLE / N;
+  var lum = new Array(N).fill(40);
+  function sample(img, idx) {
+    try {
+      var c = document.createElement('canvas'); c.width = c.height = 24;
+      var ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0, 24, 24);
+      var d = ctx.getImageData(0, 0, 24, 24).data, s = 0, px = d.length / 4;
+      for (var i = 0; i < d.length; i += 4) s += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+      lum[idx] = s / px;
+    } catch(e) {}
+  }
+  imgs.forEach(function(img, i) {
+    if (img.complete && img.naturalWidth > 0) sample(img, i);
+    else img.addEventListener('load', function(){ sample(img, i); });
+  });
+  var cur = 0;
+  function apply(i) { hero.setAttribute('data-img-theme', lum[i] > 125 ? 'bright' : 'dark'); }
+  apply(0);
+  setInterval(function(){ cur = (cur + 1) % N; apply(cur); }, STEP);
 })();
 </script>
 </body>

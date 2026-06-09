@@ -690,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
         premiumBtn.style.display = window.scrollY > threshold ? 'flex' : 'none';
     };
     window.addEventListener('scroll', updateBtn, { passive: true });
-    window.addEventListener('resize', updateBtn);
+    window.addEventListener('resize', updateBtn, { passive: true });
     setTimeout(updateBtn, 120);
 
 });

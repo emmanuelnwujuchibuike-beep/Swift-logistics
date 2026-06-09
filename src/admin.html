@@ -457,6 +457,68 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
 }
 [data-theme="light"] .ac-msg-sender{color:rgba(79,70,229,.8)}
 [data-theme="light"] .ac-msg-time{color:rgba(15,23,42,.38)}
+
+/* ── Admin ticker preview (mirrors lux-ticker design) ── */
+.adm-ticker-wrap{
+  position:relative;display:flex;align-items:stretch;height:34px;
+  background:rgba(1,12,30,.92);border:1px solid rgba(59,130,246,.22);
+  border-radius:3px;overflow:hidden;
+}
+.adm-ticker-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(59,130,246,.7) 30%,rgba(147,197,253,.9) 50%,rgba(59,130,246,.7) 70%,transparent);
+  z-index:1;
+}
+.adm-ticker-badge{
+  flex-shrink:0;display:flex;align-items:center;gap:8px;
+  padding:0 14px 0 12px;
+  background:linear-gradient(135deg,rgba(29,78,216,.35),rgba(59,130,246,.18));
+  border-right:1px solid rgba(59,130,246,.22);z-index:5;
+}
+.adm-ticker-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#3b82f6;box-shadow:0 0 8px rgba(59,130,246,.8);
+  animation:adm-dot-pulse 2s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes adm-dot-pulse{0%,100%{opacity:1;box-shadow:0 0 8px rgba(59,130,246,.8)}50%{opacity:.5;box-shadow:0 0 4px rgba(59,130,246,.4)}}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+.adm-ticker-live{
+  font:700 6px/1 'JetBrains Mono',monospace;letter-spacing:.45em;
+  text-transform:uppercase;color:rgba(96,165,250,.92);white-space:nowrap;
+}
+.adm-ticker-vp{
+  flex:1;overflow:hidden;position:relative;display:flex;align-items:center;min-width:0;
+}
+.adm-ticker-fl{
+  position:absolute;left:0;top:0;bottom:0;width:40px;z-index:3;pointer-events:none;
+  background:linear-gradient(to right,rgba(1,12,30,.95),transparent);
+}
+.adm-ticker-fr{
+  position:absolute;right:0;top:0;bottom:0;width:50px;z-index:3;pointer-events:none;
+  background:linear-gradient(to left,rgba(1,12,30,.95),transparent);
+}
+.adm-ticker-track{
+  display:inline-flex;align-items:center;white-space:nowrap;
+  width:max-content;padding-left:8px;
+  animation:adm-scroll 48s linear infinite;
+}
+.adm-ticker-track:hover{animation-play-state:paused;}
+@keyframes adm-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.adm-lti{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:0 22px;border-right:1px solid rgba(59,130,246,.12);
+}
+.adm-lti-icon{font-size:9px;opacity:.8;}
+.adm-lti-val{
+  font:500 10px/1 'DM Sans',sans-serif;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(147,197,253,.88);white-space:nowrap;
+}
+.adm-lti-sep{
+  padding:0 14px;color:rgba(59,130,246,.35);font-size:7px;
+}
+[data-theme="light"] .adm-ticker-wrap{background:rgba(10,20,60,.88)}
+[data-theme="light"] .adm-ticker-fl{background:linear-gradient(to right,rgba(10,20,60,.92),transparent)}
+[data-theme="light"] .adm-ticker-fr{background:linear-gradient(to left,rgba(10,20,60,.92),transparent)}
 </style>
 </head>
 <body>
@@ -852,11 +914,11 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
 
         <div class="form-card" style="margin-bottom:24px;">
           <div class="settings-title"><i class="fas fa-bullhorn" style="color:var(--accent);margin-right:8px"></i> Site Ticker / Broadcast</div>
-          <div class="info-box">This message scrolls across all site pages as a live announcement strip. Leave blank to hide the ticker. Changes go live as soon as you save.</div>
+          <div class="info-box">Type your announcement below — separate items with <strong>·</strong> or <strong>|</strong>. The live preview below updates as you type. Leave blank to hide the ticker.</div>
           <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
-            <div class="form-group" style="flex:1;min-width:220px;margin-bottom:0;">
-              <label for="ticker-input">Ticker Message</label>
-              <input type="text" id="ticker-input" class="form-input" placeholder="e.g. 🚚 New Lagos route live · Express freight available now">
+            <div class="f-group" style="flex:1;min-width:220px;margin-bottom:0;">
+              <label for="ticker-input" style="display:block;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;">Ticker Message</label>
+              <input type="text" id="ticker-input" class="f-input" placeholder="e.g. 🚚 New Lagos route live · Express freight available now" oninput="updateTickerPreview()">
             </div>
             <button class="btn-primary" onclick="saveTicker()" style="white-space:nowrap;flex-shrink:0;padding:12px 22px;">
               <i class="fas fa-save"></i> Save
@@ -866,6 +928,28 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
             </button>
           </div>
           <div id="ticker-save-status" style="margin-top:10px;font-size:.78rem;color:var(--muted2);min-height:18px;"></div>
+
+          <!-- Live ticker preview -->
+          <div style="margin-top:18px;">
+            <div style="font-size:.62rem;letter-spacing:.38em;text-transform:uppercase;color:rgba(59,130,246,.5);margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+              <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);animation:pulse-dot 2s ease-in-out infinite;"></span>
+              Live Preview
+            </div>
+            <!-- Ticker chrome (matches the real site lux-ticker) -->
+            <div class="adm-ticker-wrap">
+              <div class="adm-ticker-badge">
+                <span class="adm-ticker-dot"></span>
+                <span class="adm-ticker-live">SFL LIVE</span>
+              </div>
+              <div class="adm-ticker-vp">
+                <div class="adm-ticker-fl"></div>
+                <div class="adm-ticker-fr"></div>
+                <div class="adm-ticker-track" id="admin-ticker-preview-track">
+                  <div class="adm-lti"><span class="adm-lti-icon">📡</span><span class="adm-lti-val">Your ticker message will appear here as you type…</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="form-card">
@@ -1668,8 +1752,28 @@ async function loadTicker() {
       headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY }
     });
     const rows = await r.json();
-    if (rows && rows[0]) document.getElementById('ticker-input').value = rows[0].value || '';
+    if (rows && rows[0]) {
+      document.getElementById('ticker-input').value = rows[0].value || '';
+      updateTickerPreview();
+    }
   } catch(_) {}
+}
+
+function updateTickerPreview() {
+  const track = document.getElementById('admin-ticker-preview-track');
+  if (!track) return;
+  const text = (document.getElementById('ticker-input')?.value || '').trim();
+  if (!text) {
+    track.innerHTML = '<div class="adm-lti"><span class="adm-lti-icon">📡</span><span class="adm-lti-val">Your ticker message will appear here as you type…</span></div>';
+    return;
+  }
+  const icons = ['🚚','📦','✈️','⚓','🌍','📋','🔔','⚡'];
+  const items = text.split(/[·•|\n,]+/).map(s => s.trim()).filter(Boolean);
+  const doubled = [...items, ...items];
+  track.innerHTML = doubled.map((item, i) =>
+    `<div class="adm-lti"><span class="adm-lti-icon">${icons[i % icons.length]}</span><span class="adm-lti-val">${item.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span></div>` +
+    (i < doubled.length - 1 ? '<div class="adm-lti-sep">✦</div>' : '')
+  ).join('');
 }
 async function saveTicker() {
   const val = (document.getElementById('ticker-input')?.value || '').trim();

@@ -302,6 +302,15 @@
     }
     .snum { font: 500 .65rem/1 'JetBrains Mono'; color: rgba(var(--accent-rgb),.35); letter-spacing: .06em; flex-shrink: 0; width: 26px; }
 
+    /* ── Service row — mobile column layout ── */
+    @media (max-width: 640px) {
+      .srow { flex-direction: column; align-items: flex-start; padding: 22px 20px; gap: 14px; }
+      .srow:hover { transform: none; }
+      .srow .snum { position: absolute; top: 16px; right: 16px; width: auto; }
+      .srow > div { padding: 0 !important; width: 100%; }
+      .srow > a { width: 100% !important; justify-content: center !important; }
+    }
+
     /* ── Icon box ── */
     .ibox {
       width: 46px; height: 46px; border-radius: 3px; flex-shrink: 0;
@@ -615,8 +624,7 @@
       overflow: hidden; padding-top: 140px; padding-bottom: 80px;
     }
     .hero-bg { position: absolute; inset: 0; z-index: 0; }
-    .hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .58; filter: brightness(.88) saturate(.85); }
-    [data-theme="light"] .hero-bg img { opacity: .52; filter: brightness(.95) saturate(.85); }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; filter: brightness(.93) saturate(.96); }
     .hero-fade-v {
       position: absolute; inset: 0;
       background: linear-gradient(to bottom, rgba(var(--bg-rgb),.55) 0%, rgba(var(--bg-rgb),.04) 30%, rgba(var(--bg-rgb),.04) 70%, rgba(var(--bg-rgb),.65) 100%);
@@ -840,27 +848,59 @@
       .stat-c { border-right: 1px solid var(--border) !important; border-bottom: 1px solid var(--border) !important; }
       .stat-c:nth-child(2n) { border-right: none !important; }
       .stat-c:nth-child(3), .stat-c:nth-child(4) { border-bottom: none !important; }
+      /* Tablet: compact service rows */
+      .srow { gap: 14px; padding: 20px 22px; }
+      .srow:hover { transform: translateX(4px); }
+      .snum { font-size: .57rem; opacity: .3; }
+      .quote-link { padding: 9px 14px; font-size: .7rem; }
     }
     @media (max-width: 639px) {
-      /* Service rows: wrap to two-line layout on small screens */
+      /* Section header */
+      #all-services > div:first-child { margin-bottom: 36px !important; }
+      #all-services > div:first-child > p { max-width: 100% !important; }
+
+      /* Grid overrides flex — inline flex:1 on children becomes irrelevant */
       .srow {
-        flex-wrap: wrap;
-        gap: 12px 14px;
-        padding: 18px;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        padding: 22px 18px 16px !important;
+        gap: 0 !important;
       }
-      .srow:hover { transform: none; }
-      .snum { display: none; }
-      .srow > div:not(.ibox) {
-        flex: 1 1 calc(100% - 64px);
-        min-width: 0;
-        padding: 0 !important;
+      .srow:hover { transform: none !important; }
+
+      /* Left accent bar: always on at mobile */
+      .srow::before { transform: scaleY(1) !important; opacity: .2; transition: opacity .3s; }
+      .srow:active::before { opacity: .55; }
+
+      /* Number: hidden — not meaningful at this size */
+      .snum { display: none !important; }
+
+      /* Icon: top of card, fixed size */
+      .ibox {
+        width: 46px !important; height: 46px !important;
+        margin-bottom: 14px !important;
       }
+
+      /* Content div: grid child, full width automatically */
+      .srow > div:not(.ibox) { padding: 0 !important; }
+      .srow > div:not(.ibox) h3 { font-size: 1rem !important; line-height: 1.3 !important; }
+      .srow > div:not(.ibox) p  { font-size: .82rem !important; line-height: 1.72 !important; margin-top: 6px !important; }
+
+      /* Quote: full width, right-aligned, separator line at bottom */
       .quote-link {
-        flex: 1 1 100%;
-        justify-content: center;
-        font-size: .72rem;
-        padding: 9px 14px;
+        display: flex !important;
+        width: 100% !important;
+        justify-content: flex-end !important;
+        margin-top: 14px !important;
+        padding: 11px 0 2px !important;
+        border: none !important;
+        border-top: 1px solid rgba(var(--accent-rgb), .16) !important;
+        border-radius: 0 !important;
+        clip-path: none !important;
+        background: transparent !important;
+        font-size: .69rem;
       }
+      .quote-link:hover { background: transparent !important; color: var(--accent-hi, #60a5fa); }
     }
 
     @media (max-width: 479px) {
@@ -884,6 +924,12 @@
       #hdr .hdr-inner { padding: 0 16px; }
       .mob-nav-inner { padding: 22px 16px 36px; }
       .mob-nav-links a { font-size: 1.45rem; }
+      /* Smaller service card */
+      .srow { padding: 20px 14px 14px; }
+      .ibox { width: 40px !important; height: 40px !important; font-size: .82rem !important; }
+      .srow > div:not(.ibox) h3 { font-size: .93rem !important; }
+      .srow > div:not(.ibox) p  { font-size: .79rem !important; }
+      .quote-link { font-size: .64rem; }
     }
 
     @media (max-width: 359px) {
@@ -948,22 +994,29 @@
     </div>
   </div>
 
-  <div class="ticker-strip">
-    <div class="ticker-fade-l"></div>
-    <div class="ticker-fade-r"></div>
-    <div class="ticker-track">
-      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Network Active</span></div>
-      <div class="ticker-item"><i class="fas fa-plane-up"></i>Air Freight <span style="color:var(--muted2);">Priority Dispatched</span></div>
-      <div class="ticker-item"><i class="fas fa-shield-halved"></i>Cargo <span style="color:var(--muted2);">Fully Insured</span></div>
-      <div class="ticker-item"><i class="fas fa-earth-africa"></i>International <span style="color:var(--muted2);">Operating 24/7</span></div>
-      <div class="ticker-item"><i class="fas fa-ship"></i>Sea Routes <span style="color:var(--muted2);">150+ Countries</span></div>
-      <div class="ticker-item"><i class="fas fa-truck-fast"></i>Road Freight <span style="color:var(--muted2);">On-Time Delivery</span></div>
-      <div class="ticker-item"><span class="ping-dot"></span>SwiftFreight <span class="hi">Network Active</span></div>
-      <div class="ticker-item"><i class="fas fa-plane-up"></i>Air Freight <span style="color:var(--muted2);">Priority Dispatched</span></div>
-      <div class="ticker-item"><i class="fas fa-shield-halved"></i>Cargo <span style="color:var(--muted2);">Fully Insured</span></div>
-      <div class="ticker-item"><i class="fas fa-earth-africa"></i>International <span style="color:var(--muted2);">Operating 24/7</span></div>
-      <div class="ticker-item"><i class="fas fa-ship"></i>Sea Routes <span style="color:var(--muted2);">150+ Countries</span></div>
-      <div class="ticker-item"><i class="fas fa-truck-fast"></i>Road Freight <span style="color:var(--muted2);">On-Time Delivery</span></div>
+  <div class="lux-ticker" aria-label="Swift Freight live network status">
+    <div class="lux-ticker-badge"><span class="lux-pulse"></span><span class="lux-ticker-live">SFL&thinsp;LIVE</span></div>
+    <div class="lux-ticker-vp">
+      <div class="lux-ticker-fl"></div>
+      <div class="lux-ticker-track">
+        <span class="lti"><i class="fas fa-signal lti-icon"></i><span class="lti-label">Swift Freight</span><span class="lti-dot">·</span><span class="lti-val">Network Active</span></span>
+        <span class="lti"><i class="fas fa-plane-up lti-icon"></i><span class="lti-label">Air Freight</span><span class="lti-dot">·</span><span class="lti-val">Priority Dispatch</span></span>
+        <span class="lti"><i class="fas fa-ship lti-icon"></i><span class="lti-label">Ocean Routes</span><span class="lti-dot">·</span><span class="lti-val">150+ Countries</span></span>
+        <span class="lti"><i class="fas fa-shield-halved lti-icon"></i><span class="lti-label">Cargo Insured</span><span class="lti-dot">·</span><span class="lti-val">Full Coverage</span></span>
+        <span class="lti"><i class="fas fa-truck-fast lti-icon"></i><span class="lti-label">Last Mile</span><span class="lti-dot">·</span><span class="lti-val">99.4% On-Time</span></span>
+        <span class="lti"><i class="fas fa-bolt lti-icon"></i><span class="lti-label">Supply Chain</span><span class="lti-dot">·</span><span class="lti-val">24/7 Operations</span></span>
+        <span class="lti"><i class="fas fa-stamp lti-icon"></i><span class="lti-label">Customs</span><span class="lti-dot">·</span><span class="lti-val">Expedited Clearance</span></span>
+        <span class="lti"><i class="fas fa-location-dot lti-icon"></i><span class="lti-label">Tracking</span><span class="lti-dot">·</span><span class="lti-val">Real-Time Global</span></span>
+        <span class="lti"><i class="fas fa-signal lti-icon"></i><span class="lti-label">Swift Freight</span><span class="lti-dot">·</span><span class="lti-val">Network Active</span></span>
+        <span class="lti"><i class="fas fa-plane-up lti-icon"></i><span class="lti-label">Air Freight</span><span class="lti-dot">·</span><span class="lti-val">Priority Dispatch</span></span>
+        <span class="lti"><i class="fas fa-ship lti-icon"></i><span class="lti-label">Ocean Routes</span><span class="lti-dot">·</span><span class="lti-val">150+ Countries</span></span>
+        <span class="lti"><i class="fas fa-shield-halved lti-icon"></i><span class="lti-label">Cargo Insured</span><span class="lti-dot">·</span><span class="lti-val">Full Coverage</span></span>
+        <span class="lti"><i class="fas fa-truck-fast lti-icon"></i><span class="lti-label">Last Mile</span><span class="lti-dot">·</span><span class="lti-val">99.4% On-Time</span></span>
+        <span class="lti"><i class="fas fa-bolt lti-icon"></i><span class="lti-label">Supply Chain</span><span class="lti-dot">·</span><span class="lti-val">24/7 Operations</span></span>
+        <span class="lti"><i class="fas fa-stamp lti-icon"></i><span class="lti-label">Customs</span><span class="lti-dot">·</span><span class="lti-val">Expedited Clearance</span></span>
+        <span class="lti"><i class="fas fa-location-dot lti-icon"></i><span class="lti-label">Tracking</span><span class="lti-dot">·</span><span class="lti-val">Real-Time Global</span></span>
+      </div>
+      <div class="lux-ticker-fr"></div>
     </div>
   </div>
 </header>
@@ -1009,6 +1062,9 @@
 <section id="page-hero">
   <div class="hero-bg">
     <img src="./image/bt5.jpg" alt="" aria-hidden="true">
+    <img src="./image/serviceimg.jpg" alt="" aria-hidden="true">
+    <img src="./image/roadtruck.jpg" alt="" aria-hidden="true">
+    <img src="./image/bt3.jpg" alt="" aria-hidden="true">
     <div class="hero-fade-v"></div>
     <div class="hero-fade-h"></div>
   </div>
@@ -1032,9 +1088,9 @@
         End-to-end freight solutions built for precision, speed, and reliability — moving your cargo across any distance, on any route, every single time.
       </p>
 
-      <div class="reveal up" style="--d:.28s;display:flex;flex-wrap:wrap;gap:13px;margin-top:36px;">
-        <a href="quote.html" class="btn-primary">Get a Free Quote <i class="fas fa-paper-plane" style="font-size:.58rem;"></i></a>
-        <a href="#freight-modes" class="btn-outline">Explore Services <i class="fas fa-arrow-down" style="font-size:.58rem;"></i></a>
+      <div class="reveal up" style="--d:.28s;display:flex;flex-wrap:wrap;gap:14px;margin-top:36px;">
+        <a href="quote.html" class="hero-btn-red">Get a Free Quote <i class="fas fa-paper-plane"></i></a>
+        <a href="#freight-modes" class="hero-btn-crystal">Explore Services <i class="fas fa-arrow-down"></i></a>
       </div>
 
       <!-- Stats row -->
@@ -1650,7 +1706,7 @@
   if(closeBtn) closeBtn.addEventListener('click', closeNav);
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && isOpen) closeNav(); });
-  window.addEventListener('resize', () => { if(window.innerWidth >= 1024 && isOpen) closeNav(); });
+  window.addEventListener('resize', () => { if(window.innerWidth >= 1024 && isOpen) closeNav(); }, { passive: true });
 })();
 
 
@@ -1699,6 +1755,34 @@
     logo.addEventListener('touchcancel',function(){stop(logo);});
     logo.addEventListener('contextmenu',function(e){e.preventDefault();stop(logo);});
   });
+})();
+</script>
+
+<script>
+(function(){
+  var hero = document.getElementById('hero') || document.getElementById('page-hero');
+  if (!hero) return;
+  var imgs = [].slice.call(hero.querySelectorAll('.hero-bg img'));
+  if (!imgs.length) return;
+  var CYCLE = 24000, N = imgs.length, STEP = CYCLE / N;
+  var lum = new Array(N).fill(40);
+  function sample(img, idx) {
+    try {
+      var c = document.createElement('canvas'); c.width = c.height = 24;
+      var ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0, 24, 24);
+      var d = ctx.getImageData(0, 0, 24, 24).data, s = 0, px = d.length / 4;
+      for (var i = 0; i < d.length; i += 4) s += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+      lum[idx] = s / px;
+    } catch(e) {}
+  }
+  imgs.forEach(function(img, i) {
+    if (img.complete && img.naturalWidth > 0) sample(img, i);
+    else img.addEventListener('load', function(){ sample(img, i); });
+  });
+  var cur = 0;
+  function apply(i) { hero.setAttribute('data-img-theme', lum[i] > 125 ? 'bright' : 'dark'); }
+  apply(0);
+  setInterval(function(){ cur = (cur + 1) % N; apply(cur); }, STEP);
 })();
 </script>
 
