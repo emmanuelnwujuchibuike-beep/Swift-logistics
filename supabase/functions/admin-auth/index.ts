@@ -1,7 +1,8 @@
 import { CORS_HEADERS, json, err } from '../_shared/cors.ts';
 
 const ADMIN_PW     = Deno.env.get('ADMIN_PASSWORD')   ?? '';
-const API_SECRET   = Deno.env.get('ADMIN_API_SECRET') ?? '';
+/* Prefer ADMIN_API_SECRET; fall back to ADMIN_SECRET so both names work */
+const API_SECRET   = Deno.env.get('ADMIN_API_SECRET') ?? Deno.env.get('ADMIN_SECRET') ?? '';
 const TOKEN_SECRET = Deno.env.get('TOKEN_SECRET')     ?? 'sfl-fallback-set-token-secret';
 const TOKEN_TTL    = 24 * 60 * 60 * 1000; // 24 hours
 
