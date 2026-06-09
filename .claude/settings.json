@@ -15,7 +15,8 @@
       "Bash(curl -s -X POST https://oltbgccsceipedoadgka.supabase.co/functions/v1/register-shipment -H 'Content-Type: application/json' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94' -H 'x-admin-secret: SFL-ADMIN-2025-Xp7kZ3mN' -d '{\"name\":\"Test User\",\"customer_email\":\"swiftfreightlogix@gmail.com\",\"destination\":\"London, UK\",\"status\":\"Pending\",\"origin\":\"Lagos, Nigeria\"}')",
       "Bash(npx supabase *)",
       "Bash(git add *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(node --check \"c:/Users/u/OneDrive/Documents/logistics site/src/chat.js\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\u\\.claude\\projects\\c--Users-u-OneDrive-Documents-logistics-site\\memory",

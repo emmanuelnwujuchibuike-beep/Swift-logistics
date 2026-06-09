@@ -1,694 +1,812 @@
-/* ═══════════════════════════════════════════════════════════════
-   Swift Freight Logistics — Live Chat Widget  v4
-   Features: real-time messaging, image uploads, email notifications
-   ═══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   Swift Freight Logistics — Live Chat Widget  v6
+   • Inline SVG icons — zero Font Awesome dependency
+   • All layout CSS uses !important to survive Tailwind preflight
+   • Smooth gate → chat transition
+   ══════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
-  const SB_URL    = 'https://oltbgccsceipedoadgka.supabase.co';
-  const SB_ANON   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
-  const FN        = SB_URL + '/functions/v1';
-  const BUCKET    = 'chat-images';
-  const WELCOME   = 'Hello! 👋 Welcome to Swift Freight support. How can we help you today?';
-  const K_SID     = 'sfl_chat_sid';
-  const K_NAME    = 'sfl_chat_name';
-  const K_EMAIL   = 'sfl_chat_email';
-  const HDR       = { 'Content-Type': 'application/json', 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON };
+  /* ─── Config ─── */
+  var SB_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
+  var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+  var FN      = SB_URL + '/functions/v1';
+  var BUCKET  = 'chat-images';
+  var WELCOME = 'Hello! 👋 Welcome to Swift Freight support. How can we help you today?';
+  var K_SID   = 'sfl_chat_sid';
+  var K_NAME  = 'sfl_chat_name';
+  var K_EMAIL = 'sfl_chat_email';
+  var HDR     = { 'Content-Type': 'application/json', 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON };
 
-  let sbClient        = null;
-  let rtSub           = null;
-  let sessionId       = localStorage.getItem(K_SID)   || '';
-  let visitorName     = localStorage.getItem(K_NAME)  || '';
-  let visitorEmail    = localStorage.getItem(K_EMAIL) || '';
-  let isOpen          = false;
-  let unread          = 0;
-  let isFirstMsg      = true;
-  let skipWelcomeOnce = false;
+  /* ─── Inline SVGs — no icon-font dependency ─── */
+  var IC = {
+    chat:  '<svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
+    close: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>',
+    back:  '<svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1L1 6.5 7 12"/></svg>',
+    img:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/><polyline points="21 15 16 10 5 21"/></svg>',
+    send:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2" fill="white" stroke="none"/></svg>',
+    arr:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+    spin:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" opacity=".4"/><path d="M12 2v4"/></svg>',
+  };
 
-  /* ── CSS ── */
-  const S = document.createElement('style');
-  S.textContent = `
-  #sfl-root,#sfl-root *{box-sizing:border-box;margin:0;padding:0}
+  /* ─── State ─── */
+  var sbClient        = null;
+  var rtSub           = null;
+  var sessionId       = localStorage.getItem(K_SID)   || '';
+  var visitorName     = localStorage.getItem(K_NAME)  || '';
+  var visitorEmail    = localStorage.getItem(K_EMAIL) || '';
+  var isOpen          = false;
+  var unread          = 0;
+  var isFirstMsg      = !sessionId; /* false if restoring existing session */
+  var skipWelcomeOnce = false;
 
-  /* FAB */
-  #sfl-fab{
-    position:fixed;bottom:30px;right:30px;z-index:9100;
-    width:62px;height:62px;border:none;cursor:pointer;
-    background:linear-gradient(135deg,#1d4ed8 0%,#3b82f6 55%,#60a5fa 100%);
-    border-radius:6px;
-    clip-path:polygon(0 0,calc(100% - 13px) 0,100% 13px,100% 100%,13px 100%,0 calc(100% - 13px));
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 8px 32px rgba(59,130,246,.52),0 2px 8px rgba(0,0,0,.38);
-    transition:transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s;
-    outline:none;font-family:'DM Sans',sans-serif;
-  }
-  #sfl-fab:hover{transform:translateY(-4px) scale(1.07);box-shadow:0 18px 44px rgba(59,130,246,.62)}
-  #sfl-fab svg{width:27px;height:27px;fill:#fff;position:absolute;transition:opacity .22s,transform .22s}
-  #sfl-fab .ic-chat{opacity:1;transform:scale(1)}
-  #sfl-fab .ic-close{opacity:0;transform:scale(.65)}
-  #sfl-fab.open .ic-chat{opacity:0;transform:scale(.65)}
-  #sfl-fab.open .ic-close{opacity:1;transform:scale(1)}
+  /* ════════════════════════════════════════════════════════════════
+     CSS  — !important on every layout property so Tailwind can't
+     override padding/margin/display inside the widget.
+     Font-family is NOT forced on * so embedded SVGs render fine.
+     ════════════════════════════════════════════════════════════════ */
+  var css = [
 
-  #sfl-pulse{
-    position:fixed;bottom:30px;right:30px;z-index:9099;
-    width:62px;height:62px;pointer-events:none;
-    clip-path:polygon(0 0,calc(100% - 13px) 0,100% 13px,100% 100%,13px 100%,0 calc(100% - 13px));
-  }
-  #sfl-pulse::before,#sfl-pulse::after{
-    content:'';position:absolute;inset:-5px;
-    border:2px solid rgba(59,130,246,.48);border-radius:7px;
-    animation:sflRing 2.8s ease-out infinite;
-    clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
-  }
-  #sfl-pulse::after{animation-delay:1.4s}
-  @keyframes sflRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.55);opacity:0}}
+  /* keyframes */
+  '@keyframes _sflRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.7);opacity:0}}',
+  '@keyframes _sflBlink{0%,100%{opacity:1}50%{opacity:.3}}',
+  '@keyframes _sflDot{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-6px);opacity:1}}',
+  '@keyframes _sflIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}',
+  '@keyframes _sflProg{from{transform:translateX(-100%)}to{transform:translateX(380%)}}',
+  '@keyframes _sflFadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}',
 
-  #sfl-badge{
-    position:fixed;bottom:78px;right:26px;z-index:9101;
-    min-width:20px;height:20px;padding:0 5px;border-radius:99px;
-    background:linear-gradient(135deg,#ef4444,#f97316);
-    color:#fff;font-size:10px;font-weight:800;font-family:'DM Sans',sans-serif;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 2px 10px rgba(239,68,68,.55);pointer-events:none;
-    transform:scale(0);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
-  }
-  #sfl-badge.show{transform:scale(1)}
+  /* FAB button */
+  '#sfl-fab{',
+    'position:fixed!important;bottom:28px!important;right:28px!important;z-index:2147483640!important;',
+    'width:60px!important;height:60px!important;margin:0!important;padding:0!important;border:none!important;',
+    'outline:none!important;cursor:pointer!important;',
+    'background:linear-gradient(145deg,#1e40af,#3b82f6)!important;',
+    'border-radius:50%!important;',
+    'display:flex!important;align-items:center!important;justify-content:center!important;',
+    'box-shadow:0 8px 32px rgba(37,99,235,.55),0 2px 8px rgba(0,0,0,.35)!important;',
+    'transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s!important;',
+  '}',
+  '#sfl-fab:hover{transform:scale(1.1) translateY(-3px)!important;box-shadow:0 16px 44px rgba(37,99,235,.65)!important;}',
+  '#sfl-fab .sfl-ic{position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;',
+    'transition:opacity .22s,transform .22s!important;}',
+  '#sfl-fab .sfl-ic-chat{opacity:1!important;transform:scale(1)!important;}',
+  '#sfl-fab .sfl-ic-close{opacity:0!important;transform:scale(.5) rotate(-90deg)!important;}',
+  '#sfl-fab.open .sfl-ic-chat{opacity:0!important;transform:scale(.5) rotate(90deg)!important;}',
+  '#sfl-fab.open .sfl-ic-close{opacity:1!important;transform:scale(1) rotate(0)!important;}',
 
-  /* Panel */
-  #sfl-panel{
-    position:fixed;bottom:110px;right:30px;z-index:9100;
-    width:395px;
-    background:rgba(4,9,26,.98);
-    backdrop-filter:blur(52px) saturate(1.9);
-    -webkit-backdrop-filter:blur(52px) saturate(1.9);
-    border:1px solid rgba(59,130,246,.14);
-    border-radius:8px;
-    display:flex;flex-direction:column;overflow:hidden;
-    box-shadow:0 44px 96px rgba(0,0,0,.78),0 0 0 1px rgba(59,130,246,.05),0 0 90px rgba(59,130,246,.06);
-    transform:translateY(26px) scale(.93);opacity:0;pointer-events:none;
-    transition:transform .42s cubic-bezier(.16,1,.3,1),opacity .34s ease;
-    max-height:calc(100vh - 136px);
-    font-family:'DM Sans',system-ui,sans-serif;
-  }
-  #sfl-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
-  #sfl-panel *{box-sizing:border-box;margin:0;padding:0}
-  #sfl-panel::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:2px;z-index:3;
-    background:linear-gradient(90deg,transparent,#1d4ed8 20%,#3b82f6 50%,#60a5fa 80%,transparent);
-  }
+  /* Pulse rings */
+  '#sfl-pulse{position:fixed!important;bottom:28px!important;right:28px!important;z-index:2147483638!important;',
+    'width:60px!important;height:60px!important;border-radius:50%!important;pointer-events:none!important;}',
+  '#sfl-pulse::before,#sfl-pulse::after{content:""!important;position:absolute!important;inset:-4px!important;',
+    'border-radius:50%!important;border:2px solid rgba(59,130,246,.42)!important;',
+    'animation:_sflRing 3s ease-out infinite!important;}',
+  '#sfl-pulse::after{animation-delay:1.5s!important;}',
 
-  .sfl-hdr{
-    display:flex;align-items:center;gap:13px;padding:16px 18px 15px;
-    background:linear-gradient(135deg,rgba(8,15,40,.75),rgba(29,54,130,.22));
-    border-bottom:1px solid rgba(59,130,246,.09);flex-shrink:0;
-  }
-  .sfl-avatar{
-    width:44px;height:44px;flex-shrink:0;border-radius:4px;
-    background:linear-gradient(135deg,#1e3a8a,#3b82f6);
-    clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Bebas Neue',sans-serif;font-size:1.08rem;letter-spacing:.08em;color:#fff;
-    box-shadow:0 0 20px rgba(59,130,246,.42);position:relative;
-  }
-  .sfl-avatar::after{
-    content:'';position:absolute;bottom:2px;right:2px;
-    width:10px;height:10px;border-radius:50%;
-    background:#22c55e;box-shadow:0 0 6px #22c55e;
-    border:2px solid rgba(4,9,26,.98);
-  }
-  .sfl-hdr-info{flex:1;min-width:0}
-  .sfl-hdr-name{font-size:.9rem;font-weight:700;color:#e8f0fe;letter-spacing:.025em;line-height:1.2}
-  .sfl-hdr-sub{font-size:.69rem;color:rgba(232,240,254,.45);margin-top:3px;display:flex;align-items:center;gap:5px}
-  .sfl-online{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;flex-shrink:0;animation:sflBlink 2.8s ease-in-out infinite}
-  @keyframes sflBlink{0%,100%{opacity:1}50%{opacity:.4}}
-  .sfl-close-btn{
-    width:32px;height:32px;flex-shrink:0;background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);border-radius:3px;
-    color:rgba(232,240,254,.45);cursor:pointer;
-    display:flex;align-items:center;justify-content:center;font-size:.78rem;
-    transition:all .2s;
-    clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));
-  }
-  .sfl-close-btn:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:#f87171}
+  /* Unread badge */
+  '#sfl-badge{position:fixed!important;bottom:78px!important;right:22px!important;z-index:2147483641!important;',
+    'min-width:20px!important;height:20px!important;padding:0 5px!important;',
+    'border-radius:10px!important;background:#ef4444!important;',
+    'color:#fff!important;font:700 11px/20px -apple-system,BlinkMacSystemFont,sans-serif!important;',
+    'text-align:center!important;letter-spacing:0!important;',
+    'box-shadow:0 2px 10px rgba(239,68,68,.55)!important;pointer-events:none!important;',
+    'transform:scale(0)!important;transition:transform .3s cubic-bezier(.34,1.56,.64,1)!important;}',
+  '#sfl-badge.show{transform:scale(1)!important;}',
 
-  /* Welcome gate */
-  .sfl-gate{
-    flex:1;display:flex;flex-direction:column;align-items:center;
-    padding:34px 28px 28px;overflow-y:auto;
-  }
-  .sfl-gate-icon{
-    width:70px;height:70px;margin-bottom:22px;
-    background:linear-gradient(135deg,rgba(30,64,175,.48),rgba(59,130,246,.28));
-    border:1px solid rgba(59,130,246,.26);border-radius:6px;
-    clip-path:polygon(0 0,calc(100% - 11px) 0,100% 11px,100% 100%,11px 100%,0 calc(100% - 11px));
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 32px rgba(59,130,246,.18);
-  }
-  .sfl-gate-icon svg{width:32px;height:32px;fill:#60a5fa}
-  .sfl-gate h3{font-size:1.08rem;font-weight:700;color:#e8f0fe;letter-spacing:.028em;text-align:center;margin-bottom:10px}
-  .sfl-gate p{font-size:.8rem;color:rgba(232,240,254,.48);line-height:1.78;text-align:center;margin-bottom:28px;max-width:285px}
-  .sfl-field{width:100%;margin-bottom:13px}
-  .sfl-field label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,240,254,.48);margin-bottom:7px}
-  .sfl-inp{
-    width:100%;padding:12px 15px;
-    background:rgba(255,255,255,.05);border:1px solid rgba(232,240,254,.1);
-    border-radius:4px;color:#e8f0fe;font-size:.87rem;font-family:'DM Sans',sans-serif;
-    outline:none;transition:border-color .2s,background .2s;
-  }
-  .sfl-inp::placeholder{color:rgba(232,240,254,.27)}
-  .sfl-inp:focus{border-color:rgba(59,130,246,.52);background:rgba(59,130,246,.05)}
-  .sfl-inp.err{border-color:rgba(239,68,68,.55);background:rgba(239,68,68,.04)}
-  .sfl-gate-btn{
-    width:100%;margin-top:6px;padding:13px;border:none;border-radius:4px;cursor:pointer;
-    background:linear-gradient(135deg,#1d4ed8,#3b82f6);
-    color:#fff;font:700 .8rem/1 'DM Sans',sans-serif;letter-spacing:.13em;text-transform:uppercase;
-    transition:opacity .2s,transform .2s;
-    clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
-    box-shadow:0 6px 24px rgba(59,130,246,.4);
-  }
-  .sfl-gate-btn:hover{opacity:.86;transform:translateY(-2px)}
+  /* Panel shell */
+  '#sfl-panel{',
+    'position:fixed!important;bottom:106px!important;right:28px!important;z-index:2147483639!important;',
+    'width:380px!important;max-width:calc(100vw - 24px)!important;',
+    'max-height:min(600px,calc(100vh - 126px))!important;',
+    'display:flex!important;flex-direction:column!important;overflow:hidden!important;',
+    'background:#04091c!important;',
+    'border:1px solid rgba(59,130,246,.18)!important;',
+    'border-radius:16px!important;',
+    'box-shadow:0 40px 90px rgba(0,0,0,.82),0 0 0 1px rgba(37,99,235,.06)!important;',
+    'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif!important;',
+    'opacity:0!important;transform:translateY(24px) scale(.94)!important;pointer-events:none!important;',
+    'transition:opacity .38s cubic-bezier(.16,1,.3,1),transform .38s cubic-bezier(.16,1,.3,1)!important;',
+  '}',
+  '#sfl-panel.open{opacity:1!important;transform:none!important;pointer-events:all!important;}',
+  /* Top accent line */
+  '#sfl-panel::before{content:""!important;position:absolute!important;top:0!important;left:0!important;right:0!important;',
+    'height:2px!important;z-index:2!important;',
+    'background:linear-gradient(90deg,transparent,#2563eb 30%,#60a5fa 70%,transparent)!important;}',
 
-  /* Chat body */
-  #sfl-body{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0}
-  .sfl-info-bar{
-    display:flex;align-items:center;gap:10px;padding:9px 14px 9px 12px;
-    border-bottom:1px solid rgba(59,130,246,.08);background:rgba(255,255,255,.016);flex-shrink:0;
-  }
-  .sfl-back-btn{
-    display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;
-    color:rgba(232,240,254,.38);font-size:.7rem;font-family:'DM Sans',sans-serif;
-    padding:5px 9px;border-radius:3px;white-space:nowrap;transition:color .2s,background .2s;
-  }
-  .sfl-back-btn:hover{color:#60a5fa;background:rgba(59,130,246,.1)}
-  .sfl-vinfo{flex:1;min-width:0;text-align:right}
-  .sfl-vname{font-size:.77rem;font-weight:700;color:rgba(232,240,254,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .sfl-vemail{font-size:.65rem;color:rgba(59,130,246,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+  /* Box-model reset for panel children — no font-family here to keep SVG strokes intact */
+  '#sfl-panel *{box-sizing:border-box!important;margin:0!important;padding:0!important;}',
 
-  /* Messages */
-  #sfl-msgs{
-    flex:1;overflow-y:auto;padding:24px 18px;
-    display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth;
-  }
-  #sfl-msgs::-webkit-scrollbar{width:3px}
-  #sfl-msgs::-webkit-scrollbar-track{background:transparent}
-  #sfl-msgs::-webkit-scrollbar-thumb{background:rgba(59,130,246,.22);border-radius:2px}
+  /* ── Header ── */
+  '#sfl-panel .sf-hdr{',
+    'display:flex!important;align-items:center!important;gap:12px!important;',
+    'padding:16px 18px!important;flex-shrink:0!important;',
+    'background:rgba(255,255,255,.024)!important;',
+    'border-bottom:1px solid rgba(59,130,246,.1)!important;}',
+  '#sfl-panel .sf-av{',
+    'width:42px!important;height:42px!important;flex-shrink:0!important;',
+    'border-radius:50%!important;',
+    'background:linear-gradient(135deg,#1e3a8a,#3b82f6)!important;',
+    'display:flex!important;align-items:center!important;justify-content:center!important;',
+    'box-shadow:0 0 20px rgba(37,99,235,.4)!important;position:relative!important;',
+    'font:700 .9rem/1 "Bebas Neue",system-ui,sans-serif!important;',
+    'color:#fff!important;letter-spacing:.06em!important;}',
+  '#sfl-panel .sf-av::after{content:""!important;position:absolute!important;bottom:1px!important;right:1px!important;',
+    'width:10px!important;height:10px!important;border-radius:50%!important;',
+    'background:#22c55e!important;box-shadow:0 0 7px rgba(34,197,94,.8)!important;',
+    'border:2px solid #04091c!important;}',
+  '#sfl-panel .sf-hdr-info{flex:1!important;min-width:0!important;}',
+  '#sfl-panel .sf-hdr-name{',
+    'display:block!important;font:700 .88rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:#e2eeff!important;letter-spacing:.02em!important;margin-bottom:4px!important;}',
+  '#sfl-panel .sf-hdr-sub{',
+    'display:flex!important;align-items:center!important;gap:5px!important;',
+    'font:400 .68rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(226,238,255,.4)!important;}',
+  '#sfl-panel .sf-dot{',
+    'width:6px!important;height:6px!important;flex-shrink:0!important;',
+    'border-radius:50%!important;background:#22c55e!important;',
+    'box-shadow:0 0 6px rgba(34,197,94,.7)!important;',
+    'animation:_sflBlink 2.6s ease-in-out infinite!important;}',
+  '#sfl-panel .sf-close{',
+    'width:32px!important;height:32px!important;flex-shrink:0!important;',
+    'background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.08)!important;',
+    'border-radius:8px!important;cursor:pointer!important;',
+    'color:rgba(226,238,255,.45)!important;',
+    'display:flex!important;align-items:center!important;justify-content:center!important;',
+    'transition:background .2s,color .2s!important;}',
+  '#sfl-panel .sf-close:hover{background:rgba(239,68,68,.18)!important;color:#f87171!important;border-color:rgba(239,68,68,.25)!important;}',
 
-  /* Bubble */
-  .sfl-msg{display:flex;flex-direction:column;max-width:82%;animation:sflMsgIn .32s cubic-bezier(.16,1,.3,1) both}
-  @keyframes sflMsgIn{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:none}}
-  .sfl-msg.visitor{align-self:flex-end;align-items:flex-end}
-  .sfl-msg.agent{align-self:flex-start;align-items:flex-start}
-  .sfl-bubble{padding:13px 17px;font-size:.86rem;line-height:1.65;word-break:break-word;border-radius:4px}
-  .sfl-bubble.img-only{padding:5px}
-  .sfl-msg.visitor .sfl-bubble{
-    background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 45%,#3b82f6 100%);color:#fff;
-    box-shadow:0 5px 22px rgba(59,130,246,.38);
-    clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,0 100%);
-  }
-  .sfl-msg.agent .sfl-bubble{
-    background:rgba(255,255,255,.068);border:1px solid rgba(255,255,255,.09);
-    color:rgba(232,240,254,.9);
-    clip-path:polygon(0 0,100% 0,100% 100%,7px 100%,0 calc(100% - 7px));
-  }
-  .sfl-meta{display:flex;align-items:center;gap:7px;margin-top:5px;padding:0 3px}
-  .sfl-sender{font-size:.63rem;font-weight:700;color:rgba(59,130,246,.72);letter-spacing:.07em;text-transform:uppercase}
-  .sfl-time{font-size:.63rem;color:rgba(232,240,254,.3)}
+  /* ── Gate ── */
+  '#sfl-panel .sf-gate{',
+    'flex:1!important;display:flex!important;flex-direction:column!important;align-items:center!important;',
+    'padding:36px 26px 28px!important;overflow-y:auto!important;',
+    'transition:opacity .26s ease,transform .26s ease!important;}',
+  '#sfl-panel .sf-gate.fading{opacity:0!important;transform:translateY(-10px)!important;pointer-events:none!important;}',
+  '#sfl-panel .sf-gate.gone{display:none!important;}',
 
-  /* Image in bubble */
-  .sfl-chat-img{
-    max-width:230px;max-height:200px;
-    border-radius:4px;display:block;
-    cursor:pointer;object-fit:cover;
-    transition:opacity .18s;
-  }
-  .sfl-chat-img:hover{opacity:.88}
-  .sfl-img-caption{font-size:.8rem;margin-top:7px;opacity:.9}
+  /* gate icon */
+  '#sfl-panel .sf-gate-ico{',
+    'width:72px!important;height:72px!important;margin-bottom:20px!important;flex-shrink:0!important;',
+    'border-radius:50%!important;',
+    'background:linear-gradient(135deg,rgba(30,58,138,.6),rgba(37,99,235,.35))!important;',
+    'border:1px solid rgba(59,130,246,.28)!important;',
+    'display:flex!important;align-items:center!important;justify-content:center!important;',
+    'box-shadow:0 0 36px rgba(37,99,235,.22)!important;',
+    'font-size:2rem!important;line-height:1!important;}',
 
-  /* Typing indicator */
-  .sfl-typing-wrap{display:flex;flex-direction:column;align-items:flex-start;max-width:82%;animation:sflMsgIn .28s both}
-  .sfl-typing-lbl{font-size:.63rem;font-weight:700;color:rgba(59,130,246,.7);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;padding:0 3px}
-  .sfl-typing{
-    display:inline-flex;align-items:center;gap:5px;padding:13px 17px;
-    background:rgba(255,255,255,.068);border:1px solid rgba(255,255,255,.09);border-radius:4px;
-    clip-path:polygon(0 0,100% 0,100% 100%,7px 100%,0 calc(100% - 7px));
-  }
-  .sfl-typing span{width:7px;height:7px;border-radius:50%;background:rgba(96,165,250,.72);display:inline-block;animation:sflDot .88s ease-in-out infinite}
-  .sfl-typing span:nth-child(2){animation-delay:.15s}
-  .sfl-typing span:nth-child(3){animation-delay:.3s}
-  @keyframes sflDot{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-5px);opacity:1}}
+  '#sfl-panel .sf-gate h3{',
+    'font:800 1.05rem/1.3 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:#e2eeff!important;text-align:center!important;',
+    'margin-bottom:10px!important;letter-spacing:.02em!important;}',
+  '#sfl-panel .sf-gate p{',
+    'font:400 .8rem/1.75 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(226,238,255,.46)!important;text-align:center!important;',
+    'margin-bottom:28px!important;max-width:280px!important;}',
 
-  /* Date divider */
-  .sfl-date-div{display:flex;align-items:center;gap:12px;margin:2px 0}
-  .sfl-date-div span{font-size:.62rem;color:rgba(232,240,254,.27);letter-spacing:.07em;white-space:nowrap}
-  .sfl-date-div::before,.sfl-date-div::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.048)}
+  '#sfl-panel .sf-field{width:100%!important;margin-bottom:12px!important;}',
+  '#sfl-panel .sf-field label{',
+    'display:block!important;margin-bottom:7px!important;',
+    'font:700 .65rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'letter-spacing:.15em!important;text-transform:uppercase!important;',
+    'color:rgba(226,238,255,.4)!important;}',
+  '#sfl-panel .sf-inp{',
+    'width:100%!important;padding:12px 14px!important;',
+    'background:rgba(255,255,255,.055)!important;',
+    'border:1px solid rgba(226,238,255,.1)!important;',
+    'border-radius:10px!important;',
+    'color:#e2eeff!important;',
+    'font:400 .87rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'outline:none!important;',
+    'transition:border-color .2s,background .2s!important;}',
+  '#sfl-panel .sf-inp::placeholder{color:rgba(226,238,255,.22)!important;}',
+  '#sfl-panel .sf-inp:focus{border-color:rgba(59,130,246,.55)!important;background:rgba(37,99,235,.08)!important;}',
+  '#sfl-panel .sf-inp.err{border-color:rgba(239,68,68,.6)!important;background:rgba(239,68,68,.06)!important;}',
 
-  /* Input area */
-  .sfl-input-row{
-    display:flex;gap:8px;align-items:flex-end;
-    padding:12px 14px 14px;
-    border-top:1px solid rgba(59,130,246,.07);background:rgba(255,255,255,.018);flex-shrink:0;
-  }
-  /* Image attach button */
-  .sfl-img-btn{
-    width:38px;height:38px;flex-shrink:0;
-    background:rgba(255,255,255,.06);border:1px solid rgba(232,240,254,.1);
-    border-radius:4px;cursor:pointer;color:rgba(232,240,254,.48);font-size:.86rem;
-    display:flex;align-items:center;justify-content:center;align-self:flex-end;
-    transition:all .2s;
-    clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
-  }
-  .sfl-img-btn:hover{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.3);color:#60a5fa}
-  .sfl-img-btn.uploading{opacity:.45;pointer-events:none}
-  .sfl-textarea{
-    flex:1;padding:11px 14px;
-    background:rgba(255,255,255,.06);border:1px solid rgba(232,240,254,.1);
-    border-radius:4px;color:#e8f0fe;font-size:.85rem;font-family:'DM Sans',sans-serif;
-    line-height:1.55;resize:none;outline:none;min-height:42px;max-height:112px;
-    transition:border-color .2s,background .2s;
-  }
-  .sfl-textarea::placeholder{color:rgba(232,240,254,.27)}
-  .sfl-textarea:focus{border-color:rgba(59,130,246,.5);background:rgba(59,130,246,.04)}
-  .sfl-send{
-    width:38px;height:38px;flex-shrink:0;
-    background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:none;border-radius:4px;
-    cursor:pointer;color:#fff;font-size:.8rem;
-    display:flex;align-items:center;justify-content:center;
-    clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
-    box-shadow:0 4px 16px rgba(59,130,246,.4);transition:opacity .2s,transform .2s;
-    align-self:flex-end;
-  }
-  .sfl-send:hover{opacity:.84;transform:translateY(-2px)}
-  .sfl-send:disabled{opacity:.32;cursor:not-allowed;transform:none}
+  '#sfl-panel .sf-start{',
+    'width:100%!important;margin-top:6px!important;padding:13px 20px!important;',
+    'border:none!important;border-radius:10px!important;cursor:pointer!important;',
+    'background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;',
+    'color:#fff!important;',
+    'font:700 .82rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'letter-spacing:.12em!important;text-transform:uppercase!important;',
+    'display:flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;',
+    'box-shadow:0 6px 24px rgba(37,99,235,.42)!important;',
+    'transition:opacity .2s,transform .2s,box-shadow .2s!important;}',
+  '#sfl-panel .sf-start:hover{opacity:.88!important;transform:translateY(-2px)!important;box-shadow:0 10px 32px rgba(37,99,235,.55)!important;}',
+  '#sfl-panel .sf-start svg{flex-shrink:0!important;}',
 
-  /* Upload progress bar */
-  .sfl-upload-progress{
-    height:2px;background:rgba(59,130,246,.15);flex-shrink:0;overflow:hidden;display:none;
-  }
-  .sfl-upload-progress.active{display:block}
-  .sfl-upload-progress::after{
-    content:'';display:block;height:100%;width:35%;
-    background:linear-gradient(90deg,transparent,#3b82f6,#60a5fa,transparent);
-    animation:sflProg 1.1s linear infinite;
-  }
-  @keyframes sflProg{from{transform:translateX(-100%)}to{transform:translateX(400%)}}
+  /* ── Chat body ── */
+  '#sfl-panel .sf-body{flex:1!important;display:none!important;flex-direction:column!important;overflow:hidden!important;min-height:0!important;}',
+  '#sfl-panel .sf-body.active{display:flex!important;animation:_sflFadeUp .32s ease both!important;}',
 
-  .sfl-footer{text-align:center;padding:5px 0 10px;font-size:.59rem;color:rgba(232,240,254,.18);letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+  /* info bar */
+  '#sfl-panel .sf-info{',
+    'display:flex!important;align-items:center!important;gap:8px!important;',
+    'padding:8px 16px 8px 12px!important;',
+    'border-bottom:1px solid rgba(59,130,246,.07)!important;flex-shrink:0!important;',
+    'background:rgba(255,255,255,.016)!important;}',
+  '#sfl-panel .sf-back{',
+    'display:flex!important;align-items:center!important;gap:6px!important;',
+    'background:none!important;border:none!important;cursor:pointer!important;',
+    'color:rgba(226,238,255,.35)!important;padding:6px 10px!important;border-radius:7px!important;',
+    'font:400 .7rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'white-space:nowrap!important;transition:color .2s,background .2s!important;}',
+  '#sfl-panel .sf-back:hover{color:#60a5fa!important;background:rgba(59,130,246,.1)!important;}',
+  '#sfl-panel .sf-vinfo{flex:1!important;min-width:0!important;text-align:right!important;}',
+  '#sfl-panel .sf-vname{display:block!important;font:700 .76rem/1.3 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(226,238,255,.68)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}',
+  '#sfl-panel .sf-vemail{display:block!important;font:400 .64rem/1.2 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(59,130,246,.55)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;margin-top:2px!important;}',
 
-  @media(max-width:460px){
-    #sfl-panel{bottom:0;right:0;left:0;width:100%;border-radius:14px 14px 0 0;max-height:88vh}
-    #sfl-panel::before{border-radius:14px 14px 0 0}
-    #sfl-fab,#sfl-pulse{bottom:18px;right:18px}
-    #sfl-badge{bottom:64px;right:14px}
-    .sfl-chat-img{max-width:190px}
-  }
-  `;
-  document.head.appendChild(S);
+  /* messages area */
+  '#sfl-panel .sf-msgs{',
+    'flex:1!important;overflow-y:auto!important;overflow-x:hidden!important;',
+    'padding:22px 18px 18px!important;',
+    'display:flex!important;flex-direction:column!important;gap:16px!important;',
+    'scroll-behavior:smooth!important;min-height:0!important;}',
+  '#sfl-panel .sf-msgs::-webkit-scrollbar{width:3px!important;}',
+  '#sfl-panel .sf-msgs::-webkit-scrollbar-thumb{background:rgba(59,130,246,.2)!important;border-radius:2px!important;}',
 
-  /* ── Build DOM ── */
+  /* message row */
+  '#sfl-panel .sf-row{display:flex!important;flex-direction:column!important;max-width:86%!important;gap:5px!important;}',
+  '#sfl-panel .sf-row.visitor{align-self:flex-end!important;align-items:flex-end!important;}',
+  '#sfl-panel .sf-row.agent{align-self:flex-start!important;align-items:flex-start!important;}',
+  '#sfl-panel .sf-row.anim{animation:_sflIn .3s cubic-bezier(.16,1,.3,1) both!important;}',
+
+  /* bubble */
+  '#sfl-panel .sf-bub{',
+    'padding:11px 15px!important;border-radius:14px!important;',
+    'font:400 .855rem/1.6 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'word-break:break-word!important;max-width:100%!important;}',
+  '#sfl-panel .sf-row.visitor .sf-bub{',
+    'background:linear-gradient(145deg,#1d4ed8,#3b82f6)!important;',
+    'color:#fff!important;border-bottom-right-radius:4px!important;',
+    'box-shadow:0 4px 16px rgba(37,99,235,.35)!important;}',
+  '#sfl-panel .sf-row.agent .sf-bub{',
+    'background:rgba(255,255,255,.075)!important;',
+    'border:1px solid rgba(255,255,255,.09)!important;',
+    'color:rgba(226,238,255,.9)!important;',
+    'border-bottom-left-radius:4px!important;}',
+  '#sfl-panel .sf-bub.img-only{padding:4px!important;background:transparent!important;border:none!important;box-shadow:none!important;}',
+
+  /* meta row (sender + time) */
+  '#sfl-panel .sf-meta{',
+    'display:flex!important;align-items:center!important;gap:6px!important;',
+    'padding:0 2px!important;}',
+  '#sfl-panel .sf-sender{font:700 .62rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(96,165,250,.75)!important;letter-spacing:.06em!important;text-transform:uppercase!important;}',
+  '#sfl-panel .sf-time{font:400 .62rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(226,238,255,.28)!important;}',
+
+  /* image in bubble */
+  '#sfl-panel .sf-cimg{display:block!important;max-width:200px!important;max-height:180px!important;',
+    'border-radius:10px!important;object-fit:cover!important;cursor:pointer!important;}',
+  '#sfl-panel .sf-cimg:hover{opacity:.85!important;}',
+
+  /* typing indicator */
+  '#sfl-panel .sf-typing-row{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important;max-width:86%!important;}',
+  '#sfl-panel .sf-typing-lbl{font:700 .62rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(96,165,250,.65)!important;letter-spacing:.06em!important;text-transform:uppercase!important;padding:0 2px!important;}',
+  '#sfl-panel .sf-dots{',
+    'display:inline-flex!important;align-items:center!important;gap:4px!important;',
+    'padding:12px 16px!important;',
+    'background:rgba(255,255,255,.075)!important;border:1px solid rgba(255,255,255,.09)!important;',
+    'border-radius:14px!important;border-bottom-left-radius:4px!important;}',
+  '#sfl-panel .sf-dots span{width:7px!important;height:7px!important;border-radius:50%!important;',
+    'background:rgba(96,165,250,.65)!important;display:inline-block!important;',
+    'animation:_sflDot .88s ease-in-out infinite!important;}',
+  '#sfl-panel .sf-dots span:nth-child(2){animation-delay:.15s!important;}',
+  '#sfl-panel .sf-dots span:nth-child(3){animation-delay:.3s!important;}',
+
+  /* date divider */
+  '#sfl-panel .sf-date{display:flex!important;align-items:center!important;gap:10px!important;}',
+  '#sfl-panel .sf-date span{font:400 .6rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(226,238,255,.25)!important;letter-spacing:.06em!important;white-space:nowrap!important;}',
+  '#sfl-panel .sf-date::before,#sfl-panel .sf-date::after{content:""!important;flex:1!important;',
+    'height:1px!important;background:rgba(255,255,255,.05)!important;}',
+
+  /* upload progress bar */
+  '#sfl-panel .sf-prog{height:2px!important;background:rgba(37,99,235,.12)!important;flex-shrink:0!important;overflow:hidden!important;display:none!important;}',
+  '#sfl-panel .sf-prog.on{display:block!important;}',
+  '#sfl-panel .sf-prog::after{content:""!important;display:block!important;height:100%!important;width:35%!important;',
+    'background:linear-gradient(90deg,transparent,#3b82f6,#60a5fa,transparent)!important;',
+    'animation:_sflProg 1.1s linear infinite!important;}',
+
+  /* input row */
+  '#sfl-panel .sf-input-row{',
+    'display:flex!important;align-items:flex-end!important;gap:8px!important;',
+    'padding:12px 14px 14px!important;',
+    'border-top:1px solid rgba(59,130,246,.07)!important;',
+    'background:rgba(255,255,255,.016)!important;flex-shrink:0!important;}',
+
+  /* image attach button */
+  '#sfl-panel .sf-imgbtn{',
+    'width:38px!important;height:38px!important;flex-shrink:0!important;align-self:flex-end!important;',
+    'background:rgba(255,255,255,.06)!important;border:1px solid rgba(226,238,255,.1)!important;',
+    'border-radius:9px!important;cursor:pointer!important;color:rgba(226,238,255,.42)!important;',
+    'display:flex!important;align-items:center!important;justify-content:center!important;',
+    'transition:background .2s,color .2s!important;}',
+  '#sfl-panel .sf-imgbtn:hover{background:rgba(37,99,235,.14)!important;color:#60a5fa!important;border-color:rgba(59,130,246,.3)!important;}',
+  '#sfl-panel .sf-imgbtn.busy{opacity:.3!important;pointer-events:none!important;}',
+
+  /* textarea */
+  '#sfl-panel .sf-ta{',
+    'flex:1!important;padding:10px 13px!important;',
+    'background:rgba(255,255,255,.06)!important;border:1px solid rgba(226,238,255,.1)!important;',
+    'border-radius:10px!important;color:#e2eeff!important;',
+    'font:400 .86rem/1.55 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'resize:none!important;outline:none!important;',
+    'min-height:40px!important;max-height:110px!important;overflow-y:auto!important;',
+    'transition:border-color .2s,background .2s!important;}',
+  '#sfl-panel .sf-ta::placeholder{color:rgba(226,238,255,.24)!important;}',
+  '#sfl-panel .sf-ta:focus{border-color:rgba(59,130,246,.5)!important;background:rgba(37,99,235,.07)!important;}',
+
+  /* send button */
+  '#sfl-panel .sf-send{',
+    'width:38px!important;height:38px!important;flex-shrink:0!important;align-self:flex-end!important;',
+    'border:none!important;border-radius:9px!important;cursor:pointer!important;',
+    'background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;',
+    'display:flex!important;align-items:center!important;justify-content:center!important;',
+    'box-shadow:0 4px 14px rgba(37,99,235,.42)!important;',
+    'transition:opacity .2s,transform .2s!important;}',
+  '#sfl-panel .sf-send:hover{opacity:.84!important;transform:translateY(-2px)!important;}',
+  '#sfl-panel .sf-send:disabled{opacity:.28!important;pointer-events:none!important;transform:none!important;}',
+
+  /* footer */
+  '#sfl-panel .sf-foot{',
+    'text-align:center!important;padding:5px 0 9px!important;flex-shrink:0!important;',
+    'font:400 .58rem/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;',
+    'color:rgba(226,238,255,.15)!important;letter-spacing:.1em!important;text-transform:uppercase!important;}',
+
+  /* ── Mobile ── */
+  '@media(max-width:500px){',
+    '#sfl-panel{',
+      'bottom:0!important;right:0!important;left:0!important;width:100%!important;max-width:100%!important;',
+      'border-radius:20px 20px 0 0!important;max-height:90vh!important;',
+    '}',
+    '#sfl-fab,#sfl-pulse{bottom:20px!important;right:20px!important;}',
+    '#sfl-badge{bottom:68px!important;right:14px!important;}',
+    '#sfl-panel .sf-cimg{max-width:170px!important;}',
+  '}',
+
+  ].join('');
+
+  var styleEl = document.createElement('style');
+  styleEl.id = 'sfl-css';
+  document.head.appendChild(styleEl);
+  styleEl.textContent = css;
+
+  /* ════════════════════════════════════════════════════════════════
+     BUILD DOM
+     ════════════════════════════════════════════════════════════════ */
   function buildUI() {
-    const pulse = document.createElement('div'); pulse.id = 'sfl-pulse'; document.body.appendChild(pulse);
-    const badge = document.createElement('div'); badge.id = 'sfl-badge'; badge.textContent = '0'; document.body.appendChild(badge);
+    if (ge('sfl-fab')) return;
 
-    const fab = document.createElement('button');
-    fab.id = 'sfl-fab'; fab.setAttribute('aria-label', 'Open live chat');
-    fab.innerHTML = `
-      <svg class="ic-chat" viewBox="0 0 24 24"><path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-      <svg class="ic-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>`;
+    /* Pulse */
+    var pulse = mk('div'); pulse.id = 'sfl-pulse';
+    document.body.appendChild(pulse);
+
+    /* Badge */
+    var badge = mk('div'); badge.id = 'sfl-badge'; badge.textContent = '0';
+    document.body.appendChild(badge);
+
+    /* FAB */
+    var fab = mk('button'); fab.id = 'sfl-fab'; fab.setAttribute('aria-label', 'Chat with support');
+    fab.innerHTML = '<span class="sfl-ic sfl-ic-chat">' + IC.chat + '</span>' +
+                    '<span class="sfl-ic sfl-ic-close">' + IC.close + '</span>';
     document.body.appendChild(fab);
 
-    const panel = document.createElement('div');
-    panel.id = 'sfl-panel'; panel.setAttribute('role','dialog'); panel.setAttribute('aria-label','Swift Freight live chat');
-    panel.innerHTML = `
-      <div class="sfl-hdr">
-        <div class="sfl-avatar">SFL</div>
-        <div class="sfl-hdr-info">
-          <div class="sfl-hdr-name">Support Team</div>
-          <div class="sfl-hdr-sub"><span class="sfl-online"></span><span>Online &middot; typically replies instantly</span></div>
-        </div>
-        <button class="sfl-close-btn" id="sfl-close" aria-label="Close"><i class="fas fa-xmark"></i></button>
-      </div>
+    /* Panel */
+    var panel = mk('div'); panel.id = 'sfl-panel'; panel.setAttribute('role', 'dialog');
+    panel.innerHTML =
 
-      <div class="sfl-gate" id="sfl-gate">
-        <div class="sfl-gate-icon">
-          <svg viewBox="0 0 24 24"><path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-        </div>
-        <h3>Swift Freight Live Support</h3>
-        <p>Get real-time help with tracking, payments, or any delivery question. You can also send photos.</p>
-        <div class="sfl-field">
-          <label>Your Name</label>
-          <input type="text" class="sfl-inp" id="sfl-inp-name" placeholder="e.g. John Smith" maxlength="80" autocomplete="name">
-        </div>
-        <div class="sfl-field">
-          <label>Email Address</label>
-          <input type="email" class="sfl-inp" id="sfl-inp-email" placeholder="e.g. john@email.com" maxlength="120" autocomplete="email">
-        </div>
-        <button class="sfl-gate-btn" id="sfl-start">Start Chat &nbsp;<i class="fas fa-arrow-right" style="font-size:.68rem"></i></button>
-      </div>
+      /* Header */
+      '<div class="sf-hdr">' +
+        '<div class="sf-av">SFL</div>' +
+        '<div class="sf-hdr-info">' +
+          '<span class="sf-hdr-name">Support Team</span>' +
+          '<div class="sf-hdr-sub"><span class="sf-dot"></span><span>Online · replies instantly</span></div>' +
+        '</div>' +
+        '<button class="sf-close" id="sfl-close" title="Close">' + IC.close + '</button>' +
+      '</div>' +
 
-      <div id="sfl-body">
-        <div class="sfl-info-bar">
-          <button class="sfl-back-btn" id="sfl-back"><i class="fas fa-chevron-left" style="font-size:.6rem"></i>&nbsp;New Chat</button>
-          <div class="sfl-vinfo">
-            <div class="sfl-vname" id="sfl-vname"></div>
-            <div class="sfl-vemail" id="sfl-vemail"></div>
-          </div>
-        </div>
-        <div id="sfl-msgs"></div>
-        <div class="sfl-upload-progress" id="sfl-upload-bar"></div>
-        <div class="sfl-input-row">
-          <label class="sfl-img-btn" id="sfl-img-btn" for="sfl-img-input" title="Send a photo"><i class="fas fa-image"></i></label>
-          <input type="file" id="sfl-img-input" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none">
-          <textarea class="sfl-textarea" id="sfl-input" placeholder="Type a message…" rows="1"></textarea>
-          <button class="sfl-send" id="sfl-send" aria-label="Send message"><i class="fas fa-paper-plane" style="font-size:.7rem"></i></button>
-        </div>
-        <div class="sfl-footer">Swift Freight Logistics &middot; Live Support</div>
-      </div>`;
+      /* Gate */
+      '<div class="sf-gate" id="sfl-gate">' +
+        '<div class="sf-gate-ico">💬</div>' +
+        '<h3>Swift Freight Live Support</h3>' +
+        '<p>Real-time help with tracking, payments & deliveries. Send photos too.</p>' +
+        '<div class="sf-field"><label>Your Name</label>' +
+          '<input class="sf-inp" id="sfl-inp-name" type="text" placeholder="e.g. John Smith" maxlength="80" autocomplete="name"></div>' +
+        '<div class="sf-field"><label>Email Address</label>' +
+          '<input class="sf-inp" id="sfl-inp-email" type="email" placeholder="e.g. john@email.com" maxlength="120" autocomplete="email"></div>' +
+        '<button class="sf-start" id="sfl-start">Start Chat ' + IC.arr + '</button>' +
+      '</div>' +
+
+      /* Chat body */
+      '<div class="sf-body" id="sfl-body">' +
+        '<div class="sf-info">' +
+          '<button class="sf-back" id="sfl-back">' + IC.back + ' &nbsp;New Chat</button>' +
+          '<div class="sf-vinfo">' +
+            '<span class="sf-vname" id="sfl-vname"></span>' +
+            '<span class="sf-vemail" id="sfl-vemail"></span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="sf-msgs" id="sfl-msgs"></div>' +
+        '<div class="sf-prog" id="sfl-prog"></div>' +
+        '<div class="sf-input-row">' +
+          '<label class="sf-imgbtn" id="sfl-imgbtn" for="sfl-img-inp" title="Attach photo">' + IC.img + '</label>' +
+          '<input type="file" id="sfl-img-inp" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none!important">' +
+          '<textarea class="sf-ta" id="sfl-ta" placeholder="Type a message…" rows="1"></textarea>' +
+          '<button class="sf-send" id="sfl-send">' + IC.send + '</button>' +
+        '</div>' +
+        '<div class="sf-foot">Swift Freight Logistics · Secure Chat</div>' +
+      '</div>';
+
     document.body.appendChild(panel);
 
     /* Events */
-    $('sfl-fab').addEventListener('click', toggle);
-    $('sfl-close').addEventListener('click', closeChat);
-    $('sfl-start').addEventListener('click', startChat);
-    $('sfl-back').addEventListener('click', resetToGate);
-    $('sfl-send').addEventListener('click', sendMsg);
-    $('sfl-input').addEventListener('keydown', function(e) {
+    fab.addEventListener('click', toggle);
+    ge('sfl-close').addEventListener('click', closeChat);
+    ge('sfl-start').addEventListener('click', startChat);
+    ge('sfl-back').addEventListener('click', resetToGate);
+    ge('sfl-send').addEventListener('click', sendMsg);
+
+    var ta = ge('sfl-ta');
+    ta.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
     });
-    $('sfl-input').addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = Math.min(this.scrollHeight, 112) + 'px';
-    });
-    $('sfl-inp-name').addEventListener('keydown', function(e)  { if (e.key === 'Enter') $('sfl-inp-email').focus(); });
-    $('sfl-inp-email').addEventListener('keydown', function(e) { if (e.key === 'Enter') startChat(); });
-    $('sfl-img-input').addEventListener('change', handleImageSelect);
+    ta.addEventListener('input', autosize);
 
-    if (sessionId && visitorName) showBody();
+    ge('sfl-inp-name').addEventListener('keydown',  function (e) { if (e.key === 'Enter') ge('sfl-inp-email').focus(); });
+    ge('sfl-inp-email').addEventListener('keydown', function (e) { if (e.key === 'Enter') startChat(); });
+    ge('sfl-img-inp').addEventListener('change', handleImageSelect);
+
+    if (sessionId && visitorName) { restoreSession(); }
   }
 
-  /* ── Toggle / open / close ── */
+  function autosize() {
+    var ta = ge('sfl-ta');
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 110) + 'px';
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     OPEN / CLOSE
+     ════════════════════════════════════════════════════════════════ */
   function toggle() { isOpen ? closeChat() : openChat(); }
 
   function openChat() {
     isOpen = true;
-    $('sfl-panel').classList.add('open');
-    $('sfl-fab').classList.add('open');
+    ge('sfl-panel').classList.add('open');
+    ge('sfl-fab').classList.add('open');
     clearBadge();
     if (sessionId && visitorName) { loadHistory(); subscribe(); }
   }
 
   function closeChat() {
     isOpen = false;
-    $('sfl-panel').classList.remove('open');
-    $('sfl-fab').classList.remove('open');
+    ge('sfl-panel').classList.remove('open');
+    ge('sfl-fab').classList.remove('open');
   }
 
-  /* ── Gate → Body ── */
+  /* ════════════════════════════════════════════════════════════════
+     GATE → CHAT
+     ════════════════════════════════════════════════════════════════ */
   function startChat() {
-    const name  = $('sfl-inp-name').value.trim();
-    const email = $('sfl-inp-email').value.trim();
-    let valid = true;
-    if (!name)  { $('sfl-inp-name').classList.add('err');  if (valid) $('sfl-inp-name').focus();  valid = false; }
-    else          $('sfl-inp-name').classList.remove('err');
-    if (!email || !email.includes('@')) {
-      $('sfl-inp-email').classList.add('err'); if (valid) $('sfl-inp-email').focus(); valid = false;
-    } else { $('sfl-inp-email').classList.remove('err'); }
-    if (!valid) return;
+    var name  = ge('sfl-inp-name').value.trim();
+    var email = ge('sfl-inp-email').value.trim();
+    var ok    = true;
 
-    visitorName  = name; visitorEmail = email;
+    if (!name)  { ge('sfl-inp-name').classList.add('err');  if (ok) { ge('sfl-inp-name').focus(); }  ok = false; }
+    else          ge('sfl-inp-name').classList.remove('err');
+    if (!email || !email.includes('@')) {
+      ge('sfl-inp-email').classList.add('err'); if (ok) { ge('sfl-inp-email').focus(); } ok = false;
+    } else { ge('sfl-inp-email').classList.remove('err'); }
+    if (!ok) return;
+
+    visitorName  = name;
+    visitorEmail = email;
     sessionId    = 'sfl_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-    localStorage.setItem(K_SID, sessionId); localStorage.setItem(K_NAME, visitorName); localStorage.setItem(K_EMAIL, visitorEmail);
+    localStorage.setItem(K_SID, sessionId);
+    localStorage.setItem(K_NAME, visitorName);
+    localStorage.setItem(K_EMAIL, visitorEmail);
     isFirstMsg = true;
-    showBody();
-    subscribe();
-    setTimeout(() => $('sfl-input').focus(), 80);
+
+    /* Fade gate out, then reveal chat body */
+    var gate = ge('sfl-gate');
+    gate.classList.add('fading');
+    setTimeout(function () {
+      gate.classList.add('gone');
+      showBody();
+      subscribe();
+      setTimeout(function () { ge('sfl-ta').focus(); }, 60);
+    }, 260);
+  }
+
+  function restoreSession() {
+    isFirstMsg = false;
+    var gate = ge('sfl-gate');
+    gate.classList.add('gone');
+    ge('sfl-body').classList.add('active');
+    ge('sfl-vname').textContent  = visitorName;
+    ge('sfl-vemail').textContent = visitorEmail;
+  }
+
+  function showBody() {
+    ge('sfl-body').classList.add('active');
+    ge('sfl-vname').textContent  = visitorName;
+    ge('sfl-vemail').textContent = visitorEmail;
+    /* Show welcome immediately for new visitors */
+    if (isFirstMsg) {
+      setTimeout(function () {
+        appendMsg({ role:'agent', content:WELCOME, visitor_name:'Support Agent', created_at:new Date().toISOString() }, true);
+      }, 180);
+    }
   }
 
   function resetToGate() {
     sessionId = ''; visitorName = ''; visitorEmail = '';
     localStorage.removeItem(K_SID); localStorage.removeItem(K_NAME); localStorage.removeItem(K_EMAIL);
-    if (rtSub) { try { rtSub.unsubscribe(); } catch(_){} rtSub = null; }
+    if (rtSub) { try { rtSub.unsubscribe(); } catch (_) {} rtSub = null; }
     isFirstMsg = true; skipWelcomeOnce = false;
-    $('sfl-msgs').innerHTML = '';
-    $('sfl-inp-name').value = ''; $('sfl-inp-email').value = '';
-    $('sfl-body').style.display = 'none';
-    $('sfl-gate').style.display = '';
-    setTimeout(() => $('sfl-inp-name').focus(), 80);
+    ge('sfl-msgs').innerHTML = '';
+    ge('sfl-inp-name').value = ''; ge('sfl-inp-email').value = '';
+    ge('sfl-body').classList.remove('active');
+    var gate = ge('sfl-gate');
+    gate.classList.remove('fading', 'gone');
+    setTimeout(function () { ge('sfl-inp-name').focus(); }, 60);
   }
 
-  function showBody() {
-    $('sfl-gate').style.display = 'none';
-    $('sfl-body').style.cssText = 'display:flex;flex-direction:column';
-    $('sfl-vname').textContent  = visitorName;
-    $('sfl-vemail').textContent = visitorEmail;
-  }
-
-  /* ── Send text message ── */
-  async function sendMsg() {
-    const ta = $('sfl-input'), text = ta.value.trim();
+  /* ════════════════════════════════════════════════════════════════
+     SEND TEXT
+     ════════════════════════════════════════════════════════════════ */
+  function sendMsg() {
+    var ta   = ge('sfl-ta');
+    var text = ta.value.trim();
     if (!text || !sessionId) return;
-    const btn = $('sfl-send');
-    btn.disabled = true; ta.value = ''; ta.style.height = 'auto';
 
-    /* Capture first-message state NOW (sync) before any async boundary */
-    const wasFirst = isFirstMsg;
+    var btn = ge('sfl-send');
+    btn.disabled = true;
+    ta.value = ''; ta.style.height = 'auto';
+
+    var wasFirst = isFirstMsg;
     if (wasFirst) { isFirstMsg = false; skipWelcomeOnce = true; }
 
-    const now = new Date().toISOString();
-    if (wasFirst) {
-      appendMsg({ role:'agent', content:WELCOME, visitor_name:'Support Agent', created_at:now });
-    }
+    var now = new Date().toISOString();
+    /* Welcome already shown by showBody() — only insert to DB, not UI */
     appendMsg({ role:'visitor', content:text, visitor_name:visitorName, created_at:now });
 
-    getSb().then(function(sb) {
-      /* Use captured wasFirst (stable closure), not the shared flag, to decide inserts */
-      if (wasFirst) {
-        sb.from('chat_messages')
-          .insert({ session_id:sessionId, role:'agent', content:WELCOME, visitor_name:'Support Agent', visitor_email:'', page_url:location.href })
-          .catch(e => console.error('[SFL] welcome insert', e));
+    getSb().then(function (sb) {
+      function ins(row) {
+        return sb.from('chat_messages').insert(row).then(function (r) {
+          if (r && r.error) console.error('[SFL] insert error:', r.error.message, r.error);
+        });
       }
-      sb.from('chat_messages')
-        .insert({ session_id:sessionId, role:'visitor', content:text, visitor_name:visitorName, visitor_email:visitorEmail, page_url:location.href })
-        .catch(e => console.error('[SFL] msg insert', e));
-      notifyAdmin(text, wasFirst);
-    }).catch(e => console.error('[SFL] getSb', e))
-      .finally(function() { btn.disabled = false; $('sfl-input').focus(); });
+      var chain = Promise.resolve();
+      if (wasFirst) {
+        chain = chain.then(function () {
+          return ins({ session_id:sessionId, role:'agent', content:WELCOME,
+            visitor_name:'Support Agent', visitor_email:'' });
+        });
+      }
+      chain.then(function () {
+        return ins({ session_id:sessionId, role:'visitor', content:text,
+          visitor_name:visitorName, visitor_email:visitorEmail });
+      }).then(function () { notifyAdmin(text, wasFirst); });
+
+    }).catch(function (e) { console.error('[SFL] getSb', e); })
+      .finally(function () { btn.disabled = false; ge('sfl-ta').focus(); });
   }
 
-  /* ── Image upload + send ── */
-  async function handleImageSelect() {
-    const input = $('sfl-img-input');
-    const file  = input && input.files && input.files[0];
+  /* ════════════════════════════════════════════════════════════════
+     SEND IMAGE
+     ════════════════════════════════════════════════════════════════ */
+  function handleImageSelect() {
+    var input = ge('sfl-img-inp');
+    var file  = input && input.files && input.files[0];
     if (!file || !sessionId) { if (input) input.value = ''; return; }
 
     if (file.size > 8 * 1024 * 1024) {
-      appendMsg({ role:'agent', content:'⚠ Image must be under 8 MB. Please try a smaller file.', visitor_name:'Support', created_at:new Date().toISOString() });
+      appendMsg({ role:'agent', content:'⚠️ Image must be under 8 MB.', visitor_name:'Support', created_at:new Date().toISOString() });
       input.value = ''; return;
     }
 
-    const imgBtn = $('sfl-img-btn');
-    const bar    = $('sfl-upload-bar');
-    imgBtn.classList.add('uploading');
-    bar.classList.add('active');
+    var imgBtn = ge('sfl-imgbtn');
+    var bar    = ge('sfl-prog');
+    imgBtn.classList.add('busy'); bar.classList.add('on');
 
-    /* Capture first-message state NOW (sync) */
-    const wasFirst = isFirstMsg;
+    var wasFirst = isFirstMsg;
     if (wasFirst) { isFirstMsg = false; skipWelcomeOnce = true; }
+    var now = new Date().toISOString();
+    /* Welcome already shown by showBody() — only insert to DB, not UI */
 
-    const now = new Date().toISOString();
-    if (wasFirst) {
-      appendMsg({ role:'agent', content:WELCOME, visitor_name:'Support Agent', created_at:now });
-    }
+    getSb().then(function (sb) {
+      return uploadImage(sb, file).then(function (url) {
+        appendMsg({ role:'visitor', content:'📷 Photo', image_url:url, visitor_name:visitorName, created_at:now });
 
-    try {
-      const sb  = await getSb();
-      const url = await uploadImage(sb, file);
-
-      /* Render optimistically — content must be non-empty to satisfy NOT NULL */
-      appendMsg({ role:'visitor', content:'📷 Photo', image_url:url, visitor_name:visitorName, created_at:now });
-
-      /* Persist */
-      if (wasFirst) {
-        await sb.from('chat_messages').insert({ session_id:sessionId, role:'agent', content:WELCOME, visitor_name:'Support Agent', visitor_email:'', page_url:location.href });
-      }
-      await sb.from('chat_messages').insert({ session_id:sessionId, role:'visitor', content:'📷 Photo', image_url:url, visitor_name:visitorName, visitor_email:visitorEmail, page_url:location.href });
-
-      notifyAdmin('📷 [Photo]', wasFirst);
-    } catch(e) {
-      console.error('[SFL] image upload', e);
-      appendMsg({ role:'agent', content:'⚠ Failed to send image: ' + (e.message || 'Please try again'), visitor_name:'Support', created_at:new Date().toISOString() });
-    } finally {
-      imgBtn.classList.remove('uploading');
-      bar.classList.remove('active');
+        function ins(row) {
+          return sb.from('chat_messages').insert(row).then(function (r) {
+            if (r && r.error) throw new Error(r.error.message);
+          });
+        }
+        var chain = Promise.resolve();
+        if (wasFirst) chain = chain.then(function () {
+          return ins({ session_id:sessionId, role:'agent', content:WELCOME,
+            visitor_name:'Support Agent', visitor_email:'' });
+        });
+        return chain.then(function () {
+          return ins({ session_id:sessionId, role:'visitor', content:'📷 Photo',
+            image_url:url, visitor_name:visitorName, visitor_email:visitorEmail });
+        }).then(function () { notifyAdmin('📷 Photo', wasFirst); });
+      });
+    }).catch(function (e) {
+      console.error('[SFL] image:', e);
+      appendMsg({ role:'agent', content:'⚠️ Could not send image. Try again.', visitor_name:'Support', created_at:new Date().toISOString() });
+    }).finally(function () {
+      imgBtn.classList.remove('busy'); bar.classList.remove('on');
       input.value = '';
-    }
+    });
   }
 
-  /* ── Upload to Supabase Storage ── */
-  async function uploadImage(sb, file) {
-    const ext  = file.type.split('/')[1] || 'jpg';
-    const path = (sessionId || 'anon') + '/' + Date.now() + '-' + Math.random().toString(36).slice(2,7) + '.' + ext;
-    const { error } = await sb.storage.from(BUCKET).upload(path, file, { contentType: file.type, cacheControl: '3600' });
-    if (error) throw new Error(error.message || 'Upload failed');
-    const { data } = sb.storage.from(BUCKET).getPublicUrl(path);
-    return data.publicUrl;
+  function uploadImage(sb, file) {
+    var ext  = (file.type.split('/')[1] || 'jpg').replace('jpeg','jpg');
+    var path = sessionId + '/' + Date.now() + '-' + Math.random().toString(36).slice(2,6) + '.' + ext;
+    return sb.storage.from(BUCKET).upload(path, file, { contentType:file.type, cacheControl:'3600' })
+      .then(function (r) {
+        if (r.error) throw new Error(r.error.message || 'Upload failed');
+        return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+      });
   }
 
-  /* ── Notify admin via edge function ── */
+  /* ════════════════════════════════════════════════════════════════
+     NOTIFY ADMIN
+     ════════════════════════════════════════════════════════════════ */
   function notifyAdmin(content, wasFirst) {
     fetch(FN + '/chat-notify', {
       method:'POST', headers:HDR,
-      body: JSON.stringify({ role:'visitor', content, isFirst:!!wasFirst, visitorName, visitorEmail, sessionId, pageUrl:location.href }),
-    }).catch(e => console.error('[SFL] notify', e));
+      body:JSON.stringify({ role:'visitor', content:content, isFirst:!!wasFirst,
+        visitorName:visitorName, visitorEmail:visitorEmail, sessionId:sessionId, pageUrl:location.href }),
+    }).catch(function (e) { console.error('[SFL] notify:', e); });
   }
 
-  /* ── Realtime ── */
-  async function subscribe() {
+  /* ════════════════════════════════════════════════════════════════
+     REALTIME — unfiltered, client-side session check.
+     Avoids REPLICA IDENTITY FULL requirement for column filters.
+     ════════════════════════════════════════════════════════════════ */
+  function subscribe() {
     if (rtSub || !sessionId) return;
-    try {
-      const sb = await getSb();
-      rtSub = sb.channel('sfl-' + sessionId)
-        .on('postgres_changes', { event:'INSERT', schema:'public', table:'chat_messages', filter:'session_id=eq.' + sessionId },
-          function(payload) {
-            const m = payload.new;
+    getSb().then(function (sb) {
+      rtSub = sb.channel('sfl-v-' + sessionId)
+        .on('postgres_changes', { event:'INSERT', schema:'public', table:'chat_messages' },
+          function (payload) {
+            var m = payload.new;
+            if (m.session_id !== sessionId) return;
             if (m.role !== 'agent') return;
             if (skipWelcomeOnce && m.content === WELCOME) { skipWelcomeOnce = false; return; }
             appendMsg(m, true);
             if (!isOpen) { unread++; updateBadge(); }
           })
-        .subscribe();
-    } catch(e) { console.error('[SFL] RT', e); }
+        .subscribe(function (status) {
+          if (status === 'CHANNEL_ERROR') console.warn('[SFL] Realtime: run Setup SQL in Supabase.');
+        });
+    }).catch(function (e) { console.error('[SFL] subscribe:', e); });
   }
 
-  /* ── Load history ── */
-  async function loadHistory() {
-    const area = $('sfl-msgs');
+  /* ════════════════════════════════════════════════════════════════
+     LOAD HISTORY
+     ════════════════════════════════════════════════════════════════ */
+  function loadHistory() {
+    var area = ge('sfl-msgs');
     if (!area || !sessionId) return;
-    try {
-      const sb = await getSb();
-      const { data, error } = await sb.from('chat_messages').select('*').eq('session_id', sessionId).order('created_at', { ascending:true });
-      if (error) throw error;
+    getSb().then(function (sb) {
+      return sb.from('chat_messages').select('*').eq('session_id', sessionId).order('created_at', { ascending:true });
+    }).then(function (res) {
+      if (res.error) throw res.error;
       area.innerHTML = '';
-      if (data && data.length) {
+      if (res.data && res.data.length) {
         isFirstMsg = false;
-        let lastDate = '';
-        data.forEach(function(m) {
-          const d = new Date(m.created_at).toLocaleDateString([], { weekday:'short', month:'short', day:'numeric' });
+        var lastDate = '';
+        res.data.forEach(function (m) {
+          var d = new Date(m.created_at).toLocaleDateString([], { weekday:'short', month:'short', day:'numeric' });
           if (d !== lastDate) { appendDateDiv(d); lastDate = d; }
           appendMsg(m, false);
         });
         scrollBottom();
       }
-    } catch(e) { console.error('[SFL] history', e); }
+    }).catch(function (e) { console.error('[SFL] history:', e); });
   }
 
-  /* ── Render message ── */
+  /* ════════════════════════════════════════════════════════════════
+     RENDER MESSAGES
+     ════════════════════════════════════════════════════════════════ */
   function appendMsg(m, animate) {
-    const area = $('sfl-msgs');
+    var area = ge('sfl-msgs');
     if (!area) return;
-    if (animate === undefined) animate = true;
 
-    const wrap = document.createElement('div');
-    wrap.className = 'sfl-msg ' + m.role;
-    if (!animate) wrap.style.animation = 'none';
+    var row = mk('div');
+    row.className = 'sf-row ' + m.role + (animate !== false ? ' anim' : '');
 
-    const bub = document.createElement('div');
-
+    var bub = mk('div');
     if (m.image_url) {
-      bub.className = 'sfl-bubble img-only';
-      const img = document.createElement('img');
-      img.className = 'sfl-chat-img';
-      img.src = m.image_url;
-      img.setAttribute('loading', 'lazy');
-      img.setAttribute('alt', 'Shared image');
-      img.onclick = function() { window.open(m.image_url, '_blank'); };
+      bub.className = 'sf-bub img-only';
+      var img = mk('img');
+      img.className = 'sf-cimg'; img.src = m.image_url; img.alt = 'Photo';
+      img.setAttribute('loading','lazy');
+      img.onclick = function () { window.open(m.image_url,'_blank'); };
       bub.appendChild(img);
-      if (m.content && m.content !== '📷 Photo') {
-        const cap = document.createElement('div');
-        cap.className = 'sfl-img-caption';
-        cap.textContent = m.content;
-        bub.appendChild(cap);
-      }
     } else {
-      bub.className = 'sfl-bubble';
-      bub.textContent = m.content;
+      bub.className = 'sf-bub';
+      bub.textContent = m.content || '';
     }
-    wrap.appendChild(bub);
+    row.appendChild(bub);
 
-    const meta = document.createElement('div');
-    meta.className = 'sfl-meta';
+    var meta = mk('div'); meta.className = 'sf-meta';
     if (m.role === 'agent') {
-      const s = document.createElement('span');
-      s.className = 'sfl-sender';
+      var s = mk('span'); s.className = 'sf-sender';
       s.textContent = m.visitor_name || 'Support Agent';
       meta.appendChild(s);
     }
-    const t = document.createElement('span');
-    t.className = 'sfl-time';
+    var t = mk('span'); t.className = 'sf-time';
     t.textContent = fmtTime(m.created_at);
     meta.appendChild(t);
-    wrap.appendChild(meta);
+    row.appendChild(meta);
 
-    area.appendChild(wrap);
+    area.appendChild(row);
     if (animate !== false) scrollBottom();
   }
 
   function appendDateDiv(label) {
-    const div = document.createElement('div');
-    div.className = 'sfl-date-div';
-    div.innerHTML = '<span>' + label + '</span>';
-    $('sfl-msgs').appendChild(div);
+    var d = mk('div'); d.className = 'sf-date';
+    d.innerHTML = '<span>' + label + '</span>';
+    ge('sfl-msgs').appendChild(d);
   }
 
   function scrollBottom() {
-    const a = $('sfl-msgs');
-    if (a) setTimeout(function(){ a.scrollTop = a.scrollHeight; }, 30);
+    var a = ge('sfl-msgs');
+    if (a) setTimeout(function () { a.scrollTop = a.scrollHeight; }, 30);
   }
 
   function fmtTime(iso) {
     try { return new Date(iso).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }); }
-    catch(_) { return ''; }
+    catch (_) { return ''; }
   }
 
-  /* ── Badge ── */
+  /* ════════════════════════════════════════════════════════════════
+     BADGE
+     ════════════════════════════════════════════════════════════════ */
   function updateBadge() {
-    const b = $('sfl-badge');
+    var b = ge('sfl-badge');
     if (!b) return;
     b.textContent = unread > 9 ? '9+' : String(unread);
     b.classList.toggle('show', unread > 0);
   }
   function clearBadge() { unread = 0; updateBadge(); }
 
-  /* ── Lazy Supabase client ── */
+  /* ════════════════════════════════════════════════════════════════
+     SUPABASE CLIENT
+     ════════════════════════════════════════════════════════════════ */
   function getSb() {
-    return new Promise(function(res, rej) {
+    return new Promise(function (res, rej) {
       if (sbClient) { res(sbClient); return; }
       function init() {
         if (window.supabase && window.supabase.createClient) {
           sbClient = window.supabase.createClient(SB_URL, SB_ANON);
           res(sbClient);
-        } else { rej(new Error('Supabase unavailable')); }
+        } else { rej(new Error('Supabase SDK not available')); }
       }
       if (window.supabase && window.supabase.createClient) { init(); return; }
-      const existing = document.querySelector('script[src*="supabase"]');
-      if (!existing) {
-        const sc = document.createElement('script');
-        sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-        sc.onload = init;
-        sc.onerror = function(){ rej(new Error('Failed to load Supabase CDN')); };
-        document.head.appendChild(sc);
-      } else {
-        let n = 0;
-        const iv = setInterval(function() {
-          n++;
-          if (window.supabase && window.supabase.createClient) { clearInterval(iv); init(); }
-          else if (n > 50) { clearInterval(iv); rej(new Error('Supabase load timeout')); }
-        }, 100);
-      }
+      var n = 0, iv = setInterval(function () {
+        n++;
+        if (window.supabase && window.supabase.createClient) { clearInterval(iv); init(); }
+        else if (n > 60) { clearInterval(iv); rej(new Error('Supabase load timeout')); }
+      }, 100);
     });
   }
 
-  function $(id) { return document.getElementById(id); }
+  /* ─── Utils ─── */
+  function ge(id) { return document.getElementById(id); }
+  function mk(tag) { return document.createElement(tag); }
 
+  /* ─── Mount ─── */
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildUI);
   else buildUI();
 
