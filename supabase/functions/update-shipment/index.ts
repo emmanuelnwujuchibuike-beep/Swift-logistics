@@ -56,7 +56,7 @@ Deno.serve(async (req: Request) => {
     // Fetch existing record for customer info
     const { data: rows, error: fetchErr } = await supabase
       .from('shipments')
-      .select('customer_email, name, destination, tracking_id, amount_due, btc_address, usdt_address, bank_name, account_name, bank_number, paypal_email, cashapp_tag, zelle_id, western_union_info')
+      .select('customer_email, name, destination, tracking_id, amount_due, btc_address, usdt_address, bank_name, account_name, bank_number, routing_number, paypal_email, cashapp_tag, zelle_id, western_union_info, venmo_tag, moneygram_info, amazon_gc_info, google_gc_info, apple_gc_info, vanilla_gc_info, ebay_gc_info')
       .eq('tracking_id', body.trackingId)
       .limit(1);
 

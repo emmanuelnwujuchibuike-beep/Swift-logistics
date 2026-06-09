@@ -209,12 +209,55 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
 .ham-btn{display:none;background:none;border:1px solid var(--border2);color:var(--muted2);width:34px;height:34px;border-radius:3px;cursor:pointer;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;transition:all .2s}
 .ham-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-/* ── Mobile bottom nav ── */
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;background:var(--bg2);border-top:1px solid var(--border);padding:6px 0;gap:0}
-.mob-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);cursor:pointer;transition:color .2s;border:none;background:none;font-family:'DM Sans'}
-.mob-nav-item i{font-size:1rem}
-.mob-nav-item.active{color:var(--accent)}
-[data-theme="light"] .mobile-nav{background:var(--bg2);border-color:var(--border)}
+/* ── Premium Admin Mobile Nav Overlay ── */
+#admin-mobile-nav{position:fixed;inset:0;z-index:250;background:rgba(3,8,26,.97);backdrop-filter:blur(32px) saturate(1.8);-webkit-backdrop-filter:blur(32px) saturate(1.8);opacity:0;pointer-events:none;transition:opacity .4s cubic-bezier(.76,0,.24,1);}
+#admin-mobile-nav.open{opacity:1;pointer-events:all;}
+#admin-mobile-nav::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent-hi),var(--accent),transparent);opacity:.6;}
+#admin-mobile-nav::after{content:'';position:absolute;bottom:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.07),transparent);pointer-events:none;}
+.amn-inner{position:relative;z-index:2;padding:32px 36px 52px;display:flex;flex-direction:column;min-height:100%;overflow-y:auto;}
+.amn-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px;}
+.amn-logo{display:flex;align-items:center;gap:10px;}
+.amn-logo img{width:30px;height:30px;filter:drop-shadow(0 2px 10px rgba(59,130,246,.4));}
+.amn-logo-text{font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.18em;}
+.amn-logo-gt{background:linear-gradient(135deg,var(--accent),var(--accent-hi));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.amn-logo-sub{font:400 6px/1 'DM Sans';letter-spacing:.52em;text-transform:uppercase;color:rgba(59,130,246,.38);margin-top:3px;}
+.amn-close{width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2);border-radius:2px;cursor:pointer;color:var(--accent);font-size:.85rem;transition:background .25s,transform .3s;flex-shrink:0;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.amn-close:hover{background:rgba(59,130,246,.18);transform:rotate(90deg) scale(1.06);}
+.amn-nav-label{font:700 7px/1 'DM Sans';letter-spacing:.48em;text-transform:uppercase;color:rgba(59,130,246,.38);margin-bottom:20px;}
+.amn-links{list-style:none;display:flex;flex-direction:column;}
+.amn-links li{border-bottom:1px solid var(--border);opacity:0;transform:translateX(-24px);transition:opacity 0s,transform 0s;}
+#admin-mobile-nav.open .amn-links li{opacity:1;transform:none;transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);}
+#admin-mobile-nav.open .amn-links li:nth-child(1){transition-delay:.07s;}
+#admin-mobile-nav.open .amn-links li:nth-child(2){transition-delay:.14s;}
+#admin-mobile-nav.open .amn-links li:nth-child(3){transition-delay:.21s;}
+#admin-mobile-nav.open .amn-links li:nth-child(4){transition-delay:.28s;}
+.amn-link{display:flex;align-items:center;justify-content:space-between;padding:18px 0;font:700 1.85rem/1 'Bebas Neue';letter-spacing:.06em;color:var(--muted);cursor:pointer;width:100%;text-align:left;background:none;border:none;transition:color .2s,padding-left .3s;}
+.amn-arrow{width:32px;height:32px;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.18);color:var(--accent);font-size:.65rem;clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));transition:background .25s,transform .3s,box-shadow .25s;}
+.amn-link:hover,.amn-link.amn-active{color:var(--accent);padding-left:8px;}
+.amn-link:hover .amn-arrow,.amn-link.amn-active .amn-arrow{background:rgba(59,130,246,.18);transform:translateX(4px);box-shadow:0 0 16px rgba(59,130,246,.25);}
+.amn-footer{margin-top:auto;padding-top:28px;border-top:1px solid var(--border);opacity:0;transition:opacity 0s;}
+#admin-mobile-nav.open .amn-footer{opacity:1;transition:opacity .5s ease .36s;}
+[data-theme="light"] #admin-mobile-nav{background:rgba(240,244,252,.97);}
+[data-theme="light"] .amn-link{color:rgba(30,41,59,.55);}
+[data-theme="light"] .amn-link:hover,[data-theme="light"] .amn-link.amn-active{color:var(--accent);}
+
+/* ── Payment method toggle system ── */
+.pm-section-lbl{font:600 .62rem/1 'DM Sans';letter-spacing:.3em;text-transform:uppercase;color:var(--muted2);margin:0 0 10px;}
+.pm-toggle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:6px;margin-bottom:14px;}
+.pm-toggle-card{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:10px 10px 8px;border-radius:5px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .2s;position:relative;user-select:none;}
+.pm-toggle-card.pm-active{border-color:var(--accent);background:rgba(59,130,246,.08);}
+.pm-toggle-card:hover:not(.pm-active){border-color:var(--border2);}
+.pm-toggle-icon{width:26px;height:26px;border-radius:4px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:background .2s;}
+.pm-toggle-card.pm-active .pm-toggle-icon{background:rgba(255,255,255,.1);}
+.pm-toggle-lbl{font:600 .63rem/1.2 'DM Sans';color:var(--muted);line-height:1.2;}
+.pm-toggle-card.pm-active .pm-toggle-lbl{color:var(--text);}
+.pm-toggle-chk{position:absolute;top:5px;right:6px;font-size:.65rem;color:var(--accent);opacity:0;transition:opacity .2s;}
+.pm-toggle-card.pm-active .pm-toggle-chk{opacity:1;}
+.pm-fields-wrap{display:flex;flex-direction:column;gap:8px;}
+.pm-fields-panel{border-radius:5px;border:1px solid rgba(59,130,246,.2);background:rgba(59,130,246,.04);padding:14px 16px;display:none;}
+.pm-fields-panel.pm-panel-active{display:block;}
+.pm-panel-hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(59,130,246,.14);font:700 .66rem/1 'DM Sans';letter-spacing:.24em;text-transform:uppercase;color:var(--accent);}
+.pm-panel-hdr i{font-size:.85rem;flex-shrink:0;}
 
 /* ── Theme toggle button ── */
 .topbar-theme{background:none;border:1px solid var(--border2);color:var(--muted2);width:34px;height:34px;border-radius:3px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
@@ -284,17 +327,16 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
     width:min(260px,82vw);
     transform:translateX(-100%);
     transition:transform .28s cubic-bezier(.22,1,.36,1);
-    box-shadow:12px 0 48px rgba(0,0,0,.5);
+    box-shadow:none;
   }
   .sidebar.open{transform:translateX(0)}
   .main-content{
     grid-column:1/-1;
     overflow-y:auto;
     height:calc(100vh - var(--hdr-h));
-    padding:20px 16px 100px;
+    padding:20px 16px 60px;
   }
   .ham-btn{display:flex}
-  .mobile-nav{display:flex}
   .stats-grid{grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
   .form-grid-2,.form-grid-3{grid-template-columns:1fr}
   .topbar-brand{font-size:.96rem}
@@ -440,22 +482,21 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
         <div class="conn-status"><span class="conn-dot" id="conn-dot"></span><span id="conn-label">Connecting…</span></div>
         <button class="topbar-theme" id="theme-toggle" title="Toggle light / dark mode"><i class="fas fa-sun" id="theme-icon"></i></button>
         <button id="secret-topbar-btn" tabindex="-1" aria-hidden="true"></button>
-        <button class="topbar-logout" id="logout-btn"><i class="fas fa-right-from-bracket"></i><span> Lock</span></button>
+        <a href="payment.html" class="topbar-logout"><i class="fas fa-arrow-left"></i><span> Back</span></a>
       </div>
     </header>
 
     <!-- Secret popup (revealed by 1s hold on invisible topbar button) -->
     <div id="secret-popup">
       <div class="secret-popup-hdr">
-        <span class="secret-popup-title"><i class="fas fa-shield-halved" style="margin-right:6px"></i>API Secret</span>
+        <span class="secret-popup-title"><i class="fas fa-shield-halved" style="margin-right:6px"></i>Security</span>
         <button class="secret-popup-close" onclick="document.getElementById('secret-popup').classList.remove('open')"><i class="fas fa-times"></i></button>
       </div>
-      <div class="f-group" style="margin-bottom:12px;">
-        <label>Admin Secret Key</label>
-        <input type="text" id="s-api-secret" class="f-input mono" placeholder="SFL-ADMIN-2025-Xp7kZ3mN">
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
+        All secrets are stored in <strong style="color:var(--accent)">Netlify Environment Variables</strong> — never in the page source.<br><br>
+        To change the admin password or API secret, go to:<br>
+        <strong>Netlify → Site → Settings → Environment Variables</strong>
       </div>
-      <button class="btn-primary" style="width:100%;" onclick="saveApiSecret()"><i class="fas fa-floppy-disk"></i> Save Secret</button>
-      <p id="api-result" style="margin-top:10px;font-size:.8rem;display:none;"></p>
     </div>
 
     <nav class="sidebar">
@@ -610,21 +651,45 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
         </div>
 
         <div class="form-card">
-          <div class="form-card-title"><i class="fas fa-credit-card"></i> Payment (optional)</div>
-          <div class="form-grid form-grid-2">
-            <div class="f-group"><label>Payment Status</label>
+          <div class="form-card-title"><i class="fas fa-credit-card"></i> Payment <span style="font:400 .62rem 'DM Sans';color:var(--muted2);letter-spacing:.06em;margin-left:6px;text-transform:none;">— tap each method to enable</span></div>
+          <div class="form-grid form-grid-2" style="margin-bottom:18px;">
+            <div class="f-group" style="margin-bottom:0"><label>Payment Status</label>
               <select id="n-paystatus" class="f-select"><option value="not-required">Not Required</option><option value="required">Required</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option></select>
             </div>
-            <div class="f-group"><label>Amount Due</label><input type="text" id="n-amount" class="f-input" placeholder="$1,200.00"></div>
-            <div class="f-group"><label>BTC Address</label><input type="text" id="n-btc" class="f-input mono" placeholder="bc1q…"></div>
-            <div class="f-group"><label>USDT Address</label><input type="text" id="n-usdt" class="f-input mono" placeholder="TRC20 / ERC20…"></div>
-            <div class="f-group"><label>Bank Name</label><input type="text" id="n-bank" class="f-input" placeholder="Chase Bank"></div>
-            <div class="f-group"><label>Account Name</label><input type="text" id="n-accname" class="f-input" placeholder="Swift Freight LLC"></div>
-            <div class="f-group"><label>Account Number</label><input type="text" id="n-accnum" class="f-input mono" placeholder="000123456789"></div>
-            <div class="f-group"><label>PayPal Email</label><input type="text" id="n-paypal" class="f-input" placeholder="payments@example.com"></div>
-            <div class="f-group"><label>Cash App $Cashtag</label><input type="text" id="n-cashapp" class="f-input mono" placeholder="$SwiftFreight"></div>
-            <div class="f-group"><label>Zelle (Email / Phone)</label><input type="text" id="n-zelle" class="f-input" placeholder="zelle@example.com or +1 555…"></div>
-            <div class="f-group" style="grid-column:1/-1"><label>Western Union Info</label><textarea id="n-wu" class="f-input" rows="3" style="resize:vertical;height:auto" placeholder="Recipient name, address, MTCN reference…"></textarea></div>
+            <div class="f-group" style="margin-bottom:0"><label>Amount Due</label><input type="text" id="n-amount" class="f-input" placeholder="$1,200.00"></div>
+          </div>
+          <div class="pm-section-lbl">Enable Payment Methods</div>
+          <div class="pm-toggle-grid">
+            <div class="pm-toggle-card" data-panel="n-panel-btc"><div class="pm-toggle-icon" style="color:#f7931a"><i class="fab fa-bitcoin"></i></div><div class="pm-toggle-lbl">Bitcoin</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-usdt"><div class="pm-toggle-icon" style="color:#26a17b"><i class="fas fa-circle-dollar-to-slot"></i></div><div class="pm-toggle-lbl">USDT</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-wire"><div class="pm-toggle-icon" style="color:#3b82f6"><i class="fas fa-building-columns"></i></div><div class="pm-toggle-lbl">Wire</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-paypal"><div class="pm-toggle-icon" style="color:#0070ba"><i class="fab fa-paypal"></i></div><div class="pm-toggle-lbl">PayPal</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-cashapp"><div class="pm-toggle-icon" style="color:#00d64f"><i class="fas fa-mobile-screen-button"></i></div><div class="pm-toggle-lbl">Cash App</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-zelle"><div class="pm-toggle-icon" style="color:#6d1ed4"><i class="fas fa-bolt"></i></div><div class="pm-toggle-lbl">Zelle</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-wu"><div class="pm-toggle-icon" style="color:#ffb300"><i class="fas fa-globe"></i></div><div class="pm-toggle-lbl">W. Union</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-amazon"><div class="pm-toggle-icon" style="color:#ff9900"><i class="fab fa-amazon"></i></div><div class="pm-toggle-lbl">Amazon</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-google"><div class="pm-toggle-icon" style="color:#01875f"><i class="fab fa-google-play"></i></div><div class="pm-toggle-lbl">Google Play</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-apple"><div class="pm-toggle-icon" style="color:#a2aaad"><i class="fab fa-apple"></i></div><div class="pm-toggle-lbl">Apple</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-vanilla"><div class="pm-toggle-icon" style="color:#0058a3"><i class="fas fa-credit-card"></i></div><div class="pm-toggle-lbl">Vanilla Visa</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-ebay"><div class="pm-toggle-icon" style="color:#e53238"><i class="fab fa-ebay"></i></div><div class="pm-toggle-lbl">eBay</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-venmo"><div class="pm-toggle-icon" style="color:#008cff"><i class="fas fa-dollar-sign"></i></div><div class="pm-toggle-lbl">Venmo</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="n-panel-moneygram"><div class="pm-toggle-icon" style="color:#f60066"><i class="fas fa-money-bill-wave"></i></div><div class="pm-toggle-lbl">MoneyGram</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+          </div>
+          <div class="pm-fields-wrap" id="n-pm-fields">
+            <div class="pm-fields-panel" id="n-panel-btc"><div class="pm-panel-hdr"><i class="fab fa-bitcoin" style="color:#f7931a"></i>Bitcoin (BTC) — Wallet Address</div><input type="text" id="n-btc" class="f-input mono" placeholder="bc1q… or 1BvBMSEY…" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="n-panel-usdt"><div class="pm-panel-hdr"><i class="fas fa-circle-dollar-to-slot" style="color:#26a17b"></i>USDT Tether — Wallet Address</div><input type="text" id="n-usdt" class="f-input mono" placeholder="TRC20 / ERC20 address" style="margin-bottom:0"><div class="f-hint" style="margin-top:6px">Specify the network (TRC20 or ERC20) in your instructions to the customer.</div></div>
+            <div class="pm-fields-panel" id="n-panel-wire"><div class="pm-panel-hdr"><i class="fas fa-building-columns" style="color:#3b82f6"></i>Wire / ACH — Bank Details</div><div class="form-grid form-grid-2"><div class="f-group" style="margin-bottom:0"><label>Bank Name</label><input type="text" id="n-bank" class="f-input" placeholder="Chase Bank"></div><div class="f-group" style="margin-bottom:0"><label>Account Name</label><input type="text" id="n-accname" class="f-input" placeholder="Swift Freight LLC"></div><div class="f-group" style="margin-bottom:0"><label>Account Number</label><input type="text" id="n-accnum" class="f-input mono" placeholder="000123456789"></div><div class="f-group" style="margin-bottom:0"><label>Routing Number (ABA)</label><input type="text" id="n-routing" class="f-input mono" placeholder="021000021"></div></div></div>
+            <div class="pm-fields-panel" id="n-panel-paypal"><div class="pm-panel-hdr"><i class="fab fa-paypal" style="color:#0070ba"></i>PayPal — Email Address</div><input type="text" id="n-paypal" class="f-input" placeholder="payments@example.com" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="n-panel-cashapp"><div class="pm-panel-hdr"><i class="fas fa-mobile-screen-button" style="color:#00d64f"></i>Cash App — $Cashtag</div><input type="text" id="n-cashapp" class="f-input mono" placeholder="$SwiftFreight" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="n-panel-zelle"><div class="pm-panel-hdr"><i class="fas fa-bolt" style="color:#6d1ed4"></i>Zelle — Email or Phone Number</div><input type="text" id="n-zelle" class="f-input" placeholder="zelle@example.com or +1 555 000 0000" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="n-panel-wu"><div class="pm-panel-hdr"><i class="fas fa-globe" style="color:#ffb300"></i>Western Union — Recipient Info</div><textarea id="n-wu" class="f-input" rows="3" style="resize:vertical;height:auto;margin-bottom:0" placeholder="Recipient full name, country, city, reference info…"></textarea></div>
+            <div class="pm-fields-panel" id="n-panel-amazon"><div class="pm-panel-hdr"><i class="fab fa-amazon" style="color:#ff9900"></i>Amazon Gift Card — Claim Code</div><input type="text" id="n-amazon" class="f-input mono" placeholder="XXXX-XXXXXX-XXXX" style="margin-bottom:0"><div class="f-hint" style="margin-top:6px">The claim code printed on the card or received by email. Customer redeems at amazon.com/gc/redeem.</div></div>
+            <div class="pm-fields-panel" id="n-panel-google"><div class="pm-panel-hdr"><i class="fab fa-google-play" style="color:#01875f"></i>Google Play — Gift Code</div><input type="text" id="n-google" class="f-input mono" placeholder="XXXX-XXXX-XXXX-XXXX" style="margin-bottom:0"><div class="f-hint" style="margin-top:6px">Redemption code from the Google Play gift card. Customer redeems at play.google.com/redeem.</div></div>
+            <div class="pm-fields-panel" id="n-panel-apple"><div class="pm-panel-hdr"><i class="fab fa-apple" style="color:#a2aaad"></i>Apple Gift Card — Redemption Code</div><input type="text" id="n-apple" class="f-input mono" placeholder="X-XXXX-XXXX-XXXX" style="margin-bottom:0"><div class="f-hint" style="margin-top:6px">Code from the back of the Apple Gift Card. Customer redeems at redeem.apple.com.</div></div>
+            <div class="pm-fields-panel" id="n-panel-vanilla"><div class="pm-panel-hdr"><i class="fas fa-credit-card" style="color:#0058a3"></i>Vanilla Visa Prepaid — Card Info</div><div class="form-grid form-grid-2"><div class="f-group" style="margin-bottom:0"><label>Card Number</label><input type="text" id="n-vanilla-num" class="f-input mono" placeholder="XXXX XXXX XXXX XXXX"></div><div class="f-group" style="margin-bottom:0"><label>PIN</label><input type="text" id="n-vanilla-pin" class="f-input mono" placeholder="3 or 4 digits"></div></div><input type="hidden" id="n-vanilla"><div class="f-hint" style="margin-top:6px">Customer uses card number + PIN to pay online as a Visa card.</div></div>
+            <div class="pm-fields-panel" id="n-panel-ebay"><div class="pm-panel-hdr"><i class="fab fa-ebay" style="color:#e53238"></i>eBay Gift Card — Code</div><input type="text" id="n-ebay" class="f-input mono" placeholder="XXXXXXXXXXXXXXXX" style="margin-bottom:0"><div class="f-hint" style="margin-top:6px">Gift card redemption code. Customer redeems at ebay.com/giftcard.</div></div>
+            <div class="pm-fields-panel" id="n-panel-venmo"><div class="pm-panel-hdr"><i class="fas fa-dollar-sign" style="color:#008cff"></i>Venmo — Username / @Handle</div><input type="text" id="n-venmo" class="f-input" placeholder="@SwiftFreight" style="margin-bottom:0"><div class="f-hint" style="margin-top:6px">US only. Customer opens Venmo → Pay → searches this handle.</div></div>
+            <div class="pm-fields-panel" id="n-panel-moneygram"><div class="pm-panel-hdr"><i class="fas fa-money-bill-wave" style="color:#f60066"></i>MoneyGram — Recipient Info</div><textarea id="n-moneygram" class="f-input" rows="3" style="resize:vertical;height:auto;margin-bottom:0" placeholder="Recipient full name, country, city, reference info…"></textarea><div class="f-hint" style="margin-top:6px">Customer visits any MoneyGram agent or moneygram.com to send payment.</div></div>
           </div>
         </div>
 
@@ -680,17 +745,39 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
         </div>
 
         <div class="form-card">
-          <div class="form-card-title"><i class="fas fa-credit-card"></i> Update Payment Methods (leave blank to keep)</div>
-          <div class="form-grid form-grid-2">
-            <div class="f-group"><label>BTC Address</label><input type="text" id="u-btc" class="f-input mono" placeholder="Leave blank to keep"></div>
-            <div class="f-group"><label>USDT Address</label><input type="text" id="u-usdt" class="f-input mono" placeholder="Leave blank to keep"></div>
-            <div class="f-group"><label>Bank Name</label><input type="text" id="u-bank" class="f-input" placeholder="Leave blank to keep"></div>
-            <div class="f-group"><label>Account Name</label><input type="text" id="u-accname" class="f-input" placeholder="Leave blank to keep"></div>
-            <div class="f-group"><label>Account Number</label><input type="text" id="u-accnum" class="f-input mono" placeholder="Leave blank to keep"></div>
-            <div class="f-group"><label>PayPal Email</label><input type="text" id="u-paypal" class="f-input" placeholder="Leave blank to keep"></div>
-            <div class="f-group"><label>Cash App $Cashtag</label><input type="text" id="u-cashapp" class="f-input mono" placeholder="Leave blank to keep"></div>
-            <div class="f-group"><label>Zelle (Email / Phone)</label><input type="text" id="u-zelle" class="f-input" placeholder="Leave blank to keep"></div>
-            <div class="f-group" style="grid-column:1/-1"><label>Western Union Info</label><textarea id="u-wu" class="f-input" rows="3" style="resize:vertical;height:auto" placeholder="Leave blank to keep"></textarea></div>
+          <div class="form-card-title"><i class="fas fa-credit-card"></i> Payment Methods <span style="font:400 .62rem 'DM Sans';color:var(--muted2);letter-spacing:.06em;margin-left:6px;text-transform:none;">— auto-filled from existing data</span></div>
+          <div class="pm-section-lbl">Toggle to update a method (checked = will save to DB)</div>
+          <div class="pm-toggle-grid">
+            <div class="pm-toggle-card" data-panel="u-panel-btc"><div class="pm-toggle-icon" style="color:#f7931a"><i class="fab fa-bitcoin"></i></div><div class="pm-toggle-lbl">Bitcoin</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-usdt"><div class="pm-toggle-icon" style="color:#26a17b"><i class="fas fa-circle-dollar-to-slot"></i></div><div class="pm-toggle-lbl">USDT</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-wire"><div class="pm-toggle-icon" style="color:#3b82f6"><i class="fas fa-building-columns"></i></div><div class="pm-toggle-lbl">Wire</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-paypal"><div class="pm-toggle-icon" style="color:#0070ba"><i class="fab fa-paypal"></i></div><div class="pm-toggle-lbl">PayPal</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-cashapp"><div class="pm-toggle-icon" style="color:#00d64f"><i class="fas fa-mobile-screen-button"></i></div><div class="pm-toggle-lbl">Cash App</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-zelle"><div class="pm-toggle-icon" style="color:#6d1ed4"><i class="fas fa-bolt"></i></div><div class="pm-toggle-lbl">Zelle</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-wu"><div class="pm-toggle-icon" style="color:#ffb300"><i class="fas fa-globe"></i></div><div class="pm-toggle-lbl">W. Union</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-amazon"><div class="pm-toggle-icon" style="color:#ff9900"><i class="fab fa-amazon"></i></div><div class="pm-toggle-lbl">Amazon</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-google"><div class="pm-toggle-icon" style="color:#01875f"><i class="fab fa-google-play"></i></div><div class="pm-toggle-lbl">Google Play</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-apple"><div class="pm-toggle-icon" style="color:#a2aaad"><i class="fab fa-apple"></i></div><div class="pm-toggle-lbl">Apple</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-vanilla"><div class="pm-toggle-icon" style="color:#0058a3"><i class="fas fa-credit-card"></i></div><div class="pm-toggle-lbl">Vanilla Visa</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-ebay"><div class="pm-toggle-icon" style="color:#e53238"><i class="fab fa-ebay"></i></div><div class="pm-toggle-lbl">eBay</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-venmo"><div class="pm-toggle-icon" style="color:#008cff"><i class="fas fa-dollar-sign"></i></div><div class="pm-toggle-lbl">Venmo</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+            <div class="pm-toggle-card" data-panel="u-panel-moneygram"><div class="pm-toggle-icon" style="color:#f60066"><i class="fas fa-money-bill-wave"></i></div><div class="pm-toggle-lbl">MoneyGram</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
+          </div>
+          <div class="pm-fields-wrap" id="u-pm-fields">
+            <div class="pm-fields-panel" id="u-panel-btc"><div class="pm-panel-hdr"><i class="fab fa-bitcoin" style="color:#f7931a"></i>Bitcoin (BTC) — Wallet Address</div><input type="text" id="u-btc" class="f-input mono" placeholder="bc1q…" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-usdt"><div class="pm-panel-hdr"><i class="fas fa-circle-dollar-to-slot" style="color:#26a17b"></i>USDT Tether — Wallet Address</div><input type="text" id="u-usdt" class="f-input mono" placeholder="TRC20 / ERC20 address" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-wire"><div class="pm-panel-hdr"><i class="fas fa-building-columns" style="color:#3b82f6"></i>Wire / ACH — Bank Details</div><div class="form-grid form-grid-2"><div class="f-group" style="margin-bottom:0"><label>Bank Name</label><input type="text" id="u-bank" class="f-input" placeholder="Bank name"></div><div class="f-group" style="margin-bottom:0"><label>Account Name</label><input type="text" id="u-accname" class="f-input" placeholder="Account holder"></div><div class="f-group" style="margin-bottom:0"><label>Account Number</label><input type="text" id="u-accnum" class="f-input mono" placeholder="000123456789"></div><div class="f-group" style="margin-bottom:0"><label>Routing Number (ABA)</label><input type="text" id="u-routing" class="f-input mono" placeholder="021000021"></div></div></div>
+            <div class="pm-fields-panel" id="u-panel-paypal"><div class="pm-panel-hdr"><i class="fab fa-paypal" style="color:#0070ba"></i>PayPal — Email Address</div><input type="text" id="u-paypal" class="f-input" placeholder="payments@example.com" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-cashapp"><div class="pm-panel-hdr"><i class="fas fa-mobile-screen-button" style="color:#00d64f"></i>Cash App — $Cashtag</div><input type="text" id="u-cashapp" class="f-input mono" placeholder="$Cashtag" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-zelle"><div class="pm-panel-hdr"><i class="fas fa-bolt" style="color:#6d1ed4"></i>Zelle — Email or Phone</div><input type="text" id="u-zelle" class="f-input" placeholder="email or +1 555…" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-wu"><div class="pm-panel-hdr"><i class="fas fa-globe" style="color:#ffb300"></i>Western Union — Recipient Info</div><textarea id="u-wu" class="f-input" rows="3" style="resize:vertical;height:auto;margin-bottom:0" placeholder="Recipient name, country, city…"></textarea></div>
+            <div class="pm-fields-panel" id="u-panel-amazon"><div class="pm-panel-hdr"><i class="fab fa-amazon" style="color:#ff9900"></i>Amazon Gift Card — Claim Code</div><input type="text" id="u-amazon" class="f-input mono" placeholder="XXXX-XXXXXX-XXXX" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-google"><div class="pm-panel-hdr"><i class="fab fa-google-play" style="color:#01875f"></i>Google Play — Gift Code</div><input type="text" id="u-google" class="f-input mono" placeholder="XXXX-XXXX-XXXX-XXXX" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-apple"><div class="pm-panel-hdr"><i class="fab fa-apple" style="color:#a2aaad"></i>Apple Gift Card — Redemption Code</div><input type="text" id="u-apple" class="f-input mono" placeholder="X-XXXX-XXXX-XXXX" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-vanilla"><div class="pm-panel-hdr"><i class="fas fa-credit-card" style="color:#0058a3"></i>Vanilla Visa Prepaid — Card Info</div><div class="form-grid form-grid-2"><div class="f-group" style="margin-bottom:0"><label>Card Number</label><input type="text" id="u-vanilla-num" class="f-input mono" placeholder="XXXX XXXX XXXX XXXX"></div><div class="f-group" style="margin-bottom:0"><label>PIN</label><input type="text" id="u-vanilla-pin" class="f-input mono" placeholder="3 or 4 digits"></div></div><input type="hidden" id="u-vanilla"></div>
+            <div class="pm-fields-panel" id="u-panel-ebay"><div class="pm-panel-hdr"><i class="fab fa-ebay" style="color:#e53238"></i>eBay Gift Card — Code</div><input type="text" id="u-ebay" class="f-input mono" placeholder="XXXXXXXXXXXXXXXX" style="margin-bottom:0"></div>
+            <div class="pm-fields-panel" id="u-panel-venmo"><div class="pm-panel-hdr"><i class="fas fa-dollar-sign" style="color:#008cff"></i>Venmo — Username / @Handle</div><input type="text" id="u-venmo" class="f-input" placeholder="@SwiftFreight" style="margin-bottom:0"><div class="f-hint" style="margin-top:6px">US only. Customer opens Venmo → Pay → searches this handle.</div></div>
+            <div class="pm-fields-panel" id="u-panel-moneygram"><div class="pm-panel-hdr"><i class="fas fa-money-bill-wave" style="color:#f60066"></i>MoneyGram — Recipient Info</div><textarea id="u-moneygram" class="f-input" rows="3" style="resize:vertical;height:auto;margin-bottom:0" placeholder="Recipient full name, country, city, reference info…"></textarea></div>
           </div>
         </div>
 
@@ -768,27 +855,28 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
           <div id="ticker-save-status" style="margin-top:10px;font-size:.78rem;color:var(--muted2);min-height:18px;"></div>
         </div>
 
-        <div class="form-card" style="display:none;">
+        <div class="form-card">
           <div class="settings-title"></div>
           <div class="sql-wrap">
             <button class="sql-copy-btn" onclick="copySql()"><i class="fas fa-copy"></i> Copy</button>
             <pre class="sql-block" id="setup-sql">-- ══════════════════════════════════════════════
 -- Swift Freight Logistics — Database Setup
--- Run ONCE in Supabase SQL Editor
+-- Run in Supabase SQL Editor (safe to re-run)
 -- ══════════════════════════════════════════════
 
--- ── Site Settings (ticker, announcements) ────────────────────
+-- ── Site Settings ────────────────────────────
 CREATE TABLE IF NOT EXISTS public.site_settings (
   key        text PRIMARY KEY,
   value      text,
   updated_at timestamptz DEFAULT now()
 );
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public can read settings" ON public.site_settings FOR SELECT USING (true);
+CREATE POLICY "Public can read settings"
+  ON public.site_settings FOR SELECT USING (true);
+INSERT INTO public.site_settings (key, value)
+  VALUES ('ticker', '') ON CONFLICT (key) DO NOTHING;
 
--- Insert default ticker (empty = hidden)
-INSERT INTO public.site_settings (key, value) VALUES ('ticker', '') ON CONFLICT (key) DO NOTHING;
-
+-- ── Shipments table ──────────────────────────
 CREATE TABLE IF NOT EXISTS public.shipments (
   id               BIGSERIAL PRIMARY KEY,
   tracking_id      TEXT UNIQUE NOT NULL,
@@ -811,93 +899,115 @@ CREATE TABLE IF NOT EXISTS public.shipments (
   bank_name        TEXT,
   account_name     TEXT,
   bank_number      TEXT,
+  routing_number   TEXT,
+  paypal_email     TEXT,
+  cashapp_tag      TEXT,
+  zelle_id         TEXT,
+  western_union_info TEXT,
+  venmo_tag        TEXT,
+  moneygram_info   TEXT,
+  amazon_gc_info   TEXT,
+  google_gc_info   TEXT,
+  apple_gc_info    TEXT,
+  vanilla_gc_info  TEXT,
+  ebay_gc_info     TEXT,
   notes            TEXT,
   step1_color      TEXT DEFAULT 'text-blue-500',
-  step2_name       TEXT,
-  step2_location   TEXT,
-  step2_color      TEXT DEFAULT 'text-blue-500',
-  step3_name       TEXT,
-  step3_location   TEXT,
-  step3_color      TEXT DEFAULT 'text-blue-500',
-  step4_name       TEXT,
-  step4_location   TEXT,
-  step4_color      TEXT DEFAULT 'text-green-500',
+  step2_name       TEXT, step2_location TEXT, step2_color TEXT DEFAULT 'text-blue-500',
+  step3_name       TEXT, step3_location TEXT, step3_color TEXT DEFAULT 'text-blue-500',
+  step4_name       TEXT, step4_location TEXT, step4_color TEXT DEFAULT 'text-green-500',
   created_at       TIMESTAMPTZ DEFAULT NOW(),
   updated_at       TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Row Level Security
-ALTER TABLE public.shipments ENABLE ROW LEVEL SECURITY;
+-- ── Add new columns to existing tables (safe) ─
+ALTER TABLE public.shipments
+  ADD COLUMN IF NOT EXISTS routing_number     TEXT,
+  ADD COLUMN IF NOT EXISTS paypal_email       TEXT,
+  ADD COLUMN IF NOT EXISTS cashapp_tag        TEXT,
+  ADD COLUMN IF NOT EXISTS zelle_id           TEXT,
+  ADD COLUMN IF NOT EXISTS western_union_info TEXT,
+  ADD COLUMN IF NOT EXISTS venmo_tag          TEXT,
+  ADD COLUMN IF NOT EXISTS moneygram_info     TEXT,
+  ADD COLUMN IF NOT EXISTS amazon_gc_info     TEXT,
+  ADD COLUMN IF NOT EXISTS google_gc_info     TEXT,
+  ADD COLUMN IF NOT EXISTS apple_gc_info      TEXT,
+  ADD COLUMN IF NOT EXISTS vanilla_gc_info    TEXT,
+  ADD COLUMN IF NOT EXISTS ebay_gc_info       TEXT;
 
--- Anon users can read (for tracking page)
+-- ── Row Level Security ───────────────────────
+ALTER TABLE public.shipments ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read shipments"
   ON public.shipments FOR SELECT USING (true);
-
--- Only authenticated / service_role can write
 CREATE POLICY "Service role full access"
   ON public.shipments USING (auth.role() = 'service_role');
 
--- Public view — hides customer_email from the frontend
+-- ── Public view (rebuild every time) ─────────
 DROP VIEW IF EXISTS public.shipments_public;
 CREATE VIEW public.shipments_public AS
   SELECT
-    id, tracking_id, name, senders_name, status,
+    id, created_at, updated_at,
+    tracking_id, name, senders_name, status,
     current_location, destination, origin,
     pickup_date, eta, package_details, service_type, priority,
     payment_status, amount_due,
-    btc_address, usdt_address, bank_name, account_name, bank_number,
+    btc_address, usdt_address,
+    bank_name, account_name, bank_number, routing_number,
+    paypal_email, cashapp_tag, zelle_id, western_union_info,
+    venmo_tag, moneygram_info,
+    amazon_gc_info, google_gc_info, apple_gc_info,
+    vanilla_gc_info, ebay_gc_info,
     notes,
     step1_color,
     step2_name, step2_location, step2_color,
     step3_name, step3_location, step3_color,
-    step4_name, step4_location, step4_color,
-    created_at, updated_at
+    step4_name, step4_location, step4_color
   FROM public.shipments;
 
--- Grant anon access to the public view
-GRANT SELECT ON public.shipments_public TO anon;
+GRANT SELECT ON public.shipments_public TO anon, authenticated;
 
--- Quote requests table
+-- ── Quote requests ───────────────────────────
 CREATE TABLE IF NOT EXISTS public.quote_requests (
   id           BIGSERIAL PRIMARY KEY,
   reference    TEXT UNIQUE NOT NULL,
-  full_name    TEXT,
-  email        TEXT,
-  phone        TEXT,
-  origin       TEXT,
-  destination  TEXT,
-  cargo_type   TEXT,
-  weight       TEXT,
-  message      TEXT,
+  full_name    TEXT, email TEXT, phone TEXT,
+  origin       TEXT, destination TEXT,
+  cargo_type   TEXT, weight TEXT, message TEXT,
   created_at   TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE public.quote_requests ENABLE ROW LEVEL SECURITY;
 
--- Auto-update timestamp trigger
+-- ── Timestamp trigger ────────────────────────
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN NEW.updated_at = NOW(); RETURN NEW; END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS set_updated_at ON public.shipments;
 CREATE TRIGGER set_updated_at
   BEFORE UPDATE ON public.shipments
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
--- Index for fast tracking lookups
+-- ── Indexes ───────────────────────────────────
 CREATE INDEX IF NOT EXISTS shipments_tracking_id_idx ON public.shipments (tracking_id);
-CREATE INDEX IF NOT EXISTS shipments_email_idx ON public.shipments (customer_email);</pre>
+CREATE INDEX IF NOT EXISTS shipments_email_idx       ON public.shipments (customer_email);</pre>
           </div>
         </div>
 
         <div class="form-card">
-          <div class="settings-title"><i class="fas fa-lock" style="color:var(--accent);margin-right:8px"></i> Change Admin Password</div>
-          <p style="font-size:.82rem;color:var(--muted);margin-bottom:18px;line-height:1.6">This is the password used to log into this admin panel. Default is <strong style="color:var(--accent-hi)">swift2025</strong>.</p>
-          <div class="form-grid form-grid-2">
-            <div class="f-group"><label>New Password</label><input type="password" id="s-new-pw" class="f-input" placeholder="Enter new password" autocomplete="new-password"></div>
-            <div class="f-group"><label>Confirm Password</label><input type="password" id="s-confirm-pw" class="f-input" placeholder="Repeat new password" autocomplete="new-password"></div>
+          <div class="settings-title"><i class="fas fa-shield-halved" style="color:var(--accent);margin-right:8px"></i> Security &amp; Credentials</div>
+          <div class="info-box" style="margin-bottom:0">
+            All credentials are stored securely in <strong>Netlify Environment Variables</strong> — never in the page source code.<br><br>
+            To change the admin password, API secret, or any other credential:<br>
+            <strong>Netlify Dashboard → your site → Site Settings → Environment Variables</strong><br><br>
+            Required variables:
+            <ul style="margin:10px 0 0 16px;line-height:2;font-family:'JetBrains Mono';font-size:.78rem">
+              <li><code>ADMIN_PASSWORD</code> — login password for this panel</li>
+              <li><code>ADMIN_API_SECRET</code> — secret sent to edge functions</li>
+              <li><code>TOKEN_SECRET</code> — random string for signing sessions (any long random text)</li>
+            </ul>
+            <br>After updating env vars, redeploy the site for changes to take effect.
           </div>
-          <button class="btn-primary" style="margin-top:4px;" onclick="changePassword()"><i class="fas fa-key"></i> Update Password</button>
-          <p id="pw-result" style="margin-top:10px;font-size:.8rem;display:none;"></p>
         </div>
 
       </div>
@@ -909,12 +1019,32 @@ CREATE INDEX IF NOT EXISTS shipments_email_idx ON public.shipments (customer_ema
 <!-- Sidebar overlay (mobile) -->
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-<!-- Mobile bottom nav -->
-<nav class="mobile-nav" id="mobile-nav">
-  <button class="mob-nav-item active" data-view="dashboard"><i class="fas fa-gauge-high"></i>Dashboard</button>
-  <button class="mob-nav-item" data-view="shipments"><i class="fas fa-box-archive"></i>Shipments</button>
-  <button class="mob-nav-item" data-view="form-new"><i class="fas fa-plus"></i>New</button>
-  <button class="mob-nav-item" data-view="settings"><i class="fas fa-gear"></i>Settings</button>
+<!-- Premium Admin Mobile Nav Overlay -->
+<nav id="admin-mobile-nav" aria-label="Admin navigation">
+  <div class="amn-inner">
+    <div class="amn-topbar">
+      <div class="amn-logo">
+        <img src="./image/sfl-logo.svg" alt="SFL">
+        <div>
+          <div class="amn-logo-text"><span class="amn-logo-gt">SWIFT</span><span style="color:rgba(232,240,254,.72);margin-left:5px;">FREIGHT</span></div>
+          <div class="amn-logo-sub">Admin Panel</div>
+        </div>
+      </div>
+      <button class="amn-close" id="amn-close" aria-label="Close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="amn-nav-label">Navigation</div>
+    <ul class="amn-links">
+      <li><button class="amn-link amn-active" data-view="dashboard">Dashboard<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
+      <li><button class="amn-link" data-view="shipments">Shipments<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
+      <li><button class="amn-link" data-view="form-new">New Shipment<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
+      <li><button class="amn-link" data-view="settings">Settings<span class="amn-arrow"><i class="fas fa-chevron-right"></i></span></button></li>
+    </ul>
+    <div class="amn-footer">
+      <a href="payment.html" class="btn-secondary" style="width:100%;justify-content:center;text-decoration:none;">
+        <i class="fas fa-arrow-left"></i>&nbsp; Back to Site
+      </a>
+    </div>
+  </div>
 </nav>
 
 <!-- Confirm modal -->
@@ -932,33 +1062,51 @@ CREATE INDEX IF NOT EXISTS shipments_email_idx ON public.shipments (customer_ema
 <div id="toast"></div>
 
 <script>
-const SUPABASE_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
-const ANON_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
-const FN            = SUPABASE_URL + '/functions/v1';
-const PW_KEY        = 'sfl_panel_pw';
-const API_KEY       = 'sfl_api_secret';
-const DEFAULT_PW    = 'swift2025';
-const DEFAULT_API   = 'SFL-ADMIN-2025-Xp7kZ3mN';
-let allShipments    = [];
-let editId          = null;
-let emailType       = 'auto';
+// ── Public Supabase config (anon key is safe to expose — Supabase RLS protects data) ──
+const SUPABASE_URL = 'https://oltbgccsceipedoadgka.supabase.co';
+const ANON_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+const FN           = SUPABASE_URL + '/functions/v1';
+
+// ── Auth proxy — password & API secret live in Supabase secrets, never here ──
+const AUTH_URL = SUPABASE_URL + '/functions/v1/admin-auth';
+let _apiSecret = '';                          // set at runtime after auth, never stored in HTML
+const getApiSecret = () => _apiSecret;
+
+let allShipments = [];
+let editId       = null;
+let emailType    = 'auto';
 
 /* ═══ AUTH ═══ */
-const getStoredPw  = () => localStorage.getItem(PW_KEY)  || DEFAULT_PW;
-const getApiSecret = () => (localStorage.getItem(API_KEY) || DEFAULT_API).replace(/[^\x20-\x7E]/g, '');
-
-function tryLogin() {
-  const pw  = document.getElementById('login-pw').value.trim();
-  const btn = document.getElementById('login-btn');
-  if (!pw) { showLoginErr('Enter your admin password.'); return; }
-  if (pw !== getStoredPw()) { showLoginErr('Incorrect password. Try again.'); return; }
-  localStorage.setItem('sfl_auth', '1');
-  launchApp();
-}
 function showLoginErr(msg) {
   const el = document.getElementById('login-err');
   el.textContent = msg; el.style.display = 'block';
 }
+
+async function tryLogin() {
+  const pw  = document.getElementById('login-pw').value.trim();
+  const btn = document.getElementById('login-btn');
+  if (!pw) { showLoginErr('Enter your admin password.'); return; }
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>&nbsp; Verifying…';
+  try {
+    const r    = await fetch(AUTH_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY },
+      body: JSON.stringify({ action: 'login', password: pw }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Login failed');
+    _apiSecret = data.apiSecret || '';
+    localStorage.setItem('sfl_auth_token', data.token);
+    launchApp();
+  } catch (e) {
+    showLoginErr(e.message || 'Connection error. Try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Unlock';
+  }
+}
+
 function launchApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-app').style.display = 'block';
@@ -966,10 +1114,28 @@ function launchApp() {
   loadTicker();
   initTheme();
 }
+
+async function checkStoredAuth() {
+  const token = localStorage.getItem('sfl_auth_token');
+  if (!token) return;
+  try {
+    const r    = await fetch(AUTH_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY },
+      body: JSON.stringify({ action: 'verify', token }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error('expired');
+    _apiSecret = data.apiSecret || '';
+    launchApp();
+  } catch {
+    localStorage.removeItem('sfl_auth_token');
+  }
+}
+
 document.getElementById('login-btn').addEventListener('click', tryLogin);
 document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-document.getElementById('logout-btn').addEventListener('click', () => { localStorage.removeItem('sfl_auth'); location.reload(); });
-if (localStorage.getItem('sfl_auth') === '1') { launchApp(); }
+checkStoredAuth();
 
 /* ═══ NAVIGATION ═══ */
 function switchView(name) {
@@ -979,10 +1145,7 @@ function switchView(name) {
     n.classList.toggle('active', n.dataset.view === name || n.dataset.view === name.split('-')[0] + '-' + name.split('-')[1]);
   });
   if (name === 'form-new') clearNewForm();
-  if (name === 'settings') {
-    const el = document.getElementById('s-api-secret');
-    if (el) el.value = localStorage.getItem(API_KEY) || DEFAULT_API;
-  }
+  if (name === 'settings') { /* nothing extra to init */ }
 }
 document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => {
   const v = n.dataset.view;
@@ -992,19 +1155,45 @@ document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', 
 
 /* ═══ LOAD SHIPMENTS ═══ */
 async function loadShipments() {
+  const dot = document.getElementById('conn-dot');
+  const lbl = document.getElementById('conn-label');
+  dot.classList.remove('ok');
+  lbl.textContent = 'Connecting…';
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 12000);
   try {
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/shipments_public?select=*&order=created_at.desc`, {
+    // Try the public view first; fall back to the raw table if the view doesn't exist yet
+    let r = await fetch(`${SUPABASE_URL}/rest/v1/shipments_public?select=*`, {
       headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY },
+      signal: ctrl.signal,
     });
-    allShipments = await r.json();
+    if (!r.ok) {
+      r = await fetch(`${SUPABASE_URL}/rest/v1/shipments?select=*`, {
+        headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY },
+        signal: ctrl.signal,
+      });
+    }
+    clearTimeout(timer);
+    const raw = await r.json();
+    if (!r.ok) throw new Error(raw?.message || raw?.hint || raw?.code || JSON.stringify(raw).slice(0, 140));
+    allShipments = Array.isArray(raw) ? raw.slice().reverse() : [];
     renderDash();
     renderTable(allShipments);
     updateStats();
     document.getElementById('sidebar-count').textContent = allShipments.length;
-    document.getElementById('conn-dot').classList.add('ok');
-    document.getElementById('conn-label').textContent = 'Connected';
+    dot.classList.add('ok');
+    lbl.textContent = 'Connected';
   } catch (e) {
-    document.getElementById('conn-label').textContent = 'Error';
+    clearTimeout(timer);
+    console.error('[SFL] loadShipments:', e);
+    dot.classList.remove('ok');
+    lbl.textContent = 'Error';
+    const msg = e.name === 'AbortError'
+      ? 'Connection timed out — check your internet connection.'
+      : (e.message || String(e));
+    toast(msg, 'error');
+    const tbody = document.getElementById('dash-tbody');
+    if (tbody) tbody.innerHTML = `<tr class="empty-row"><td colspan="7" style="color:#f87171"><i class="fas fa-circle-xmark" style="margin-right:6px"></i>${msg}</td></tr>`;
   }
 }
 
@@ -1175,10 +1364,14 @@ document.getElementById('register-btn').addEventListener('click', async () => {
     step3_name: v('n-s3name'), step3_location: v('n-s3loc'), step3_color: v('n-s3color') || 'text-blue-500',
     step4_name: v('n-s4name'), step4_location: v('n-s4loc'), step4_color: v('n-s4color') || 'text-green-500',
     payment_status: v('n-paystatus') || 'not-required', amount_due: v('n-amount'),
-    btc_address: v('n-btc'), usdt_address: v('n-usdt'),
-    bank_name: v('n-bank'), account_name: v('n-accname'), bank_number: v('n-accnum'),
-    paypal_email: v('n-paypal'), cashapp_tag: v('n-cashapp'),
-    zelle_id: v('n-zelle'), western_union_info: v('n-wu'),
+    btc_address: v('n-btc')||null, usdt_address: v('n-usdt')||null,
+    bank_name: v('n-bank')||null, account_name: v('n-accname')||null, bank_number: v('n-accnum')||null, routing_number: v('n-routing')||null,
+    paypal_email: v('n-paypal')||null, cashapp_tag: v('n-cashapp')||null,
+    zelle_id: v('n-zelle')||null, western_union_info: v('n-wu')||null,
+    venmo_tag: v('n-venmo')||null, moneygram_info: v('n-moneygram')||null,
+    amazon_gc_info: v('n-amazon')||null, google_gc_info: v('n-google')||null,
+    apple_gc_info: v('n-apple')||null, vanilla_gc_info: v('n-vanilla')||null,
+    ebay_gc_info: v('n-ebay')||null,
     sendEmail,
   };
   try {
@@ -1216,9 +1409,46 @@ function openEdit(tid) {
   document.getElementById('edit-tid').textContent = tid;
   // Reset fields
   ['u-status','u-s1color','u-location','u-eta','u-paystatus','u-amount','u-notes',
-   'u-s2name','u-s2loc','u-s2color','u-s3name','u-s3loc','u-s3color','u-s4name','u-s4loc','u-s4color',
-   'u-btc','u-usdt','u-bank','u-accname','u-accnum','u-paypal','u-cashapp','u-zelle','u-wu']
+   'u-s2name','u-s2loc','u-s2color','u-s3name','u-s3loc','u-s3color','u-s4name','u-s4loc','u-s4color']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = el.tagName === 'SELECT' ? '' : ''; });
+  // Reset all payment panels
+  document.querySelectorAll('[data-panel^="u-panel-"]').forEach(card => {
+    card.classList.remove('pm-active');
+    const p = document.getElementById(card.dataset.panel);
+    if (p) p.classList.remove('pm-panel-active');
+  });
+  // Pre-fill payment methods that have existing data
+  const _pre = (panelSuffix, fieldMap) => {
+    const vals = Object.values(fieldMap);
+    if (!vals.some(x => !!x)) return;
+    const panelId = `u-panel-${panelSuffix}`;
+    const card = document.querySelector(`[data-panel="${panelId}"]`);
+    const panel = document.getElementById(panelId);
+    if (card) card.classList.add('pm-active');
+    if (panel) panel.classList.add('pm-panel-active');
+    Object.entries(fieldMap).forEach(([fid, val]) => { const el = document.getElementById(fid); if (el) el.value = val || ''; });
+  };
+  _pre('btc',     {'u-btc':     s.btc_address});
+  _pre('usdt',    {'u-usdt':    s.usdt_address});
+  _pre('wire',      {'u-bank': s.bank_name, 'u-accname': s.account_name, 'u-accnum': s.bank_number, 'u-routing': s.routing_number});
+  _pre('paypal',    {'u-paypal':    s.paypal_email});
+  _pre('cashapp',   {'u-cashapp':   s.cashapp_tag});
+  _pre('zelle',     {'u-zelle':     s.zelle_id});
+  _pre('wu',        {'u-wu':        s.western_union_info});
+  _pre('venmo',     {'u-venmo':     s.venmo_tag});
+  _pre('moneygram', {'u-moneygram': s.moneygram_info});
+  _pre('amazon',    {'u-amazon':    s.amazon_gc_info});
+  _pre('google',    {'u-google':    s.google_gc_info});
+  _pre('apple',     {'u-apple':     s.apple_gc_info});
+  _pre('vanilla',   {'u-vanilla':   s.vanilla_gc_info});
+  _pre('ebay',      {'u-ebay':      s.ebay_gc_info});
+  // Parse vanilla into split fields if present
+  if (s.vanilla_gc_info) {
+    const vm = s.vanilla_gc_info.match(/Card:\s*([^|]+)/i);
+    const pm = s.vanilla_gc_info.match(/PIN:\s*([^|]+)/i);
+    const vn = document.getElementById('u-vanilla-num'); if (vn && vm) vn.value = vm[1].trim();
+    const vp = document.getElementById('u-vanilla-pin'); if (vp && pm) vp.value = pm[1].trim();
+  }
   document.getElementById('update-result').style.display = 'none';
   emailType = 'auto';
   document.querySelectorAll('.email-chip').forEach(c => c.classList.toggle('sel', c.dataset.type === 'auto'));
@@ -1247,15 +1477,25 @@ document.getElementById('update-btn').addEventListener('click', async () => {
   if (v('u-s4name'))    updates.step4_name       = v('u-s4name');
   if (v('u-s4loc'))     updates.step4_location   = v('u-s4loc');
   if (v('u-s4color'))   updates.step4_color      = v('u-s4color');
-  if (v('u-btc'))       updates.btc_address       = v('u-btc');
-  if (v('u-usdt'))      updates.usdt_address      = v('u-usdt');
-  if (v('u-bank'))      updates.bank_name         = v('u-bank');
-  if (v('u-accname'))   updates.account_name      = v('u-accname');
-  if (v('u-accnum'))    updates.bank_number       = v('u-accnum');
-  if (v('u-paypal'))    updates.paypal_email      = v('u-paypal');
-  if (v('u-cashapp'))   updates.cashapp_tag       = v('u-cashapp');
-  if (v('u-zelle'))     updates.zelle_id          = v('u-zelle');
-  if (v('u-wu'))        updates.western_union_info = v('u-wu');
+  // Payment methods — only update if panel is active
+  document.querySelectorAll('#u-pm-fields .pm-fields-panel.pm-panel-active').forEach(panel => {
+    switch(panel.id) {
+      case 'u-panel-btc':    if(v('u-btc'))    updates.btc_address       = v('u-btc');    break;
+      case 'u-panel-usdt':   if(v('u-usdt'))   updates.usdt_address      = v('u-usdt');   break;
+      case 'u-panel-wire':      if(v('u-bank'))      updates.bank_name         = v('u-bank');      if(v('u-accname'))   updates.account_name      = v('u-accname');   if(v('u-accnum'))    updates.bank_number       = v('u-accnum');    if(v('u-routing'))   updates.routing_number    = v('u-routing');   break;
+      case 'u-panel-paypal':    if(v('u-paypal'))    updates.paypal_email      = v('u-paypal');    break;
+      case 'u-panel-cashapp':   if(v('u-cashapp'))   updates.cashapp_tag       = v('u-cashapp');   break;
+      case 'u-panel-zelle':     if(v('u-zelle'))     updates.zelle_id          = v('u-zelle');     break;
+      case 'u-panel-wu':        if(v('u-wu'))        updates.western_union_info= v('u-wu');        break;
+      case 'u-panel-venmo':     if(v('u-venmo'))     updates.venmo_tag         = v('u-venmo');     break;
+      case 'u-panel-moneygram': if(v('u-moneygram')) updates.moneygram_info    = v('u-moneygram'); break;
+      case 'u-panel-amazon':    if(v('u-amazon'))    updates.amazon_gc_info    = v('u-amazon');    break;
+      case 'u-panel-google':    if(v('u-google'))    updates.google_gc_info    = v('u-google');    break;
+      case 'u-panel-apple':     if(v('u-apple'))     updates.apple_gc_info     = v('u-apple');     break;
+      case 'u-panel-vanilla':   if(v('u-vanilla'))   updates.vanilla_gc_info   = v('u-vanilla');   break;
+      case 'u-panel-ebay':      if(v('u-ebay'))      updates.ebay_gc_info      = v('u-ebay');      break;
+    }
+  });
   if (!Object.keys(updates).length) {
     showInline('update-result', 'error', 'No changes entered.'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save &amp; Send Notification'; return;
   }
@@ -1283,32 +1523,7 @@ document.getElementById('update-btn').addEventListener('click', async () => {
 });
 
 /* ═══ SETTINGS ═══ */
-function changePassword() {
-  const np = document.getElementById('s-new-pw').value.trim();
-  const cp = document.getElementById('s-confirm-pw').value.trim();
-  const el = document.getElementById('pw-result');
-  el.style.display = 'block';
-  if (!np) { el.style.color='#f87171'; el.textContent='Enter a new password.'; return; }
-  if (np.length < 4) { el.style.color='#f87171'; el.textContent='Password must be at least 4 characters.'; return; }
-  if (np !== cp) { el.style.color='#f87171'; el.textContent='Passwords do not match.'; return; }
-  localStorage.setItem(PW_KEY, np);
-  el.style.color='#4ade80';
-  el.textContent='✓ Password updated. It will be required next time you log in.';
-  document.getElementById('s-new-pw').value = '';
-  document.getElementById('s-confirm-pw').value = '';
-  toast('Admin password updated!', 'success');
-}
-
-function saveApiSecret() {
-  const val = document.getElementById('s-api-secret').value.trim().replace(/[^\x20-\x7E]/g, '');
-  const el  = document.getElementById('api-result');
-  el.style.display = 'block';
-  if (!val) { el.style.color='#f87171'; el.textContent='Enter the API secret.'; return; }
-  localStorage.setItem(API_KEY, val);
-  el.style.color='#4ade80';
-  el.textContent='✓ API secret saved locally. Remember to redeploy edge functions if you changed it on Supabase.';
-  toast('API secret saved!', 'success');
-}
+// Credentials are managed via Netlify Environment Variables — no local storage of secrets
 
 /* ═══ TICKER ═══ */
 async function loadTicker() {
@@ -1368,10 +1583,6 @@ function clearTicker() {
 
     holdTimer = setTimeout(() => {
       if (ringEl) { ringEl.remove(); ringEl = null; }
-      // Load saved secret
-      const saved = (localStorage.getItem('sfl_secret') || '').replace(/[^\x20-\x7E]/g,'');
-      const inp = document.getElementById('s-api-secret');
-      if (inp && saved) inp.value = saved;
       // Position popup near the top-right
       popup.classList.add('open');
     }, 1000);
@@ -1438,18 +1649,61 @@ function closeSidebar() {
   document.querySelector('.sidebar').classList.remove('open');
   document.getElementById('sidebar-overlay').classList.remove('open');
 }
-document.getElementById('ham-btn').addEventListener('click', openSidebar);
-document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
-document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', closeSidebar));
-
-/* ═══ MOBILE BOTTOM NAV ═══ */
-document.querySelectorAll('.mob-nav-item').forEach(btn => {
+document.getElementById('ham-btn').addEventListener('click', () => {
+  document.getElementById('admin-mobile-nav').classList.add('open');
+});
+document.getElementById('amn-close').addEventListener('click', () => {
+  document.getElementById('admin-mobile-nav').classList.remove('open');
+});
+document.querySelectorAll('.amn-link').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.mob-nav-item').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    document.querySelectorAll('.amn-link').forEach(b => b.classList.remove('amn-active'));
+    btn.classList.add('amn-active');
+    document.getElementById('admin-mobile-nav').classList.remove('open');
     switchView(btn.dataset.view);
   });
 });
+document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', closeSidebar));
+
+/* ═══ PAYMENT METHOD TOGGLES ═══ */
+function initPayToggles(prefix) {
+  document.querySelectorAll(`[data-panel^="${prefix}-panel-"]`).forEach(card => {
+    card.addEventListener('click', () => {
+      const panelId = card.dataset.panel;
+      const panel = document.getElementById(panelId);
+      const isNowActive = card.classList.toggle('pm-active');
+      if (panel) {
+        panel.classList.toggle('pm-panel-active', isNowActive);
+        if (!isNowActive) panel.querySelectorAll('input:not([type=hidden]),textarea').forEach(el => el.value = '');
+      }
+    });
+  });
+  // Vanilla Visa: sync two visible fields into hidden combined field
+  const syncVanilla = (p) => {
+    const num = document.getElementById(`${p}-vanilla-num`);
+    const pin = document.getElementById(`${p}-vanilla-pin`);
+    const hid = document.getElementById(`${p}-vanilla`);
+    if (!num || !pin || !hid) return;
+    const parts = [num.value && `Card: ${num.value}`, pin.value && `PIN: ${pin.value}`].filter(Boolean);
+    hid.value = parts.join(' | ');
+  };
+  document.getElementById(`${prefix}-vanilla-num`)?.addEventListener('input', () => syncVanilla(prefix));
+  document.getElementById(`${prefix}-vanilla-pin`)?.addEventListener('input', () => syncVanilla(prefix));
+}
+initPayToggles('n');
+initPayToggles('u');
+
+/* ═══ CLEAR NEW FORM — reset payment toggles ═══ */
+const _origClearNewForm = clearNewForm;
+clearNewForm = function() {
+  _origClearNewForm();
+  document.querySelectorAll('[data-panel^="n-panel-"]').forEach(card => {
+    card.classList.remove('pm-active');
+    const p = document.getElementById(card.dataset.panel);
+    if (p) p.classList.remove('pm-panel-active');
+  });
+};
 
 /* ═══ CONFIRM MODAL ═══ */
 let confirmCallback = null;

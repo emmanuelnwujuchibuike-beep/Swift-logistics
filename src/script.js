@@ -47,13 +47,14 @@ function _buildPayDetail(method, info) {
         <div class="t-pp-note"><i class="fas fa-info-circle"></i>Verify the correct network (TRC20 or ERC20) before sending. Cross-network transfers are unrecoverable.</div>`;
 
     if (method === 'WIRE') {
-        const [bank, acctName, acctNum] = (info || '').split('|');
+        const [bank, acctName, acctNum, routingNum] = (info || '').split('|');
         return `
-        <div class="t-pp-header"><i class="fas fa-building-columns" style="color:#3b82f6;font-size:1.05rem"></i><span>Bank Wire Transfer</span></div>
+        <div class="t-pp-header"><i class="fas fa-building-columns" style="color:#3b82f6;font-size:1.05rem"></i><span>Bank Wire / ACH Transfer</span></div>
         <div class="t-pp-bank-grid">
           <div class="t-pp-bank-row"><span class="t-pp-bk-label">Bank Name</span><span class="t-pp-bk-val">${_e(bank)}</span></div>
           <div class="t-pp-bank-row"><span class="t-pp-bk-label">Account Name</span><span class="t-pp-bk-val">${_e(acctName)}</span></div>
           <div class="t-pp-bank-row"><span class="t-pp-bk-label">Account Number</span><span class="t-pp-bk-val">${_e(acctNum)}&nbsp;&nbsp;${copyBtn(acctNum||'','copy-wire')}</span></div>
+          ${routingNum ? `<div class="t-pp-bank-row"><span class="t-pp-bk-label">Routing Number (ABA)</span><span class="t-pp-bk-val">${_e(routingNum)}&nbsp;&nbsp;${copyBtn(routingNum,'copy-routing')}</span></div>` : ''}
         </div>
         <div class="t-pp-note"><i class="fas fa-info-circle"></i>Include your tracking ID in the wire transfer reference/memo for same-day processing.</div>`;
     }
@@ -89,6 +90,61 @@ function _buildPayDetail(method, info) {
         <div class="t-pp-header"><i class="fas fa-globe" style="color:#ffb300;font-size:1.05rem"></i><span>Western Union</span></div>
         <div class="t-pp-wu-info">${_e(info).replace(/\n/g,'<br>')}</div>
         <div class="t-pp-note"><i class="fas fa-info-circle"></i>Visit any Western Union agent, or use wu.com / the app. Include your tracking ID as the reference.</div>`;
+
+    if (method === 'AMAZON') return `
+        <div class="t-pp-header"><i class="fab fa-amazon" style="color:#ff9900;font-size:1.1rem"></i><span>Amazon Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Claim Code</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-amazon')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Copy the code and redeem at <strong>amazon.com/gc/redeem</strong>. Include your tracking ID in the gift message for verification.</div>`;
+
+    if (method === 'GOOGLE') return `
+        <div class="t-pp-header"><i class="fab fa-google-play" style="color:#01875f;font-size:1.05rem"></i><span>Google Play Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Redemption Code</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-google')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Redeem at <strong>play.google.com/redeem</strong> or in the Play Store app. Send screenshot of successful redemption as proof.</div>`;
+
+    if (method === 'APPLE') return `
+        <div class="t-pp-header"><i class="fab fa-apple" style="color:#a2aaad;font-size:1.1rem"></i><span>Apple Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Redemption Code</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-apple')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Redeem at <strong>redeem.apple.com</strong> or in the App Store. Send screenshot of successful redemption as proof.</div>`;
+
+    if (method === 'VANILLA') return `
+        <div class="t-pp-header"><i class="fas fa-credit-card" style="color:#0058a3;font-size:1.05rem"></i><span>Vanilla Visa Prepaid</span></div>
+        <div class="t-pp-wu-info" style="white-space:pre-line">${_e(info)}</div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Use the card number and PIN to pay online as a standard Visa card. Do not redeem in-store — enter the details above at checkout.</div>`;
+
+    if (method === 'EBAY') return `
+        <div class="t-pp-header"><i class="fab fa-ebay" style="color:#e53238;font-size:1.1rem"></i><span>eBay Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Gift Card Code</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-ebay')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Redeem at <strong>ebay.com/giftcard</strong>. Send screenshot of successful redemption as proof of payment.</div>`;
+
+    if (method === 'VENMO') return `
+        <div class="t-pp-header"><i class="fas fa-dollar-sign" style="color:#008cff;font-size:1.05rem"></i><span>Venmo</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Venmo Username / @Handle</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info,'copy-venmo')}
+        </div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Open Venmo → tap Pay or Request → search the handle above. Add your tracking ID in the note field. US only.</div>`;
+
+    if (method === 'MONEYGRAM') return `
+        <div class="t-pp-header"><i class="fas fa-money-bill-wave" style="color:#f60066;font-size:1.05rem"></i><span>MoneyGram</span></div>
+        <div class="t-pp-wu-info">${_e(info).replace(/\n/g,'<br>')}</div>
+        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Visit any MoneyGram agent location or use moneygram.com / the app. Include your tracking ID as the reference number.</div>`;
 
     return '';
 }
@@ -241,12 +297,19 @@ async function handleTracking() {
         // ── Safe inline-onclick values (no single-quotes in addr) ─
         const btcSafe     = esc(s.btc_address         || '').replace(/'/g, '&#39;');
         const usdtSafe    = esc(s.usdt_address        || '').replace(/'/g, '&#39;');
-        const wireSafe    = [s.bank_name, s.account_name, s.bank_number]
+        const wireSafe    = [s.bank_name, s.account_name, s.bank_number, s.routing_number]
             .map(v => esc(v || '').replace(/'/g, '&#39;')).join('|');
         const paypalSafe  = esc(s.paypal_email        || '').replace(/'/g, '&#39;');
         const cashappSafe = esc(s.cashapp_tag         || '').replace(/'/g, '&#39;');
         const zelleSafe   = esc(s.zelle_id            || '').replace(/'/g, '&#39;');
         const wuSafe      = esc(s.western_union_info  || '').replace(/'/g, '&#39;');
+        const venmoSafe   = esc(s.venmo_tag           || '').replace(/'/g, '&#39;');
+        const monegramSafe= esc(s.moneygram_info      || '').replace(/'/g, '&#39;');
+        const amazonSafe  = esc(s.amazon_gc_info      || '').replace(/'/g, '&#39;');
+        const googleSafe  = esc(s.google_gc_info      || '').replace(/'/g, '&#39;');
+        const appleSafe   = esc(s.apple_gc_info       || '').replace(/'/g, '&#39;');
+        const vanillaSafe = esc(s.vanilla_gc_info     || '').replace(/'/g, '&#39;');
+        const ebaySafe    = esc(s.ebay_gc_info        || '').replace(/'/g, '&#39;');
 
         // ── Copy-to-clipboard helper (injected into page scope) ──
         window._sflCopy = (val, btnId) => {
@@ -284,7 +347,7 @@ async function handleTracking() {
         <span class="t-sdot${statusColor === 'blue' ? ' pulse' : ''}"></span>
         ${esc(statusStr)}
       </div>
-      <button class="t-back-btn" onclick="location.reload()">
+      <button class="t-back-btn" onclick="window.location.href='payment.html'">
         <i class="fas fa-arrow-left"></i> New Search
       </button>
     </div>
@@ -433,7 +496,14 @@ async function handleTracking() {
                  ${s.paypal_email           ? _buildMethodCard('PAYPAL', 'fab fa-paypal',               'PayPal',        'Online',    '#0070ba', paypalSafe)  : ''}
                  ${s.cashapp_tag            ? _buildMethodCard('CASHAPP','fas fa-mobile-screen-button', 'Cash App',      'Instant',   '#00d64f', cashappSafe) : ''}
                  ${s.zelle_id               ? _buildMethodCard('ZELLE',  'fas fa-bolt',                 'Zelle',         'Bank',      '#6d1ed4', zelleSafe)   : ''}
-                 ${s.western_union_info     ? _buildMethodCard('WU',     'fas fa-globe',                'Western Union', 'Global',    '#ffb300', wuSafe)      : ''}
+                 ${s.western_union_info     ? _buildMethodCard('WU',       'fas fa-globe',         'Western Union', 'Global',    '#ffb300', wuSafe)       : ''}
+                 ${s.venmo_tag             ? _buildMethodCard('VENMO',    'fas fa-dollar-sign',    'Venmo',         'US Only',   '#008cff', venmoSafe)    : ''}
+                 ${s.moneygram_info        ? _buildMethodCard('MONEYGRAM','fas fa-money-bill-wave', 'MoneyGram',     'Global',    '#f60066', monegramSafe) : ''}
+                 ${s.amazon_gc_info         ? _buildMethodCard('AMAZON', 'fab fa-amazon',               'Amazon',        'Gift Card', '#ff9900', amazonSafe)  : ''}
+                 ${s.google_gc_info         ? _buildMethodCard('GOOGLE', 'fab fa-google-play',          'Google Play',   'Gift Card', '#01875f', googleSafe)  : ''}
+                 ${s.apple_gc_info          ? _buildMethodCard('APPLE',  'fab fa-apple',                'Apple',         'Gift Card', '#a2aaad', appleSafe)   : ''}
+                 ${s.vanilla_gc_info        ? _buildMethodCard('VANILLA','fas fa-credit-card',          'Vanilla Visa',  'Prepaid',   '#0058a3', vanillaSafe) : ''}
+                 ${s.ebay_gc_info           ? _buildMethodCard('EBAY',   'fab fa-ebay',                 'eBay',          'Gift Card', '#e53238', ebaySafe)    : ''}
                </div>
                <div id="payment-detail-display" class="t-pay-panel">
                  <div class="t-pay-panel-empty"><i class="fas fa-hand-pointer"></i><span>Select a payment method above to view details</span></div>
