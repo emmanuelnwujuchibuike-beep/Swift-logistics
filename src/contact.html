@@ -1370,7 +1370,7 @@
   if(closeBtn) closeBtn.addEventListener('click', closeNav);
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && isOpen) closeNav(); });
-  window.addEventListener('resize', () => { if(!isMobile() && isOpen) closeNav(); });
+  window.addEventListener('resize', () => { if(!isMobile() && isOpen) closeNav(); }, { passive: true });
 })();
 
 
@@ -1516,7 +1516,7 @@
   var mapEl = document.getElementById('sfl-port-map');
   if (!mapEl || typeof mapboxgl === 'undefined') return;
   /* Free token — replace with your own at account.mapbox.com (50k loads/month free) */
-  mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
+  mapboxgl.accessToken = 'pk.eyJ1Ijoic3dpZnRmcmVpZ2h0bG9naXgiLCJhIjoiY21xNnhoZ3AwMDdhcjJycjU2bndyNGFhbyJ9.SUrLgNUXCy-PuDZu79Httw';
   var PORT = [-118.2720, 33.7395]; // Port of Los Angeles, San Pedro CA
   var map = new mapboxgl.Map({
     container: 'sfl-port-map',
