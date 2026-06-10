@@ -519,6 +519,61 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
 [data-theme="light"] .adm-ticker-wrap{background:rgba(10,20,60,.88)}
 [data-theme="light"] .adm-ticker-fl{background:linear-gradient(to right,rgba(10,20,60,.92),transparent)}
 [data-theme="light"] .adm-ticker-fr{background:linear-gradient(to left,rgba(10,20,60,.92),transparent)}
+
+/* ═══════════════════════════════════════════════════════════
+   PREMIUM UPGRADE LAYER — high-end, professional, responsive
+═══════════════════════════════════════════════════════════ */
+
+/* ── Login: deeper premium card ── */
+.login-glass{border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(var(--accent-rgb),.05),inset 0 1px 0 rgba(255,255,255,.04)}
+[data-theme="light"] .login-glass{box-shadow:0 30px 70px rgba(15,23,42,.14),inset 0 1px 0 rgba(255,255,255,.8)}
+#login-screen::after{content:'';position:absolute;bottom:-30%;right:-15%;width:55%;height:75%;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.05),transparent 70%);pointer-events:none}
+
+/* ── Topbar: refined glass + accent underline ── */
+.topbar{box-shadow:0 1px 0 rgba(var(--accent-rgb),.08),0 6px 24px rgba(0,0,0,.18)}
+
+/* ── Sidebar nav: active item gets an inner glow ── */
+.nav-item{transition:color .22s,border-color .22s,background .22s,box-shadow .22s}
+.nav-item.active{box-shadow:inset 0 0 26px rgba(var(--accent-rgb),.1)}
+
+/* ── Buttons: gradient depth + glow ── */
+.btn-primary{background:linear-gradient(135deg,#1d4ed8,#3b82f6);box-shadow:0 5px 18px rgba(var(--accent-rgb),.34),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn-primary:hover{background:linear-gradient(135deg,#2563eb,#60a5fa);box-shadow:0 9px 26px rgba(var(--accent-rgb),.48),inset 0 1px 0 rgba(255,255,255,.24)}
+
+/* ── Stat cards: glassy gradient + cinematic hover ── */
+.stat-card{background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.018));border-radius:12px;box-shadow:0 4px 22px rgba(0,0,0,.22);transition:border-color .25s,transform .25s,box-shadow .25s}
+.stat-card::before{height:3px}
+.stat-card:hover{transform:translateY(-3px);border-color:var(--aborder);box-shadow:0 18px 44px rgba(0,0,0,.42),0 0 0 1px rgba(var(--accent-rgb),.14)}
+.stat-value{letter-spacing:-.02em}
+[data-theme="light"] .stat-card{background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(255,255,255,.78));box-shadow:0 6px 26px rgba(15,23,42,.08)}
+[data-theme="light"] .stat-card:hover{box-shadow:0 18px 44px rgba(15,23,42,.14)}
+
+/* ── Tables: rounded shell, left accent bar on hover ── */
+.table-wrap{border-radius:12px;box-shadow:0 4px 22px rgba(0,0,0,.2)}
+[data-theme="light"] .table-wrap{box-shadow:0 6px 26px rgba(15,23,42,.07)}
+tbody td:first-child{box-shadow:inset 0 0 0 rgba(var(--accent-rgb),0);transition:box-shadow .18s}
+tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+
+/* ── Form cards: rounded premium ── */
+.form-card{border-radius:12px;box-shadow:0 4px 22px rgba(0,0,0,.18)}
+[data-theme="light"] .form-card{box-shadow:0 6px 26px rgba(15,23,42,.06)}
+
+/* ── Stats grid: never cramped on wide screens ── */
+@media(min-width:1101px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+
+/* ── Admin chat: professional responsive behaviour ── */
+.chat-ftab{border-radius:7px}
+@media(max-width:767px){
+  #admin-chat-layout{grid-template-columns:1fr!important;height:auto!important;gap:12px!important}
+  #admin-chat-layout > div:first-child{max-height:46vh}
+  #admin-messages{min-height:54vh}
+  #admin-convo-hdr .ac-hdr-actions{gap:5px}
+}
+@media(max-width:480px){
+  #admin-chat-layout > div:first-child{max-height:38vh}
+  #admin-convo-hdr .ac-hdr-actions .btn-secondary,
+  #admin-convo-hdr .ac-hdr-actions .btn-danger{padding:6px 9px!important;font-size:.64rem!important}
+}
 </style>
 <style id="x-hlock">html,body{overflow-x:hidden;overflow-x:clip;max-width:100%;overscroll-behavior-x:none}</style>
 </head>
@@ -2060,9 +2115,9 @@ async function doMarkDelivered(tid) {
     #admin-session-list::-webkit-scrollbar-thumb,#admin-messages::-webkit-scrollbar-thumb{background:rgba(59,130,246,.2);border-radius:2px}
 
     /* ── Session list items ── */
-    .ac-session-item{padding:12px 16px;cursor:pointer;border-left:3px solid transparent;transition:background .2s,border-color .2s}
-    .ac-session-item:hover{background:rgba(59,130,246,.06)}
-    .ac-session-item.active{background:rgba(59,130,246,.1);border-left-color:var(--accent)}
+    .ac-session-item{padding:12px 14px;margin:3px 8px;border-radius:10px;cursor:pointer;border-left:3px solid transparent;transition:background .2s,border-color .2s,box-shadow .2s,transform .15s}
+    .ac-session-item:hover{background:rgba(59,130,246,.07);transform:translateX(2px)}
+    .ac-session-item.active{background:linear-gradient(135deg,rgba(59,130,246,.18),rgba(59,130,246,.05));border-left-color:var(--accent);box-shadow:inset 0 0 24px rgba(59,130,246,.12),0 2px 12px rgba(0,0,0,.18)}
     .ac-session-name{font-size:.84rem;font-weight:600;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px;justify-content:space-between}
     .ac-session-preview{font-size:.75rem;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
     .ac-session-time{font-size:.65rem;color:rgba(232,240,254,.3);white-space:nowrap}
@@ -2071,17 +2126,18 @@ async function doMarkDelivered(tid) {
     /* ── Message row ── */
     @keyframes sfl-msg-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
     .ac-msg{
-      display:flex;flex-direction:column;max-width:76%;
+      display:flex;flex-direction:column;max-width:82%;
       animation:sfl-msg-in .28s cubic-bezier(.16,1,.3,1) both;
     }
 
     /* Visitor messages — LEFT */
     .ac-msg.visitor{align-self:flex-start;align-items:flex-start}
     .ac-msg.visitor .ac-bubble{
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.075);
+      border:1px solid rgba(255,255,255,.11);
       color:rgba(226,238,255,.92);
-      border-radius:4px 14px 14px 4px;
+      border-radius:4px 15px 15px 15px;
+      box-shadow:0 3px 14px rgba(0,0,0,.22);
     }
 
     /* Agent/Admin messages — RIGHT */
@@ -2089,8 +2145,9 @@ async function doMarkDelivered(tid) {
     .ac-msg.agent .ac-bubble{
       background:linear-gradient(145deg,#1d4ed8,#3b82f6);
       color:#fff;
-      border-radius:14px 4px 4px 14px;
-      box-shadow:0 4px 16px rgba(37,99,235,.35);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:15px 4px 15px 15px;
+      box-shadow:0 6px 20px rgba(37,99,235,.42),inset 0 1px 0 rgba(255,255,255,.22);
     }
 
     /* Shared bubble */

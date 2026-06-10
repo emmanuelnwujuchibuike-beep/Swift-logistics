@@ -58,15 +58,17 @@
   /* FAB button */
   '#sfl-fab{',
     'position:fixed!important;bottom:28px!important;right:28px!important;z-index:2147483640!important;',
-    'width:60px!important;height:60px!important;margin:0!important;padding:0!important;border:none!important;',
+    'width:62px!important;height:62px!important;margin:0!important;padding:0!important;',
+    'border:1px solid rgba(255,255,255,.16)!important;',
     'outline:none!important;cursor:pointer!important;',
-    'background:linear-gradient(145deg,#1e40af,#3b82f6)!important;',
+    'background:linear-gradient(140deg,#1e3a8a 0%,#2563eb 52%,#3b82f6 100%)!important;',
     'border-radius:50%!important;',
     'display:flex!important;align-items:center!important;justify-content:center!important;',
-    'box-shadow:0 8px 32px rgba(37,99,235,.55),0 2px 8px rgba(0,0,0,.35)!important;',
-    'transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s!important;',
+    'box-shadow:0 12px 36px rgba(37,99,235,.5),0 4px 14px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -2px 6px rgba(0,0,0,.25)!important;',
+    'transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .35s!important;',
   '}',
-  '#sfl-fab:hover{transform:scale(1.1) translateY(-3px)!important;box-shadow:0 16px 44px rgba(37,99,235,.65)!important;}',
+  '#sfl-fab:hover{transform:scale(1.08) translateY(-3px)!important;box-shadow:0 20px 50px rgba(37,99,235,.62),0 6px 18px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.35)!important;}',
+  '#sfl-fab:active{transform:scale(1.02) translateY(-1px)!important;}',
   '#sfl-fab .sfl-ic{position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;',
     'transition:opacity .22s,transform .22s!important;}',
   '#sfl-fab .sfl-ic-chat{opacity:1!important;transform:scale(1)!important;}',
@@ -95,21 +97,26 @@
   /* Panel shell — tall like WhatsApp: anchored top+bottom so it fills the viewport */
   '#sfl-panel{',
     'position:fixed!important;top:12px!important;bottom:100px!important;right:28px!important;z-index:2147483639!important;',
-    'width:390px!important;max-width:calc(100vw - 24px)!important;',
+    'width:392px!important;max-width:calc(100vw - 24px)!important;',
     'display:flex!important;flex-direction:column!important;overflow:hidden!important;',
-    'background:#04091c!important;',
-    'border:1px solid rgba(59,130,246,.18)!important;',
-    'border-radius:16px!important;',
-    'box-shadow:0 40px 90px rgba(0,0,0,.82),0 0 0 1px rgba(37,99,235,.06)!important;',
+    'background:linear-gradient(170deg,#070e26 0%,#04091c 60%,#03071a 100%)!important;',
+    'backdrop-filter:blur(22px) saturate(1.4)!important;-webkit-backdrop-filter:blur(22px) saturate(1.4)!important;',
+    'border:1px solid rgba(99,141,255,.2)!important;',
+    'border-radius:20px!important;',
+    'box-shadow:0 50px 110px rgba(0,0,0,.86),0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(37,99,235,.08),inset 0 1px 0 rgba(255,255,255,.05)!important;',
     'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif!important;',
     'opacity:0!important;transform:translateY(24px) scale(.94)!important;pointer-events:none!important;',
-    'transition:opacity .38s cubic-bezier(.16,1,.3,1),transform .38s cubic-bezier(.16,1,.3,1)!important;',
+    'transition:opacity .42s cubic-bezier(.16,1,.3,1),transform .42s cubic-bezier(.16,1,.3,1)!important;',
   '}',
   '#sfl-panel.open{opacity:1!important;transform:none!important;pointer-events:all!important;}',
   /* Top accent line */
   '#sfl-panel::before{content:""!important;position:absolute!important;top:0!important;left:0!important;right:0!important;',
     'height:2px!important;z-index:2!important;',
-    'background:linear-gradient(90deg,transparent,#2563eb 30%,#60a5fa 70%,transparent)!important;}',
+    'background:linear-gradient(90deg,transparent,#2563eb 25%,#60a5fa 50%,#2563eb 75%,transparent)!important;}',
+  /* Ambient corner glow — behind content, above panel bg */
+  '#sfl-panel::after{content:""!important;position:absolute!important;top:-60px!important;right:-60px!important;',
+    'width:220px!important;height:220px!important;border-radius:50%!important;z-index:-1!important;pointer-events:none!important;',
+    'background:radial-gradient(circle,rgba(37,99,235,.14),transparent 70%)!important;}',
 
   /* Box-model reset for panel children — no font-family here to keep SVG strokes intact */
   '#sfl-panel *{box-sizing:border-box!important;margin:0!important;padding:0!important;}',
@@ -117,9 +124,9 @@
   /* ── Header ── */
   '#sfl-panel .sf-hdr{',
     'display:flex!important;align-items:center!important;gap:12px!important;',
-    'padding:16px 18px!important;flex-shrink:0!important;',
-    'background:rgba(255,255,255,.024)!important;',
-    'border-bottom:1px solid rgba(59,130,246,.1)!important;}',
+    'padding:16px 18px!important;flex-shrink:0!important;position:relative!important;z-index:1!important;',
+    'background:linear-gradient(180deg,rgba(37,99,235,.1),rgba(255,255,255,.02))!important;',
+    'border-bottom:1px solid rgba(99,141,255,.14)!important;}',
   '#sfl-panel .sf-av{',
     'width:42px!important;height:42px!important;flex-shrink:0!important;',
     'border-radius:50%!important;',
@@ -318,11 +325,11 @@
 
   /* image attach button */
   '#sfl-panel .sf-imgbtn{',
-    'width:38px!important;height:38px!important;flex-shrink:0!important;align-self:flex-end!important;',
+    'width:40px!important;height:40px!important;flex-shrink:0!important;align-self:flex-end!important;',
     'background:rgba(255,255,255,.06)!important;border:1px solid rgba(226,238,255,.1)!important;',
-    'border-radius:9px!important;cursor:pointer!important;color:rgba(226,238,255,.42)!important;',
+    'border-radius:11px!important;cursor:pointer!important;color:rgba(226,238,255,.42)!important;',
     'display:flex!important;align-items:center!important;justify-content:center!important;',
-    'transition:background .2s,color .2s!important;}',
+    'transition:background .2s,color .2s,border-color .2s!important;}',
   '#sfl-panel .sf-imgbtn:hover{background:rgba(37,99,235,.14)!important;color:#60a5fa!important;border-color:rgba(59,130,246,.3)!important;}',
   '#sfl-panel .sf-imgbtn.busy{opacity:.3!important;pointer-events:none!important;}',
 
@@ -340,14 +347,14 @@
 
   /* send button */
   '#sfl-panel .sf-send{',
-    'width:38px!important;height:38px!important;flex-shrink:0!important;align-self:flex-end!important;',
-    'border:none!important;border-radius:9px!important;cursor:pointer!important;',
-    'background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;',
+    'width:40px!important;height:40px!important;flex-shrink:0!important;align-self:flex-end!important;',
+    'border:1px solid rgba(255,255,255,.16)!important;border-radius:11px!important;cursor:pointer!important;',
+    'background:linear-gradient(140deg,#1d4ed8,#3b82f6)!important;',
     'display:flex!important;align-items:center!important;justify-content:center!important;',
-    'box-shadow:0 4px 14px rgba(37,99,235,.42)!important;',
-    'transition:opacity .2s,transform .2s!important;}',
-  '#sfl-panel .sf-send:hover{opacity:.84!important;transform:translateY(-2px)!important;}',
-  '#sfl-panel .sf-send:disabled{opacity:.28!important;pointer-events:none!important;transform:none!important;}',
+    'box-shadow:0 5px 16px rgba(37,99,235,.45),inset 0 1px 0 rgba(255,255,255,.25)!important;',
+    'transition:opacity .2s,transform .2s,box-shadow .2s!important;}',
+  '#sfl-panel .sf-send:hover{transform:translateY(-2px)!important;box-shadow:0 9px 24px rgba(37,99,235,.6),inset 0 1px 0 rgba(255,255,255,.3)!important;}',
+  '#sfl-panel .sf-send:disabled{opacity:.28!important;pointer-events:none!important;transform:none!important;box-shadow:none!important;}',
 
   /* footer */
   '#sfl-panel .sf-foot{',
@@ -365,6 +372,10 @@
     '#sfl-fab,#sfl-pulse{bottom:18px!important;right:18px!important;z-index:2147483642!important;}',
     '#sfl-badge{bottom:68px!important;right:12px!important;}',
     '#sfl-panel .sf-cimg{max-width:160px!important;}',
+    /* When the full-screen panel is open, hide the floating button + pulse so
+       they never sit on top of the send button — the header X closes the chat. */
+    'body.sfl-chat-open #sfl-fab,body.sfl-chat-open #sfl-pulse{',
+      'opacity:0!important;transform:scale(.6)!important;pointer-events:none!important;}',
   '}',
 
   ].join('');
@@ -477,6 +488,7 @@
     isOpen = true;
     ge('sfl-panel').classList.add('open');
     ge('sfl-fab').classList.add('open');
+    document.body.classList.add('sfl-chat-open');
     clearBadge();
     if (sessionId && visitorName) { loadHistory(); subscribe(); }
   }
@@ -485,6 +497,7 @@
     isOpen = false;
     ge('sfl-panel').classList.remove('open');
     ge('sfl-fab').classList.remove('open');
+    document.body.classList.remove('sfl-chat-open');
   }
 
   /* ════════════════════════════════════════════════════════════════
