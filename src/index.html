@@ -1948,22 +1948,28 @@
     }, 350);
   });
 })();
-// Ticker fetch
+// Ticker — polls every 10 s so admin changes appear without a page refresh
 (function(){
   const SB_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
   const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
-  fetch(SB_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
-    headers: { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON }
-  }).then(r => r.json()).then(rows => {
-    const text = rows && rows[0] && rows[0].value ? rows[0].value.trim() : '';
-    if (!text) return;
-    const sep = '  ·  ';
-    const full = text + sep + text;
-    document.getElementById('ticker-t1').textContent = full;
-    document.getElementById('ticker-t2').textContent = full;
-    const ticker = document.getElementById('site-ticker');
-    if (ticker) ticker.classList.add('visible');
-  }).catch(() => {});
+  var _last = undefined;
+  function refreshTicker() {
+    fetch(SB_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
+      headers: { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON }
+    }).then(function(r){ return r.json(); }).then(function(rows) {
+      var text = (rows && rows[0] && rows[0].value) ? rows[0].value.trim() : '';
+      if (text === _last) return; // unchanged — skip DOM write
+      _last = text;
+      var ticker = document.getElementById('site-ticker');
+      if (!text) { if (ticker) ticker.classList.remove('visible'); return; }
+      var full = text + '  ·  ' + text;
+      document.getElementById('ticker-t1').textContent = full;
+      document.getElementById('ticker-t2').textContent = full;
+      if (ticker) ticker.classList.add('visible');
+    }).catch(function(){});
+  }
+  refreshTicker();
+  setInterval(refreshTicker, 10000);
 })();
 </script>
 
