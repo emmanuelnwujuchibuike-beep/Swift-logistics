@@ -5,10 +5,22 @@ html.lenis {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
   -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* iOS Safari zooms any input with font-size < 16px on focus.
+   Force minimum 16px on mobile so the viewport never jumps. */
+@media (max-width: 1024px) {
+  input, textarea, select {
+    font-size: max(16px, 1em) !important;
+  }
 }
 
 
