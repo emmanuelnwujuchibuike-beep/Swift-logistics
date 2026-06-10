@@ -623,12 +623,41 @@ async function initRouteMap(waypoints) {
         const token   = tokJson && tokJson.token;
         if (!token) { showFallback(); return; }
 
-        const geocode = async (q) => {
+        // Accurate geocoding: restrict to real administrative places (city /
+        // locality / region / district / country) — never POIs or addresses —
+        // and disable partial autocomplete so "Port Harcourt" resolves to the
+        // actual city, not a same-named point of interest elsewhere.
+        const TYPES = 'place,locality,region,district,country';
+        const STRIP = /\b(sorting\s*hub|sorting\s*centre?|hub|warehouse|facility|distribution\s*centre?|distribution|depot|terminal|station|branch|office)\b/gi;
+
+        const queryOnce = async (q) => {
+            // Mapbox Geocoding v6 (most accurate)
             try {
-                const u = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?limit=1&access_token=${token}`;
+                const u = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(q)}&limit=1&types=${TYPES}&autocomplete=false&access_token=${token}`;
                 const r = await fetch(u); const j = await r.json();
-                return (j && j.features && j.features[0]) ? j.features[0].center : null;
-            } catch (_) { return null; }
+                const f = j && j.features && j.features[0];
+                if (f && f.geometry && f.geometry.coordinates) return f.geometry.coordinates;
+            } catch (_) {}
+            // Fallback: v5 with the same restrictions
+            try {
+                const u = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?limit=1&types=${TYPES}&autocomplete=false&language=en&access_token=${token}`;
+                const r = await fetch(u); const j = await r.json();
+                const f = j && j.features && j.features[0];
+                if (f && f.center) return f.center;
+            } catch (_) {}
+            return null;
+        };
+
+        const geocode = async (raw) => {
+            const q = String(raw || '').trim();
+            if (!q) return null;
+            let c = await queryOnce(q);
+            if (!c) {
+                // Retry without logistics noise words (e.g. "Port Harcourt Sorting Hub")
+                const simple = q.replace(STRIP, '').replace(/\s{2,}/g, ' ').replace(/^[\s,]+|[\s,]+$/g, '').trim();
+                if (simple && simple.toLowerCase() !== q.toLowerCase()) c = await queryOnce(simple);
+            }
+            return c;
         };
 
         // Geocode every waypoint in parallel; keep order, drop failures
