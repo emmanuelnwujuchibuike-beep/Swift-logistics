@@ -64,24 +64,37 @@
     stats.forEach(function (s) { co.observe(s); });
   }
 
-  /* ── Hero pointer parallax (desktop only) ── */
+  /* ── Pause hero's continuous animations when it scrolls out of view ──
+     Wheel scrolling on laptops is main-thread; constantly compositing the
+     Ken Burns + aurora while scrolling the rest of the page causes jank.
+     Touch scroll (phones) is compositor-threaded, so it stays smooth — this
+     is why the lag was laptop-only. */
   var hero = document.getElementById('hero') || document.getElementById('page-hero');
-  var hc = hero && hero.querySelector('.hero-content');
-  if (hc && !reduce &&
+  if (hero && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      hero.classList.toggle('sfl-hero-out', !es[0].isIntersecting);
+    }, { threshold: 0 }).observe(hero);
+  }
+
+  /* ── Hero pointer parallax (desktop only) ──
+     Moves only the inner text wrapper, NOT .hero-content (which carries the
+     blurred aurora pseudo) — keeps the per-frame repaint cheap. */
+  var hcInner = hero && hero.querySelector('.hero-content > div');
+  if (hcInner && !reduce &&
       window.matchMedia('(pointer:fine)').matches && window.innerWidth > 1024) {
     var tx = 0, ty = 0, cx = 0, cy = 0, raf2 = null;
     function loop() {
       cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08;
-      hc.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0)';
+      hcInner.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0)';
       if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1) raf2 = requestAnimationFrame(loop);
       else raf2 = null;
     }
     hero.addEventListener('mousemove', function (ev) {
       var r = hero.getBoundingClientRect();
-      tx = ((ev.clientX - r.left) / r.width - 0.5) * 14;
-      ty = ((ev.clientY - r.top) / r.height - 0.5) * 10;
+      tx = ((ev.clientX - r.left) / r.width - 0.5) * 10;
+      ty = ((ev.clientY - r.top) / r.height - 0.5) * 7;
       if (!raf2) raf2 = requestAnimationFrame(loop);
-    });
+    }, { passive: true });
     hero.addEventListener('mouseleave', function () {
       tx = 0; ty = 0; if (!raf2) raf2 = requestAnimationFrame(loop);
     });

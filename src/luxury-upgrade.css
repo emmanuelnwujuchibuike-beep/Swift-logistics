@@ -1610,8 +1610,8 @@ body { position: relative; }
     rgba(var(--accent-rgb, 59,130,246),.18) 0%,
     rgba(232,27,42,.07) 38%,
     transparent 68%);
-  filter: blur(42px);
-  animation: aurora 11s ease-in-out infinite alternate;
+  filter: blur(30px);
+  animation: aurora 12s ease-in-out infinite alternate;
   pointer-events: none;
 }
 @keyframes aurora {
@@ -1619,12 +1619,16 @@ body { position: relative; }
   100% { transform: translate3d(6%,4%,0) scale(1.2); opacity: 1; }
 }
 
-/* ── Orbs breathe + drift (cinematic depth) ── */
-.orb { animation: orb-drift 16s ease-in-out infinite alternate; }
-.orb:nth-of-type(2) { animation-duration: 21s; animation-delay: -4s; }
-@keyframes orb-drift {
-  0%   { transform: translate3d(0,0,0) scale(1); }
-  100% { transform: translate3d(4%,-5%,0) scale(1.16); }
+/* Orbs stay static — animating the heavy blur(110px) layers continuously was
+   too costly for laptop wheel-scroll. Depth comes from the aurora instead. */
+
+/* Pause the hero's continuous animations once it scrolls out of view, so the
+   rest of the page scrolls smoothly (JS toggles .sfl-hero-out via observer). */
+#hero.sfl-hero-out .hero-bg,
+#page-hero.sfl-hero-out .hero-bg,
+#hero.sfl-hero-out .hero-content::before,
+#page-hero.sfl-hero-out .hero-content::before {
+  animation-play-state: paused !important;
 }
 
 /* ── Bigger, bolder hero headline ── */
@@ -1642,8 +1646,8 @@ body { position: relative; }
 .reveal.left  { transform: translate3d(-46px, 0, 0); }
 .reveal.right { transform: translate3d(46px, 0, 0); }
 .reveal {
-  filter: blur(7px);
-  transition: opacity .7s ease, transform .9s cubic-bezier(.16,1,.3,1), filter .8s ease !important;
+  filter: blur(4px);
+  transition: opacity .7s ease, transform .9s cubic-bezier(.16,1,.3,1), filter .6s ease !important;
 }
 .reveal.on { filter: blur(0) !important; }
 
