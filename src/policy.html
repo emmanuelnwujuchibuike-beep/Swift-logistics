@@ -48,7 +48,13 @@
                  radial-gradient(ellipse 50% 45% at 95% 80%,rgba(201,168,76,.05) 0%,transparent 50%),
                  radial-gradient(ellipse 40% 35% at 60% 20%,rgba(59,130,246,.04) 0%,transparent 50%)}
     header,main,footer,nav,.fab-btn{position:relative;z-index:1}
-    .gt{background:linear-gradient(115deg,var(--gold) 0%,var(--gold-hi) 50%,var(--violet-hi) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .gt {
+      background: linear-gradient(115deg, #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
     .gt-blue{background:linear-gradient(115deg,var(--accent) 0%,var(--accent-hi) 40%,var(--gold-hi) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .orb{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
     .btn-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--accent-deep),var(--accent),var(--accent-hi));background-size:200% 100%;background-position:left;color:#fff;font:700 .74rem/1 'DM Sans';letter-spacing:.12em;text-transform:uppercase;padding:15px 32px;border-radius:2px;border:none;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-position .5s ease,box-shadow .3s,transform .25s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
@@ -583,7 +589,7 @@
 <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
 <script>
 (function(){
-  var lenis = new Lenis({ duration: 0.9, easing: function(t){ return 1 - Math.pow(1 - t, 4); }, smoothTouch: false });
+  var lenis = new Lenis({ duration: 0.55, easing: function(t){ return 1 - Math.pow(1 - t, 4); }, smoothTouch: false });
   function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
 })();

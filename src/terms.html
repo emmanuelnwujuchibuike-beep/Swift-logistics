@@ -48,7 +48,13 @@
                  radial-gradient(ellipse 50% 45% at 90% 80%,rgba(201,168,76,.05) 0%,transparent 50%),
                  radial-gradient(ellipse 40% 35% at 55% 25%,rgba(124,58,237,.04) 0%,transparent 50%)}
     header,main,footer,nav{position:relative;z-index:1}
-    .gt{background:linear-gradient(115deg,var(--teal) 0%,var(--teal-hi) 35%,var(--accent-hi) 70%,var(--violet-hi) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .gt {
+      background: linear-gradient(115deg, #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
     .gt-gold{background:linear-gradient(115deg,var(--gold) 0%,var(--gold-hi) 60%,var(--accent-hi) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .gt-blue{background:linear-gradient(115deg,var(--accent) 0%,var(--accent-hi) 40%,var(--gold-hi) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .orb{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
@@ -616,7 +622,7 @@
 <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
 <script>
 (function(){
-  var lenis = new Lenis({ duration: 0.9, easing: function(t){ return 1 - Math.pow(1 - t, 4); }, smoothTouch: false });
+  var lenis = new Lenis({ duration: 0.55, easing: function(t){ return 1 - Math.pow(1 - t, 4); }, smoothTouch: false });
   function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
 })();

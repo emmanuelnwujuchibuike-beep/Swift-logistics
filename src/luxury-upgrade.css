@@ -1292,6 +1292,8 @@ img { max-width: 100%; height: auto; }
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  transition: none !important;
   filter: drop-shadow(0 0 18px rgba(200,16,46,.55)) !important;
 }
 
@@ -1333,6 +1335,8 @@ img { max-width: 100%; height: auto; }
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  transition: none !important;
   filter: drop-shadow(0 0 18px rgba(200,16,46,.55)) !important;
 }
 
@@ -1367,6 +1371,8 @@ img { max-width: 100%; height: auto; }
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  transition: none !important;
   filter: drop-shadow(0 0 18px rgba(200,16,46,.55)) !important;
 }
 

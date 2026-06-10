@@ -143,9 +143,11 @@
 
     /* ── Gradient text ── */
     .gt {
-      background: linear-gradient(115deg, var(--accent) 0%, var(--accent-hi) 55%, var(--accent) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background: linear-gradient(115deg, #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%);
+      -webkit-background-clip: text;
       background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
     }
     .gt-gold {
       background: linear-gradient(115deg, var(--gold) 0%, var(--gold-hi) 55%, var(--gold) 100%);
@@ -1595,7 +1597,7 @@
 <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
 <script>
 (function(){
-  var lenis = new Lenis({ duration: 0.9, easing: function(t){ return 1 - Math.pow(1 - t, 4); }, smoothTouch: false });
+  var lenis = new Lenis({ duration: 0.55, easing: function(t){ return 1 - Math.pow(1 - t, 4); }, smoothTouch: false });
   function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
 })();
