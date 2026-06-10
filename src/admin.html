@@ -848,6 +848,19 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
         </div>
 
         <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-route"></i> Route &amp; Details</div>
+          <div class="form-grid form-grid-2">
+            <div class="f-group"><label>Origin (Pickup)</label><input type="text" id="u-origin" class="f-input" placeholder="e.g. Port Harcourt, Nigeria — blank = keep"></div>
+            <div class="f-group"><label>Destination</label><input type="text" id="u-dest" class="f-input" placeholder="e.g. Manchester, United Kingdom — blank = keep"></div>
+            <div class="f-group"><label>Sender's Name</label><input type="text" id="u-sender" class="f-input" placeholder="Blank = keep"></div>
+            <div class="f-group"><label>Pickup Date</label><input type="text" id="u-pickup" class="f-input" placeholder="Blank = keep"></div>
+            <div class="f-group"><label>Service Type</label><input type="text" id="u-service" class="f-input" placeholder="Blank = keep"></div>
+            <div class="f-group"><label>Priority</label><input type="text" id="u-priority" class="f-input" placeholder="Blank = keep"></div>
+            <div class="f-group" style="grid-column:1/-1"><label>Package Details</label><input type="text" id="u-pkg" class="f-input" placeholder="Blank = keep"></div>
+          </div>
+        </div>
+
+        <div class="form-card">
           <div class="form-card-title"><i class="fas fa-map-pin"></i> Status &amp; Location</div>
           <div class="form-grid form-grid-2">
             <div class="f-group"><label>New Status</label>
@@ -1690,6 +1703,15 @@ function openEdit(tid) {
   ['u-status','u-s1color','u-location','u-eta','u-paystatus','u-amount','u-notes',
    'u-s2name','u-s2loc','u-s2color','u-s3name','u-s3loc','u-s3color','u-s4name','u-s4loc','u-s4color']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = el.tagName === 'SELECT' ? '' : ''; });
+  // Pre-fill route & details with current values so they can be edited
+  const _setEdit = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  _setEdit('u-origin',   s.origin);
+  _setEdit('u-dest',     s.destination);
+  _setEdit('u-sender',   s.senders_name);
+  _setEdit('u-pickup',   s.pickup_date);
+  _setEdit('u-service',  s.service_type);
+  _setEdit('u-priority', s.priority);
+  _setEdit('u-pkg',      s.package_details);
   // Reset all payment panels
   document.querySelectorAll('[data-panel^="u-panel-"]').forEach(card => {
     card.classList.remove('pm-active');
@@ -1740,6 +1762,13 @@ document.getElementById('update-btn').addEventListener('click', async () => {
   const btn = document.getElementById('update-btn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>&nbsp; Saving…';
   const updates = {};
+  if (v('u-origin'))    updates.origin           = v('u-origin');
+  if (v('u-dest'))      updates.destination      = v('u-dest');
+  if (v('u-sender'))    updates.senders_name     = v('u-sender');
+  if (v('u-pickup'))    updates.pickup_date      = v('u-pickup');
+  if (v('u-service'))   updates.service_type     = v('u-service');
+  if (v('u-priority'))  updates.priority         = v('u-priority');
+  if (v('u-pkg'))       updates.package_details  = v('u-pkg');
   if (v('u-status'))    updates.status           = v('u-status');
   if (v('u-s1color'))   updates.step1_color      = v('u-s1color');
   if (v('u-location'))  updates.current_location = v('u-location');

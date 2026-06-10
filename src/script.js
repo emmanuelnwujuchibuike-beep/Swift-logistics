@@ -357,8 +357,8 @@ async function handleTracking(silent) {
     </div>
     <div class="t-route-line">
       <div class="t-route-end origin">
-        <div class="t-route-sub">Origin</div>
-        <div class="t-route-city" title="${esc(s.origin || '')}">${esc(s.origin || '—')}</div>
+        <div class="t-route-sub">Pickup</div>
+        <div class="t-route-city" title="${esc(s.current_location || '')}">${esc(s.current_location || '—')}</div>
         <div class="t-route-dot origin"></div>
       </div>
       <div class="t-route-track">
@@ -384,7 +384,7 @@ async function handleTracking(silent) {
       <div id="t-route-map"></div>
       <div class="t-map-corner t-mc-tl"></div><div class="t-map-corner t-mc-tr"></div>
       <div class="t-map-corner t-mc-bl"></div><div class="t-map-corner t-mc-br"></div>
-      <div class="t-map-badge"><span class="t-live-dot"></span> ${esc(s.origin || 'Origin')} &rarr; ${esc(s.destination || 'Destination')}</div>
+      <div class="t-map-badge"><span class="t-live-dot"></span> ${esc(s.current_location || 'Pickup')} &rarr; ${esc(s.destination || 'Destination')}</div>
       <div class="t-map-legend">
         <div><span class="lg trav"></span> Traveled</div>
         <div><span class="lg cur"></span> Package</div>
@@ -578,16 +578,18 @@ async function handleTracking(silent) {
             if (plane) plane.style.left = pct + '%';
         }));
 
-        // Initialise the interactive 3D route globe with the FULL journey:
-        // origin → current package position → every checkpoint → destination.
+        // The journey is driven ONLY by what the admin entered, in transit order:
+        //   Step 1 location (= PICKUP) → Step 2 → Step 3 → Step 4 → Destination.
+        // The live PACKAGE position is the LAST step marked green (completed).
+        // Waypoints with no location are skipped entirely (nothing fabricated).
+        const _green = (c) => (c || '').includes('green');
         const journey = [
-            { q: s.origin,           label: s.origin || 'Origin',              kind: 'origin' },
-            { q: s.current_location, label: s.current_location || 'In Transit',kind: 'current' },
-            { q: s.step2_location,   label: s.step2_name || 'Checkpoint',      kind: 'check', done: (s.step2_color || '').includes('green') },
-            { q: s.step3_location,   label: s.step3_name || 'Checkpoint',      kind: 'check', done: (s.step3_color || '').includes('green') },
-            { q: s.step4_location,   label: s.step4_name || 'Arrival',         kind: 'check', done: (s.step4_color || '').includes('green') },
-            { q: s.destination,      label: s.destination || 'Destination',    kind: 'dest' },
-        ].filter(w => w.q && String(w.q).trim());
+            { q: s.current_location, kind: 'origin', done: _green(s.step1_color) },
+            { q: s.step2_location,   kind: 'check',  done: _green(s.step2_color) },
+            { q: s.step3_location,   kind: 'check',  done: _green(s.step3_color) },
+            { q: s.step4_location,   kind: 'check',  done: _green(s.step4_color) },
+            { q: s.destination,      kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver') },
+        ].filter(w => w.q && String(w.q).trim()).map(w => ({ ...w, label: w.q }));
         initRouteMap(journey);
 
         // Live sync — reflect admin dashboard edits without a manual reload
@@ -775,22 +777,23 @@ async function initRouteMap(waypoints) {
                     paint:{ 'line-color':'#22c55e', 'line-width':3.6, 'line-opacity':1 } });
             }
 
-            // Clearly-labelled markers: Pickup · checkpoints · Package · Destination
+            // Markers: PICKUP (step 1) · checkpoints · PACKAGE (live) · DESTINATION
+            const lastIdx = pts.length - 1;
             pts.forEach((w, i) => {
                 const el = document.createElement('div');
-                let cls = 't-map-marker', label = '', icon = '';
-                if (i === curIdx)             { cls += ' current pulse'; label = 'Package';     icon = '<i class="fas fa-box"></i>'; }
-                else if (w.kind === 'origin') { cls += ' origin';        label = 'Pickup';      icon = '<i class="fas fa-location-dot"></i>'; }
-                else if (w.kind === 'dest')   { cls += ' dest';          label = 'Destination'; icon = '<i class="fas fa-flag-checkered"></i>'; }
-                else if (w.done || i < curIdx) cls += ' done';
-                else                          cls += ' check';
+                let cls = 't-map-marker', label = '', icon = '', title = '';
+                if (i === 0)                   { cls += ' origin'; label = 'Pickup'; icon = '<i class="fas fa-location-dot"></i>'; title = 'Picked up'; }
+                else if (i === lastIdx)        { cls += ' dest';   label = 'Destination'; icon = '<i class="fas fa-flag-checkered"></i>'; title = 'Destination'; }
+                else if (i === curIdx)         { cls += ' current pulse'; label = 'Package'; icon = '<i class="fas fa-box"></i>'; title = 'Package is here'; }
+                else if (w.done || i < curIdx) { cls += ' done'; title = 'Completed'; }
+                else                           { cls += ' check'; title = 'Upcoming'; }
                 el.className = cls;
                 el.innerHTML = icon + (label ? '<span class="t-mk-label">' + escMap(label) + '</span>' : '');
 
-                const title = (i === curIdx) ? 'Package is here' : escMap(w.label);
                 const sub   = w.label ? '<span>' + escMap(w.label) + '</span>' : '';
                 const popup = new mapboxgl.Popup({ offset: 20, closeButton: false, className: 't-map-popup' })
                     .setHTML('<b>' + title + '</b>' + sub);
+                // anchor:'center' keeps the marker pinned exactly on its coordinate at every zoom level
                 new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat(w.coord).setPopup(popup).addTo(map);
             });
 
