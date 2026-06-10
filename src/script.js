@@ -383,6 +383,11 @@ async function handleTracking() {
       <div class="t-map-corner t-mc-tl"></div><div class="t-map-corner t-mc-tr"></div>
       <div class="t-map-corner t-mc-bl"></div><div class="t-map-corner t-mc-br"></div>
       <div class="t-map-badge"><span class="t-live-dot"></span> ${esc(s.origin || 'Origin')} &rarr; ${esc(s.destination || 'Destination')}</div>
+      <div class="t-map-legend">
+        <div><span class="lg trav"></span> Traveled</div>
+        <div><span class="lg cur"></span> Package</div>
+        <div><span class="lg up"></span> Upcoming</div>
+      </div>
       <div class="t-map-fallback" id="t-map-fallback" style="display:none;">
         <i class="fas fa-route"></i>
         <p>Route progress is shown above. Live globe view is unavailable for this shipment.</p>
@@ -571,8 +576,17 @@ async function handleTracking() {
             if (plane) plane.style.left = pct + '%';
         }));
 
-        // Initialise the interactive 3D route globe (graceful fallback)
-        initRouteMap(s.origin, s.destination);
+        // Initialise the interactive 3D route globe with the FULL journey:
+        // origin → current package position → every checkpoint → destination.
+        const journey = [
+            { q: s.origin,           label: s.origin || 'Origin',              kind: 'origin' },
+            { q: s.current_location, label: s.current_location || 'In Transit',kind: 'current' },
+            { q: s.step2_location,   label: s.step2_name || 'Checkpoint',      kind: 'check', done: (s.step2_color || '').includes('green') },
+            { q: s.step3_location,   label: s.step3_name || 'Checkpoint',      kind: 'check', done: (s.step3_color || '').includes('green') },
+            { q: s.step4_location,   label: s.step4_name || 'Arrival',         kind: 'check', done: (s.step4_color || '').includes('green') },
+            { q: s.destination,      label: s.destination || 'Destination',    kind: 'dest' },
+        ].filter(w => w.q && String(w.q).trim());
+        initRouteMap(journey);
 
     } catch (e) {
         console.error('Tracking error:', e);
@@ -586,54 +600,72 @@ async function handleTracking() {
 
 
 /* ════════════════════════════════════════════════════════════════
-   3D ROUTE MAP — Mapbox globe with origin→destination great-circle arc
-   Geocodes free-text origin/destination at runtime. Any failure (no
-   coords, no token, SDK missing) falls back to the hero route line.
+   3D ROUTE GLOBE — full journey on a Mapbox globe.
+   Plots origin, every transit checkpoint, the CURRENT package position,
+   and destination. Traveled path = solid green, upcoming = dashed blue.
+   Geocodes free-text locations at runtime. Any failure falls back to
+   the hero route line.  waypoints: [{ q, label, kind, done }]
    ════════════════════════════════════════════════════════════════ */
-async function initRouteMap(originText, destText) {
-    const mapEl   = document.getElementById('t-route-map');
+async function initRouteMap(waypoints) {
+    const mapEl    = document.getElementById('t-route-map');
     const fallback = document.getElementById('t-map-fallback');
     if (!mapEl) return;
-
     const showFallback = () => { if (fallback) fallback.style.display = 'flex'; };
+    const escMap = (v) => String(v || '').replace(/[<>&"]/g, c =>
+        ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;' }[c]));
 
-    // Tear down any previous instance (re-track without reload)
     if (window._sflRouteMap) { try { window._sflRouteMap.remove(); } catch (_) {} window._sflRouteMap = null; }
-
-    if (typeof mapboxgl === 'undefined' || !originText || !destText) { showFallback(); return; }
+    if (typeof mapboxgl === 'undefined' || !waypoints || waypoints.length < 2) { showFallback(); return; }
 
     try {
-        // 1 ─ Token from Supabase edge function (never hard-coded)
-        const tokRes = await fetch('https://oltbgccsceipedoadgka.supabase.co/functions/v1/get-map-token');
+        const tokRes  = await fetch('https://oltbgccsceipedoadgka.supabase.co/functions/v1/get-map-token');
         const tokJson = await tokRes.json();
-        const token = tokJson && tokJson.token;
+        const token   = tokJson && tokJson.token;
         if (!token) { showFallback(); return; }
 
-        // 2 ─ Geocode both endpoints
         const geocode = async (q) => {
-            const u = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?limit=1&access_token=${token}`;
-            const r = await fetch(u);
-            const j = await r.json();
-            return (j && j.features && j.features[0]) ? j.features[0].center : null; // [lng,lat]
+            try {
+                const u = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?limit=1&access_token=${token}`;
+                const r = await fetch(u); const j = await r.json();
+                return (j && j.features && j.features[0]) ? j.features[0].center : null;
+            } catch (_) { return null; }
         };
-        const [origin, dest] = await Promise.all([geocode(originText), geocode(destText)]);
-        if (!origin || !dest) { showFallback(); return; }
 
-        // 3 ─ Great-circle arc points (spherical interpolation)
-        const arc = greatCircleArc(origin, dest, 96);
-        const mid = arc[Math.floor(arc.length / 2)];
-        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        // Geocode every waypoint in parallel; keep order, drop failures
+        const coords = await Promise.all(waypoints.map(w => geocode(w.q)));
+        let pts = waypoints.map((w, i) => Object.assign({}, w, { coord: coords[i] })).filter(w => w.coord);
+        // Drop consecutive duplicate coordinates (e.g. origin === first checkpoint)
+        pts = pts.filter((w, i) => i === 0 ||
+            Math.abs(w.coord[0] - pts[i-1].coord[0]) > 1e-4 ||
+            Math.abs(w.coord[1] - pts[i-1].coord[1]) > 1e-4);
+        if (pts.length < 2) { showFallback(); return; }
+
+        // Index of the live package position
+        let curIdx = pts.findIndex(w => w.kind === 'current');
+        if (curIdx < 0) { for (let i = 0; i < pts.length; i++) if (pts[i].done) curIdx = i; }
+        if (curIdx < 0) curIdx = 0;
+
+        // Concatenated great-circle path through every point
+        const buildPath = (arr) => {
+            let out = [];
+            for (let i = 0; i < arr.length - 1; i++) {
+                const seg = greatCircleArc(arr[i].coord, arr[i+1].coord, 40);
+                out = out.concat(i === 0 ? seg : seg.slice(1));
+            }
+            return out;
+        };
+        const traveled  = buildPath(pts.slice(0, curIdx + 1));
+        const upcoming  = buildPath(pts.slice(curIdx));
+        const allCoords = pts.map(p => p.coord);
+        const center    = allCoords[Math.floor(allCoords.length / 2)];
+        const isLight   = document.documentElement.getAttribute('data-theme') === 'light';
 
         mapboxgl.accessToken = token;
         const map = new mapboxgl.Map({
             container: 't-route-map',
             style: isLight ? 'mapbox://styles/mapbox/light-v11' : 'mapbox://styles/mapbox/dark-v11',
-            projection: 'globe',
-            center: mid,
-            zoom: 1.3,
-            pitch: 0,
-            attributionControl: false,
-            cooperativeGestures: true,
+            projection: 'globe', center, zoom: 1.3, pitch: 0,
+            attributionControl: false, cooperativeGestures: true,
         });
         window._sflRouteMap = map;
         map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
@@ -650,35 +682,51 @@ async function initRouteMap(originText, destText) {
 
         map.on('load', () => {
             map.resize();
-            // Arc + glow underlay
-            map.addSource('sfl-route', { type: 'geojson',
-                data: { type: 'Feature', geometry: { type: 'LineString', coordinates: arc } } });
-            map.addLayer({ id: 'sfl-route-glow', type: 'line', source: 'sfl-route',
-                layout: { 'line-cap': 'round' },
-                paint: { 'line-color': '#60a5fa', 'line-width': 8, 'line-opacity': 0.16, 'line-blur': 4 } });
-            map.addLayer({ id: 'sfl-route-line', type: 'line', source: 'sfl-route',
-                layout: { 'line-cap': 'round' },
-                paint: { 'line-color': '#3b82f6', 'line-width': 2.6, 'line-opacity': 0.95 } });
+            // Upcoming path — dashed dim blue (under)
+            if (upcoming.length > 1) {
+                map.addSource('sfl-up', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates: upcoming } } });
+                map.addLayer({ id:'sfl-up-line', type:'line', source:'sfl-up', layout:{ 'line-cap':'round' },
+                    paint:{ 'line-color':'#3b82f6', 'line-width':2.2, 'line-opacity':0.5, 'line-dasharray':[1.4,2] } });
+            }
+            // Traveled path — solid green with glow (over)
+            if (traveled.length > 1) {
+                map.addSource('sfl-tr', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates: traveled } } });
+                map.addLayer({ id:'sfl-tr-glow', type:'line', source:'sfl-tr', layout:{ 'line-cap':'round' },
+                    paint:{ 'line-color':'#22c55e', 'line-width':9, 'line-opacity':0.18, 'line-blur':4 } });
+                map.addLayer({ id:'sfl-tr-line', type:'line', source:'sfl-tr', layout:{ 'line-cap':'round' },
+                    paint:{ 'line-color':'#22c55e', 'line-width':2.8, 'line-opacity':0.95 } });
+            }
 
-            // Endpoint markers
-            const mk = (lngLat, cls) => {
+            // A marker for every waypoint — origin, checkpoints, live, destination
+            pts.forEach((w, i) => {
                 const el = document.createElement('div');
-                el.className = 't-map-marker ' + cls;
-                new mapboxgl.Marker({ element: el }).setLngLat(lngLat).addTo(map);
-            };
-            mk(origin, 'origin');
-            mk(dest, 'pulse');
+                let cls = 't-map-marker';
+                if (i === curIdx)            cls += ' current pulse';
+                else if (w.kind === 'origin') cls += ' origin';
+                else if (w.kind === 'dest')   cls += ' dest';
+                else if (w.done || i < curIdx) cls += ' done';
+                else                          cls += ' check';
+                el.className = cls;
+                if (i === curIdx)            el.innerHTML = '<i class="fas fa-box"></i>';
+                else if (w.kind === 'dest')  el.innerHTML = '<i class="fas fa-flag-checkered"></i>';
 
-            // Frame the route, then a cinematic ease to a tilted globe view
-            const b = new mapboxgl.LngLatBounds(origin, origin).extend(dest);
-            map.fitBounds(b, { padding: 70, duration: 0 });
-            const targetZoom = Math.min(map.getZoom(), 3.4);
-            setTimeout(() => {
-                map.easeTo({ center: mid, zoom: targetZoom, pitch: 38, duration: 2600, essential: true });
-            }, 450);
+                const title = (i === curIdx) ? 'Package is here' : escMap(w.label);
+                const sub   = (i === curIdx && w.label) ? '<span>' + escMap(w.label) + '</span>' : '';
+                const popup = new mapboxgl.Popup({ offset: 16, closeButton: false, className: 't-map-popup' })
+                    .setHTML('<b>' + title + '</b>' + sub);
+                const marker = new mapboxgl.Marker({ element: el }).setLngLat(w.coord).setPopup(popup).addTo(map);
+                if (i === curIdx) marker.togglePopup(); // live position open by default
+            });
+
+            // Frame the whole journey, then cinematic ease to a tilted globe
+            const b = new mapboxgl.LngLatBounds(allCoords[0], allCoords[0]);
+            allCoords.forEach(c => b.extend(c));
+            map.fitBounds(b, { padding: 58, duration: 0 });
+            const targetZoom = Math.min(map.getZoom(), 3.6);
+            setTimeout(() => { map.easeTo({ center, zoom: targetZoom, pitch: 42, duration: 2600, essential: true }); }, 450);
         });
 
-        map.on('error', () => { /* keep silent; fallback already hidden if map drew */ });
+        map.on('error', () => {});
     } catch (e) {
         console.warn('[Route map] unavailable:', e);
         showFallback();
