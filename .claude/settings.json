@@ -37,7 +37,8 @@
       "Bash(findstr \".html\")",
       "Bash(Get-Content \"c:\\\\Users\\\\u\\\\OneDrive\\\\Documents\\\\logistics site\\\\src\\\\luxury-upgrade.css\")",
       "Bash(Measure-Object -Line)",
-      "PowerShell(\\(Get-Content \"c:\\\\Users\\\\u\\\\OneDrive\\\\Documents\\\\logistics site\\\\src\\\\luxury-upgrade.css\" | Measure-Object -Line\\).Lines)"
+      "PowerShell(\\(Get-Content \"c:\\\\Users\\\\u\\\\OneDrive\\\\Documents\\\\logistics site\\\\src\\\\luxury-upgrade.css\" | Measure-Object -Line\\).Lines)",
+      "Bash(git rm *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\u\\.claude\\projects\\c--Users-u-OneDrive-Documents-logistics-site\\memory",
