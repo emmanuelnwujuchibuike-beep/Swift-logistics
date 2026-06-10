@@ -630,17 +630,18 @@ async function initRouteMap(waypoints) {
         const TYPES = 'place,locality,region,district,country';
         const STRIP = /\b(sorting\s*hub|sorting\s*centre?|hub|warehouse|facility|distribution\s*centre?|distribution|depot|terminal|station|branch|office)\b/gi;
 
-        const queryOnce = async (q) => {
-            // Mapbox Geocoding v6 (most accurate)
+        const proxStr = (p) => (p && p.length === 2) ? `&proximity=${p[0]},${p[1]}` : '';
+        const queryOnce = async (q, prox) => {
+            // Mapbox Geocoding v6 (most accurate), biased toward the route region
             try {
-                const u = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(q)}&limit=1&types=${TYPES}&autocomplete=false&access_token=${token}`;
+                const u = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(q)}&limit=1&types=${TYPES}&autocomplete=false${proxStr(prox)}&access_token=${token}`;
                 const r = await fetch(u); const j = await r.json();
                 const f = j && j.features && j.features[0];
                 if (f && f.geometry && f.geometry.coordinates) return f.geometry.coordinates;
             } catch (_) {}
             // Fallback: v5 with the same restrictions
             try {
-                const u = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?limit=1&types=${TYPES}&autocomplete=false&language=en&access_token=${token}`;
+                const u = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?limit=1&types=${TYPES}&autocomplete=false&language=en${proxStr(prox)}&access_token=${token}`;
                 const r = await fetch(u); const j = await r.json();
                 const f = j && j.features && j.features[0];
                 if (f && f.center) return f.center;
@@ -648,20 +649,23 @@ async function initRouteMap(waypoints) {
             return null;
         };
 
-        const geocode = async (raw) => {
+        const geocode = async (raw, prox) => {
             const q = String(raw || '').trim();
             if (!q) return null;
-            let c = await queryOnce(q);
+            let c = await queryOnce(q, prox);
             if (!c) {
                 // Retry without logistics noise words (e.g. "Port Harcourt Sorting Hub")
                 const simple = q.replace(STRIP, '').replace(/\s{2,}/g, ' ').replace(/^[\s,]+|[\s,]+$/g, '').trim();
-                if (simple && simple.toLowerCase() !== q.toLowerCase()) c = await queryOnce(simple);
+                if (simple && simple.toLowerCase() !== q.toLowerCase()) c = await queryOnce(simple, prox);
             }
             return c;
         };
 
-        // Geocode every waypoint in parallel; keep order, drop failures
-        const coords = await Promise.all(waypoints.map(w => geocode(w.q)));
+        // Anchor the region on the origin first, then bias every other
+        // location's search toward it — keeps same-named places in-country.
+        const anchor = await geocode(waypoints[0].q, null);
+        const coords = await Promise.all(waypoints.map((w, i) =>
+            i === 0 ? Promise.resolve(anchor) : geocode(w.q, anchor)));
         let pts = waypoints.map((w, i) => Object.assign({}, w, { coord: coords[i] })).filter(w => w.coord);
         // Drop consecutive duplicate coordinates (e.g. origin === first checkpoint)
         pts = pts.filter((w, i) => i === 0 ||
@@ -760,8 +764,8 @@ async function initRouteMap(waypoints) {
                 padding: { top: 80, bottom: 90, left: 60, right: 60 },
                 pitch: 25, maxZoom: 6, duration: dur, essential: true
             });
+            // Frame once, statically — markers stay fixed (no drift after load)
             frame(0);
-            setTimeout(() => frame(1600), 450);
 
             // "Fit Route" button — instantly re-frame the whole journey
             const wrap = mapEl.parentElement;
