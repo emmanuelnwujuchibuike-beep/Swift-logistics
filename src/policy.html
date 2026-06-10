@@ -586,13 +586,5 @@
   updateActive();
 })();
 </script>
-<script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
-<script>
-(function(){
-  var lenis = new Lenis({ duration: 0.55, easing: function(t){ return 1 - Math.pow(1 - t, 4); }, smoothTouch: false });
-  function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-  requestAnimationFrame(raf);
-})();
-</script>
 </body>
 </html>
