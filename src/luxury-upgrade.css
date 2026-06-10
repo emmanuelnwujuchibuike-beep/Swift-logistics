@@ -1287,14 +1287,12 @@ img { max-width: 100%; height: auto; }
 /* .gt — ultra-premium red, constant across all image themes */
 #hero .hero-content .gt,
 #page-hero .hero-content .gt {
-  background: linear-gradient(115deg,
-    #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
+  color: #e81b2a !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
   transition: none !important;
-  filter: drop-shadow(0 0 18px rgba(200,16,46,.55)) !important;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1330,14 +1328,12 @@ img { max-width: 100%; height: auto; }
 #page-hero[data-img-theme="dark"] .hero-content .gt,
 #hero:not([data-img-theme]) .hero-content .gt,
 #page-hero:not([data-img-theme]) .hero-content .gt {
-  background: linear-gradient(115deg,
-    #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
+  color: #e81b2a !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
   transition: none !important;
-  filter: drop-shadow(0 0 18px rgba(200,16,46,.55)) !important;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1366,14 +1362,12 @@ img { max-width: 100%; height: auto; }
 /* .gt bright — same red (highest specificity rule; locks colour against theme flip) */
 #hero[data-img-theme="bright"] .hero-content .gt,
 #page-hero[data-img-theme="bright"] .hero-content .gt {
-  background: linear-gradient(115deg,
-    #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
+  color: #e81b2a !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
   transition: none !important;
-  filter: drop-shadow(0 0 18px rgba(200,16,46,.55)) !important;
 }
 
 /* ── Mobile: kill the horizontal fade that hides half the image ── */
