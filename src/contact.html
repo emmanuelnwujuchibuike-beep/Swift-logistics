@@ -1505,12 +1505,7 @@
   var cur = 0;
   function apply(i) {
     var nxt = lum[i] > 125 ? 'bright' : 'dark';
-    var prev = hero.getAttribute('data-img-theme');
-    if (prev === nxt) return;
-    if (!prev) { hero.setAttribute('data-img-theme', nxt); return; }
-    var gts = hero.querySelectorAll('.hero-content .gt');
-    gts.forEach(function(el){ el.style.opacity = '0'; });
-    setTimeout(function(){ hero.setAttribute('data-img-theme', nxt); gts.forEach(function(el){ el.style.opacity = ''; }); }, 500);
+    if (hero.getAttribute('data-img-theme') !== nxt) hero.setAttribute('data-img-theme', nxt);
   }
   apply(0);
   setInterval(function(){ cur = (cur + 1) % N; apply(cur); }, STEP);
