@@ -665,10 +665,14 @@ async function initRouteMap(waypoints) {
             container: 't-route-map',
             style: isLight ? 'mapbox://styles/mapbox/light-v11' : 'mapbox://styles/mapbox/dark-v11',
             projection: 'globe', center, zoom: 1.3, pitch: 0,
-            attributionControl: false, cooperativeGestures: true,
+            attributionControl: false, cooperativeGestures: false,
         });
         window._sflRouteMap = map;
-        map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+        // Easy controls: zoom + compass/pitch, fullscreen, scroll/drag/pinch
+        map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
+        map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+        if (map.scrollZoom) map.scrollZoom.enable();
+        if (map.touchZoomRotate) map.touchZoomRotate.enable();
 
         map.on('style.load', () => {
             map.setFog(isLight ? {
@@ -682,48 +686,64 @@ async function initRouteMap(waypoints) {
 
         map.on('load', () => {
             map.resize();
-            // Upcoming path — dashed dim blue (under)
+            // Upcoming path — white casing + brighter dashed blue
             if (upcoming.length > 1) {
                 map.addSource('sfl-up', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates: upcoming } } });
+                map.addLayer({ id:'sfl-up-case', type:'line', source:'sfl-up', layout:{ 'line-cap':'round' },
+                    paint:{ 'line-color':'#ffffff', 'line-width':5, 'line-opacity':0.1 } });
                 map.addLayer({ id:'sfl-up-line', type:'line', source:'sfl-up', layout:{ 'line-cap':'round' },
-                    paint:{ 'line-color':'#3b82f6', 'line-width':2.2, 'line-opacity':0.5, 'line-dasharray':[1.4,2] } });
+                    paint:{ 'line-color':'#60a5fa', 'line-width':3, 'line-opacity':0.75, 'line-dasharray':[1.3,1.8] } });
             }
-            // Traveled path — solid green with glow (over)
+            // Traveled path — green glow + white casing + bright line
             if (traveled.length > 1) {
                 map.addSource('sfl-tr', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates: traveled } } });
                 map.addLayer({ id:'sfl-tr-glow', type:'line', source:'sfl-tr', layout:{ 'line-cap':'round' },
-                    paint:{ 'line-color':'#22c55e', 'line-width':9, 'line-opacity':0.18, 'line-blur':4 } });
+                    paint:{ 'line-color':'#22c55e', 'line-width':12, 'line-opacity':0.2, 'line-blur':5 } });
+                map.addLayer({ id:'sfl-tr-case', type:'line', source:'sfl-tr', layout:{ 'line-cap':'round' },
+                    paint:{ 'line-color':'#ffffff', 'line-width':6, 'line-opacity':0.22 } });
                 map.addLayer({ id:'sfl-tr-line', type:'line', source:'sfl-tr', layout:{ 'line-cap':'round' },
-                    paint:{ 'line-color':'#22c55e', 'line-width':2.8, 'line-opacity':0.95 } });
+                    paint:{ 'line-color':'#22c55e', 'line-width':3.6, 'line-opacity':1 } });
             }
 
-            // A marker for every waypoint — origin, checkpoints, live, destination
+            // Clearly-labelled markers: Pickup · checkpoints · Package · Destination
             pts.forEach((w, i) => {
                 const el = document.createElement('div');
-                let cls = 't-map-marker';
-                if (i === curIdx)            cls += ' current pulse';
-                else if (w.kind === 'origin') cls += ' origin';
-                else if (w.kind === 'dest')   cls += ' dest';
+                let cls = 't-map-marker', label = '', icon = '';
+                if (i === curIdx)             { cls += ' current pulse'; label = 'Package';     icon = '<i class="fas fa-box"></i>'; }
+                else if (w.kind === 'origin') { cls += ' origin';        label = 'Pickup';      icon = '<i class="fas fa-location-dot"></i>'; }
+                else if (w.kind === 'dest')   { cls += ' dest';          label = 'Destination'; icon = '<i class="fas fa-flag-checkered"></i>'; }
                 else if (w.done || i < curIdx) cls += ' done';
                 else                          cls += ' check';
                 el.className = cls;
-                if (i === curIdx)            el.innerHTML = '<i class="fas fa-box"></i>';
-                else if (w.kind === 'dest')  el.innerHTML = '<i class="fas fa-flag-checkered"></i>';
+                el.innerHTML = icon + (label ? '<span class="t-mk-label">' + escMap(label) + '</span>' : '');
 
                 const title = (i === curIdx) ? 'Package is here' : escMap(w.label);
-                const sub   = (i === curIdx && w.label) ? '<span>' + escMap(w.label) + '</span>' : '';
-                const popup = new mapboxgl.Popup({ offset: 16, closeButton: false, className: 't-map-popup' })
+                const sub   = w.label ? '<span>' + escMap(w.label) + '</span>' : '';
+                const popup = new mapboxgl.Popup({ offset: 20, closeButton: false, className: 't-map-popup' })
                     .setHTML('<b>' + title + '</b>' + sub);
-                const marker = new mapboxgl.Marker({ element: el }).setLngLat(w.coord).setPopup(popup).addTo(map);
-                if (i === curIdx) marker.togglePopup(); // live position open by default
+                new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat(w.coord).setPopup(popup).addTo(map);
             });
 
-            // Frame the whole journey, then cinematic ease to a tilted globe
+            // Frame the whole journey clearly (near top-down), animate in
             const b = new mapboxgl.LngLatBounds(allCoords[0], allCoords[0]);
             allCoords.forEach(c => b.extend(c));
-            map.fitBounds(b, { padding: 58, duration: 0 });
-            const targetZoom = Math.min(map.getZoom(), 3.6);
-            setTimeout(() => { map.easeTo({ center, zoom: targetZoom, pitch: 42, duration: 2600, essential: true }); }, 450);
+            const frame = (dur) => map.fitBounds(b, {
+                padding: { top: 80, bottom: 90, left: 60, right: 60 },
+                pitch: 25, maxZoom: 6, duration: dur, essential: true
+            });
+            frame(0);
+            setTimeout(() => frame(1600), 450);
+
+            // "Fit Route" button — instantly re-frame the whole journey
+            const wrap = mapEl.parentElement;
+            if (wrap && !wrap.querySelector('.t-map-fit')) {
+                const fit = document.createElement('button');
+                fit.type = 'button';
+                fit.className = 't-map-fit';
+                fit.innerHTML = '<i class="fas fa-expand"></i> Fit Route';
+                fit.addEventListener('click', () => frame(900));
+                wrap.appendChild(fit);
+            }
         });
 
         map.on('error', () => {});
