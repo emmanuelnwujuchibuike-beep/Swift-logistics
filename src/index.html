@@ -1992,18 +1992,19 @@
   }
 
   imgs.forEach(function(img, i) {
-    if (img.complete && img.naturalWidth > 0) { sample(img, i); }
-    else { img.addEventListener('load', function(){
-      sample(img, i);
-      if (i === cur) apply(cur); /* re-apply if this is the currently visible slide */
-    }); }
+    if (img.complete && img.naturalWidth > 0) sample(img, i);
+    else img.addEventListener('load', function(){ sample(img, i); if (i === cur) apply(cur); });
   });
-
   var cur = 0;
   function apply(i) {
-    hero.setAttribute('data-img-theme', lum[i] > 125 ? 'bright' : 'dark');
+    var nxt = lum[i] > 125 ? 'bright' : 'dark';
+    var prev = hero.getAttribute('data-img-theme');
+    if (prev === nxt) return;
+    if (!prev) { hero.setAttribute('data-img-theme', nxt); return; }
+    var gts = hero.querySelectorAll('.hero-content .gt');
+    gts.forEach(function(el){ el.style.opacity = '0'; });
+    setTimeout(function(){ hero.setAttribute('data-img-theme', nxt); gts.forEach(function(el){ el.style.opacity = ''; }); }, 500);
   }
-
   apply(0);
   setInterval(function(){ cur = (cur + 1) % N; apply(cur); }, STEP);
 })();

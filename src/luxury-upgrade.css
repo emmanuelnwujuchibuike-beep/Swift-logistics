@@ -1284,13 +1284,10 @@ img { max-width: 100%; height: auto; }
 #hero .hero-content .display, #page-hero .hero-content .display {
   transition: color 1.3s ease, text-shadow 1.3s ease !important;
 }
-/* .gt uses -webkit-text-fill-color transition:
-   dark  → transparent (gradient shows through as blue)
-   bright → solid #0b2160 (fill overrides gradient = dark navy)
-   Both states are -webkit-text-fill-color values so they interpolate smoothly */
+/* .gt fades out/in via JS when theme changes — only opacity needs a CSS transition */
 #hero .hero-content .gt,
 #page-hero .hero-content .gt {
-  transition: -webkit-text-fill-color 1.3s ease, color 1.3s ease !important;
+  transition: opacity .5s ease !important;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1356,10 +1353,13 @@ img { max-width: 100%; height: auto; }
   text-shadow: none !important;
 }
 
-/* Gradient text on bright image → solid dark navy fill (allows CSS transition) */
+/* Gradient text on bright image → deep navy gradient */
 #hero[data-img-theme="bright"] .hero-content .gt,
 #page-hero[data-img-theme="bright"] .hero-content .gt {
-  -webkit-text-fill-color: #0b2160 !important;
+  background: linear-gradient(115deg, #06122a 0%, #0f2d6e 45%, #06122a 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 /* ── Mobile: kill the horizontal fade that hides half the image ── */
