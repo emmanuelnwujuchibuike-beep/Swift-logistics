@@ -1099,13 +1099,14 @@
     /* ─── Admin padlock (press-hold 3s) ─── */
     .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; }
     .admin-padlock-btn { background:none; border:none; cursor:pointer; padding:0; outline:none; -webkit-tap-highlight-color:transparent; position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center; user-select:none; }
-    .admin-padlock-ico { font-size:13px; color:transparent; transition:color .2s; position:relative; z-index:1; pointer-events:none; }
+    .admin-padlock-ico { font-size:13px; color:rgba(232,240,254,.24); transition:color .25s, transform .25s; position:relative; z-index:1; pointer-events:none; }
+    .admin-padlock-btn:hover .admin-padlock-ico { color:var(--t-accent2); transform:scale(1.12); }
     .admin-padlock-ring { position:absolute; inset:0; width:40px; height:40px; overflow:visible; pointer-events:none; }
-    .pad-ring-track { fill:none; stroke:transparent; stroke-width:1.5; }
+    .pad-ring-track { fill:none; stroke:rgba(59,130,246,.12); stroke-width:1.5; }
     .pad-ring-fill  { fill:none; stroke:#3b82f6; stroke-width:1.5; stroke-linecap:round;
                       stroke-dasharray:106.8; stroke-dashoffset:106.8; transition:stroke .4s; }
     .admin-padlock-btn.unlocking .admin-padlock-ico { animation:padUnlock .75s cubic-bezier(.34,1.56,.64,1) forwards; }
-    [data-theme="light"] .admin-padlock-ico { color:transparent; }
+    [data-theme="light"] .admin-padlock-ico { color:rgba(5,16,42,.26); }
     @keyframes padUnlock {
       0%   { transform:scale(1) rotate(0deg);    color:transparent; }
       25%  { transform:scale(1.8) rotate(-22deg); color:rgba(59,130,246,.8); }
