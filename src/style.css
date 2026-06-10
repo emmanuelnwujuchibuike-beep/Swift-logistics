@@ -6,14 +6,18 @@ html.lenis {
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: hidden;       /* fallback */
+  overflow-x: clip;         /* modern: no scroll container */
   max-width: 100%;
+  overscroll-behavior-x: none;
 }
 
 body {
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
+  overscroll-behavior-x: none;
 }
 
 /* iOS Safari zooms any input with font-size < 16px on focus.

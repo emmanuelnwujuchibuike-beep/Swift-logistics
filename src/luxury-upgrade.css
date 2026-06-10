@@ -1557,3 +1557,145 @@ img { max-width: 100%; height: auto; }
 @media (max-width: 479px) {
   #sfl-port-map { height: 300px; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   GLOBAL HORIZONTAL LOCK — no page can slide left/right, ever.
+   clip (not hidden) avoids creating a scroll container, so vertical
+   scroll, smooth-scroll and sticky all keep working.
+══════════════════════════════════════════════════════════════ */
+html, body {
+  overflow-x: hidden !important;   /* fallback for old engines */
+  overflow-x: clip !important;     /* modern: no scroll container */
+  max-width: 100% !important;
+  overscroll-behavior-x: none;     /* kill swipe-back + x rubber-band */
+}
+body { position: relative; }
+
+/* ══════════════════════════════════════════════════════════════
+   CINEMATIC BOLD — ultra-premium showpiece layer (shared, all pages)
+   Imagery + motion + depth + type scale. No text-shadow added,
+   .gt stays pure solid red. Respects prefers-reduced-motion.
+══════════════════════════════════════════════════════════════ */
+
+/* ── Scroll progress bar ── */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  z-index: 9998; pointer-events: none;
+  background: linear-gradient(90deg, var(--accent, #3b82f6), var(--accent-hi, #60a5fa), #e81b2a);
+  box-shadow: 0 0 14px rgba(var(--accent-rgb, 59,130,246), .6);
+  transition: width .1s linear;
+}
+
+/* ── Hero: cinematic Ken Burns drift on the image container ── */
+#hero .hero-bg, #page-hero .hero-bg {
+  animation: kenburns 32s ease-in-out infinite alternate;
+  transform-origin: 50% 42%;
+}
+@keyframes kenburns {
+  0%   { transform: scale(1.04) translate3d(0,0,0); }
+  100% { transform: scale(1.14) translate3d(-1.5%, -1%, 0); }
+}
+
+/* ── Hero: cinematic radial vignette for filmic framing ── */
+#hero::after, #page-hero::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 120% 88% at 50% 42%, transparent 40%, rgba(0,0,0,.34) 100%);
+}
+
+/* ── Hero: breathing ambient aurora behind content ── */
+#hero .hero-content::before, #page-hero .hero-content::before {
+  content: ''; position: absolute; z-index: -1;
+  top: 10%; left: -6%; width: 58%; height: 74%;
+  background: radial-gradient(ellipse at center,
+    rgba(var(--accent-rgb, 59,130,246),.18) 0%,
+    rgba(232,27,42,.07) 38%,
+    transparent 68%);
+  filter: blur(42px);
+  animation: aurora 11s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes aurora {
+  0%   { transform: translate3d(0,0,0) scale(1);     opacity: .8; }
+  100% { transform: translate3d(6%,4%,0) scale(1.2); opacity: 1; }
+}
+
+/* ── Orbs breathe + drift (cinematic depth) ── */
+.orb { animation: orb-drift 16s ease-in-out infinite alternate; }
+.orb:nth-of-type(2) { animation-duration: 21s; animation-delay: -4s; }
+@keyframes orb-drift {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  100% { transform: translate3d(4%,-5%,0) scale(1.16); }
+}
+
+/* ── Bigger, bolder hero headline ── */
+#hero .hero-content h1, #page-hero .hero-content h1 {
+  font-size: clamp(4.2rem, 11.5vw, 11rem) !important;
+  letter-spacing: .005em;
+}
+#hero .hero-content > div, #page-hero .hero-content > div { max-width: 920px !important; }
+
+/* ── Stat numbers: larger + cinematic ── */
+.stats-row .stat-c .display { font-size: 2.5rem !important; letter-spacing: .01em; }
+
+/* ── Cinematic reveal: bigger travel + focus-pull blur-in ── */
+.reveal.up    { transform: translate3d(0, 46px, 0); }
+.reveal.left  { transform: translate3d(-46px, 0, 0); }
+.reveal.right { transform: translate3d(46px, 0, 0); }
+.reveal {
+  filter: blur(7px);
+  transition: opacity .7s ease, transform .9s cubic-bezier(.16,1,.3,1), filter .8s ease !important;
+}
+.reveal.on { filter: blur(0) !important; }
+
+/* ── Freight + blog cards: cinematic hover ── */
+.fc:hover {
+  transform: translateY(-12px) scale(1.012) !important;
+  box-shadow: 0 44px 90px rgba(0,0,0,.6), 0 0 60px rgba(var(--accent-rgb, 59,130,246),.14) !important;
+}
+.fc:hover .fc-img { transform: scale(1.1) !important; filter: brightness(1) saturate(1.08) !important; }
+.fc-img { transition: transform 1.1s cubic-bezier(.16,1,.3,1), filter .6s ease !important; }
+
+/* ── Feature strip: taller & more dramatic ── */
+.feature-strip { height: 560px; }
+.feature-strip img { will-change: transform; }
+.feature-strip h2 { font-size: clamp(3.2rem, 8.5vw, 7.4rem) !important; }
+
+/* ── Glass / value cards: deeper cinematic depth ── */
+.values-grid .glass.lift:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 40px 80px rgba(0,0,0,.5), 0 0 50px rgba(var(--accent-rgb, 59,130,246),.12) !important;
+}
+
+/* ── CTA: larger filmic headline ── */
+.cta-wrap .display { font-size: clamp(2.8rem, 5.6vw, 5.2rem) !important; }
+.cta-wrap { padding: 104px 80px; }
+
+/* ── Premium button shine sweep ── */
+.btn-primary, .hero-btn-red { position: relative; overflow: hidden; }
+.btn-primary::after, .hero-btn-red::after {
+  content: ''; position: absolute; top: 0; left: -130%; width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.38), transparent);
+  transform: skewX(-18deg); pointer-events: none;
+}
+.btn-primary:hover::after, .hero-btn-red:hover::after {
+  animation: btn-shine .85s cubic-bezier(.22,1,.36,1);
+}
+@keyframes btn-shine { from { left: -130%; } to { left: 130%; } }
+
+/* ── Parallax targets: GPU hint + overscan so drift never shows edges ── */
+[data-parallax] { will-change: transform; transform: scale(1.18); }
+
+@media (max-width: 767px) {
+  .feature-strip { height: 380px; }
+  .cta-wrap { padding: 56px 26px; }
+  #hero .hero-content h1, #page-hero .hero-content h1 { font-size: clamp(3.4rem, 13vw, 5.5rem) !important; }
+  .stats-row .stat-c .display { font-size: 1.7rem !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #hero .hero-bg, #page-hero .hero-bg,
+  #hero .hero-content::before, #page-hero .hero-content::before,
+  .orb { animation: none !important; }
+  [data-parallax] { transform: none !important; }
+  .reveal { filter: none !important; }
+}
