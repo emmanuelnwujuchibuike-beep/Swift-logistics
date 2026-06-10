@@ -1282,7 +1282,8 @@ img { max-width: 100%; height: auto; }
 #hero .hero-content p,        #page-hero .hero-content p,
 #hero .hero-content .lbl,     #page-hero .hero-content .lbl,
 #hero .hero-content .display, #page-hero .hero-content .display {
-  transition: color 1.3s ease, text-shadow 1.3s ease !important;
+  transition: color 0.9s ease !important;
+  text-shadow: none !important;
 }
 /* .gt — ultra-premium red, constant across all image themes */
 #hero .hero-content .gt,
@@ -1303,24 +1304,21 @@ img { max-width: 100%; height: auto; }
 #hero:not([data-img-theme]) .hero-content h1,
 #page-hero:not([data-img-theme]) .hero-content h1 {
   color: #ffffff !important;
-  text-shadow: 0 2px 28px rgba(0,0,0,.7), 0 1px 6px rgba(0,0,0,.5) !important;
 }
 
 #hero[data-img-theme="dark"] .hero-content p,
 #page-hero[data-img-theme="dark"] .hero-content p,
 #hero:not([data-img-theme]) .hero-content p,
 #page-hero:not([data-img-theme]) .hero-content p {
-  color: rgba(255,255,255,.80) !important;
-  border-left-color: rgba(255,255,255,.28) !important;
-  text-shadow: 0 1px 10px rgba(0,0,0,.55) !important;
+  color: rgba(255,255,255,.88) !important;
+  border-left-color: rgba(255,255,255,.32) !important;
 }
 
 #hero[data-img-theme="dark"] .hero-content .lbl,
 #page-hero[data-img-theme="dark"] .hero-content .lbl,
 #hero:not([data-img-theme]) .hero-content .lbl,
 #page-hero:not([data-img-theme]) .hero-content .lbl {
-  color: rgba(255,255,255,.65) !important;
-  text-shadow: 0 1px 8px rgba(0,0,0,.5) !important;
+  color: rgba(255,255,255,.72) !important;
 }
 
 /* .gt dark/default — same red (overrides base specificity; keeps colour constant) */
@@ -1341,22 +1339,18 @@ img { max-width: 100%; height: auto; }
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #hero[data-img-theme="bright"] .hero-content h1,
 #page-hero[data-img-theme="bright"] .hero-content h1 {
-  color: #06122a !important;
-  text-shadow: 0 2px 16px rgba(255,255,255,.5),
-               0 0 40px rgba(255,255,255,.12) !important;
+  color: #04102a !important;
 }
 
 #hero[data-img-theme="bright"] .hero-content p,
 #page-hero[data-img-theme="bright"] .hero-content p {
-  color: rgba(6,18,42,.78) !important;
-  border-left-color: rgba(6,18,42,.22) !important;
-  text-shadow: none !important;
+  color: rgba(4,16,42,.85) !important;
+  border-left-color: rgba(4,16,42,.25) !important;
 }
 
 #hero[data-img-theme="bright"] .hero-content .lbl,
 #page-hero[data-img-theme="bright"] .hero-content .lbl {
-  color: rgba(6,18,42,.62) !important;
-  text-shadow: none !important;
+  color: rgba(4,16,42,.68) !important;
 }
 
 /* .gt bright — same red (highest specificity rule; locks colour against theme flip) */
