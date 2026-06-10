@@ -330,26 +330,63 @@ async function handleTracking() {
         dashboard.innerHTML = `
 <div class="t-dash-inner">
 
-  <!-- ── HEADER CARD ──────────────────────────────────────── -->
-  <div class="t-hdr-card t-fade-up t-d1">
-    <div>
-      <div class="t-hdr-eyebrow">
-        <i class="fas fa-satellite-dish" style="font-size:9px;"></i> Shipment Profile
+  <!-- ── HERO BAND (id · status · origin→dest route) ──────── -->
+  <div class="t-hero-band t-fade-up t-d1">
+    <div class="t-hero-band-top">
+      <div>
+        <div class="t-hdr-eyebrow">
+          <i class="fas fa-satellite-dish" style="font-size:9px;"></i> Live Shipment
+        </div>
+        <div class="t-tracking-id">${esc(trackingNo)}</div>
+        <div class="t-hdr-meta">
+          ${s.service_type ? `<span class="t-hdr-chip">${esc(s.service_type)}</span>` : ''}
+          ${s.priority     ? `<span class="t-hdr-chip">${esc(s.priority)}</span>`     : ''}
+        </div>
       </div>
-      <div class="t-tracking-id">${esc(trackingNo)}</div>
-      <div class="t-hdr-meta">
-        ${s.service_type ? `<span class="t-hdr-chip">${esc(s.service_type)}</span>` : ''}
-        ${s.priority     ? `<span class="t-hdr-chip">${esc(s.priority)}</span>`     : ''}
+      <div class="t-hdr-right">
+        <div class="t-status-pill ${statusColor}">
+          <span class="t-sdot${statusColor === 'blue' ? ' pulse' : ''}"></span>
+          ${esc(statusStr)}
+        </div>
+        <button class="t-back-btn" onclick="window.location.href='payment.html'">
+          <i class="fas fa-arrow-left"></i> New Search
+        </button>
       </div>
     </div>
-    <div class="t-hdr-right">
-      <div class="t-status-pill ${statusColor}">
-        <span class="t-sdot${statusColor === 'blue' ? ' pulse' : ''}"></span>
-        ${esc(statusStr)}
+    <div class="t-route-line">
+      <div class="t-route-end origin">
+        <div class="t-route-sub">Origin</div>
+        <div class="t-route-city" title="${esc(s.origin || '')}">${esc(s.origin || '—')}</div>
+        <div class="t-route-dot origin"></div>
       </div>
-      <button class="t-back-btn" onclick="window.location.href='payment.html'">
-        <i class="fas fa-arrow-left"></i> New Search
-      </button>
+      <div class="t-route-track">
+        <div class="t-route-prog" id="t-route-prog"></div>
+        <i class="fas fa-plane-up t-route-plane" id="t-route-plane"></i>
+      </div>
+      <div class="t-route-end dest">
+        <div class="t-route-sub">Destination</div>
+        <div class="t-route-city" title="${esc(s.destination || '')}">${esc(s.destination || '—')}</div>
+        <div class="t-route-dot dest"></div>
+      </div>
+      ${s.eta ? `<div class="t-route-eta"><i class="fas fa-calendar-check" style="margin-right:6px;color:var(--t-accent2);"></i>Estimated Delivery: <b>${esc(s.eta)}</b></div>` : ''}
+    </div>
+  </div>
+
+  <!-- ── 3D ROUTE MAP ──────────────────────────────────────── -->
+  <div class="t-map-card t-fade-up t-d2" id="t-map-card">
+    <div class="t-card-top">
+      <span class="t-card-title"><i class="fas fa-earth-americas"></i> Live Route</span>
+      <span class="t-live-tag"><span class="t-live-dot"></span> LIVE</span>
+    </div>
+    <div class="t-map3d-wrap">
+      <div id="t-route-map"></div>
+      <div class="t-map-corner t-mc-tl"></div><div class="t-map-corner t-mc-tr"></div>
+      <div class="t-map-corner t-mc-bl"></div><div class="t-map-corner t-mc-br"></div>
+      <div class="t-map-badge"><span class="t-live-dot"></span> ${esc(s.origin || 'Origin')} &rarr; ${esc(s.destination || 'Destination')}</div>
+      <div class="t-map-fallback" id="t-map-fallback" style="display:none;">
+        <i class="fas fa-route"></i>
+        <p>Route progress is shown above. Live globe view is unavailable for this shipment.</p>
+      </div>
     </div>
   </div>
 
@@ -523,12 +560,19 @@ async function handleTracking() {
 </div><!-- /t-dash-inner -->
         `;
 
-        // Animate ring arcs after HTML is painted
+        // Animate ring arcs + route progress after HTML is painted
         requestAnimationFrame(() => requestAnimationFrame(() => {
             document.querySelectorAll('.t-ring-arc').forEach(el => {
                 el.style.strokeDashoffset = String(ringOffset.toFixed(2));
             });
+            const prog  = document.getElementById('t-route-prog');
+            const plane = document.getElementById('t-route-plane');
+            if (prog)  prog.style.width = pct + '%';
+            if (plane) plane.style.left = pct + '%';
         }));
+
+        // Initialise the interactive 3D route globe (graceful fallback)
+        initRouteMap(s.origin, s.destination);
 
     } catch (e) {
         console.error('Tracking error:', e);
@@ -538,6 +582,128 @@ async function handleTracking() {
         searchBtn.disabled = false;
         searchBtn.innerHTML = `<i class="fas fa-satellite-dish"></i> Track Shipment`;
     }
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   3D ROUTE MAP — Mapbox globe with origin→destination great-circle arc
+   Geocodes free-text origin/destination at runtime. Any failure (no
+   coords, no token, SDK missing) falls back to the hero route line.
+   ════════════════════════════════════════════════════════════════ */
+async function initRouteMap(originText, destText) {
+    const mapEl   = document.getElementById('t-route-map');
+    const fallback = document.getElementById('t-map-fallback');
+    if (!mapEl) return;
+
+    const showFallback = () => { if (fallback) fallback.style.display = 'flex'; };
+
+    // Tear down any previous instance (re-track without reload)
+    if (window._sflRouteMap) { try { window._sflRouteMap.remove(); } catch (_) {} window._sflRouteMap = null; }
+
+    if (typeof mapboxgl === 'undefined' || !originText || !destText) { showFallback(); return; }
+
+    try {
+        // 1 ─ Token from Supabase edge function (never hard-coded)
+        const tokRes = await fetch('https://oltbgccsceipedoadgka.supabase.co/functions/v1/get-map-token');
+        const tokJson = await tokRes.json();
+        const token = tokJson && tokJson.token;
+        if (!token) { showFallback(); return; }
+
+        // 2 ─ Geocode both endpoints
+        const geocode = async (q) => {
+            const u = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?limit=1&access_token=${token}`;
+            const r = await fetch(u);
+            const j = await r.json();
+            return (j && j.features && j.features[0]) ? j.features[0].center : null; // [lng,lat]
+        };
+        const [origin, dest] = await Promise.all([geocode(originText), geocode(destText)]);
+        if (!origin || !dest) { showFallback(); return; }
+
+        // 3 ─ Great-circle arc points (spherical interpolation)
+        const arc = greatCircleArc(origin, dest, 96);
+        const mid = arc[Math.floor(arc.length / 2)];
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+        mapboxgl.accessToken = token;
+        const map = new mapboxgl.Map({
+            container: 't-route-map',
+            style: isLight ? 'mapbox://styles/mapbox/light-v11' : 'mapbox://styles/mapbox/dark-v11',
+            projection: 'globe',
+            center: mid,
+            zoom: 1.3,
+            pitch: 0,
+            attributionControl: false,
+            cooperativeGestures: true,
+        });
+        window._sflRouteMap = map;
+        map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+
+        map.on('style.load', () => {
+            map.setFog(isLight ? {
+                color: 'rgb(220,232,255)', 'high-color': 'rgb(180,205,255)',
+                'horizon-blend': 0.18, 'space-color': 'rgb(225,235,255)', 'star-intensity': 0
+            } : {
+                color: 'rgb(8,14,38)', 'high-color': 'rgb(22,46,100)',
+                'horizon-blend': 0.2, 'space-color': 'rgb(2,4,12)', 'star-intensity': 0.55
+            });
+        });
+
+        map.on('load', () => {
+            map.resize();
+            // Arc + glow underlay
+            map.addSource('sfl-route', { type: 'geojson',
+                data: { type: 'Feature', geometry: { type: 'LineString', coordinates: arc } } });
+            map.addLayer({ id: 'sfl-route-glow', type: 'line', source: 'sfl-route',
+                layout: { 'line-cap': 'round' },
+                paint: { 'line-color': '#60a5fa', 'line-width': 8, 'line-opacity': 0.16, 'line-blur': 4 } });
+            map.addLayer({ id: 'sfl-route-line', type: 'line', source: 'sfl-route',
+                layout: { 'line-cap': 'round' },
+                paint: { 'line-color': '#3b82f6', 'line-width': 2.6, 'line-opacity': 0.95 } });
+
+            // Endpoint markers
+            const mk = (lngLat, cls) => {
+                const el = document.createElement('div');
+                el.className = 't-map-marker ' + cls;
+                new mapboxgl.Marker({ element: el }).setLngLat(lngLat).addTo(map);
+            };
+            mk(origin, 'origin');
+            mk(dest, 'pulse');
+
+            // Frame the route, then a cinematic ease to a tilted globe view
+            const b = new mapboxgl.LngLatBounds(origin, origin).extend(dest);
+            map.fitBounds(b, { padding: 70, duration: 0 });
+            const targetZoom = Math.min(map.getZoom(), 3.4);
+            setTimeout(() => {
+                map.easeTo({ center: mid, zoom: targetZoom, pitch: 38, duration: 2600, essential: true });
+            }, 450);
+        });
+
+        map.on('error', () => { /* keep silent; fallback already hidden if map drew */ });
+    } catch (e) {
+        console.warn('[Route map] unavailable:', e);
+        showFallback();
+    }
+}
+
+/* Spherical great-circle interpolation → array of [lng,lat] */
+function greatCircleArc(a, b, n) {
+    const toRad = d => d * Math.PI / 180, toDeg = r => r * 180 / Math.PI;
+    const lon1 = toRad(a[0]), lat1 = toRad(a[1]), lon2 = toRad(b[0]), lat2 = toRad(b[1]);
+    const d = 2 * Math.asin(Math.sqrt(
+        Math.sin((lat2 - lat1) / 2) ** 2 +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin((lon2 - lon1) / 2) ** 2));
+    if (!d || !isFinite(d)) return [a, b];
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+        const f = i / n;
+        const A = Math.sin((1 - f) * d) / Math.sin(d);
+        const B = Math.sin(f * d) / Math.sin(d);
+        const x = A * Math.cos(lat1) * Math.cos(lon1) + B * Math.cos(lat2) * Math.cos(lon2);
+        const y = A * Math.cos(lat1) * Math.sin(lon1) + B * Math.cos(lat2) * Math.sin(lon2);
+        const z = A * Math.sin(lat1) + B * Math.sin(lat2);
+        pts.push([toDeg(Math.atan2(y, x)), toDeg(Math.atan2(z, Math.sqrt(x * x + y * y)))]);
+    }
+    return pts;
 }
 
 
