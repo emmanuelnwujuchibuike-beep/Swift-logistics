@@ -160,7 +160,7 @@ function _buildMethodCard(method, icon, name, sub, color, value) {
 
 
 // ── MAIN TRACKING ENGINE ──────────────────────────────────────
-async function handleTracking() {
+async function handleTracking(silent) {
     const trackingInput = document.getElementById('trackingInput');
     const dashboard     = document.getElementById('dashboard-target');
     const searchGate    = document.getElementById('search-gate');
@@ -200,9 +200,11 @@ async function handleTracking() {
         return;
     }
 
-    searchBtn.disabled = true;
-    searchBtn.innerHTML = `<span class="t-search-spinner"></span> Locating…`;
-    hideError();
+    if (!silent) {
+        searchBtn.disabled = true;
+        searchBtn.innerHTML = `<span class="t-search-spinner"></span> Locating…`;
+        hideError();
+    }
 
     try {
         const url = `${SUPABASE_URL}/rest/v1/shipments_public?tracking_id=eq.${encodeURIComponent(trackingNo)}&select=*`;
@@ -588,14 +590,49 @@ async function handleTracking() {
         ].filter(w => w.q && String(w.q).trim());
         initRouteMap(journey);
 
+        // Live sync — reflect admin dashboard edits without a manual reload
+        if (!silent) startShipmentPoll(trackingNo, JSON.stringify(s));
+
     } catch (e) {
         console.error('Tracking error:', e);
-        showSearch();
-        showError('Unable to load tracking details. Please check your connection and try again.');
+        if (!silent) {
+            showSearch();
+            showError('Unable to load tracking details. Please check your connection and try again.');
+        }
     } finally {
-        searchBtn.disabled = false;
-        searchBtn.innerHTML = `<i class="fas fa-satellite-dish"></i> Track Shipment`;
+        if (!silent) {
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = `<i class="fas fa-satellite-dish"></i> Track Shipment`;
+        }
     }
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   LIVE SYNC — poll the shipment so edits made in the admin dashboard
+   appear on the tracking page automatically (no manual reload). Re-renders
+   (and re-maps) only when the data actually changes; stops when the user
+   leaves the dashboard.
+   ════════════════════════════════════════════════════════════════ */
+let _sflPollTimer = null;
+function startShipmentPoll(trackingNo, baselineJSON) {
+    if (_sflPollTimer) { clearInterval(_sflPollTimer); _sflPollTimer = null; }
+    let last = baselineJSON;
+    _sflPollTimer = setInterval(async () => {
+        const dash = document.getElementById('t-dashboard');
+        if (!dash || dash.style.display === 'none') { clearInterval(_sflPollTimer); _sflPollTimer = null; return; }
+        try {
+            const url = `${SUPABASE_URL}/rest/v1/shipments_public?tracking_id=eq.${encodeURIComponent(trackingNo)}&select=*`;
+            const r = await fetch(url, { headers: {
+                'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json'
+            }});
+            if (!r.ok) return;
+            const d = await r.json();
+            if (!Array.isArray(d) || d.length === 0) return;
+            const js = JSON.stringify(d[0]);
+            if (js !== last) { last = js; handleTracking(true); } // silent re-render with fresh data
+        } catch (_) {}
+    }, 7000);
 }
 
 
