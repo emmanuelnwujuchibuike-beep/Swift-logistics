@@ -1515,8 +1515,7 @@
 (function(){
   var mapEl = document.getElementById('sfl-port-map');
   if (!mapEl || typeof mapboxgl === 'undefined') return;
-  /* Free token — replace with your own at account.mapbox.com (50k loads/month free) */
-  mapboxgl.accessToken = 'pk.eyJ1Ijoic3dpZnRmcmVpZ2h0bG9naXgiLCJhIjoiY21xNnhoZ3AwMDdhcjJycjU2bndyNGFhbyJ9.SUrLgNUXCy-PuDZu79Httw';
+  mapboxgl.accessToken = 'MAPBOX_TOKEN_PLACEHOLDER';
   var PORT = [-118.2720, 33.7395]; // Port of Los Angeles, San Pedro CA
   var map = new mapboxgl.Map({
     container: 'sfl-port-map',
@@ -1572,6 +1571,7 @@
     }, 5500);
     map.on('mousedown', function(){ rotating = false; });
     map.on('touchstart', function(){ rotating = false; });
+    new IntersectionObserver(function(e){ if(!e[0].isIntersecting) rotating = false; }, { threshold: 0 }).observe(mapEl);
   });
   var markerEl = document.createElement('div');
   markerEl.className = 'sfl-port-marker';

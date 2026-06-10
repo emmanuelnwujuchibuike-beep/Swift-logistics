@@ -1,0 +1,3 @@
+[build]
+  command = "sed -i 's|MAPBOX_TOKEN_PLACEHOLDER|'\"$MAPBOX_TOKEN\"'|g' src/index.html src/contact.html"
+  publish = "src"
