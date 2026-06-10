@@ -1,6 +1,7 @@
 
 html.lenis {
   height: auto;
+  scroll-behavior: auto !important; /* Lenis owns scrolling — disable CSS smooth-scroll to avoid conflict */
 }
 
 html {

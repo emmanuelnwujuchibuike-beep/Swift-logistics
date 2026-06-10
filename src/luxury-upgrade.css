@@ -1288,7 +1288,7 @@ img { max-width: 100%; height: auto; }
 #hero .hero-content .gt,
 #page-hero .hero-content .gt {
   background: linear-gradient(115deg,
-    #8b0000 0%, #c8102e 20%, #f02030 42%, #ff5c5c 52%, #f02030 62%, #c8102e 80%, #8b0000 100%) !important;
+    #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -1329,7 +1329,7 @@ img { max-width: 100%; height: auto; }
 #hero:not([data-img-theme]) .hero-content .gt,
 #page-hero:not([data-img-theme]) .hero-content .gt {
   background: linear-gradient(115deg,
-    #8b0000 0%, #c8102e 20%, #f02030 42%, #ff5c5c 52%, #f02030 62%, #c8102e 80%, #8b0000 100%) !important;
+    #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -1363,7 +1363,7 @@ img { max-width: 100%; height: auto; }
 #hero[data-img-theme="bright"] .hero-content .gt,
 #page-hero[data-img-theme="bright"] .hero-content .gt {
   background: linear-gradient(115deg,
-    #8b0000 0%, #c8102e 20%, #f02030 42%, #ff5c5c 52%, #f02030 62%, #c8102e 80%, #8b0000 100%) !important;
+    #ff0022 0%, #ff1f38 28%, #ff5566 52%, #ff1f38 74%, #ff0022 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
