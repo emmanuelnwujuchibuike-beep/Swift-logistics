@@ -1785,25 +1785,18 @@ document.getElementById('update-btn').addEventListener('click', async () => {
   if (v('u-s4name'))    updates.step4_name       = v('u-s4name');
   if (v('u-s4loc'))     updates.step4_location   = v('u-s4loc');
   if (v('u-s4color'))   updates.step4_color      = v('u-s4color');
-  // Payment methods — only update if panel is active
-  document.querySelectorAll('#u-pm-fields .pm-fields-panel.pm-panel-active').forEach(panel => {
-    switch(panel.id) {
-      case 'u-panel-btc':    if(v('u-btc'))    updates.btc_address       = v('u-btc');    break;
-      case 'u-panel-usdt':   if(v('u-usdt'))   updates.usdt_address      = v('u-usdt');   break;
-      case 'u-panel-wire':      if(v('u-bank'))      updates.bank_name         = v('u-bank');      if(v('u-accname'))   updates.account_name      = v('u-accname');   if(v('u-accnum'))    updates.bank_number       = v('u-accnum');    if(v('u-routing'))   updates.routing_number    = v('u-routing');   break;
-      case 'u-panel-paypal':    if(v('u-paypal'))    updates.paypal_email      = v('u-paypal');    break;
-      case 'u-panel-cashapp':   if(v('u-cashapp'))   updates.cashapp_tag       = v('u-cashapp');   break;
-      case 'u-panel-zelle':     if(v('u-zelle'))     updates.zelle_id          = v('u-zelle');     break;
-      case 'u-panel-wu':        if(v('u-wu'))        updates.western_union_info= v('u-wu');        break;
-      case 'u-panel-venmo':     if(v('u-venmo'))     updates.venmo_tag         = v('u-venmo');     break;
-      case 'u-panel-moneygram': if(v('u-moneygram')) updates.moneygram_info    = v('u-moneygram'); break;
-      case 'u-panel-amazon':    if(v('u-amazon'))    updates.amazon_gc_info    = v('u-amazon');    break;
-      case 'u-panel-google':    if(v('u-google'))    updates.google_gc_info    = v('u-google');    break;
-      case 'u-panel-apple':     if(v('u-apple'))     updates.apple_gc_info     = v('u-apple');     break;
-      case 'u-panel-vanilla':   if(v('u-vanilla'))   updates.vanilla_gc_info   = v('u-vanilla');   break;
-      case 'u-panel-ebay':      if(v('u-ebay'))      updates.ebay_gc_info      = v('u-ebay');      break;
-    }
-  });
+  // Payment methods — send ANY field that has a value, regardless of the
+  // panel's active UI state. (The old code only read panels flagged
+  // pm-panel-active, which silently dropped methods whose toggle state
+  // wasn't set — this removes that whole class of "didn't save" bugs.)
+  const _pmFields = {
+    'u-btc':'btc_address', 'u-usdt':'usdt_address', 'u-bank':'bank_name', 'u-accname':'account_name',
+    'u-accnum':'bank_number', 'u-routing':'routing_number', 'u-paypal':'paypal_email', 'u-cashapp':'cashapp_tag',
+    'u-zelle':'zelle_id', 'u-wu':'western_union_info', 'u-venmo':'venmo_tag', 'u-moneygram':'moneygram_info',
+    'u-amazon':'amazon_gc_info', 'u-google':'google_gc_info', 'u-apple':'apple_gc_info',
+    'u-vanilla':'vanilla_gc_info', 'u-ebay':'ebay_gc_info'
+  };
+  Object.keys(_pmFields).forEach(fid => { const val = v(fid); if (val) updates[_pmFields[fid]] = val; });
   if (!Object.keys(updates).length) {
     showInline('update-result', 'error', 'No changes entered.'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save &amp; Send Notification'; return;
   }
