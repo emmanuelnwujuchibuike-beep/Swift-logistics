@@ -2012,72 +2012,77 @@
 (function(){
   var mapEl = document.getElementById('sfl-port-map');
   if (!mapEl || typeof mapboxgl === 'undefined') return;
-  mapboxgl.accessToken = 'MAPBOX_TOKEN_PLACEHOLDER';
-  var PORT = [-118.2720, 33.7395]; // Port of Los Angeles, San Pedro CA
-  var map = new mapboxgl.Map({
-    container: 'sfl-port-map',
-    style: 'mapbox://styles/mapbox/dark-v11',
-    center: PORT,
-    zoom: 12.5,
-    pitch: 56,
-    bearing: 18,
-    antialias: true,
-    attributionControl: false
-  });
-  map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
-  map.addControl(new mapboxgl.NavigationControl({ showCompass: true, visualizePitch: true }), 'top-right');
-  map.on('load', function() {
-    var layers = map.getStyle().layers, firstLabelId;
-    for (var i = 0; i < layers.length; i++) {
-      if (layers[i].type === 'symbol' && layers[i].layout && layers[i].layout['text-field']) {
-        firstLabelId = layers[i].id; break;
-      }
-    }
-    map.addLayer({
-      id: 'sfl-3d-buildings',
-      source: 'composite',
-      'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'],
-      type: 'fill-extrusion',
-      minzoom: 11,
-      paint: {
-        'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'],
-          0, '#0c1b44', 30, '#132258', 70, '#1a2e80', 120, '#2040b8'],
-        'fill-extrusion-height': ['get', 'height'],
-        'fill-extrusion-base': ['get', 'min_height'],
-        'fill-extrusion-opacity': 0.82
-      }
-    }, firstLabelId);
-    var section = document.getElementById('port-map-section'), flown = false;
-    if (section && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !flown) {
-          flown = true;
-          map.flyTo({ center: PORT, zoom: 14.5, pitch: 62, bearing: 18, speed: 0.45, curve: 1.5, essential: true });
+  fetch('https://oltbgccsceipedoadgka.supabase.co/functions/v1/get-map-token')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d.token) return;
+      mapboxgl.accessToken = d.token;
+      var PORT = [-118.2720, 33.7395];
+      var map = new mapboxgl.Map({
+        container: 'sfl-port-map',
+        style: 'mapbox://styles/mapbox/dark-v11',
+        center: PORT,
+        zoom: 12.5,
+        pitch: 56,
+        bearing: 18,
+        antialias: true,
+        attributionControl: false
+      });
+      map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
+      map.addControl(new mapboxgl.NavigationControl({ showCompass: true, visualizePitch: true }), 'top-right');
+      map.on('load', function() {
+        var layers = map.getStyle().layers, firstLabelId;
+        for (var i = 0; i < layers.length; i++) {
+          if (layers[i].type === 'symbol' && layers[i].layout && layers[i].layout['text-field']) {
+            firstLabelId = layers[i].id; break;
+          }
         }
-      }, { threshold: 0.25 }).observe(section);
-    }
-    var rotating = false;
-    setTimeout(function() {
-      rotating = true;
-      (function spin() {
-        if (!rotating) return;
-        map.easeTo({ bearing: map.getBearing() + 0.10, duration: 150, easing: function(t){ return t; } });
-        requestAnimationFrame(spin);
-      })();
-    }, 5500);
-    map.on('mousedown', function(){ rotating = false; });
-    map.on('touchstart', function(){ rotating = false; });
-    /* Stop rotation when map scrolls out of view — saves GPU */
-    new IntersectionObserver(function(e){ if(!e[0].isIntersecting) rotating = false; }, { threshold: 0 }).observe(mapEl);
-  });
-  var markerEl = document.createElement('div');
-  markerEl.className = 'sfl-port-marker';
-  new mapboxgl.Marker({ element: markerEl, anchor: 'center' })
-    .setLngLat(PORT)
-    .setPopup(new mapboxgl.Popup({ offset: 18, closeButton: false, maxWidth: '220px' })
-      .setHTML('<div style="font:700 .7rem/1 \'DM Sans\',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:7px;"><i class="fas fa-anchor" style="margin-right:5px;font-size:.6rem;opacity:.7;"></i>Port of Los Angeles</div><div style="font:400 .7rem/1.6 \'DM Sans\',sans-serif;color:rgba(232,240,254,.75);">San Pedro, California<br>Primary US Freight Gateway<br><span style="color:rgba(96,165,250,.8);">33°44\'N &nbsp;118°16\'W</span></div>'))
-    .addTo(map);
+        map.addLayer({
+          id: 'sfl-3d-buildings',
+          source: 'composite',
+          'source-layer': 'building',
+          filter: ['==', 'extrude', 'true'],
+          type: 'fill-extrusion',
+          minzoom: 11,
+          paint: {
+            'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'],
+              0, '#0c1b44', 30, '#132258', 70, '#1a2e80', 120, '#2040b8'],
+            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-base': ['get', 'min_height'],
+            'fill-extrusion-opacity': 0.82
+          }
+        }, firstLabelId);
+        var section = document.getElementById('port-map-section'), flown = false;
+        if (section && 'IntersectionObserver' in window) {
+          new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting && !flown) {
+              flown = true;
+              map.flyTo({ center: PORT, zoom: 14.5, pitch: 62, bearing: 18, speed: 0.45, curve: 1.5, essential: true });
+            }
+          }, { threshold: 0.25 }).observe(section);
+        }
+        var rotating = false;
+        setTimeout(function() {
+          rotating = true;
+          (function spin() {
+            if (!rotating) return;
+            map.easeTo({ bearing: map.getBearing() + 0.10, duration: 150, easing: function(t){ return t; } });
+            requestAnimationFrame(spin);
+          })();
+        }, 5500);
+        map.on('mousedown', function(){ rotating = false; });
+        map.on('touchstart', function(){ rotating = false; });
+        new IntersectionObserver(function(e){ if(!e[0].isIntersecting) rotating = false; }, { threshold: 0 }).observe(mapEl);
+      });
+      var markerEl = document.createElement('div');
+      markerEl.className = 'sfl-port-marker';
+      new mapboxgl.Marker({ element: markerEl, anchor: 'center' })
+        .setLngLat(PORT)
+        .setPopup(new mapboxgl.Popup({ offset: 18, closeButton: false, maxWidth: '220px' })
+          .setHTML('<div style="font:700 .7rem/1 \'DM Sans\',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:7px;"><i class="fas fa-anchor" style="margin-right:5px;font-size:.6rem;opacity:.7;"></i>Port of Los Angeles</div><div style="font:400 .7rem/1.6 \'DM Sans\',sans-serif;color:rgba(232,240,254,.75);">San Pedro, California<br>Primary US Freight Gateway<br><span style="color:rgba(96,165,250,.8);">33°44\'N &nbsp;118°16\'W</span></div>'))
+        .addTo(map);
+    })
+    .catch(function(){ console.warn('Map unavailable'); });
 })();
 </script>
 
