@@ -1993,7 +1993,10 @@
 
   imgs.forEach(function(img, i) {
     if (img.complete && img.naturalWidth > 0) { sample(img, i); }
-    else { img.addEventListener('load', function(){ sample(img, i); }); }
+    else { img.addEventListener('load', function(){
+      sample(img, i);
+      if (i === cur) apply(cur); /* re-apply if this is the currently visible slide */
+    }); }
   });
 
   var cur = 0;
