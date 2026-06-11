@@ -936,9 +936,18 @@ function renderEliteStep(name, loc, label, icon, colorClass, idx) {
     }
 
     // ── Icon color / style per state ─────────────────────────
-    const iconColor  = isGreen ? '#22c55e' : isHold ? '#f59e0b' : state === 'upcoming' ? 'rgba(232,240,254,.2)' : col;
-    const iconBg     = isGreen ? 'rgba(34,197,94,.12)'   : isHold ? 'rgba(245,158,11,.12)'  : state === 'upcoming' ? 'rgba(255,255,255,.03)' : `${col}20`;
-    const iconBorder = isGreen ? 'rgba(34,197,94,.3)'    : isHold ? 'rgba(245,158,11,.28)'  : state === 'upcoming' ? 'rgba(255,255,255,.07)' : `${col}60`;
+    // Solid colored circles so icons are always clearly visible
+    const iconColor  = state === 'upcoming' ? 'rgba(232,240,254,.35)' : '#fff';
+    const iconBg     = isGreen  ? '#22c55e'
+        : isRed   ? '#ef4444'
+        : isAmber ? '#f59e0b'
+        : state === 'active'   ? col
+        : 'rgba(255,255,255,.07)';
+    const iconBorder = isGreen  ? 'rgba(34,197,94,.6)'
+        : isRed   ? 'rgba(239,68,68,.6)'
+        : isAmber ? 'rgba(245,158,11,.5)'
+        : state === 'active'   ? `${col}cc`
+        : 'rgba(255,255,255,.12)';
 
     return `
     <div class="t-step" style="animation-delay:${delay}s;">

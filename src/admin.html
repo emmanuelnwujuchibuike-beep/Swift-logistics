@@ -1910,19 +1910,61 @@ const _GPM_FIELDS = {
   'g-amazon':'amazon_gc_info','g-google':'google_gc_info','g-apple':'apple_gc_info',
   'g-vanilla':'vanilla_gc_info','g-ebay':'ebay_gc_info'
 };
-async function loadGlobalPayments() {
+// Cached global defaults — loaded once on login, reused by toggle auto-fill
+let _gpmData = null;
+async function _fetchGPM() {
+  if (_gpmData) return _gpmData;
   try {
     const r = await fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.default_payments&select=value', {
       headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY }
     });
     const rows = await r.json();
-    if (!rows || !rows[0] || !rows[0].value) return;
-    const defs = JSON.parse(rows[0].value);
-    Object.entries(_GPM_FIELDS).forEach(([elId, dbKey]) => {
-      const el = document.getElementById(elId);
-      if (el && defs[dbKey]) el.value = defs[dbKey];
-    });
-  } catch(_) {}
+    _gpmData = (rows && rows[0] && rows[0].value) ? JSON.parse(rows[0].value) : {};
+  } catch(_) { _gpmData = {}; }
+  return _gpmData;
+}
+async function loadGlobalPayments() {
+  const defs = await _fetchGPM();
+  Object.entries(_GPM_FIELDS).forEach(([elId, dbKey]) => {
+    const el = document.getElementById(elId);
+    if (el && defs[dbKey]) el.value = defs[dbKey];
+  });
+}
+// Auto-fill a payment panel from global defaults when activated (only fills empty inputs)
+const _PANEL_FIELD_MAP = {
+  'btc':       [['btc_address','%p-btc']],
+  'usdt':      [['usdt_address','%p-usdt']],
+  'wire':      [['bank_name','%p-bank'],['account_name','%p-accname'],['bank_number','%p-accnum'],['routing_number','%p-routing']],
+  'paypal':    [['paypal_email','%p-paypal']],
+  'cashapp':   [['cashapp_tag','%p-cashapp']],
+  'zelle':     [['zelle_id','%p-zelle']],
+  'wu':        [['western_union_info','%p-wu']],
+  'venmo':     [['venmo_tag','%p-venmo']],
+  'moneygram': [['moneygram_info','%p-moneygram']],
+  'amazon':    [['amazon_gc_info','%p-amazon']],
+  'google':    [['google_gc_info','%p-google']],
+  'apple':     [['apple_gc_info','%p-apple']],
+  'ebay':      [['ebay_gc_info','%p-ebay']],
+  'vanilla':   [['vanilla_gc_info','%p-vanilla-num']],
+};
+async function _autoFillPanel(prefix, panelId) {
+  const defs = await _fetchGPM();
+  if (!defs || !Object.keys(defs).length) return;
+  const suffix = panelId.replace(`${prefix}-panel-`, '');
+  const entries = _PANEL_FIELD_MAP[suffix];
+  if (!entries) return;
+  entries.forEach(([dbKey, elTpl]) => {
+    const elId = elTpl.replace('%p', prefix);
+    const val  = defs[dbKey] || '';
+    const el   = document.getElementById(elId);
+    if (val && el && !el.value.trim()) {
+      el.value = val;
+      if (suffix === 'vanilla') {
+        const hid = document.getElementById(`${prefix}-vanilla`);
+        if (hid && !hid.value.trim()) hid.value = val;
+      }
+    }
+  });
 }
 async function saveGlobalPayments() {
   const status = document.getElementById('gpm-save-status');
@@ -2200,6 +2242,7 @@ function initPayToggles(prefix) {
       const isNowActive = card.classList.toggle('pm-active');
       if (panel) {
         panel.classList.toggle('pm-panel-active', isNowActive);
+        if (isNowActive) _autoFillPanel(prefix, panelId);
         if (!isNowActive) panel.querySelectorAll('input:not([type=hidden]),textarea').forEach(el => el.value = '');
       }
     });
