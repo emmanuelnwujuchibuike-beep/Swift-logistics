@@ -1024,6 +1024,62 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
           </div>
         </div>
 
+        <!-- ═══ GLOBAL PAYMENT METHODS ═══ -->
+        <div class="form-card" id="gpm-card">
+          <div class="settings-title"><i class="fas fa-credit-card" style="color:var(--accent);margin-right:8px"></i> Global Payment Methods</div>
+          <div class="info-box" style="margin-bottom:20px">
+            These methods show on <strong>every shipment</strong> by default — set them once here and all tracking pages will display them automatically. If you add a payment method directly on a specific shipment (via the Edit panel), that value takes priority for that shipment only.
+          </div>
+
+          <!-- Crypto -->
+          <div style="font-size:.65rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(59,130,246,.6);margin-bottom:10px;margin-top:4px;">Cryptocurrency</div>
+          <div class="form-grid form-grid-2" style="margin-bottom:0">
+            <div class="f-group"><label><i class="fab fa-bitcoin" style="color:#f7931a;margin-right:5px"></i>BTC Address</label><input id="g-btc" class="f-input" placeholder="bc1q…"></div>
+            <div class="f-group"><label><i class="fas fa-circle-dollar-to-slot" style="color:#26a17b;margin-right:5px"></i>USDT Address (TRC-20)</label><input id="g-usdt" class="f-input" placeholder="T…"></div>
+          </div>
+
+          <!-- Bank -->
+          <div style="font-size:.65rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(59,130,246,.6);margin-bottom:10px;margin-top:18px;">Bank Transfer</div>
+          <div class="form-grid form-grid-2" style="margin-bottom:0">
+            <div class="f-group"><label>Bank Name</label><input id="g-bank" class="f-input" placeholder="e.g. Chase Bank"></div>
+            <div class="f-group"><label>Account Name</label><input id="g-accname" class="f-input" placeholder="e.g. Swift Freight LLC"></div>
+            <div class="f-group"><label>Account Number</label><input id="g-accnum" class="f-input" placeholder="0000000000"></div>
+            <div class="f-group"><label>Routing Number</label><input id="g-routing" class="f-input" placeholder="021000021"></div>
+          </div>
+
+          <!-- Digital Wallets -->
+          <div style="font-size:.65rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(59,130,246,.6);margin-bottom:10px;margin-top:18px;">Digital Wallets</div>
+          <div class="form-grid form-grid-2" style="margin-bottom:0">
+            <div class="f-group"><label><i class="fab fa-paypal" style="color:#003087;margin-right:5px"></i>PayPal Email</label><input id="g-paypal" class="f-input" type="email" placeholder="pay@example.com"></div>
+            <div class="f-group"><label>Cash App Tag</label><input id="g-cashapp" class="f-input" placeholder="$YourTag"></div>
+            <div class="f-group"><label>Zelle (Email or Phone)</label><input id="g-zelle" class="f-input" placeholder="pay@example.com"></div>
+            <div class="f-group"><label>Venmo Tag</label><input id="g-venmo" class="f-input" placeholder="@YourVenmo"></div>
+            <div class="f-group"><label>Western Union Info</label><input id="g-wu" class="f-input" placeholder="Receiver name / location"></div>
+            <div class="f-group"><label>MoneyGram Info</label><input id="g-moneygram" class="f-input" placeholder="Receiver name / location"></div>
+          </div>
+
+          <!-- Gift Cards -->
+          <div style="font-size:.65rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(59,130,246,.6);margin-bottom:10px;margin-top:18px;">Gift Cards</div>
+          <div class="form-grid form-grid-2" style="margin-bottom:0">
+            <div class="f-group"><label>Amazon Gift Card</label><input id="g-amazon" class="f-input" placeholder="Send to email@example.com"></div>
+            <div class="f-group"><label>Google Play Gift Card</label><input id="g-google" class="f-input" placeholder="Send to email@example.com"></div>
+            <div class="f-group"><label>Apple / iTunes Gift Card</label><input id="g-apple" class="f-input" placeholder="Send to email@example.com"></div>
+            <div class="f-group"><label>Vanilla Visa Gift Card</label><input id="g-vanilla" class="f-input" placeholder="Card number / PIN"></div>
+            <div class="f-group"><label>eBay Gift Card</label><input id="g-ebay" class="f-input" placeholder="Send to email@example.com"></div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;margin-top:4px;flex-wrap:wrap;">
+            <button class="btn-primary" onclick="saveGlobalPayments()" style="white-space:nowrap;flex-shrink:0;padding:12px 22px;">
+              <i class="fas fa-save"></i> Save Global Methods
+            </button>
+            <button class="btn-secondary" onclick="clearGlobalPayments()" style="white-space:nowrap;flex-shrink:0;padding:11px 18px;font-size:.72rem;opacity:.7;">
+              <i class="fas fa-times"></i> Clear All
+            </button>
+          </div>
+          <div id="gpm-save-status" style="margin-top:10px;font-size:.78rem;color:var(--muted2);min-height:18px;"></div>
+        </div>
+        <!-- ═══ END GLOBAL PAYMENT METHODS ═══ -->
+
         <div class="form-card">
           <div class="settings-title"><i class="fas fa-database" style="color:var(--accent);margin-right:8px"></i> Database Setup SQL</div>
           <div class="info-box" style="margin-bottom:16px">
@@ -1404,6 +1460,7 @@ function launchApp() {
   document.getElementById('admin-app').style.display = 'block';
   loadShipments();
   loadTicker();
+  loadGlobalPayments();
   initTheme();
 }
 
@@ -1833,6 +1890,59 @@ document.getElementById('update-btn').addEventListener('click', async () => {
 
 /* ═══ SETTINGS ═══ */
 // Credentials are managed via Netlify Environment Variables — no local storage of secrets
+
+/* ═══ GLOBAL PAYMENT METHODS ═══ */
+const _GPM_FIELDS = {
+  'g-btc':'btc_address','g-usdt':'usdt_address',
+  'g-bank':'bank_name','g-accname':'account_name','g-accnum':'bank_number','g-routing':'routing_number',
+  'g-paypal':'paypal_email','g-cashapp':'cashapp_tag','g-zelle':'zelle_id',
+  'g-wu':'western_union_info','g-venmo':'venmo_tag','g-moneygram':'moneygram_info',
+  'g-amazon':'amazon_gc_info','g-google':'google_gc_info','g-apple':'apple_gc_info',
+  'g-vanilla':'vanilla_gc_info','g-ebay':'ebay_gc_info'
+};
+async function loadGlobalPayments() {
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.default_payments&select=value', {
+      headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY }
+    });
+    const rows = await r.json();
+    if (!rows || !rows[0] || !rows[0].value) return;
+    const defs = JSON.parse(rows[0].value);
+    Object.entries(_GPM_FIELDS).forEach(([elId, dbKey]) => {
+      const el = document.getElementById(elId);
+      if (el && defs[dbKey]) el.value = defs[dbKey];
+    });
+  } catch(_) {}
+}
+async function saveGlobalPayments() {
+  const status = document.getElementById('gpm-save-status');
+  status.textContent = 'Saving…';
+  status.style.color = 'var(--muted2)';
+  const defs = {};
+  Object.entries(_GPM_FIELDS).forEach(([elId, dbKey]) => {
+    const val = (document.getElementById(elId)?.value || '').trim();
+    if (val) defs[dbKey] = val;
+  });
+  try {
+    const r = await fetch(FN + '/update-setting', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+ANON_KEY, 'x-admin-secret': getApiSecret() },
+      body: JSON.stringify({ key: 'default_payments', value: JSON.stringify(defs) }),
+    });
+    const d = await r.json();
+    if (d.error || d.message) throw new Error(d.error || d.message);
+    status.textContent = '✓ Saved! All shipments will now show these payment methods.';
+    status.style.color = 'var(--success)';
+    setTimeout(() => { status.textContent = ''; }, 5000);
+  } catch(e) {
+    status.textContent = 'Error: ' + String(e);
+    status.style.color = '#f87171';
+  }
+}
+function clearGlobalPayments() {
+  Object.keys(_GPM_FIELDS).forEach(elId => { const el = document.getElementById(elId); if (el) el.value = ''; });
+  saveGlobalPayments();
+}
 
 /* ═══ TICKER ═══ */
 async function loadTicker() {

