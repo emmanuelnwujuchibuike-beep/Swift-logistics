@@ -730,6 +730,10 @@ async function handleTracking(silent) {
         searchGate.style.display = 'none';
         if (dashSection) dashSection.style.display = 'block';
 
+        // Receipt metadata (precomputed for template + send function)
+        const _rcpNum  = `RCP-${(s.tracking_id||'').replace('SFL-','')}`;
+        const _rcpDate = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
         dashboard.innerHTML = `
 <div class="t-dash-inner">
 
@@ -966,6 +970,114 @@ async function handleTracking(silent) {
     </div><!-- /t-right-col -->
   </div><!-- /t-grid -->
 </div><!-- /t-dash-inner -->
+
+${isPaid ? `
+<!-- ══ PAYMENT RECEIPT ══════════════════════════════════════════ -->
+<div class="t-receipt-wrap" id="t-receipt">
+  <div class="t-receipt-inner">
+    <div class="t-receipt-wm">PAID</div>
+
+    <!-- Header -->
+    <div class="t-receipt-hdr">
+      <div class="t-receipt-brand">
+        <div class="t-receipt-logo-text">SFL</div>
+        <div>
+          <div class="t-receipt-company">SWIFT FREIGHT LOGISTICS</div>
+          <div class="t-receipt-doc-type">OFFICIAL PAYMENT RECEIPT</div>
+        </div>
+      </div>
+      <div class="t-receipt-seal">
+        <div class="t-receipt-seal-ring">
+          <i class="fas fa-circle-check"></i>
+          <div class="t-receipt-seal-label">PAYMENT<br>CONFIRMED</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-receipt-stripe"></div>
+
+    <!-- Meta row -->
+    <div class="t-receipt-meta-row">
+      <div class="t-receipt-meta-item">
+        <div class="t-receipt-meta-label">RECEIPT NUMBER</div>
+        <div class="t-receipt-meta-val t-receipt-mono">${_rcpNum}</div>
+      </div>
+      <div class="t-receipt-meta-item">
+        <div class="t-receipt-meta-label">DATE ISSUED</div>
+        <div class="t-receipt-meta-val">${_rcpDate}</div>
+      </div>
+      <div class="t-receipt-meta-item">
+        <div class="t-receipt-meta-label">STATUS</div>
+        <div class="t-receipt-meta-val"><span class="t-receipt-status-pill">&#10003; CLEARED</span></div>
+      </div>
+    </div>
+
+    <!-- Details table -->
+    <table class="t-receipt-table">
+      <tbody>
+        <tr><td class="t-rk">Recipient</td><td class="t-rv">${esc(s.name)}</td></tr>
+        <tr><td class="t-rk">Tracking ID</td><td class="t-rv t-receipt-mono">${esc(s.tracking_id)}</td></tr>
+        ${s.senders_name  ? `<tr><td class="t-rk">Sender</td><td class="t-rv">${esc(s.senders_name)}</td></tr>` : ''}
+        ${s.origin        ? `<tr><td class="t-rk">Origin</td><td class="t-rv">${esc(s.origin)}</td></tr>` : ''}
+        ${s.destination   ? `<tr><td class="t-rk">Destination</td><td class="t-rv">${esc(s.destination)}</td></tr>` : ''}
+        ${s.pickup_date   ? `<tr><td class="t-rk">Pickup Date</td><td class="t-rv">${esc(s.pickup_date)}</td></tr>` : ''}
+        ${s.package_details ? `<tr><td class="t-rk">Package</td><td class="t-rv">${esc(s.package_details)}</td></tr>` : ''}
+        ${s.service_type  ? `<tr><td class="t-rk">Service</td><td class="t-rv">${esc(s.service_type)}</td></tr>` : ''}
+        ${s.eta           ? `<tr><td class="t-rk">Est. Delivery</td><td class="t-rv t-receipt-accent">${esc(s.eta)}</td></tr>` : ''}
+      </tbody>
+    </table>
+
+    <!-- Amount feature -->
+    <div class="t-receipt-amount-block">
+      <div class="t-receipt-amount-label">TOTAL AMOUNT PAID</div>
+      <div class="t-receipt-amount">${esc(s.amount_due || '—')}</div>
+      <div class="t-receipt-amount-note">Payment verified and recorded in the Swift Freight Logistics system</div>
+    </div>
+
+    <!-- What happens next -->
+    <div class="t-receipt-next">
+      <div class="t-receipt-next-title">WHAT HAPPENS NEXT</div>
+      <div class="t-receipt-next-steps">
+        <div class="t-receipt-step"><span class="t-rn">1</span><span>Your payment has been verified and your shipment is now fully cleared.</span></div>
+        <div class="t-receipt-step"><span class="t-rn">2</span><span>Your package will resume transit immediately on the scheduled route.</span></div>
+        <div class="t-receipt-step"><span class="t-rn">3</span><span>You will receive live checkpoint updates at every stage of the journey.</span></div>
+        <div class="t-receipt-step"><span class="t-rn">4</span><span>Expected delivery by <strong>${esc(s.eta || 'your scheduled date')}</strong> — track anytime via your tracking ID.</span></div>
+      </div>
+    </div>
+
+    <!-- Receipt footer -->
+    <div class="t-receipt-footer">
+      <div class="t-receipt-footer-left">
+        <div class="t-receipt-footer-brand">SWIFT FREIGHT LOGISTICS</div>
+        <div class="t-receipt-footer-sub">Certified Carrier &middot; Est. 1999 &middot; swiftfreightlogix.netlify.app</div>
+      </div>
+      <div class="t-receipt-footer-right">
+        <div class="t-receipt-footer-note">This document serves as official proof of payment.</div>
+        <div class="t-receipt-footer-note">Please keep for your records.</div>
+      </div>
+    </div>
+  </div><!-- /t-receipt-inner -->
+
+  <!-- Action buttons (hidden on print) -->
+  <div class="t-receipt-actions no-print">
+    <button class="t-ra-btn t-ra-print" onclick="window.print()">
+      <i class="fas fa-print"></i> Print Receipt
+    </button>
+    <button class="t-ra-btn t-ra-email" onclick="document.getElementById('t-receipt-email-panel').classList.toggle('t-rp-hidden')">
+      <i class="fas fa-envelope"></i> Email Receipt
+    </button>
+  </div>
+
+  <div id="t-receipt-email-panel" class="t-receipt-email-panel t-rp-hidden no-print">
+    <div class="t-rep-label">Send this receipt to your inbox</div>
+    <div class="t-rep-row">
+      <input id="t-receipt-email-input" class="t-rep-input" type="email" placeholder="your@email.com" autocomplete="email">
+      <button class="t-rep-btn" onclick="window.sflSendReceipt()"><i class="fas fa-paper-plane"></i> Send</button>
+    </div>
+    <div id="t-receipt-email-status" class="t-rep-status"></div>
+  </div>
+</div><!-- /t-receipt-wrap -->
+` : ''}
         `;
 
         // Animate ring arcs + route progress after HTML is painted
@@ -1009,6 +1121,48 @@ async function handleTracking(silent) {
             }
         }
         initRouteMap(journey, pct);
+
+        // Receipt email sender (closes over shipment data `s`)
+        if (isPaid) {
+            window.sflSendReceipt = async function () {
+                const emailInput = document.getElementById('t-receipt-email-input');
+                const statusEl   = document.getElementById('t-receipt-email-status');
+                if (!emailInput || !statusEl) return;
+                const email = emailInput.value.trim();
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    statusEl.textContent = 'Please enter a valid email address.';
+                    statusEl.style.color = '#f87171';
+                    return;
+                }
+                statusEl.textContent = 'Sending…';
+                statusEl.style.color = 'rgba(199,210,254,.5)';
+                try {
+                    const res = await fetch('https://oltbgccsceipedoadgka.supabase.co/functions/v1/payment-receipt', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email,
+                            trackingId:     s.tracking_id,
+                            name:           s.name,
+                            amountPaid:     s.amount_due,
+                            destination:    s.destination,
+                            eta:            s.eta,
+                            packageDetails: s.package_details,
+                        }),
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        statusEl.textContent = '✓ Receipt sent to ' + email;
+                        statusEl.style.color = '#22c55e';
+                    } else {
+                        throw new Error(data.error || 'Send failed');
+                    }
+                } catch (e) {
+                    statusEl.textContent = 'Failed to send. Please try again.';
+                    statusEl.style.color = '#f87171';
+                }
+            };
+        }
 
         // Live sync — reflect admin dashboard edits without a manual reload
         if (!silent) startShipmentPoll(trackingNo, JSON.stringify(s));

@@ -880,7 +880,122 @@ export function deliveredEmail(d: DeliveredData): { subject: string; html: strin
   };
 }
 
-// ── Template 9: Subscribe Notification (admin alert) ──────────────────────
+// ── Template 9: Payment Confirmed / Receipt ────────────────────────────────
+
+export interface PaymentConfirmedData {
+  name:            string;
+  trackingId:      string;
+  amountPaid?:     string;
+  destination?:    string;
+  eta?:            string;
+  packageDetails?: string;
+  receiptNumber?:  string;
+  paidAt?:         string;
+}
+
+export function paymentConfirmedEmail(d: PaymentConfirmedData): { subject: string; html: string } {
+  const url     = trackingUrl(d.trackingId);
+  const receipt = d.receiptNumber || `RCP-${d.trackingId.replace('SFL-','')}`;
+  const paidAt  = d.paidAt || new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+  const body = `
+    ${contextPill('&#10003; Payment Confirmed')}
+    ${statusHero('&#10003;', 'Payment Confirmed', 'Your shipment is fully cleared and proceeding on schedule', '#22c55e')}
+    ${greeting(d.name)}
+    ${bodyText('Your payment has been verified and recorded. Your shipment is now fully cleared and will proceed without interruption to its destination.')}
+
+    <!-- Receipt card -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;">
+      <tr>
+        <td style="padding:26px 28px;background:rgba(34,197,94,.07);
+                   border:1px solid rgba(34,197,94,.28);border-top:4px solid #22c55e;
+                   border-radius:0 10px 10px 10px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td>
+                <p style="margin:0 0 4px;font-size:8px;letter-spacing:.38em;text-transform:uppercase;
+                   color:rgba(34,197,94,.6);font-family:Arial,Helvetica,sans-serif;">RECEIPT NUMBER</p>
+                <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:16px;
+                   font-weight:700;color:#22c55e;letter-spacing:.1em;">${esc(receipt)}</p>
+              </td>
+              <td align="right" valign="top">
+                <span style="display:inline-block;padding:6px 14px;
+                       background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);
+                       border-radius:99px;font-size:9px;letter-spacing:.18em;font-weight:700;
+                       color:#22c55e;font-family:Arial,Helvetica,sans-serif;">&#10003; CLEARED</span>
+              </td>
+            </tr>
+          </table>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                 style="margin-top:14px;border-top:1px solid rgba(34,197,94,.15);">
+            <tr>
+              <td style="padding-top:10px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+                         color:rgba(167,139,250,.4);font-family:Arial,Helvetica,sans-serif;">Date Issued</td>
+              <td align="right" style="padding-top:10px;font-size:12px;color:rgba(224,231,255,.7);
+                         font-family:Arial,Helvetica,sans-serif;">${esc(paidAt)}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    ${d.amountPaid ? `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;">
+      <tr>
+        <td align="center" style="padding:26px;background:rgba(34,197,94,.05);
+                           border:1px solid rgba(34,197,94,.18);border-radius:8px;">
+          <p style="margin:0 0 7px;font-size:8px;letter-spacing:.38em;text-transform:uppercase;
+             color:rgba(34,197,94,.5);font-family:Arial,Helvetica,sans-serif;">AMOUNT PAID</p>
+          <p style="margin:0;font-size:38px;font-weight:900;color:#22c55e;letter-spacing:.02em;
+             font-family:Arial,Helvetica,sans-serif;">${esc(d.amountPaid)}</p>
+        </td>
+      </tr>
+    </table>` : ''}
+
+    ${trackingBox(d.trackingId, '#22c55e')}
+
+    ${infoTable([
+      infoRow('Recipient',     d.name),
+      infoRow('Tracking ID',   d.trackingId),
+      infoRow('Destination',   d.destination   ?? ''),
+      infoRow('Package',       d.packageDetails ?? ''),
+      infoRow('Est. Delivery', d.eta            ?? ''),
+    ].join(''))}
+
+    ${divider()}
+    ${contextPill('&#9670; What Happens Next')}
+    ${nextSteps([
+      'Your payment has been verified and logged in the Swift Freight system.',
+      'Your shipment is fully cleared and will resume transit immediately on the scheduled route.',
+      'Live checkpoint updates will be sent at every stage of the journey.',
+      `Expect delivery by <strong style="color:#eef2ff;">${esc(d.eta || 'your scheduled date')}</strong> — track anytime via your tracking ID.`,
+    ])}
+
+    ${journeySteps([
+      { icon: '&#10003;', label: 'Registered', active: true  },
+      { icon: '&#10003;', label: 'Cleared',    active: true  },
+      { icon: '&#8594;',  label: 'In Transit', active: true  },
+      { icon: '&#11044;', label: 'Delivered',  active: false },
+    ])}
+
+    ${ctaButton(url, 'Track My Shipment Live', '#22c55e')}
+    <p style="font-size:11px;color:rgba(199,210,254,.28);margin:0;text-align:center;line-height:1.9;
+       font-family:Arial,Helvetica,sans-serif;">
+      This email is your official receipt — please keep it for your records.<br>
+      Support: <a href="mailto:swiftfreightlogix@gmail.com"
+        style="color:rgba(34,197,94,.5);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">
+        swiftfreightlogix@gmail.com
+      </a>
+    </p>`;
+
+  return {
+    subject: `[CLEARED] Payment Confirmed — ${d.trackingId} | Swift Freight`,
+    html:    base('#22c55e', '#4ade80', 'Payment Receipt', body,
+                  `Payment confirmed for ${d.trackingId}. Your shipment is cleared and proceeding on schedule.`),
+  };
+}
+
+// ── Template 10: Subscribe Notification (admin alert) ─────────────────────
 
 export interface SubscribeNotificationData {
   subscriberEmail: string;
@@ -1038,6 +1153,7 @@ export type EmailType =
   | 'quote-received'
   | 'location-update'
   | 'payment-required'
+  | 'payment-confirmed'
   | 'delayed'
   | 'customs-hold'
   | 'out-for-delivery'
@@ -1055,6 +1171,7 @@ export function buildEmailFromType(
     case 'quote-received':         return quoteReceivedEmail(data as QuoteReceivedData);
     case 'location-update':        return locationUpdateEmail(data as LocationUpdateData);
     case 'payment-required':       return paymentRequiredEmail(data as PaymentRequiredData);
+    case 'payment-confirmed':      return paymentConfirmedEmail(data as PaymentConfirmedData);
     case 'delayed':                return delayedEmail(data as DelayedData);
     case 'customs-hold':           return customsHoldEmail(data as CustomsHoldData);
     case 'out-for-delivery':       return outForDeliveryEmail(data as OutForDeliveryData);
