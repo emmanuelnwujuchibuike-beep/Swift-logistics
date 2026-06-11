@@ -1075,7 +1075,7 @@ async function initRouteMap(waypoints) {
         const queryOnce = async (q, prox) => {
             // Mapbox Geocoding v6 (most accurate), biased toward the route region
             try {
-                const u = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(q)}&limit=1&types=${TYPES}&autocomplete=false${proxStr(prox)}&access_token=${token}`;
+                const u = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(q)}&limit=1&types=${TYPES}&autocomplete=false&language=en${proxStr(prox)}&access_token=${token}`;
                 const r = await fetch(u); const j = await r.json();
                 const f = j && j.features && j.features[0];
                 if (f && f.geometry && f.geometry.coordinates) return f.geometry.coordinates;
@@ -1247,7 +1247,9 @@ async function initRouteMap(waypoints) {
 
                 const popup = new mapboxgl.Popup({ offset: popOff, closeButton: false, className: 't-map-popup' })
                     .setHTML(`<b>${popTitle}</b>${popSub ? `<span>${popSub}</span>` : ''}`);
-                new mapboxgl.Marker({ element: el, anchor: 'center' })
+                // offset:[0, 4.5] = (tail 11 - margin 2) / 2 — shifts element down so
+                // head CENTER lands exactly at the coordinate, zoom-invariant.
+                new mapboxgl.Marker({ element: el, anchor: 'center', offset: [0, 4.5] })
                     .setLngLat(w.coord).setPopup(popup).addTo(map);
             });
 
