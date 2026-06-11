@@ -1202,56 +1202,21 @@ async function initRouteMap(waypoints) {
             const lastIdx = pts.length - 1;
             const mkShort = (str, max = 14) => { const t = String(str || '').trim(); return t.length > max ? t.slice(0, max - 1) + '…' : t; };
 
-            pts.forEach((w, i) => {
+            // Only render the PICKUP (origin) marker — index 0.
+            if (pts.length > 0) {
+                const w = pts[0];
                 const el = document.createElement('div');
-                let cls = 't-mp', icon = MP_ICO.check, pinLabel = '', popTitle = '', popSub = '';
-                // anchor:'center' + CSS padding-top=11px → head CENTER is at coordinate.
-                // popup y-offset = -(head_radius + 6px gap) so tip clears the head top.
-                let popOff = [0, -19];
-
-                if (i === 0) {
-                    cls += ' origin';  icon = MP_ICO.origin;
-                    pinLabel = 'PICKUP';
-                    popTitle = escMap(w.name || 'Pickup');  popSub = escMap(w.label || '');
-                    popOff = [0, -24]; // head 36px → radius 18 + 6
-                } else if (i === lastIdx) {
-                    cls += ' dest';    icon = MP_ICO.dest;
-                    pinLabel = 'ARRIVAL';
-                    popTitle = 'Destination';               popSub = escMap(w.label || '');
-                    popOff = [0, -24];
-                } else if (i === curIdx) {
-                    cls += ' current'; icon = MP_ICO.current;
-                    pinLabel = 'PACKAGE';
-                    popTitle = escMap(w.name || 'Package Location'); popSub = escMap(w.label || '');
-                    popOff = [0, -29]; // head 44px → radius 22 + 7
-                } else if (w.done || i < curIdx) {
-                    cls += ' done';    icon = MP_ICO.done;
-                    pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint'); popSub = escMap(w.label || '') + ' · Completed';
-                    popOff = [0, -20]; // head 28px → radius 14 + 6
-                } else {
-                    cls += ' check';   icon = MP_ICO.check;
-                    pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint'); popSub = escMap(w.label || '') + ' · Upcoming';
-                    popOff = [0, -19]; // head 26px → radius 13 + 6
-                }
-
-                el.className = cls;
-                const h = document.createElement('div'); h.className = 't-mp-h'; h.innerHTML = icon;
+                el.className = 't-mp origin';
+                const h = document.createElement('div'); h.className = 't-mp-h'; h.innerHTML = MP_ICO.origin;
                 const t = document.createElement('div'); t.className = 't-mp-t';
                 el.appendChild(h); el.appendChild(t);
-                if (pinLabel) {
-                    const lbl = document.createElement('span'); lbl.className = 't-mk-label';
-                    lbl.textContent = pinLabel; el.appendChild(lbl);
-                }
-
-                const popup = new mapboxgl.Popup({ offset: popOff, closeButton: false, className: 't-map-popup' })
-                    .setHTML(`<b>${popTitle}</b>${popSub ? `<span>${popSub}</span>` : ''}`);
-                // offset:[0, 4.5] = (tail 11 - margin 2) / 2 — shifts element down so
-                // head CENTER lands exactly at the coordinate, zoom-invariant.
+                const lbl = document.createElement('span'); lbl.className = 't-mk-label';
+                lbl.textContent = 'PICKUP'; el.appendChild(lbl);
+                const popup = new mapboxgl.Popup({ offset: [0, -24], closeButton: false, className: 't-map-popup' })
+                    .setHTML(`<b>${escMap(w.name || 'Pickup')}</b>${w.label ? `<span>${escMap(w.label)}</span>` : ''}`);
                 new mapboxgl.Marker({ element: el, anchor: 'center', offset: [0, 4.5] })
                     .setLngLat(w.coord).setPopup(popup).addTo(map);
-            });
+            }
 
             // Frame the whole journey clearly (near top-down), animate in
             const b = new mapboxgl.LngLatBounds(allCoords[0], allCoords[0]);
