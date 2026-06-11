@@ -974,89 +974,147 @@ async function handleTracking(silent) {
 ${isPaid ? `
 <!-- ══ PAYMENT RECEIPT ══════════════════════════════════════════ -->
 <div class="t-receipt-wrap" id="t-receipt">
-  <div class="t-receipt-inner">
-    <div class="t-receipt-wm">PAID</div>
+  <div class="t-rcp">
 
-    <!-- Header -->
-    <div class="t-receipt-hdr">
-      <div class="t-receipt-brand">
-        <div class="t-receipt-logo-text">SFL</div>
+    <!-- ══ HEADER ══ -->
+    <div class="t-rcp-hdr">
+      <div class="t-rcp-hdr-left">
+        <div class="t-rcp-logomark">SFL</div>
+        <div class="t-rcp-logo-sep"></div>
         <div>
-          <div class="t-receipt-company">SWIFT FREIGHT LOGISTICS</div>
-          <div class="t-receipt-doc-type">OFFICIAL PAYMENT RECEIPT</div>
+          <div class="t-rcp-co">SWIFT FREIGHT LOGISTICS</div>
+          <div class="t-rcp-co-sub">CERTIFIED INTERNATIONAL CARRIER &nbsp;&middot;&nbsp; EST. 1999</div>
         </div>
       </div>
-      <div class="t-receipt-seal">
-        <div class="t-receipt-seal-ring">
-          <i class="fas fa-circle-check"></i>
-          <div class="t-receipt-seal-label">PAYMENT<br>CONFIRMED</div>
+      <div class="t-rcp-hdr-right">
+        <div class="t-rcp-doc-label">PAYMENT RECEIPT</div>
+        <div class="t-rcp-refbox">
+          <div class="t-rcp-refbox-lbl">RECEIPT NO.</div>
+          <div class="t-rcp-refbox-val">${_rcpNum}</div>
         </div>
       </div>
     </div>
 
-    <div class="t-receipt-stripe"></div>
+    <!-- ══ CONFIRMATION BAND ══ -->
+    <div class="t-rcp-band">
+      <i class="fas fa-circle-check t-rcp-band-icon"></i>
+      <span class="t-rcp-band-title">PAYMENT CONFIRMED</span>
+      <span class="t-rcp-band-dot">&middot;</span>
+      <span class="t-rcp-band-sub">Shipment fully cleared &amp; proceeding on schedule</span>
+      <span class="t-rcp-band-badge">VERIFIED</span>
+    </div>
 
-    <!-- Meta row -->
-    <div class="t-receipt-meta-row">
-      <div class="t-receipt-meta-item">
-        <div class="t-receipt-meta-label">RECEIPT NUMBER</div>
-        <div class="t-receipt-meta-val t-receipt-mono">${_rcpNum}</div>
+    <!-- ══ META ROW ══ -->
+    <div class="t-rcp-meta">
+      <div class="t-rcp-meta-cell">
+        <div class="t-rcp-ml">DATE ISSUED</div>
+        <div class="t-rcp-mv">${_rcpDate}</div>
       </div>
-      <div class="t-receipt-meta-item">
-        <div class="t-receipt-meta-label">DATE ISSUED</div>
-        <div class="t-receipt-meta-val">${_rcpDate}</div>
+      <div class="t-rcp-meta-cell">
+        <div class="t-rcp-ml">TRACKING NUMBER</div>
+        <div class="t-rcp-mv t-rcp-mono">${esc(s.tracking_id)}</div>
       </div>
-      <div class="t-receipt-meta-item">
-        <div class="t-receipt-meta-label">STATUS</div>
-        <div class="t-receipt-meta-val"><span class="t-receipt-status-pill">&#10003; CLEARED</span></div>
+      <div class="t-rcp-meta-cell">
+        <div class="t-rcp-ml">SERVICE</div>
+        <div class="t-rcp-mv">${esc(s.service_type || 'Freight Logistics')}</div>
+      </div>
+      <div class="t-rcp-meta-cell">
+        <div class="t-rcp-ml">STATUS</div>
+        <div class="t-rcp-mv"><span class="t-rcp-cleared">&#10003;&nbsp;CLEARED</span></div>
       </div>
     </div>
 
-    <!-- Details table -->
-    <table class="t-receipt-table">
-      <tbody>
-        <tr><td class="t-rk">Recipient</td><td class="t-rv">${esc(s.name)}</td></tr>
-        <tr><td class="t-rk">Tracking ID</td><td class="t-rv t-receipt-mono">${esc(s.tracking_id)}</td></tr>
-        ${s.senders_name  ? `<tr><td class="t-rk">Sender</td><td class="t-rv">${esc(s.senders_name)}</td></tr>` : ''}
-        ${s.origin        ? `<tr><td class="t-rk">Origin</td><td class="t-rv">${esc(s.origin)}</td></tr>` : ''}
-        ${s.destination   ? `<tr><td class="t-rk">Destination</td><td class="t-rv">${esc(s.destination)}</td></tr>` : ''}
-        ${s.pickup_date   ? `<tr><td class="t-rk">Pickup Date</td><td class="t-rv">${esc(s.pickup_date)}</td></tr>` : ''}
-        ${s.package_details ? `<tr><td class="t-rk">Package</td><td class="t-rv">${esc(s.package_details)}</td></tr>` : ''}
-        ${s.service_type  ? `<tr><td class="t-rk">Service</td><td class="t-rv">${esc(s.service_type)}</td></tr>` : ''}
-        ${s.eta           ? `<tr><td class="t-rk">Est. Delivery</td><td class="t-rv t-receipt-accent">${esc(s.eta)}</td></tr>` : ''}
-      </tbody>
-    </table>
+    <!-- ══ BODY: 2-column ══ -->
+    <div class="t-rcp-body">
 
-    <!-- Amount feature -->
-    <div class="t-receipt-amount-block">
-      <div class="t-receipt-amount-label">TOTAL AMOUNT PAID</div>
-      <div class="t-receipt-amount">${esc(s.amount_due || '—')}</div>
-      <div class="t-receipt-amount-note">Payment verified and recorded in the Swift Freight Logistics system</div>
-    </div>
+      <!-- LEFT — Shipment Details -->
+      <div class="t-rcp-ship">
+        <div class="t-rcp-col-label">SHIPMENT DETAILS</div>
+        <table class="t-rcp-tbl">
+          <tr><td class="t-rcp-k">Recipient</td><td class="t-rcp-v">${esc(s.name)}</td></tr>
+          ${s.senders_name   ? `<tr><td class="t-rcp-k">Sender</td><td class="t-rcp-v">${esc(s.senders_name)}</td></tr>` : ''}
+          ${s.origin         ? `<tr><td class="t-rcp-k">Origin</td><td class="t-rcp-v">${esc(s.origin)}</td></tr>` : ''}
+          ${s.destination    ? `<tr><td class="t-rcp-k">Destination</td><td class="t-rcp-v">${esc(s.destination)}</td></tr>` : ''}
+          ${s.pickup_date    ? `<tr><td class="t-rcp-k">Pickup Date</td><td class="t-rcp-v">${esc(s.pickup_date)}</td></tr>` : ''}
+          ${s.package_details? `<tr><td class="t-rcp-k">Package</td><td class="t-rcp-v">${esc(s.package_details)}</td></tr>` : ''}
+          ${s.service_type   ? `<tr><td class="t-rcp-k">Service Type</td><td class="t-rcp-v">${esc(s.service_type)}</td></tr>` : ''}
+          ${s.eta            ? `<tr><td class="t-rcp-k">Est. Delivery</td><td class="t-rcp-v t-rcp-eta">${esc(s.eta)}</td></tr>` : ''}
+        </table>
+      </div>
 
-    <!-- What happens next -->
-    <div class="t-receipt-next">
-      <div class="t-receipt-next-title">WHAT HAPPENS NEXT</div>
-      <div class="t-receipt-next-steps">
-        <div class="t-receipt-step"><span class="t-rn">1</span><span>Your payment has been verified and your shipment is now fully cleared.</span></div>
-        <div class="t-receipt-step"><span class="t-rn">2</span><span>Your package will resume transit immediately on the scheduled route.</span></div>
-        <div class="t-receipt-step"><span class="t-rn">3</span><span>You will receive live checkpoint updates at every stage of the journey.</span></div>
-        <div class="t-receipt-step"><span class="t-rn">4</span><span>Expected delivery by <strong>${esc(s.eta || 'your scheduled date')}</strong> — track anytime via your tracking ID.</span></div>
+      <!-- RIGHT — Payment Summary -->
+      <div class="t-rcp-pay">
+        <div class="t-rcp-col-label">PAYMENT SUMMARY</div>
+        <div class="t-rcp-pay-card">
+          <div class="t-rcp-pay-lbl">TOTAL AMOUNT PAID</div>
+          <div class="t-rcp-pay-amt">${esc(s.amount_due || '—')}</div>
+          <div class="t-rcp-pay-verified"><i class="fas fa-shield-check"></i>&nbsp; Payment Verified &amp; Cleared</div>
+        </div>
+        <div class="t-rcp-pay-rows">
+          <div class="t-rcp-pay-row">
+            <span class="t-rcp-pk">Reference</span>
+            <span class="t-rcp-pv t-rcp-mono">${_rcpNum}</span>
+          </div>
+          <div class="t-rcp-pay-row">
+            <span class="t-rcp-pk">Date Processed</span>
+            <span class="t-rcp-pv">${_rcpDate}</span>
+          </div>
+          <div class="t-rcp-pay-row">
+            <span class="t-rcp-pk">Currency</span>
+            <span class="t-rcp-pv">USD</span>
+          </div>
+          <div class="t-rcp-pay-row">
+            <span class="t-rcp-pk">Clearance</span>
+            <span class="t-rcp-pv" style="color:#22c55e;font-weight:600;">Approved</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /t-rcp-body -->
+
+    <!-- ══ WHAT HAPPENS NEXT ══ -->
+    <div class="t-rcp-next">
+      <div class="t-rcp-col-label" style="margin-bottom:22px;">WHAT HAPPENS NEXT</div>
+      <div class="t-rcp-steps">
+        <div class="t-rcp-step">
+          <div class="t-rcp-step-n">01</div>
+          <div class="t-rcp-step-txt">Payment verified &amp; recorded in system</div>
+        </div>
+        <div class="t-rcp-step-line"></div>
+        <div class="t-rcp-step">
+          <div class="t-rcp-step-n">02</div>
+          <div class="t-rcp-step-txt">Shipment cleared for transit</div>
+        </div>
+        <div class="t-rcp-step-line"></div>
+        <div class="t-rcp-step">
+          <div class="t-rcp-step-n">03</div>
+          <div class="t-rcp-step-txt">Live updates at every checkpoint</div>
+        </div>
+        <div class="t-rcp-step-line"></div>
+        <div class="t-rcp-step">
+          <div class="t-rcp-step-n">04</div>
+          <div class="t-rcp-step-txt">Delivered by&nbsp;<strong>${esc(s.eta || 'scheduled date')}</strong></div>
+        </div>
       </div>
     </div>
 
-    <!-- Receipt footer -->
-    <div class="t-receipt-footer">
-      <div class="t-receipt-footer-left">
-        <div class="t-receipt-footer-brand">SWIFT FREIGHT LOGISTICS</div>
-        <div class="t-receipt-footer-sub">Certified Carrier &middot; Est. 1999 &middot; swiftfreightlogix.netlify.app</div>
+    <!-- ══ BARCODE + FOOTER ══ -->
+    <div class="t-rcp-barcode-row">
+      <div class="t-rcp-barcode"></div>
+      <div class="t-rcp-barcode-id t-rcp-mono">${esc(s.tracking_id || _rcpNum)}</div>
+    </div>
+
+    <div class="t-rcp-footer">
+      <div>
+        <div class="t-rcp-footer-co">SWIFT FREIGHT LOGISTICS</div>
+        <div class="t-rcp-footer-sub">swiftfreightlogix@gmail.com &nbsp;&middot;&nbsp; swiftfreightlogix.netlify.app</div>
       </div>
-      <div class="t-receipt-footer-right">
-        <div class="t-receipt-footer-note">This document serves as official proof of payment.</div>
-        <div class="t-receipt-footer-note">Please keep for your records.</div>
+      <div class="t-rcp-footer-cert">
+        <i class="fas fa-certificate"></i> Official receipt &mdash; retain for your records
       </div>
     </div>
-  </div><!-- /t-receipt-inner -->
+
+  </div><!-- /t-rcp -->
 
   <!-- Action buttons (hidden on print) -->
   <div class="t-receipt-actions no-print">
@@ -1065,6 +1123,9 @@ ${isPaid ? `
     </button>
     <button class="t-ra-btn t-ra-email" onclick="document.getElementById('t-receipt-email-panel').classList.toggle('t-rp-hidden')">
       <i class="fas fa-envelope"></i> Email Receipt
+    </button>
+    <button class="t-ra-btn t-ra-dismiss" onclick="document.getElementById('t-receipt').classList.add('t-rcp-dismissed')">
+      <i class="fas fa-check"></i> Got it, Dismiss
     </button>
   </div>
 
@@ -1075,6 +1136,20 @@ ${isPaid ? `
       <button class="t-rep-btn" onclick="window.sflSendReceipt()"><i class="fas fa-paper-plane"></i> Send</button>
     </div>
     <div id="t-receipt-email-status" class="t-rep-status"></div>
+  </div>
+
+  <!-- Dismissed state bar — hidden until customer dismisses -->
+  <div class="t-rcp-dismissed-bar no-print">
+    <div class="t-rcp-db-left">
+      <i class="fas fa-circle-check t-rcp-db-icon"></i>
+      <div>
+        <div class="t-rcp-db-title">Receipt acknowledged &mdash; ${_rcpNum}</div>
+        <div class="t-rcp-db-sub">Payment cleared &middot; ${_rcpDate}</div>
+      </div>
+    </div>
+    <button class="t-rcp-db-btn" onclick="document.getElementById('t-receipt').classList.remove('t-rcp-dismissed')">
+      <i class="fas fa-file-invoice"></i> View Receipt
+    </button>
   </div>
 </div><!-- /t-receipt-wrap -->
 ` : ''}
