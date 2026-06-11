@@ -980,6 +980,18 @@ async function handleTracking(silent) {
             { q: s.step4_location,   kind: 'check',  done: _green(s.step4_color), name: s.step4_name || '' },
             { q: s.destination,      kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver'), name: 'Destination' },
         ].filter(w => w.q && String(w.q).trim()).map(w => ({ ...w, label: w.q }));
+        // Merge last transit checkpoint with destination when they name the same place
+        // (step4_location = destination is the expected final-stop pattern)
+        {
+            const _n = v => String(v || '').trim().toLowerCase();
+            const _dw = journey.find(w => w.kind === 'dest');
+            const _lc = [...journey].reverse().find(w => w.kind === 'check');
+            if (_dw && _lc) {
+                const a = _n(_lc.q), b = _n(_dw.q);
+                if (a && b && (a === b || a.startsWith(b) || b.startsWith(a)))
+                    { _lc.kind = 'dest'; _lc.name = 'Destination'; journey.splice(journey.indexOf(_dw), 1); }
+            }
+        }
         initRouteMap(journey);
 
         // Live sync — reflect admin dashboard edits without a manual reload
@@ -1098,8 +1110,8 @@ async function initRouteMap(waypoints) {
         let pts = waypoints.map((w, i) => Object.assign({}, w, { coord: coords[i] })).filter(w => w.coord);
         // Drop consecutive duplicate coordinates (e.g. origin === first checkpoint)
         pts = pts.filter((w, i) => i === 0 ||
-            Math.abs(w.coord[0] - pts[i-1].coord[0]) > 1e-4 ||
-            Math.abs(w.coord[1] - pts[i-1].coord[1]) > 1e-4);
+            Math.abs(w.coord[0] - pts[i-1].coord[0]) > 0.02 ||
+            Math.abs(w.coord[1] - pts[i-1].coord[1]) > 0.02);
         if (pts.length < 2) { showFallback(); return; }
 
         // Index of the live package position
@@ -1167,54 +1179,67 @@ async function initRouteMap(waypoints) {
                     paint:{ 'line-color':'#22c55e', 'line-width':3.6, 'line-opacity':1 } });
             }
 
-            // Markers: PICKUP · transit checkpoints · PACKAGE (live) · DESTINATION
-            // anchor:'center' pins each marker's exact center dot on its coordinate at every zoom level.
+            // Markers: PICKUP · transit checkpoints · PACKAGE (live) · ARRIVAL
+            // Lollipop pin shape (circle head + triangular tail).
+            // anchor:'bottom' — the tail tip sits exactly on the coordinate.
+            // RULE: zero CSS transform/transition on the root element (.t-mp).
+            // Mapbox writes transform:translate(x,y) on it every render frame;
+            // any CSS transform property would interfere and cause drift.
+            const MP_ICO = {
+                origin:  `<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+                done:    `<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`,
+                current: `<svg viewBox="0 0 24 24" width="21" height="18" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`,
+                check:   `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+                dest:    `<svg viewBox="0 0 24 24" width="17" height="15" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z"/></svg>`,
+            };
+
             const lastIdx = pts.length - 1;
-            const mkShort = (s, max = 14) => { const t = String(s || '').trim(); return t.length > max ? t.slice(0, max - 1) + '…' : t; };
+            const mkShort = (str, max = 14) => { const t = String(str || '').trim(); return t.length > max ? t.slice(0, max - 1) + '…' : t; };
 
             pts.forEach((w, i) => {
                 const el = document.createElement('div');
-                let cls = 't-map-marker';
-                let icon = '', pinLabel = '', popTitle = '', popSub = '';
+                let cls = 't-mp', icon = MP_ICO.check, pinLabel = '', popTitle = '', popSub = '';
+                let popOff = [0, -42];
 
                 if (i === 0) {
-                    cls     += ' origin';
-                    icon     = '<i class="fas fa-location-dot"></i>';
+                    cls += ' origin';  icon = MP_ICO.origin;
                     pinLabel = 'PICKUP';
-                    popTitle = escMap(w.name || 'Pickup');
-                    popSub   = escMap(w.label || '');
+                    popTitle = escMap(w.name || 'Pickup');  popSub = escMap(w.label || '');
+                    popOff = [0, -52];
                 } else if (i === lastIdx) {
-                    cls     += ' dest';
-                    icon     = '<i class="fas fa-flag-checkered"></i>';
+                    cls += ' dest';    icon = MP_ICO.dest;
                     pinLabel = 'ARRIVAL';
-                    popTitle = 'Destination';
-                    popSub   = escMap(w.label || '');
+                    popTitle = 'Destination';               popSub = escMap(w.label || '');
+                    popOff = [0, -52];
                 } else if (i === curIdx) {
-                    cls     += ' current pulse';
-                    icon     = '<i class="fas fa-box"></i>';
+                    cls += ' current'; icon = MP_ICO.current;
                     pinLabel = 'PACKAGE';
-                    popTitle = escMap(w.name || 'Package Location');
-                    popSub   = escMap(w.label || '');
+                    popTitle = escMap(w.name || 'Package Location'); popSub = escMap(w.label || '');
+                    popOff = [0, -60];
                 } else if (w.done || i < curIdx) {
-                    cls     += ' done';
-                    icon     = '<i class="fas fa-circle-check"></i>';
+                    cls += ' done';    icon = MP_ICO.done;
                     pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint');
-                    popSub   = escMap(w.label || '') + ' &middot; Completed';
+                    popTitle = escMap(w.name || 'Checkpoint'); popSub = escMap(w.label || '') + ' · Completed';
+                    popOff = [0, -44];
                 } else {
-                    cls     += ' check';
-                    icon     = '<i class="fas fa-location-pin"></i>';
+                    cls += ' check';   icon = MP_ICO.check;
                     pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint');
-                    popSub   = escMap(w.label || '') + ' &middot; Upcoming';
+                    popTitle = escMap(w.name || 'Checkpoint'); popSub = escMap(w.label || '') + ' · Upcoming';
+                    popOff = [0, -42];
                 }
 
                 el.className = cls;
-                el.innerHTML = icon + (pinLabel ? `<span class="t-mk-label">${escMap(pinLabel)}</span>` : '');
+                const h = document.createElement('div'); h.className = 't-mp-h'; h.innerHTML = icon;
+                const t = document.createElement('div'); t.className = 't-mp-t';
+                el.appendChild(h); el.appendChild(t);
+                if (pinLabel) {
+                    const lbl = document.createElement('span'); lbl.className = 't-mk-label';
+                    lbl.textContent = pinLabel; el.appendChild(lbl);
+                }
 
-                const popup = new mapboxgl.Popup({ offset: 22, closeButton: false, className: 't-map-popup' })
+                const popup = new mapboxgl.Popup({ offset: popOff, closeButton: false, className: 't-map-popup' })
                     .setHTML(`<b>${popTitle}</b>${popSub ? `<span>${popSub}</span>` : ''}`);
-                new mapboxgl.Marker({ element: el, anchor: 'center' })
+                new mapboxgl.Marker({ element: el, anchor: 'bottom' })
                     .setLngLat(w.coord).setPopup(popup).addTo(map);
             });
 
