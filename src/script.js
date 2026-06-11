@@ -63,12 +63,14 @@ function _clearPayUpload(id) {
     const preview = document.getElementById('preview-' + id);
     const empty   = document.getElementById('empty-'   + id);
     const change  = document.getElementById('change-'  + id);
-    const input   = document.getElementById(id);
+    const cam     = document.getElementById(id + '-cam');
+    const gal     = document.getElementById(id + '-gal');
     if (preview) { preview.src = ''; preview.style.display = 'none'; }
     if (empty)   empty.style.display  = 'flex';
     if (change)  change.style.display = 'none';
     if (zone)    zone.classList.remove('has-file');
-    if (input)   input.value = '';
+    if (cam)     cam.value = '';
+    if (gal)     gal.value = '';
 }
 
 async function submitPaymentProof(method) {
@@ -120,18 +122,27 @@ async function submitPaymentProof(method) {
 function _uploadZone(method, side, label) {
     const id = `ppf-${method}-${side}`;
     return `
-    <div class="t-pp-upload-zone" id="zone-${id}" onclick="document.getElementById('${id}').click()">
+    <div class="t-pp-upload-zone" id="zone-${id}">
       <div class="t-pp-upload-empty" id="empty-${id}">
-        <i class="fas fa-cloud-arrow-up" style="font-size:1.5rem;opacity:.55;margin-bottom:7px;display:block;"></i>
-        <span style="font-size:.78rem;font-weight:600;">${label}</span>
-        <small style="font-size:.66rem;opacity:.5;margin-top:3px;display:block;">Click or drop · JPG PNG HEIC</small>
+        <i class="fas fa-cloud-arrow-up" style="font-size:1.5rem;opacity:.55;margin-bottom:6px;display:block;"></i>
+        <span style="font-size:.78rem;font-weight:600;margin-bottom:9px;display:block;">${label}</span>
+        <div class="t-pp-src-btns">
+          <button type="button" class="t-pp-src-btn" onclick="document.getElementById('${id}-cam').click()">
+            <i class="fas fa-camera"></i> Camera
+          </button>
+          <button type="button" class="t-pp-src-btn" onclick="document.getElementById('${id}-gal').click()">
+            <i class="fas fa-images"></i> Gallery
+          </button>
+        </div>
       </div>
       <img id="preview-${id}" class="t-pp-upload-preview" style="display:none;" alt="preview">
       <button type="button" class="t-pp-upload-clear" id="change-${id}" style="display:none;"
               onclick="event.stopPropagation();_clearPayUpload('${id}')">
         <i class="fas fa-xmark"></i>
       </button>
-      <input type="file" id="${id}" accept="image/*" capture="environment" style="display:none"
+      <input type="file" id="${id}-cam" accept="image/*" capture="environment" style="display:none"
+             onchange="_onPayUpload(this,'${id}')">
+      <input type="file" id="${id}-gal" accept="image/*" style="display:none"
              onchange="_onPayUpload(this,'${id}')">
     </div>`;
 }
@@ -973,13 +984,18 @@ async function handleTracking(silent) {
         // The live PACKAGE position is the LAST step marked green (completed).
         // Waypoints with no location are skipped entirely (nothing fabricated).
         const _green = (c) => (c || '').includes('green');
+        // _loc: use the explicit location field; fall back to the step name so
+        // that "TRANSIT HUB LONDON" (name) still geocodes → London even when
+        // the location field is blank. The STRIP regex inside geocode() strips
+        // facility keywords, leaving just the city name for the API call.
+        const _loc = (loc, name) => String(loc || name || '').trim();
         const journey = [
-            { q: s.current_location, kind: 'origin', done: _green(s.step1_color), name: s.status || 'Pickup' },
-            { q: s.step2_location,   kind: 'check',  done: _green(s.step2_color), name: s.step2_name || '' },
-            { q: s.step3_location,   kind: 'check',  done: _green(s.step3_color), name: s.step3_name || '' },
-            { q: s.step4_location,   kind: 'check',  done: _green(s.step4_color), name: s.step4_name || '' },
-            { q: s.destination,      kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver'), name: 'Destination' },
-        ].filter(w => w.q && String(w.q).trim()).map(w => ({ ...w, label: w.q }));
+            { q: _loc(s.current_location, null),          kind: 'origin', done: _green(s.step1_color), name: s.status || 'Pickup' },
+            { q: _loc(s.step2_location, s.step2_name),    kind: 'check',  done: _green(s.step2_color), name: s.step2_name || '' },
+            { q: _loc(s.step3_location, s.step3_name),    kind: 'check',  done: _green(s.step3_color), name: s.step3_name || '' },
+            { q: _loc(s.step4_location, s.step4_name),    kind: 'check',  done: _green(s.step4_color), name: s.step4_name || '' },
+            { q: _loc(s.destination,    null),             kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver'), name: 'Destination' },
+        ].filter(w => w.q).map(w => ({ ...w, label: w.q }));
         // Merge last transit checkpoint with destination when they name the same place
         // (step4_location = destination is the expected final-stop pattern)
         {
@@ -1075,7 +1091,7 @@ async function initRouteMap(waypoints) {
         const queryOnce = async (q, prox) => {
             // Mapbox Geocoding v6 (most accurate), biased toward the route region
             try {
-                const u = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(q)}&limit=1&types=${TYPES}&autocomplete=false${proxStr(prox)}&access_token=${token}`;
+                const u = `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(q)}&limit=1&types=${TYPES}&autocomplete=false&language=en${proxStr(prox)}&access_token=${token}`;
                 const r = await fetch(u); const j = await r.json();
                 const f = j && j.features && j.features[0];
                 if (f && f.geometry && f.geometry.coordinates) return f.geometry.coordinates;
@@ -1199,57 +1215,37 @@ async function initRouteMap(waypoints) {
                 dest:    `<svg viewBox="0 0 24 24" width="17" height="15" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z"/></svg>`,
             };
 
-            const lastIdx = pts.length - 1;
-            const mkShort = (str, max = 14) => { const t = String(str || '').trim(); return t.length > max ? t.slice(0, max - 1) + '…' : t; };
-
-            pts.forEach((w, i) => {
-                const el = document.createElement('div');
-                let cls = 't-mp', icon = MP_ICO.check, pinLabel = '', popTitle = '', popSub = '';
-                // anchor:'center' + CSS padding-top=11px → head CENTER is at coordinate.
-                // popup y-offset = -(head_radius + 6px gap) so tip clears the head top.
-                let popOff = [0, -19];
-
-                if (i === 0) {
-                    cls += ' origin';  icon = MP_ICO.origin;
-                    pinLabel = 'PICKUP';
-                    popTitle = escMap(w.name || 'Pickup');  popSub = escMap(w.label || '');
-                    popOff = [0, -24]; // head 36px → radius 18 + 6
-                } else if (i === lastIdx) {
-                    cls += ' dest';    icon = MP_ICO.dest;
-                    pinLabel = 'ARRIVAL';
-                    popTitle = 'Destination';               popSub = escMap(w.label || '');
-                    popOff = [0, -24];
-                } else if (i === curIdx) {
-                    cls += ' current'; icon = MP_ICO.current;
-                    pinLabel = 'PACKAGE';
-                    popTitle = escMap(w.name || 'Package Location'); popSub = escMap(w.label || '');
-                    popOff = [0, -29]; // head 44px → radius 22 + 7
-                } else if (w.done || i < curIdx) {
-                    cls += ' done';    icon = MP_ICO.done;
-                    pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint'); popSub = escMap(w.label || '') + ' · Completed';
-                    popOff = [0, -20]; // head 28px → radius 14 + 6
-                } else {
-                    cls += ' check';   icon = MP_ICO.check;
-                    pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint'); popSub = escMap(w.label || '') + ' · Upcoming';
-                    popOff = [0, -19]; // head 26px → radius 13 + 6
-                }
-
-                el.className = cls;
+            const addPin = (coord, cls, icon, label, popHtml, popOff) => {
+                const el = document.createElement('div'); el.className = cls;
                 const h = document.createElement('div'); h.className = 't-mp-h'; h.innerHTML = icon;
                 const t = document.createElement('div'); t.className = 't-mp-t';
                 el.appendChild(h); el.appendChild(t);
-                if (pinLabel) {
-                    const lbl = document.createElement('span'); lbl.className = 't-mk-label';
-                    lbl.textContent = pinLabel; el.appendChild(lbl);
-                }
+                if (label) { const lbl = document.createElement('span'); lbl.className = 't-mk-label'; lbl.textContent = label; el.appendChild(lbl); }
+                new mapboxgl.Marker({ element: el, anchor: 'center', offset: [0, 4.5] })
+                    .setLngLat(coord)
+                    .setPopup(new mapboxgl.Popup({ offset: popOff, closeButton: false, className: 't-map-popup' }).setHTML(popHtml))
+                    .addTo(map);
+            };
 
-                const popup = new mapboxgl.Popup({ offset: popOff, closeButton: false, className: 't-map-popup' })
-                    .setHTML(`<b>${popTitle}</b>${popSub ? `<span>${popSub}</span>` : ''}`);
-                new mapboxgl.Marker({ element: el, anchor: 'center' })
-                    .setLngLat(w.coord).setPopup(popup).addTo(map);
-            });
+            // PICKUP — origin pin
+            const orig = pts[0];
+            addPin(orig.coord, 't-mp origin', MP_ICO.origin, 'PICKUP',
+                `<b>${escMap(orig.name || 'Pickup')}</b><span>${escMap(orig.label || '')}</span>`, [0, -24]);
+
+            // DESTINATION — final pin
+            const dest = pts[pts.length - 1];
+            addPin(dest.coord, 't-mp dest', MP_ICO.dest, 'ARRIVAL',
+                `<b>Destination</b><span>${escMap(dest.label || '')}</span>`, [0, -24]);
+
+            // Completion percentage — pill label at midpoint of dashed (upcoming) route
+            const pct = pts.length > 1 ? Math.round((traveledEnd - 1) / (pts.length - 1) * 100) : 0;
+            if (pct > 0 && pct < 100 && upcoming.length > 1) {
+                const midCoord = upcoming[Math.floor(upcoming.length / 2)];
+                const pctEl = document.createElement('div');
+                pctEl.className = 't-route-pct';
+                pctEl.textContent = pct + '% Complete';
+                new mapboxgl.Marker({ element: pctEl, anchor: 'center' }).setLngLat(midCoord).addTo(map);
+            }
 
             // Frame the whole journey clearly (near top-down), animate in
             const b = new mapboxgl.LngLatBounds(allCoords[0], allCoords[0]);

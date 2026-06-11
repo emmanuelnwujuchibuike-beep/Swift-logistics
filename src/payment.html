@@ -2,6 +2,9 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Track Your Shipment — Swift Freight Logistics</title>
   <meta name="description" content="Track your Swift Freight shipment in real-time. Enter your tracking ID for live status, location, and delivery updates.">
@@ -783,6 +786,16 @@
       transition:border-color .2s, background .2s; overflow:hidden; padding:14px 10px;
     }
     .t-pp-upload-zone:hover { border-color:rgba(59,130,246,.52); background:rgba(59,130,246,.08); }
+    .t-pp-src-btns { display:flex; gap:8px; margin-top:2px; }
+    .t-pp-src-btn {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:6px 13px; border-radius:8px; border:1px solid rgba(59,130,246,.35);
+      background:rgba(59,130,246,.1); color:rgba(147,197,253,.9);
+      font:700 .68rem/1 'DM Sans'; cursor:pointer; transition:background .18s,border-color .18s;
+      white-space:nowrap; }
+    .t-pp-src-btn:hover { background:rgba(59,130,246,.22); border-color:rgba(59,130,246,.6); }
+    [data-theme="light"] .t-pp-src-btn { border-color:rgba(29,78,216,.25); background:rgba(29,78,216,.07); color:#1d4ed8; }
+    [data-theme="light"] .t-pp-src-btn:hover { background:rgba(29,78,216,.14); border-color:rgba(29,78,216,.45); }
     .t-pp-upload-zone.has-file { border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.05); padding:0; min-height:140px; }
     .t-pp-upload-empty { display:flex; flex-direction:column; align-items:center; pointer-events:none; }
     .t-pp-upload-preview { width:100%; object-fit:cover; border-radius:8px; min-height:120px; max-height:260px; display:block; }
@@ -1159,8 +1172,8 @@
     [data-theme="light"] .t-ring-dot.pending { background:rgba(5,16,42,.1); border-color:rgba(5,16,42,.18); }
     [data-theme="light"] .t-step-content.upcoming { border-color:rgba(5,16,42,.04) !important; }
 
-    /* ─── Admin padlock (press-hold 3s) ─── */
-    .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; }
+    /* ─── Admin padlock (press-hold 3s) — intentionally invisible ─── */
+    .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; opacity:0; }
     .admin-padlock-btn { background:none; border:none; cursor:pointer; padding:0; outline:none; -webkit-tap-highlight-color:transparent; position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center; user-select:none; }
     .admin-padlock-ico { font-size:13px; color:rgba(232,240,254,.24); transition:color .25s, transform .25s; position:relative; z-index:1; pointer-events:none; }
     .admin-padlock-btn:hover .admin-padlock-ico { color:var(--t-accent2); transform:scale(1.12); }
@@ -1444,17 +1457,15 @@
     .t-map-fallback i{font-size:2rem;color:var(--t-accent2);opacity:.7;}
     .t-map-fallback p{font:500 .82rem/1.6 'DM Sans';color:var(--t-muted);max-width:280px;}
     /* ── Premium lollipop-pin map markers ──────────────────────────────────
-       anchor:'center' — Mapbox centers the whole element on the coordinate.
-       padding-top = tail height (11px) so the HEAD CENTER is exactly on the
-       coordinate/route — the circle icon sits right on the route line.
-       The tail extends below the coordinate as a decorative ground pointer.
+       anchor:'center' + Marker offset:[0, tailEffective/2] — Mapbox centers
+       the element on the coordinate then the JS offset shifts it down by
+       (tail - |margin|)/2 = 4.5 px so the HEAD CENTER lands exactly on the
+       coordinate. This is zoom-invariant (screen pixels, not geographic units).
        RULE: zero CSS transform or transition on .t-mp (the root element).
-       Mapbox writes transform:translate(x,y) on it every render frame to keep
-       it at its coordinate. Any CSS transform on this element interferes and
-       causes markers to drift while zooming. Hover effects go on .t-mp-h only.
+       Mapbox writes transform:translate(x,y) on it every render frame — any
+       CSS transform here drifts markers while zooming. Hover → .t-mp-h only.
        Icons are inline SVG — no font-loading dependency, always rendered.  */
-    .t-mp{position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;pointer-events:auto;
-      padding-top:11px;/* = tail height → head center aligns with anchor:center */}
+    .t-mp{position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;pointer-events:auto;}
     /* Circle head */
     .t-mp-h{
       border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -1524,6 +1535,18 @@
     [data-theme="light"] .t-mp.origin  .t-mk-label{color:#15803d;border-color:rgba(21,128,61,.4);}
     [data-theme="light"] .t-mp.done    .t-mk-label{color:#166534;border-color:rgba(22,101,52,.35);}
     [data-theme="light"] .t-mp.check   .t-mk-label{color:#475569;border-color:rgba(71,85,105,.3);}
+
+    /* Completion percentage pill — floats on the dashed route midpoint */
+    .t-route-pct{
+      background:rgba(96,165,250,.18);backdrop-filter:blur(6px);
+      border:1.5px solid rgba(96,165,250,.65);
+      color:#93c5fd;
+      font:700 .68rem/1 'DM Sans';letter-spacing:.07em;
+      padding:5px 12px;border-radius:99px;
+      white-space:nowrap;pointer-events:none;
+      box-shadow:0 4px 16px rgba(37,99,235,.35);}
+    [data-theme="light"] .t-route-pct{
+      background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.5);color:#1d4ed8;}
 
     /* "Fit Route" button */
     .t-map-fit{position:absolute;bottom:14px;right:14px;z-index:4;display:inline-flex;align-items:center;gap:7px;cursor:pointer;
@@ -2012,7 +2035,7 @@
   })();
   </script>
 
-  <script src="./script.js"></script>
+  <script src="./script.js?v=20260611c"></script>
 
   <!-- Live Chat -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
