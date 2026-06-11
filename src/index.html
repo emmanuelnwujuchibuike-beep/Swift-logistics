@@ -337,44 +337,182 @@
     .stat-c:hover { background: rgba(var(--accent-rgb),.04); }
 
 
-    /* ══════════════════════════════
-       LOADER — wordmark
-    ══════════════════════════════ */
-    @keyframes ldr-up {
-      from { opacity:0; transform:translateY(18px); }
-      to   { opacity:1; transform:translateY(0); }
+    /* ══════════════════════════════════════════════════════
+       LOADER — ultra-premium truck
+    ══════════════════════════════════════════════════════ */
+    @keyframes ldr-truck-drive {
+      0%,100% { transform: translateY(0); }
+      30%     { transform: translateY(-2.5px); }
+      70%     { transform: translateY(-1px); }
+    }
+    @keyframes ldr-wheel-spin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes ldr-fly-left {
+      from { transform: translateX(110vw); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      to   { transform: translateX(-110vw); opacity: 0; }
+    }
+    @keyframes ldr-road-scroll {
+      to { transform: translateX(-120px); }
     }
     @keyframes ldr-bar {
-      from { transform:scaleX(0); transform-origin:left; }
-      to   { transform:scaleX(1); transform-origin:left; }
+      from { transform: scaleX(0); transform-origin: left; }
+      to   { transform: scaleX(1); transform-origin: left; }
     }
+    @keyframes ldr-fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes ldr-exhaust {
+      0%   { transform: translateY(0) scale(1);    opacity: .32; }
+      100% { transform: translateY(-24px) scale(3); opacity: 0; }
+    }
+    @keyframes ldr-headlight {
+      0%,100% { opacity: .78; }
+      50%     { opacity: 1; }
+    }
+
     #loader {
-      position:fixed; inset:0; z-index:9999;
-      background:var(--bg);
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center; gap:28px;
+      position: fixed; inset: 0; z-index: 9999;
+      background: #020810;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    /* Ambient radial glow */
+    #loader::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 100% 75% at 50% 46%,
+        rgba(14,22,56,.97) 0%, #020810 68%);
+    }
+    /* Grain texture */
+    #loader::after {
+      content: '';
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      opacity: .18;
+    }
+
+    /* ── Speed lines ── */
+    .ldr-speed-wrap {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+    }
+    .ldr-speed-line {
+      position: absolute; left: 0; height: 1px; border-radius: 1px;
+      background: linear-gradient(to right, transparent 0%,
+        rgba(59,130,246,.65) 35%, rgba(96,165,250,.45) 65%, transparent 100%);
+      will-change: transform;
+    }
+    .ldr-speed-line:nth-child(1){ width:42%; top:35%; animation: ldr-fly-left .82s linear infinite 0.00s; }
+    .ldr-speed-line:nth-child(2){ width:64%; top:39%; height:1.5px; animation: ldr-fly-left .72s linear infinite 0.06s; opacity:.9; }
+    .ldr-speed-line:nth-child(3){ width:36%; top:43%; animation: ldr-fly-left .91s linear infinite 0.13s; opacity:.75; }
+    .ldr-speed-line:nth-child(4){ width:74%; top:46%; height:2px; animation: ldr-fly-left .68s linear infinite 0.03s; }
+    .ldr-speed-line:nth-child(5){ width:52%; top:50%; animation: ldr-fly-left .78s linear infinite 0.17s; }
+    .ldr-speed-line:nth-child(6){ width:45%; top:54%; height:1.5px; animation: ldr-fly-left .86s linear infinite 0.09s; opacity:.78; }
+    .ldr-speed-line:nth-child(7){ width:32%; top:58%; animation: ldr-fly-left .94s linear infinite 0.21s; opacity:.65; }
+    .ldr-speed-line:nth-child(8){ width:56%; top:62%; animation: ldr-fly-left .80s linear infinite 0.14s; opacity:.6; }
+
+    /* ── Content wrapper ── */
+    .ldr-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+    }
+
+    /* ── Truck wrapper — Y oscillation ── */
+    .ldr-truck-wrap {
+      position: relative;
+      animation: ldr-truck-drive .17s ease-in-out infinite;
+      filter: drop-shadow(0 4px 16px rgba(59,130,246,.38)) drop-shadow(0 2px 6px rgba(0,0,0,.55));
+    }
+    .ldr-truck {
+      width: clamp(52px, 9vw, 68px);
+      height: auto; display: block;
+    }
+
+    /* ── Wheel spin ── */
+    .ldr-wheel {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: ldr-wheel-spin .44s linear infinite;
+    }
+
+    /* ── Headlight ── */
+    .ldr-headlight { animation: ldr-headlight .36s ease-in-out infinite; }
+
+    /* ── Exhaust ── */
+    .ldr-puff-1 { animation: ldr-exhaust .62s ease-out infinite .00s; }
+    .ldr-puff-2 { animation: ldr-exhaust .62s ease-out infinite .21s; }
+    .ldr-puff-3 { animation: ldr-exhaust .62s ease-out infinite .42s; }
+
+    /* ── Road strip ── */
+    .ldr-road {
+      width: min(300px, 68vw);
+      height: 32px; position: relative; overflow: hidden;
+    }
+    .ldr-road-top, .ldr-road-btm {
+      position: absolute; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.1) 20%, rgba(255,255,255,.1) 80%, transparent);
+    }
+    .ldr-road-top { top: 0; }
+    .ldr-road-btm { bottom: 0; opacity: .5; }
+    .ldr-road-dashes {
+      position: absolute; top: 50%; left: 0; right: 0; height: 2px;
+      transform: translateY(-50%); overflow: hidden;
+    }
+    .ldr-road-dashes-track {
+      display: flex; gap: 22px; width: max-content;
+      animation: ldr-road-scroll .44s linear infinite;
+    }
+    .ldr-road-dashes-track span {
+      flex-shrink: 0; width: 34px; height: 2px;
+      background: rgba(255,255,255,.13); border-radius: 1px;
+    }
+
+    /* ── Brand ── */
+    .ldr-brand {
+      display: flex; flex-direction: column; align-items: center; gap: 7px;
+      margin-top: 10px;
+      animation: ldr-fade-up .6s cubic-bezier(.22,1,.36,1) .18s both;
     }
     .loader-wordmark {
-      display:flex; gap:6px;
-      font-family:'Bebas Neue'; font-size:3rem; letter-spacing:.3em; color:var(--text);
+      display: flex; gap: 3px; align-items: baseline;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 3.2rem;
+      letter-spacing: .3em;
+      color: #e8f0fe;
     }
     .loader-wordmark span {
-      display:inline-block;
-      animation:ldr-up .6s cubic-bezier(.22,1,.36,1) both;
+      display: inline-block;
+      animation: ldr-fade-up .5s cubic-bezier(.22,1,.36,1) both;
     }
-    .loader-wordmark span:nth-child(1){animation-delay:.08s}
-    .loader-wordmark span:nth-child(2){animation-delay:.16s}
-    .loader-wordmark span:nth-child(3){animation-delay:.24s}
-    .loader-wordmark span:nth-child(4){animation-delay:.32s}
-    .loader-wordmark span:nth-child(5){animation-delay:.40s}
+    .loader-wordmark span:nth-child(1){ animation-delay: .10s }
+    .loader-wordmark span:nth-child(2){ animation-delay: .16s }
+    .loader-wordmark span:nth-child(3){ animation-delay: .22s }
+    .loader-wordmark span:nth-child(4){ animation-delay: .28s }
+    .loader-wordmark span:nth-child(5){ animation-delay: .34s }
+    .ldr-tagline {
+      font: 500 7px/1 'DM Sans', sans-serif;
+      letter-spacing: .52em; text-transform: uppercase;
+      color: rgba(59,130,246,.5);
+      animation: ldr-fade-up .5s cubic-bezier(.22,1,.36,1) .36s both;
+    }
+
+    /* ── Progress bar ── */
     .loader-bar {
-      width:160px; height:2px; background:rgba(var(--accent-rgb),.13);
-      border-radius:99px; overflow:hidden;
+      width: min(280px, 64vw); height: 1.5px;
+      background: rgba(59,130,246,.1);
+      border-radius: 99px; overflow: hidden;
+      margin-top: 18px;
     }
     .loader-bar-fill {
-      height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-hi));
-      animation:ldr-bar 1s ease .42s both;
-      box-shadow:0 0 8px rgba(var(--accent-rgb),.4);
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      animation: ldr-bar 1.7s cubic-bezier(.4,0,.2,1) .12s both;
+      box-shadow: 0 0 8px rgba(59,130,246,.5);
     }
     /* Smooth theme transitions */
     .sfl-transitioning body,.sfl-transitioning #hdr,.sfl-transitioning footer,.sfl-transitioning .card-glass,.sfl-transitioning section { transition:background-color .4s cubic-bezier(.4,0,.2,1),border-color .4s cubic-bezier(.4,0,.2,1),color .28s ease,box-shadow .4s ease !important; }
@@ -1241,13 +1379,6 @@
     }
     .footer-form button:hover, #sub-btn:hover { opacity: .88 !important; }
 
-    /* ─── Loader wordmark — DM Sans 700, tight tracking ──────────── */
-    .loader-wordmark {
-      font-family: 'DM Sans', sans-serif !important;
-      font-weight: 700 !important;
-      letter-spacing: -0.02em !important;
-    }
-
     /* ─── Hero headline ───────────────────────────────────────────── */
     #hero h1.display {
       letter-spacing: -0.02em !important;
@@ -1282,6 +1413,117 @@
       .btn-primary, .btn-outline { min-height: 44px !important; }
       .hero-btns  { flex-direction: column !important; align-items: flex-start !important; }
     }
+
+    /* ══════════════════════════════════════════════════════════════
+       GOTURKIYE DESIGN LAYER — image-dominant, editorial precision
+       Photography breathes. Cards zoom, not lift. Overlays recede.
+    ══════════════════════════════════════════════════════════════ */
+
+    /* ─── Hero: tight to header, no wasted space ─────────────────── */
+    #hero { padding-top: 74px !important; }
+
+    /* ─── Hero images: richer saturation, let photography lead ───── */
+    .hero-bg img {
+      filter: brightness(.74) saturate(1.12) !important;
+      transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+
+    /* ─── Hero vertical overlay: near-invisible top, gradual bottom ─ */
+    .hero-fade-v {
+      background: linear-gradient(
+        to bottom,
+        rgba(var(--bg-rgb),.06) 0%,
+        transparent 22%,
+        rgba(var(--bg-rgb),.48) 78%,
+        rgba(var(--bg-rgb),.88) 100%
+      ) !important;
+    }
+    [data-theme="light"] .hero-fade-v {
+      background: linear-gradient(
+        to bottom,
+        rgba(var(--bg-rgb),.04) 0%,
+        transparent 22%,
+        rgba(var(--bg-rgb),.28) 78%,
+        rgba(var(--bg-rgb),.55) 100%
+      ) !important;
+    }
+
+    /* ─── Hero horizontal overlay: softer left fade ──────────────── */
+    .hero-fade-h {
+      background: linear-gradient(
+        to right,
+        rgba(var(--bg-rgb),.52) 0%,
+        rgba(var(--bg-rgb),.18) 48%,
+        transparent 100%
+      ) !important;
+    }
+    [data-theme="light"] .hero-fade-h {
+      background: linear-gradient(
+        to right,
+        rgba(var(--bg-rgb),.22) 0%,
+        rgba(var(--bg-rgb),.06) 48%,
+        transparent 100%
+      ) !important;
+    }
+
+    /* ─── Freight cards: GoTurkiye image-zoom hover, no card lift ── */
+    .fc {
+      transition: box-shadow .5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+    .fc-img {
+      transition: transform .75s cubic-bezier(0.22, 1, 0.36, 1),
+                  filter .5s ease !important;
+    }
+    .fc:hover {
+      transform: none !important;
+      box-shadow: 0 8px 40px rgba(0,0,0,.3) !important;
+    }
+    .fc:hover .fc-img {
+      transform: scale(1.07) !important;
+      filter: brightness(.88) saturate(1.06) !important;
+    }
+    .fc:hover::after {
+      border-color: rgba(var(--accent-rgb), .3) !important;
+    }
+    /* Card overlay: rich at bottom, very thin at top so image shines */
+    .fc-ov {
+      background: linear-gradient(
+        to top,
+        rgba(2,6,18,.95) 0%,
+        rgba(2,6,18,.48) 38%,
+        rgba(2,6,18,.06) 65%,
+        transparent 100%
+      ) !important;
+    }
+
+    /* ─── Glass lift cards: subtle hover, GoTurkiye restraint ─────── */
+    .lift {
+      transition: transform .4s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow .4s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color .28s ease !important;
+    }
+    .lift:hover { transform: translateY(-3px) !important; }
+    .values-grid .glass.lift:hover { transform: translateY(-2px) !important; }
+
+    /* ─── About image: hover zoom for visual richness ─────────────── */
+    .about-img-wrap { overflow: hidden !important; }
+    .about-img-wrap img {
+      transition: transform .75s cubic-bezier(0.22, 1, 0.36, 1),
+                  filter .5s ease !important;
+    }
+    .about-img-wrap:hover img {
+      transform: scale(1.04) !important;
+      filter: brightness(.92) saturate(1.1) !important;
+    }
+
+    /* ─── Section h2: tighter leading, more editorial presence ─────── */
+    .sec h2, .sec-full h2 {
+      line-height: 1.08 !important;
+    }
+
+    /* ─── Responsive: mobile padding adjustments ───────────────────── */
+    @media (max-width: 979px) { #hero { padding-top: 64px !important; } }
+    @media (max-width: 639px) { #hero { padding-top: 54px !important; } }
   </style>
 </head>
 <body>
@@ -1290,10 +1532,188 @@
 
 <!-- ══════════════ LOADER ══════════════ -->
 <div id="loader">
-  <div class="loader-wordmark">
-    <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
+
+  <!-- Speed streaks — fly right to left behind the truck -->
+  <div class="ldr-speed-wrap" aria-hidden="true">
+    <span class="ldr-speed-line"></span>
+    <span class="ldr-speed-line"></span>
+    <span class="ldr-speed-line"></span>
+    <span class="ldr-speed-line"></span>
+    <span class="ldr-speed-line"></span>
+    <span class="ldr-speed-line"></span>
+    <span class="ldr-speed-line"></span>
+    <span class="ldr-speed-line"></span>
   </div>
-  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+
+  <div class="ldr-content">
+
+    <!-- Truck SVG -->
+    <div class="ldr-truck-wrap">
+      <svg class="ldr-truck" viewBox="0 0 420 148" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lg-trailer" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#1e40af"/>
+            <stop offset="100%" stop-color="#1e3a8a"/>
+          </linearGradient>
+          <linearGradient id="lg-cab" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#2563eb"/>
+            <stop offset="100%" stop-color="#1d4ed8"/>
+          </linearGradient>
+          <linearGradient id="lg-visor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#2563eb"/>
+          </linearGradient>
+          <radialGradient id="rg-wheel" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#3b82f6"/>
+            <stop offset="55%"  stop-color="#1d4ed8"/>
+            <stop offset="100%" stop-color="#1e3a8a"/>
+          </radialGradient>
+          <radialGradient id="rg-hl" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#fef9c3"/>
+            <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- ── TRAILER BODY ── -->
+        <rect x="0" y="12" width="268" height="96" rx="3" fill="url(#lg-trailer)"/>
+        <!-- Roof highlight -->
+        <rect x="0" y="12" width="268" height="7" rx="3" fill="rgba(255,255,255,.1)"/>
+        <!-- Body horizontal crease -->
+        <line x1="0" y1="60" x2="268" y2="60" stroke="rgba(255,255,255,.07)" stroke-width="1.5"/>
+        <!-- Underframe shadow -->
+        <rect x="0" y="103" width="268" height="5" rx="2" fill="rgba(0,0,0,.32)"/>
+        <!-- Side logo panel -->
+        <rect x="12" y="26" width="242" height="62" rx="2" fill="rgba(0,0,0,.22)"/>
+        <!-- SFL brand text -->
+        <text x="133" y="60" text-anchor="middle" dominant-baseline="middle"
+              font-family="DM Sans, sans-serif" font-weight="700" font-size="28" letter-spacing="8"
+              fill="rgba(255,255,255,.92)">SFL</text>
+        <text x="133" y="76" text-anchor="middle" dominant-baseline="middle"
+              font-family="DM Sans, sans-serif" font-weight="500" font-size="6.5" letter-spacing="4"
+              fill="rgba(255,255,255,.4)">SWIFT FREIGHT</text>
+        <!-- Rear marker lights -->
+        <rect x="0" y="26" width="5" height="14" rx="2" fill="#ef4444" opacity=".85"/>
+        <rect x="0" y="48" width="5" height="14" rx="2" fill="#ef4444" opacity=".65"/>
+        <!-- Rear reflector strip -->
+        <rect x="0" y="103" width="268" height="3" rx="1" fill="rgba(239,68,68,.38)"/>
+
+        <!-- ── CAB–TRAILER COUPLER ── -->
+        <rect x="266" y="26" width="14" height="82" rx="2" fill="rgba(0,0,0,.38)"/>
+
+        <!-- ── CAB BODY ── -->
+        <path d="M280 108 L280 24 Q282 14 296 12 L348 12 Q372 16 390 44 L396 58 L398 78 L396 108 Z"
+              fill="url(#lg-cab)"/>
+        <!-- Cab roof visor -->
+        <path d="M296 12 L348 12 Q366 14 380 28 L380 18 Q366 6 348 6 L296 6 Q282 6 280 18 L280 24 Q282 14 296 12 Z"
+              fill="url(#lg-visor)"/>
+        <!-- Roof running lights -->
+        <circle cx="303" cy="13" r="2.5" fill="rgba(251,191,36,.95)"/>
+        <circle cx="315" cy="11" r="2.5" fill="rgba(251,191,36,.95)"/>
+        <circle cx="327" cy="10" r="2.5" fill="rgba(251,191,36,.95)"/>
+        <circle cx="339" cy="9"  r="2.5" fill="rgba(251,191,36,.95)"/>
+        <!-- Exhaust stack -->
+        <rect x="284" y="0" width="6" height="30" rx="3"
+              fill="rgba(200,215,240,.18)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        <!-- Windshield -->
+        <path d="M296 24 L348 16 Q368 20 386 46 L386 84 L296 84 Z"
+              fill="rgba(96,165,250,.14)" stroke="rgba(96,165,250,.38)" stroke-width="1.2"/>
+        <!-- Windshield A-pillar -->
+        <line x1="343" y1="18" x2="386" y2="62" stroke="rgba(96,165,250,.3)" stroke-width="1.5"/>
+        <!-- Windshield glare -->
+        <path d="M306 26 L346 20 Q358 24 364 36 L354 38 Q344 30 306 28 Z"
+              fill="rgba(255,255,255,.07)"/>
+        <!-- Side vent/window -->
+        <rect x="282" y="34" width="10" height="40" rx="2"
+              fill="rgba(96,165,250,.1)" stroke="rgba(96,165,250,.2)" stroke-width="1"/>
+        <!-- Door handle -->
+        <rect x="286" y="72" width="22" height="2.5" rx="1.25" fill="rgba(255,255,255,.32)"/>
+        <!-- Front grill -->
+        <path d="M388 48 L395 62 L397 80 L392 84 L388 86 L388 48 Z" fill="rgba(0,0,0,.45)"/>
+        <line x1="388" y1="56" x2="396" y2="66" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        <line x1="388" y1="65" x2="397" y2="75" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        <!-- Bumper -->
+        <path d="M386 88 L398 88 L398 102 L394 106 L280 106 L280 100 L286 95 L286 88 Z"
+              fill="rgba(30,64,175,.65)" stroke="rgba(96,165,250,.18)" stroke-width="1"/>
+        <!-- Headlight housing -->
+        <rect x="386" y="62" width="12" height="22" rx="3" fill="rgba(0,0,0,.52)"/>
+        <!-- Headlight bulb (animated) -->
+        <rect x="388" y="64" width="8" height="18" rx="2.5" fill="#fef08a" class="ldr-headlight"/>
+        <!-- Headlight forward glow (animated) -->
+        <ellipse cx="406" cy="73" rx="14" ry="9" fill="url(#rg-hl)" class="ldr-headlight"/>
+        <!-- Step boards -->
+        <rect x="288" y="106" width="26" height="4" rx="2" fill="rgba(255,255,255,.1)"/>
+        <rect x="352" y="106" width="30" height="4" rx="2" fill="rgba(255,255,255,.1)"/>
+
+        <!-- ── WHEELS ── -->
+        <!-- Rear axle wheel 1 (x=52) -->
+        <g class="ldr-wheel">
+          <circle cx="52" cy="122" r="22" fill="#0b1120" stroke="rgba(255,255,255,.1)" stroke-width="2"/>
+          <circle cx="52" cy="122" r="17" fill="none" stroke="rgba(59,130,246,.28)" stroke-width="3.5"/>
+          <circle cx="52" cy="122" r="12" fill="url(#rg-wheel)"/>
+          <line x1="52" y1="110" x2="52" y2="134" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <line x1="40"  y1="122" x2="64" y2="122" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <line x1="44"  y1="114" x2="60" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <line x1="60"  y1="114" x2="44" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <circle cx="52" cy="122" r="4" fill="rgba(255,255,255,.22)"/>
+        </g>
+        <!-- Rear axle wheel 2 (x=98) -->
+        <g class="ldr-wheel">
+          <circle cx="98" cy="122" r="22" fill="#0b1120" stroke="rgba(255,255,255,.1)" stroke-width="2"/>
+          <circle cx="98" cy="122" r="17" fill="none" stroke="rgba(59,130,246,.28)" stroke-width="3.5"/>
+          <circle cx="98" cy="122" r="12" fill="url(#rg-wheel)"/>
+          <line x1="98" y1="110" x2="98"  y2="134" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <line x1="86" y1="122" x2="110" y2="122" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <line x1="90" y1="114" x2="106" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <line x1="106" y1="114" x2="90" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <circle cx="98" cy="122" r="4" fill="rgba(255,255,255,.22)"/>
+        </g>
+        <!-- Front steer wheel (x=346) -->
+        <g class="ldr-wheel">
+          <circle cx="346" cy="122" r="22" fill="#0b1120" stroke="rgba(255,255,255,.1)" stroke-width="2"/>
+          <circle cx="346" cy="122" r="17" fill="none" stroke="rgba(59,130,246,.28)" stroke-width="3.5"/>
+          <circle cx="346" cy="122" r="12" fill="url(#rg-wheel)"/>
+          <line x1="346" y1="110" x2="346" y2="134" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <line x1="334" y1="122" x2="358" y2="122" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <line x1="338" y1="114" x2="354" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <line x1="354" y1="114" x2="338" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <circle cx="346" cy="122" r="4" fill="rgba(255,255,255,.22)"/>
+        </g>
+
+        <!-- ── EXHAUST PUFFS (staggered) ── -->
+        <circle class="ldr-puff-1" cx="287" cy="3" r="5"   fill="rgba(180,188,220,.15)"/>
+        <circle class="ldr-puff-2" cx="287" cy="3" r="4"   fill="rgba(180,188,220,.12)"/>
+        <circle class="ldr-puff-3" cx="287" cy="3" r="3"   fill="rgba(180,188,220,.1)"/>
+
+        <!-- Ground shadow -->
+        <ellipse cx="200" cy="148" rx="196" ry="5" fill="rgba(0,0,0,.25)"/>
+      </svg>
+    </div>
+
+    <!-- Road strip -->
+    <div class="ldr-road" aria-hidden="true">
+      <div class="ldr-road-top"></div>
+      <div class="ldr-road-dashes">
+        <div class="ldr-road-dashes-track">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="ldr-road-btm"></div>
+    </div>
+
+    <!-- Brand -->
+    <div class="ldr-brand">
+      <div class="loader-wordmark">
+        <span>S</span><span>W</span><span>I</span><span>F</span><span>T</span>
+      </div>
+      <div class="ldr-tagline">Freight Logistics</div>
+    </div>
+
+    <!-- Progress -->
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+
+  </div>
 </div>
 
 <!-- ══════════════ HEADER ══════════════ -->
@@ -1411,10 +1831,10 @@
 <!-- ══════════════ HERO ══════════════ -->
 <section id="hero">
   <div class="hero-bg">
-    <img src="./image/background.jpg" alt="" aria-hidden="true">
-    <img src="./image/mainbg1.webp" alt="" aria-hidden="true">
-    <img src="./image/seaimg.jpg" alt="" aria-hidden="true">
-    <img src="./image/cargoplane.jpg" alt="" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920&q=85&auto=format&fit=crop" alt="" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?w=1920&q=85&auto=format&fit=crop" alt="" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=85&auto=format&fit=crop" alt="" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1920&q=85&auto=format&fit=crop" alt="" aria-hidden="true">
     <div class="hero-fade-v"></div>
     <div class="hero-fade-h"></div>
   </div>
@@ -1493,7 +1913,7 @@
 
     <div class="about-img-wrap reveal right" style="--d:.15s;">
       <div style="position:absolute;inset:-24px;border-radius:6px;background:radial-gradient(ellipse,rgba(var(--accent-rgb),.065),transparent);z-index:-1;"></div>
-      <img src="./image/bt7.jpg" alt="Swift Freight operations">
+      <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=1200&q=85&auto=format&fit=crop" alt="Swift Freight operations">
       <div class="about-img-overlay"></div>
       <div style="position:absolute;bottom:26px;left:26px;">
         <div class="lbl" style="color:rgba(var(--accent-rgb),.58);">Est. 2015</div>
@@ -1517,7 +1937,7 @@
 
   <div class="freight-grid">
     <div class="fc reveal up" style="--d:.1s;height:310px;">
-      <img class="fc-img" src="./image/seaimg.jpg" alt="Sea Freight">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=900&q=85&auto=format&fit=crop" alt="Sea Freight">
       <div class="fc-ov"></div>
       <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Sea Freight</span></div>
       <div style="position:absolute;bottom:24px;left:24px;right:24px;">
@@ -1527,7 +1947,7 @@
     </div>
 
     <div class="fc reveal up" style="--d:.2s;height:310px;">
-      <img class="fc-img" src="./image/bt6.jpg" alt="Road Freight">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=900&q=85&auto=format&fit=crop" alt="Road Freight">
       <div class="fc-ov"></div>
       <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Road Freight</span></div>
       <div style="position:absolute;bottom:24px;left:24px;right:24px;">
@@ -1537,7 +1957,7 @@
     </div>
 
     <div class="fc reveal up" style="--d:.3s;height:310px;">
-      <img class="fc-img" src="./image/cargoplane.jpg" alt="Air Freight">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=900&q=85&auto=format&fit=crop" alt="Air Freight">
       <div class="fc-ov"></div>
       <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Air Freight</span></div>
       <div style="position:absolute;bottom:24px;left:24px;right:24px;">
@@ -1547,7 +1967,7 @@
     </div>
 
     <div class="fc reveal up" style="--d:.4s;height:310px;">
-      <img class="fc-img" src="./image/rail.jpg" alt="Rail Freight">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?w=900&q=85&auto=format&fit=crop" alt="Rail Freight">
       <div class="fc-ov"></div>
       <div style="position:absolute;top:20px;left:20px;"><span class="badge-pill">Rail Freight</span></div>
       <div style="position:absolute;bottom:24px;left:24px;right:24px;">
@@ -1560,7 +1980,7 @@
 
 <!-- ══════════════ FEATURE STRIP ══════════════ -->
 <div class="feature-strip">
-  <img src="./image/bt5.jpg" alt="Swift Freight operations" data-parallax="0.18">
+  <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=2400&q=85&auto=format&fit=crop" alt="Swift Freight operations" data-parallax="0.18">
   <div class="feature-strip-ov"></div>
   <div class="feature-strip-top"></div>
   <div class="feature-strip-btm"></div>
@@ -1784,7 +2204,7 @@
 
   <div class="blog-grid">
     <div class="fc reveal up" style="--d:.1s;height:430px;">
-      <img class="fc-img" src="./image/gallery.jpg" alt="Logistics Innovation" style="height:100%;width:100%;">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1530569673472-307dc017a82d?w=900&q=85&auto=format&fit=crop" alt="Logistics Innovation" style="height:100%;width:100%;">
       <div class="fc-ov"></div>
       <div style="position:absolute;top:18px;left:18px;"><span class="badge-pill">Logistics Innovation</span></div>
       <div style="position:absolute;bottom:24px;left:24px;right:24px;">
@@ -1798,7 +2218,7 @@
     </div>
 
     <div class="fc reveal up" style="--d:.2s;height:430px;">
-      <img class="fc-img" src="./image/gallery2.jpg" alt="Last-Mile" style="height:100%;width:100%;">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?w=900&q=85&auto=format&fit=crop" alt="Last-Mile" style="height:100%;width:100%;">
       <div class="fc-ov"></div>
       <div style="position:absolute;top:18px;left:18px;"><span class="badge-pill">Delivery Solutions</span></div>
       <div style="position:absolute;bottom:24px;left:24px;right:24px;">
@@ -1809,7 +2229,7 @@
     </div>
 
     <div class="fc reveal up" style="--d:.3s;height:430px;">
-      <img class="fc-img" src="./image/gallery3.jpeg" alt="Sustainability" style="height:100%;width:100%;">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=900&q=85&auto=format&fit=crop" alt="Sustainability" style="height:100%;width:100%;">
       <div class="fc-ov"></div>
       <div style="position:absolute;top:18px;left:18px;"><span class="badge-pill">Sustainability</span></div>
       <div style="position:absolute;bottom:24px;left:24px;right:24px;">
@@ -1853,7 +2273,7 @@
 <section style="padding:0 48px 88px;max-width:1400px;margin:0 auto;">
   <div class="cta-wrap reveal up">
     <div class="cta-bg">
-      <img src="./image/shipment.jpg" alt="" data-parallax="0.14">
+      <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=2400&q=85&auto=format&fit=crop" alt="" data-parallax="0.14">
     </div>
     <div class="cta-ov"></div>
     <!-- decorative corner accent -->
