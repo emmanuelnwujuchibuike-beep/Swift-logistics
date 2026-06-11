@@ -131,7 +131,7 @@ function _uploadZone(method, side, label) {
               onclick="event.stopPropagation();_clearPayUpload('${id}')">
         <i class="fas fa-xmark"></i>
       </button>
-      <input type="file" id="${id}" accept="image/*" capture="environment" style="display:none"
+      <input type="file" id="${id}" accept="image/*" style="display:none"
              onchange="_onPayUpload(this,'${id}')">
     </div>`;
 }
