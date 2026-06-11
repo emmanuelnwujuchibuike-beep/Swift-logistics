@@ -1140,6 +1140,29 @@
 
     @media (max-width: 979px) { #page-hero { padding-top: 64px !important; } }
     @media (max-width: 639px) { #page-hero { padding-top: 54px !important; } }
+
+    /* ── Freight grid: fully responsive ── */
+
+    /* 640px–979px: keep 2 columns (overrides the 979px collapse-to-1col) */
+    @media (min-width: 640px) {
+      .freight-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    /* 640px–767px: moderate height in 2-col layout */
+    @media (min-width: 640px) and (max-width: 767px) {
+      .freight-grid .fc { height: 290px !important; }
+    }
+    /* <640px: single column, comfortable height */
+    @media (max-width: 639px) {
+      .freight-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .freight-grid .fc { height: 280px !important; }
+      .freight-grid .fc > div[style*="bottom:24px"] { bottom: 18px !important; left: 18px !important; right: 18px !important; }
+      .freight-grid .fc > div[style*="bottom:24px"] h3 { font-size: 1.05rem !important; }
+      .freight-grid .fc > div[style*="bottom:24px"] p  { font-size: .78rem !important; margin-bottom: 12px !important; }
+    }
+    /* <480px: slightly shorter but still breathable */
+    @media (max-width: 479px) {
+      .freight-grid .fc { height: 260px !important; }
+    }
   </style>
 </head>
 <body>
