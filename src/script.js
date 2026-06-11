@@ -882,8 +882,18 @@ function renderEliteStep(name, loc, label, icon, colorClass, idx) {
         'text-purple-500': '#a855f7',
         'text-cyan-500':   '#06b6d4',
     };
-    const col   = COLOR_MAP[colorClass] || '#3b82f6';
-    const delay = (0.3 + (idx || 0) * 0.14).toFixed(2);
+    // Icon derived from the chosen color — reflects meaning at a glance
+    const COLOR_ICON_MAP = {
+        'text-blue-500':   'fa-truck-fast',
+        'text-green-500':  'fa-circle-check',
+        'text-amber-500':  'fa-triangle-exclamation',
+        'text-red-500':    'fa-circle-xmark',
+        'text-purple-500': 'fa-star',
+        'text-cyan-500':   'fa-plane-up',
+    };
+    const col       = COLOR_MAP[colorClass] || '#3b82f6';
+    const colorIcon = COLOR_ICON_MAP[colorClass] || icon;
+    const delay     = (0.3 + (idx || 0) * 0.14).toFixed(2);
 
     // Sanitise displayed text
     const esc = (v) => String(v || '').replace(/[<>&"]/g, c =>
@@ -891,7 +901,9 @@ function renderEliteStep(name, loc, label, icon, colorClass, idx) {
 
     // ── Determine step state ─────────────────────────────────
     const isGreen = (colorClass || '').includes('green');
-    const isHold  = (colorClass || '').includes('amber') || (colorClass || '').includes('red');
+    const isRed   = (colorClass || '').includes('red');
+    const isAmber = (colorClass || '').includes('amber');
+    const isHold  = isAmber || isRed;
     let state, stateIcon, stateLabel, contentVariant, iconVariant;
 
     if (isGreen) {
@@ -902,19 +914,19 @@ function renderEliteStep(name, loc, label, icon, colorClass, idx) {
         iconVariant    = 'done';
     } else if (isHold) {
         state          = 'on-hold';
-        stateIcon      = 'fa-triangle-exclamation';
-        stateLabel     = `<span class="t-step-state-label" style="color:#f59e0b;">&#9888; On Hold</span>`;
+        stateIcon      = isRed ? 'fa-circle-xmark' : 'fa-triangle-exclamation';
+        stateLabel     = `<span class="t-step-state-label" style="color:${isRed ? '#ef4444' : '#f59e0b'};">${isRed ? '&#10006; Issue' : '&#9888; On Hold'}</span>`;
         contentVariant = 'on-hold';
         iconVariant    = 'hold';
     } else if (idx === 0) {
         state          = 'active';
-        stateIcon      = icon;
-        stateLabel     = `<span class="t-step-state-label" style="color:#3b82f6;">&#9679; Active Now</span>`;
+        stateIcon      = colorIcon;
+        stateLabel     = `<span class="t-step-state-label" style="color:${col};">&#9679; Active Now</span>`;
         contentVariant = '';
         iconVariant    = 'is-current';
     } else {
         state          = 'upcoming';
-        stateIcon      = 'fa-circle-dot';
+        stateIcon      = colorIcon;
         stateLabel     = `<span class="t-step-state-label" style="color:rgba(232,240,254,.3);">&#9675; Upcoming</span>`;
         contentVariant = 'upcoming';
         iconVariant    = '';

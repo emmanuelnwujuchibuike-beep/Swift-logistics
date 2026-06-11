@@ -789,7 +789,10 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
             </div>
             <div class="f-group" style="margin-bottom:0"><label>Amount Due</label><input type="text" id="n-amount" class="f-input" placeholder="$1,200.00"></div>
           </div>
-          <div class="pm-section-lbl">Enable Payment Methods</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <div class="pm-section-lbl" style="margin-bottom:0">Enable Payment Methods</div>
+            <button type="button" class="btn-secondary" onclick="applyDefaultsToForm('n')" style="font-size:.7rem;padding:6px 14px;flex-shrink:0;"><i class="fas fa-wand-magic-sparkles" style="margin-right:5px"></i>Load Global Defaults</button>
+          </div>
           <div class="pm-toggle-grid">
             <div class="pm-toggle-card" data-panel="n-panel-btc"><div class="pm-toggle-icon" style="color:#f7931a"><i class="fab fa-bitcoin"></i></div><div class="pm-toggle-lbl">Bitcoin</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
             <div class="pm-toggle-card" data-panel="n-panel-usdt"><div class="pm-toggle-icon" style="color:#26a17b"><i class="fas fa-circle-dollar-to-slot"></i></div><div class="pm-toggle-lbl">USDT</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
@@ -890,7 +893,10 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 
         <div class="form-card">
           <div class="form-card-title"><i class="fas fa-credit-card"></i> Payment Methods <span style="font:400 .62rem 'DM Sans';color:var(--muted2);letter-spacing:.06em;margin-left:6px;text-transform:none;">— auto-filled from existing data</span></div>
-          <div class="pm-section-lbl">Toggle to update a method (checked = will save to DB)</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <div class="pm-section-lbl" style="margin-bottom:0">Toggle to update a method (checked = will save to DB)</div>
+            <button type="button" class="btn-secondary" onclick="applyDefaultsToForm('u')" style="font-size:.7rem;padding:6px 14px;flex-shrink:0;"><i class="fas fa-wand-magic-sparkles" style="margin-right:5px"></i>Load Global Defaults</button>
+          </div>
           <div class="pm-toggle-grid">
             <div class="pm-toggle-card" data-panel="u-panel-btc"><div class="pm-toggle-icon" style="color:#f7931a"><i class="fab fa-bitcoin"></i></div><div class="pm-toggle-lbl">Bitcoin</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
             <div class="pm-toggle-card" data-panel="u-panel-usdt"><div class="pm-toggle-icon" style="color:#26a17b"><i class="fas fa-circle-dollar-to-slot"></i></div><div class="pm-toggle-lbl">USDT</div><div class="pm-toggle-chk"><i class="fas fa-circle-check"></i></div></div>
@@ -2109,6 +2115,77 @@ document.querySelectorAll('.amn-link').forEach(btn => {
 });
 document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
 document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', closeSidebar));
+
+/* ═══ LOAD GLOBAL DEFAULTS INTO PAYMENT TOGGLES ═══ */
+async function applyDefaultsToForm(prefix) {
+  let defs = {};
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.default_payments&select=value', {
+      headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY }
+    });
+    const rows = await r.json();
+    defs = (rows && rows[0] && rows[0].value) ? JSON.parse(rows[0].value) : {};
+  } catch (_) {}
+
+  // panel-id → { inputId: dbKey, ... }
+  const map = {
+    [`${prefix}-panel-btc`]:       { [`${prefix}-btc`]:       'btc_address' },
+    [`${prefix}-panel-usdt`]:      { [`${prefix}-usdt`]:      'usdt_address' },
+    [`${prefix}-panel-wire`]:      { [`${prefix}-bank`]:'bank_name', [`${prefix}-accname`]:'account_name',
+                                     [`${prefix}-accnum`]:'bank_number', [`${prefix}-routing`]:'routing_number' },
+    [`${prefix}-panel-paypal`]:    { [`${prefix}-paypal`]:    'paypal_email' },
+    [`${prefix}-panel-cashapp`]:   { [`${prefix}-cashapp`]:   'cashapp_tag' },
+    [`${prefix}-panel-zelle`]:     { [`${prefix}-zelle`]:     'zelle_id' },
+    [`${prefix}-panel-wu`]:        { [`${prefix}-wu`]:        'western_union_info' },
+    [`${prefix}-panel-venmo`]:     { [`${prefix}-venmo`]:     'venmo_tag' },
+    [`${prefix}-panel-moneygram`]: { [`${prefix}-moneygram`]: 'moneygram_info' },
+    [`${prefix}-panel-amazon`]:    { [`${prefix}-amazon`]:    'amazon_gc_info' },
+    [`${prefix}-panel-google`]:    { [`${prefix}-google`]:    'google_gc_info' },
+    [`${prefix}-panel-apple`]:     { [`${prefix}-apple`]:     'apple_gc_info' },
+    [`${prefix}-panel-ebay`]:      { [`${prefix}-ebay`]:      'ebay_gc_info' },
+  };
+
+  let activated = 0;
+  Object.entries(map).forEach(([panelId, fields]) => {
+    let hasValue = false;
+    Object.entries(fields).forEach(([elId, dbKey]) => {
+      const val = defs[dbKey] || '';
+      const el  = document.getElementById(elId);
+      if (val && el) { el.value = val; hasValue = true; }
+    });
+    if (hasValue) {
+      const card  = document.querySelector(`[data-panel="${panelId}"]`);
+      const panel = document.getElementById(panelId);
+      if (card && !card.classList.contains('pm-active')) {
+        card.classList.add('pm-active');
+        panel?.classList.add('pm-panel-active');
+        activated++;
+      }
+    }
+  });
+
+  // Vanilla Visa: set visible num field + hidden combined field
+  const vv = defs.vanilla_gc_info || '';
+  if (vv) {
+    const numEl = document.getElementById(`${prefix}-vanilla-num`);
+    const hidEl = document.getElementById(`${prefix}-vanilla`);
+    if (numEl) numEl.value = vv;
+    if (hidEl) hidEl.value = vv;
+    const vCard  = document.querySelector(`[data-panel="${prefix}-panel-vanilla"]`);
+    const vPanel = document.getElementById(`${prefix}-panel-vanilla`);
+    if (vCard && !vCard.classList.contains('pm-active')) {
+      vCard.classList.add('pm-active');
+      vPanel?.classList.add('pm-panel-active');
+      activated++;
+    }
+  }
+
+  if (activated === 0) {
+    toast('No global payment methods configured — go to Settings → Global Payment Methods first.', 'error');
+  } else {
+    toast(`${activated} payment method${activated !== 1 ? 's' : ''} loaded. Uncheck any you don't want for this shipment.`, 'success');
+  }
+}
 
 /* ═══ PAYMENT METHOD TOGGLES ═══ */
 function initPayToggles(prefix) {
