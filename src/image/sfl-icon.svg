@@ -1,61 +1,103 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Swift Freight Logistics">
   <defs>
+    <!-- Base background gradient -->
+    <linearGradient id="bg-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06112c"/>
+      <stop offset="100%" stop-color="#020810"/>
+    </linearGradient>
+    <!-- Centre depth glow (radial blue haze behind truck) -->
+    <radialGradient id="bg-depth" cx="54%" cy="46%" r="54%">
+      <stop offset="0%"   stop-color="#0e2260" stop-opacity=".52"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Top-right corner ambient -->
+    <radialGradient id="bg-tr" cx="90%" cy="8%" r="52%">
+      <stop offset="0%"   stop-color="#1d4ed8" stop-opacity=".14"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Bottom-left shadow depth -->
+    <radialGradient id="bg-bl" cx="10%" cy="92%" r="46%">
+      <stop offset="0%"   stop-color="#000814" stop-opacity=".65"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Diagonal shimmer band -->
+    <linearGradient id="bg-shim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="44%"  stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="48%"  stop-color="#ffffff" stop-opacity=".02"/>
+      <stop offset="52%"  stop-color="#ffffff" stop-opacity=".02"/>
+      <stop offset="56%"  stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Micro dot grid -->
+    <pattern id="bg-dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r=".52" fill="#3b82f6" opacity=".11"/>
+    </pattern>
+    <!-- Truck cargo gradient -->
     <linearGradient id="cargo-g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="0%"   stop-color="#2563eb"/>
       <stop offset="100%" stop-color="#1e40af"/>
     </linearGradient>
+    <!-- Truck cab gradient -->
     <linearGradient id="cab-g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="0%"   stop-color="#3b82f6"/>
       <stop offset="100%" stop-color="#2563eb"/>
-    </linearGradient>
-    <linearGradient id="bg-g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#060f24"/>
-      <stop offset="100%" stop-color="#030a1a"/>
     </linearGradient>
   </defs>
 
-  <!-- Background (full container size) -->
-  <rect width="100" height="100" rx="20" fill="url(#bg-g)"/>
+  <!-- ═══════════════ BACKGROUND (premium layered) ═══════════════ -->
 
-  <!-- Truck content scaled to ~68% and centered -->
-  <g transform="translate(16,16) scale(0.68)">
+  <!-- 1. Base dark gradient -->
+  <rect width="100" height="100" rx="24" fill="url(#bg-g)"/>
+  <!-- 2. Centre radial depth glow -->
+  <rect width="100" height="100" rx="24" fill="url(#bg-depth)"/>
+  <!-- 3. Micro dot grid -->
+  <rect width="100" height="100" rx="24" fill="url(#bg-dots)"/>
+  <!-- 4. Top-right corner blue ambient -->
+  <rect width="100" height="100" rx="24" fill="url(#bg-tr)"/>
+  <!-- 5. Bottom-left corner shadow -->
+  <rect width="100" height="100" rx="24" fill="url(#bg-bl)"/>
+  <!-- 6. Diagonal shimmer (luxury finish) -->
+  <rect width="100" height="100" rx="24" fill="url(#bg-shim)"/>
+  <!-- 7. Inner border ring (glowing edge) -->
+  <rect x="1.5" y="1.5" width="97" height="97" rx="22.5"
+        fill="none" stroke="rgba(59,130,246,.24)" stroke-width="1.5"/>
+  <!-- 8. Outer subtle halo -->
+  <rect x=".5"  y=".5"  width="99" height="99" rx="23.5"
+        fill="none" stroke="rgba(96,165,250,.06)" stroke-width="1"/>
 
-    <!-- Ambient blue glow -->
+  <!-- ═══════════════ TRUCK (62 %, centred in background) ════════ -->
+  <g transform="translate(19,19) scale(0.62)">
+
+    <!-- Ambient haze behind truck -->
     <ellipse cx="54" cy="43" rx="32" ry="22" fill="#1d4ed8" opacity="0.1"/>
-
     <!-- Ground shadow -->
     <ellipse cx="52" cy="83" rx="36" ry="3" fill="#3b82f6" opacity="0.22"/>
 
     <!-- Speed lines -->
-    <rect x="2" y="27" width="8"  height="2.5" rx="1.25" fill="#60a5fa" opacity="0.72"/>
-    <rect x="2" y="34" width="5"  height="2"   rx="1"    fill="#60a5fa" opacity="0.5"/>
-    <rect x="2" y="41" width="7"  height="1.5" rx=".75"  fill="#60a5fa" opacity="0.34"/>
-    <rect x="2" y="48" width="4"  height="1.5" rx=".75"  fill="#60a5fa" opacity="0.2"/>
+    <rect x="2" y="27" width="8"  height="2.5" rx="1.25" fill="#60a5fa" opacity=".72"/>
+    <rect x="2" y="34" width="5"  height="2"   rx="1"    fill="#60a5fa" opacity=".5"/>
+    <rect x="2" y="41" width="7"  height="1.5" rx=".75"  fill="#60a5fa" opacity=".34"/>
+    <rect x="2" y="48" width="4"  height="1.5" rx=".75"  fill="#60a5fa" opacity=".2"/>
 
     <!-- Cargo box -->
     <rect x="12" y="17" width="48" height="45" rx="5" fill="url(#cargo-g)"/>
-    <!-- Top sheen -->
     <rect x="12" y="17" width="48" height="7"  rx="3.5" fill="rgba(255,255,255,.17)"/>
-    <!-- Accent stripe -->
-    <rect x="12" y="17" width="48" height="2.5" rx="1.25" fill="#93c5fd" opacity="0.55"/>
-    <!-- Door seam -->
+    <rect x="12" y="17" width="48" height="2.5" rx="1.25" fill="#93c5fd" opacity=".55"/>
     <rect x="12" y="40" width="48" height="1.5" rx=".75" fill="rgba(0,0,0,.18)"/>
-    <!-- Rear edge depth -->
     <rect x="56" y="17" width="4"  height="45" rx="2" fill="rgba(0,0,0,.14)"/>
 
     <!-- Cab -->
     <path d="M60 25 L60 62 L90 62 L90 47 Q90 25 75 25 Z" fill="url(#cab-g)"/>
-    <!-- Cab top highlight -->
-    <path d="M64 25 Q75 23 89 30 L89 26 Q76 21 64 25 Z" fill="#bfdbfe" opacity="0.3"/>
+    <path d="M64 25 Q75 23 89 30 L89 26 Q76 21 64 25 Z" fill="#bfdbfe" opacity=".3"/>
 
     <!-- Windshield -->
-    <path d="M62 27 L62 45 L88 45 Q87.5 27 75 27 Z" fill="#020b1d" opacity="0.58"/>
-    <!-- Glare -->
+    <path d="M62 27 L62 45 L88 45 Q87.5 27 75 27 Z" fill="#020b1d" opacity=".58"/>
     <rect x="64" y="29" width="8" height="10" rx="2" fill="rgba(255,255,255,.09)"/>
 
-    <!-- Side mirror -->
+    <!-- Mirror -->
     <rect x="87" y="30" width="5" height="9" rx="2.5" fill="#2563eb"/>
-    <rect x="88" y="32" width="3" height="5" rx="1"   fill="#020b1d" opacity="0.45"/>
+    <rect x="88" y="32" width="3" height="5" rx="1"   fill="#020b1d" opacity=".45"/>
 
     <!-- Chassis -->
     <rect x="12" y="62" width="78" height="4" rx="2" fill="#1e3a8a"/>
@@ -66,14 +108,14 @@
     <circle cx="28" cy="73" r="8"    fill="#0d1b36"/>
     <circle cx="28" cy="73" r="5"    fill="#1d4ed8"/>
     <circle cx="28" cy="73" r="2"    fill="#93c5fd"/>
-    <circle cx="28" cy="73" r="8" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+    <circle cx="28" cy="73" r="8" fill="none" stroke="#3b82f6" stroke-width="1" opacity=".5"/>
 
     <!-- Front wheel -->
     <circle cx="76" cy="73" r="10.5" fill="#020b1d"/>
     <circle cx="76" cy="73" r="8"    fill="#0d1b36"/>
     <circle cx="76" cy="73" r="5"    fill="#1d4ed8"/>
     <circle cx="76" cy="73" r="2"    fill="#93c5fd"/>
-    <circle cx="76" cy="73" r="8" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+    <circle cx="76" cy="73" r="8" fill="none" stroke="#3b82f6" stroke-width="1" opacity=".5"/>
 
   </g>
 </svg>
