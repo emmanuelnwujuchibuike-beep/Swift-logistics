@@ -1,28 +1,77 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Swift Freight Logistics">
+  <defs>
+    <linearGradient id="cargo-g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="cab-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="bg-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060f24"/>
+      <stop offset="100%" stop-color="#030a1a"/>
+    </linearGradient>
+  </defs>
+
   <!-- Background -->
-  <rect width="100" height="100" rx="20" fill="#040d1a"/>
+  <rect width="100" height="100" rx="20" fill="url(#bg-g)"/>
 
-  <!-- Cargo box -->
-  <rect x="8" y="18" width="50" height="42" rx="5" fill="#22c55e"/>
-  <!-- Top sheen -->
-  <rect x="8" y="18" width="50" height="5" rx="2.5" fill="rgba(255,255,255,.1)"/>
-  <!-- Door seam -->
-  <rect x="8" y="39" width="50" height="2" rx="1" fill="rgba(0,0,0,.12)"/>
+  <!-- Ambient blue glow behind truck body -->
+  <ellipse cx="54" cy="43" rx="32" ry="22" fill="#1d4ed8" opacity="0.1"/>
 
-  <!-- Cab body -->
-  <path d="M58 28 L58 60 L90 60 L90 46 Q90 28 76 28 Z" fill="#22c55e"/>
+  <!-- Ground shadow -->
+  <ellipse cx="52" cy="83" rx="36" ry="3" fill="#3b82f6" opacity="0.22"/>
 
-  <!-- Windshield -->
-  <path d="M60 30 L60 46 L88 46 Q87 30 76 30 Z" fill="#030b17" opacity=".52"/>
+  <!-- Speed lines (motion, left side) -->
+  <rect x="2" y="27" width="8"  height="2.5" rx="1.25" fill="#60a5fa" opacity="0.72"/>
+  <rect x="2" y="34" width="5"  height="2"   rx="1"    fill="#60a5fa" opacity="0.5"/>
+  <rect x="2" y="41" width="7"  height="1.5" rx=".75"  fill="#60a5fa" opacity="0.34"/>
+  <rect x="2" y="48" width="4"  height="1.5" rx=".75"  fill="#60a5fa" opacity="0.2"/>
 
-  <!-- Chassis bar -->
-  <rect x="8" y="60" width="82" height="4" rx="2" fill="#166534"/>
+  <!-- ── Cargo box ── -->
+  <rect x="12" y="17" width="48" height="45" rx="5" fill="url(#cargo-g)"/>
+  <!-- Top highlight sheen -->
+  <rect x="12" y="17" width="48" height="7"  rx="3.5" fill="rgba(255,255,255,.17)"/>
+  <!-- Accent stripe (top edge, bright blue) -->
+  <rect x="12" y="17" width="48" height="2.5" rx="1.25" fill="#93c5fd" opacity="0.55"/>
+  <!-- Horizontal door seam -->
+  <rect x="12" y="40" width="48" height="1.5" rx=".75" fill="rgba(0,0,0,.18)"/>
+  <!-- Rear edge depth shadow -->
+  <rect x="56" y="17" width="4"  height="45" rx="2" fill="rgba(0,0,0,.14)"/>
 
-  <!-- Rear wheel -->
-  <circle cx="24" cy="72" r="10" fill="#040d1a" stroke="#22c55e" stroke-width="2.5"/>
-  <circle cx="24" cy="72" r="4" fill="#22c55e"/>
+  <!-- ── Cab ── -->
+  <path d="M60 25 L60 62 L90 62 L90 47 Q90 25 75 25 Z" fill="url(#cab-g)"/>
+  <!-- Cab top accent highlight -->
+  <path d="M64 25 Q75 23 89 30 L89 26 Q76 21 64 25 Z" fill="#bfdbfe" opacity="0.3"/>
 
-  <!-- Front wheel -->
-  <circle cx="74" cy="72" r="10" fill="#040d1a" stroke="#22c55e" stroke-width="2.5"/>
-  <circle cx="74" cy="72" r="4" fill="#22c55e"/>
+  <!-- Windshield (deep dark, slight blue tint) -->
+  <path d="M62 27 L62 45 L88 45 Q87.5 27 75 27 Z" fill="#020b1d" opacity="0.58"/>
+  <!-- Windshield glare (top-left corner) -->
+  <rect x="64" y="29" width="8" height="10" rx="2" fill="rgba(255,255,255,.09)"/>
+
+  <!-- Side mirror -->
+  <rect x="87" y="30" width="5" height="9" rx="2.5" fill="#2563eb"/>
+  <rect x="88" y="32" width="3" height="5" rx="1"   fill="#020b1d" opacity="0.45"/>
+
+  <!-- ── Chassis ── -->
+  <rect x="12" y="62" width="78" height="4" rx="2" fill="#1e3a8a"/>
+  <!-- Chassis bottom highlight -->
+  <rect x="12" y="64" width="78" height="2" rx="1" fill="rgba(59,130,246,.25)"/>
+
+  <!-- ── Rear wheel ── -->
+  <circle cx="28" cy="73" r="10.5" fill="#020b1d"/>
+  <circle cx="28" cy="73" r="8"    fill="#0d1b36"/>
+  <circle cx="28" cy="73" r="5"    fill="#1d4ed8"/>
+  <circle cx="28" cy="73" r="2"    fill="#93c5fd"/>
+  <!-- Wheel rim highlight -->
+  <circle cx="28" cy="73" r="8" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+
+  <!-- ── Front wheel ── -->
+  <circle cx="76" cy="73" r="10.5" fill="#020b1d"/>
+  <circle cx="76" cy="73" r="8"    fill="#0d1b36"/>
+  <circle cx="76" cy="73" r="5"    fill="#1d4ed8"/>
+  <circle cx="76" cy="73" r="2"    fill="#93c5fd"/>
+  <!-- Wheel rim highlight -->
+  <circle cx="76" cy="73" r="8" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
 </svg>
