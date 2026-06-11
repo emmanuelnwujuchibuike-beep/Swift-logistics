@@ -905,51 +905,52 @@ function renderEliteStep(name, loc, label, icon, colorClass, idx) {
     const isAmber = (colorClass || '').includes('amber');
     const isRed   = (colorClass || '').includes('red');
 
-    let stateIcon, stateBadge, iconVariant, contentOpacity;
+    let stateIcon, stateBadge, iconVariant, contentVariant;
 
     if (isGreen) {
         stateIcon      = 'fa-circle-check';
         stateBadge     = `<span style="background:rgba(34,197,94,.18);color:#22c55e;border:1px solid rgba(34,197,94,.4);border-radius:20px;padding:2px 10px;font-size:.57rem;font-weight:700;letter-spacing:.08em;white-space:nowrap;">&#10003;&nbsp;COMPLETED</span>`;
         iconVariant    = 'done';
-        contentOpacity = '1';
+        contentVariant = 'completed';
     } else if (isAmber) {
         stateIcon      = 'fa-clock';
         stateBadge     = `<span style="background:rgba(245,158,11,.18);color:#f59e0b;border:1px solid rgba(245,158,11,.4);border-radius:20px;padding:2px 10px;font-size:.57rem;font-weight:700;letter-spacing:.08em;white-space:nowrap;">&#9711;&nbsp;PENDING</span>`;
         iconVariant    = 'hold';
-        contentOpacity = '1';
+        contentVariant = 'on-hold';
     } else if (isRed) {
         stateIcon      = 'fa-circle-pause';
         stateBadge     = `<span style="background:rgba(239,68,68,.18);color:#ef4444;border:1px solid rgba(239,68,68,.4);border-radius:20px;padding:2px 10px;font-size:.57rem;font-weight:700;letter-spacing:.08em;white-space:nowrap;">&#9646;&nbsp;ON HOLD</span>`;
         iconVariant    = 'hold';
-        contentOpacity = '1';
+        contentVariant = 'on-hold';
     } else if (idx === 0) {
         stateIcon      = colorIcon;
         stateBadge     = `<span style="background:${col}25;color:${col};border:1px solid ${col}50;border-radius:20px;padding:2px 10px;font-size:.57rem;font-weight:700;letter-spacing:.08em;white-space:nowrap;">&#9679;&nbsp;ACTIVE NOW</span>`;
         iconVariant    = 'is-current';
-        contentOpacity = '1';
+        contentVariant = '';
     } else {
         stateIcon      = colorIcon;
         stateBadge     = `<span style="background:${col}18;color:${col}cc;border:1px solid ${col}38;border-radius:20px;padding:2px 10px;font-size:.57rem;font-weight:700;letter-spacing:.08em;white-space:nowrap;">&#9675;&nbsp;UPCOMING</span>`;
         iconVariant    = '';
-        contentOpacity = '.8';
+        contentVariant = 'upcoming';
     }
 
     // ── Every circle: solid color, white icon, soft glow ─────
+    // Text colors use CSS vars (var(--t-text), var(--t-muted)) so they adapt
+    // to light/dark mode automatically — do NOT hardcode color:#fff here.
     return `
     <div class="t-step" style="animation-delay:${delay}s;">
       <div class="t-step-icon ${iconVariant}"
            style="color:#fff;background:${col};border:2px solid ${col}aa;box-shadow:0 0 14px ${col}55;">
         <i class="fas ${stateIcon}"></i>
       </div>
-      <div class="t-step-content" style="opacity:${contentOpacity};border-left-color:${col}40;">
+      <div class="t-step-content ${contentVariant}" style="border-left-color:${col}40;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
-          <div class="t-step-seq" style="color:rgba(255,255,255,.45);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;">${esc(label)}</div>
+          <div class="t-step-seq">${esc(label)}</div>
           ${stateBadge}
         </div>
-        <div class="t-step-name" style="color:#fff;font-weight:600;">${esc(name)}</div>
-        ${loc ? `<div class="t-step-loc" style="margin-top:5px;display:flex;align-items:center;gap:5px;">
-          <i class="fas fa-location-dot" style="font-size:9px;color:${col};opacity:.85;flex-shrink:0;"></i>
-          <span style="color:rgba(255,255,255,.55);font-size:.72rem;">${esc(loc)}</span>
+        <div class="t-step-name">${esc(name)}</div>
+        ${loc ? `<div class="t-step-loc">
+          <i class="fas fa-location-dot" style="font-size:9px;margin-right:5px;color:${col};opacity:.85;"></i>${esc(loc)}
         </div>` : ''}
       </div>
     </div>`;
