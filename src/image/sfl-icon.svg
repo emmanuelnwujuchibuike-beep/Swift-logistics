@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Swift Freight Logistics">
+  <!-- Background -->
+  <rect width="100" height="100" rx="20" fill="#040d1a"/>
+
+  <!-- Cargo box -->
+  <rect x="8" y="18" width="50" height="42" rx="5" fill="#22c55e"/>
+  <!-- Top sheen -->
+  <rect x="8" y="18" width="50" height="5" rx="2.5" fill="rgba(255,255,255,.1)"/>
+  <!-- Door seam -->
+  <rect x="8" y="39" width="50" height="2" rx="1" fill="rgba(0,0,0,.12)"/>
+
+  <!-- Cab body -->
+  <path d="M58 28 L58 60 L90 60 L90 46 Q90 28 76 28 Z" fill="#22c55e"/>
+
+  <!-- Windshield -->
+  <path d="M60 30 L60 46 L88 46 Q87 30 76 30 Z" fill="#030b17" opacity=".52"/>
+
+  <!-- Chassis bar -->
+  <rect x="8" y="60" width="82" height="4" rx="2" fill="#166534"/>
+
+  <!-- Rear wheel -->
+  <circle cx="24" cy="72" r="10" fill="#040d1a" stroke="#22c55e" stroke-width="2.5"/>
+  <circle cx="24" cy="72" r="4" fill="#22c55e"/>
+
+  <!-- Front wheel -->
+  <circle cx="74" cy="72" r="10" fill="#040d1a" stroke="#22c55e" stroke-width="2.5"/>
+  <circle cx="74" cy="72" r="4" fill="#22c55e"/>
+</svg>
