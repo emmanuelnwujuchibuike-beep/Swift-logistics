@@ -242,13 +242,16 @@ async function handleTracking(silent) {
 
         const s      = resData[0];
 
-        // Merge global payment defaults for any field not set on this shipment
-        const _defs = await _loadPayDefaults();
-        ['btc_address','usdt_address','bank_name','account_name','bank_number',
-         'routing_number','paypal_email','cashapp_tag','zelle_id','western_union_info',
-         'venmo_tag','moneygram_info','amazon_gc_info','google_gc_info','apple_gc_info',
-         'vanilla_gc_info','ebay_gc_info']
-            .forEach(f => { if (!s[f] && _defs[f]) s[f] = _defs[f]; });
+        // Apply global payment defaults ONLY when this shipment has no per-shipment methods.
+        // If even one method is explicitly saved on the shipment, use per-shipment values only.
+        const _PM_FIELDS = ['btc_address','usdt_address','bank_name','account_name','bank_number',
+            'routing_number','paypal_email','cashapp_tag','zelle_id','western_union_info',
+            'venmo_tag','moneygram_info','amazon_gc_info','google_gc_info','apple_gc_info',
+            'vanilla_gc_info','ebay_gc_info'];
+        if (!_PM_FIELDS.some(f => s[f])) {
+            const _defs = await _loadPayDefaults();
+            _PM_FIELDS.forEach(f => { if (_defs[f]) s[f] = _defs[f]; });
+        }
 
         const isPaid = (s.payment_status || '').toLowerCase() === 'confirmed';
 

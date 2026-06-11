@@ -153,7 +153,7 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
 .step-block-hdr span{font-size:.78rem;font-weight:600;color:var(--text);flex-shrink:0}
 .step-block-hdr small{font-size:.68rem;color:var(--muted2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
 .color-dots{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.color-dot{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s}
+.color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .color-dot:hover{transform:scale(1.2)}
 .color-dot.selected{border-color:#fff;transform:scale(1.15)}
 .tracking-id-box{background:rgba(var(--accent-rgb),.08);border:1px solid var(--aborder);border-radius:3px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
@@ -726,11 +726,11 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
           </div>
           <div class="f-group"><label>Step 1 Colour</label>
             <div class="color-dots" data-field="n-s1color">
-              <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500"></div>
-              <div class="color-dot" style="background:#22c55e" data-value="text-green-500"></div>
-              <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
-              <div class="color-dot" style="background:#ef4444" data-value="text-red-500"></div>
-              <div class="color-dot" style="background:#a855f7" data-value="text-purple-500"></div>
+              <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500" title="Blue — In Transit"><i class="fas fa-truck-fast" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+              <div class="color-dot" style="background:#22c55e" data-value="text-green-500" title="Green — Completed"><i class="fas fa-check" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+              <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500" title="Amber — On Hold"><i class="fas fa-exclamation" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+              <div class="color-dot" style="background:#ef4444" data-value="text-red-500" title="Red — Issue"><i class="fas fa-xmark" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+              <div class="color-dot" style="background:#a855f7" data-value="text-purple-500" title="Purple — Special"><i class="fas fa-star" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
             </div><input type="hidden" id="n-s1color" value="text-blue-500">
           </div>
           <div class="grule"></div>
@@ -742,10 +742,11 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
               <div class="f-group"><label>Location</label><input type="text" id="n-s2loc" class="f-input" placeholder="Frankfurt Hub"></div>
               <div class="f-group"><label>Colour</label>
                 <div class="color-dots" data-field="n-s2color">
-                  <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500"></div>
-                  <div class="color-dot" style="background:#22c55e" data-value="text-green-500"></div>
-                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
-                  <div class="color-dot" style="background:#ef4444" data-value="text-red-500"></div>
+                  <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500" title="Blue — In Transit"><i class="fas fa-truck-fast" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#22c55e" data-value="text-green-500" title="Green — Completed"><i class="fas fa-check" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500" title="Amber — On Hold"><i class="fas fa-exclamation" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#ef4444" data-value="text-red-500" title="Red — Issue"><i class="fas fa-xmark" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#a855f7" data-value="text-purple-500" title="Purple — Special"><i class="fas fa-star" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
                 </div><input type="hidden" id="n-s2color" value="text-blue-500">
               </div>
             </div>
@@ -757,10 +758,11 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
               <div class="f-group"><label>Location</label><input type="text" id="n-s3loc" class="f-input" placeholder="London Heathrow"></div>
               <div class="f-group"><label>Colour</label>
                 <div class="color-dots" data-field="n-s3color">
-                  <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500"></div>
-                  <div class="color-dot" style="background:#22c55e" data-value="text-green-500"></div>
-                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
-                  <div class="color-dot" style="background:#ef4444" data-value="text-red-500"></div>
+                  <div class="color-dot selected" style="background:#3b82f6" data-value="text-blue-500" title="Blue — In Transit"><i class="fas fa-truck-fast" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#22c55e" data-value="text-green-500" title="Green — Completed"><i class="fas fa-check" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500" title="Amber — On Hold"><i class="fas fa-exclamation" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#ef4444" data-value="text-red-500" title="Red — Issue"><i class="fas fa-xmark" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#a855f7" data-value="text-purple-500" title="Purple — Special"><i class="fas fa-star" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
                 </div><input type="hidden" id="n-s3color" value="text-blue-500">
               </div>
             </div>
@@ -772,9 +774,11 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
               <div class="f-group"><label>Location</label><input type="text" id="n-s4loc" class="f-input" placeholder="London, UK"></div>
               <div class="f-group"><label>Colour</label>
                 <div class="color-dots" data-field="n-s4color">
-                  <div class="color-dot" style="background:#3b82f6" data-value="text-blue-500"></div>
-                  <div class="color-dot selected" style="background:#22c55e" data-value="text-green-500"></div>
-                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500"></div>
+                  <div class="color-dot" style="background:#3b82f6" data-value="text-blue-500" title="Blue — In Transit"><i class="fas fa-truck-fast" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot selected" style="background:#22c55e" data-value="text-green-500" title="Green — Completed"><i class="fas fa-check" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#f59e0b" data-value="text-amber-500" title="Amber — Delayed"><i class="fas fa-exclamation" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#ef4444" data-value="text-red-500" title="Red — Issue"><i class="fas fa-xmark" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
+                  <div class="color-dot" style="background:#a855f7" data-value="text-purple-500" title="Purple — Special"><i class="fas fa-star" style="color:rgba(255,255,255,.9);font-size:9px;pointer-events:none"></i></div>
                 </div><input type="hidden" id="n-s4color" value="text-green-500">
               </div>
             </div>
@@ -938,7 +942,7 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
             <div class="form-grid form-grid-3">
               <div class="f-group"><label>Name</label><input type="text" id="u-s2name" class="f-input"></div>
               <div class="f-group"><label>Location</label><input type="text" id="u-s2loc" class="f-input"></div>
-              <div class="f-group"><label>Colour</label><select id="u-s2color" class="f-select"><option value="">Keep</option><option value="text-blue-500">Blue</option><option value="text-green-500">Green</option><option value="text-amber-500">Amber</option><option value="text-red-500">Red</option></select></div>
+              <div class="f-group"><label>Colour</label><select id="u-s2color" class="f-select"><option value="">Keep</option><option value="text-blue-500">🔵 Blue — In Transit</option><option value="text-green-500">🟢 Green — Completed</option><option value="text-amber-500">🟡 Amber — On Hold</option><option value="text-red-500">🔴 Red — Issue</option><option value="text-purple-500">🟣 Purple — Special</option></select></div>
             </div>
           </div>
           <div class="step-block">
@@ -946,7 +950,7 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
             <div class="form-grid form-grid-3">
               <div class="f-group"><label>Name</label><input type="text" id="u-s3name" class="f-input"></div>
               <div class="f-group"><label>Location</label><input type="text" id="u-s3loc" class="f-input"></div>
-              <div class="f-group"><label>Colour</label><select id="u-s3color" class="f-select"><option value="">Keep</option><option value="text-blue-500">Blue</option><option value="text-green-500">Green</option><option value="text-amber-500">Amber</option><option value="text-red-500">Red</option></select></div>
+              <div class="f-group"><label>Colour</label><select id="u-s3color" class="f-select"><option value="">Keep</option><option value="text-blue-500">🔵 Blue — In Transit</option><option value="text-green-500">🟢 Green — Completed</option><option value="text-amber-500">🟡 Amber — On Hold</option><option value="text-red-500">🔴 Red — Issue</option><option value="text-purple-500">🟣 Purple — Special</option></select></div>
             </div>
           </div>
           <div class="step-block">
@@ -954,7 +958,7 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
             <div class="form-grid form-grid-3">
               <div class="f-group"><label>Name</label><input type="text" id="u-s4name" class="f-input"></div>
               <div class="f-group"><label>Location</label><input type="text" id="u-s4loc" class="f-input"></div>
-              <div class="f-group"><label>Colour</label><select id="u-s4color" class="f-select"><option value="">Keep</option><option value="text-green-500">Green</option><option value="text-blue-500">Blue</option><option value="text-amber-500">Amber</option></select></div>
+              <div class="f-group"><label>Colour</label><select id="u-s4color" class="f-select"><option value="">Keep</option><option value="text-green-500">🟢 Green — Completed</option><option value="text-blue-500">🔵 Blue — In Transit</option><option value="text-amber-500">🟡 Amber — Delayed</option><option value="text-red-500">🔴 Red — Issue</option><option value="text-purple-500">🟣 Purple — Special</option></select></div>
             </div>
           </div>
         </div>
