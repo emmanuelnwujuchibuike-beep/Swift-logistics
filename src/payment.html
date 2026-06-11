@@ -1659,6 +1659,412 @@
       .t-mp.current .t-mp-h,.t-step-icon.is-current::after,.t-tl-line,
       .t-step:has(.t-step-icon.is-current) .t-step-content::before{animation:none !important;}
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       EMIL KOWALSKI REDESIGN LAYER
+       Principle: restraint over decoration · spring physics · intentional
+       spacing · negative letter-tracking on headings · clean geometry.
+       Source-order ensures these win over earlier declarations.
+    ═══════════════════════════════════════════════════════════════════ */
+
+    /* ── Design tokens ── */
+    :root {
+      --ek-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ek-out:         cubic-bezier(0.22, 1, 0.36, 1);
+      --ek-r-xs:        6px;
+      --ek-r-sm:        9px;
+      --ek-r:           14px;
+      --ek-r-lg:        20px;
+      --ek-r-pill:      9999px;
+    }
+
+    /* ── Body atmosphere — one clean gradient, not three ── */
+    body {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -5%, rgba(59,130,246,.12), transparent 65%),
+        #09090b !important;
+    }
+    [data-theme="light"] body {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -5%, rgba(29,78,216,.07), transparent 65%),
+        #f8faff !important;
+    }
+
+    /* ── Strip ALL clip-paths — angular cuts are anti-Kowalski ── */
+    .btn-primary, .btn-outline, .theme-btn, .menu-btn,
+    .mob-close-btn, .mob-nav-links a .nav-arrow, #search-btn {
+      clip-path: none !important;
+    }
+
+    /* ── Logo wordmark ── */
+    .logo-name {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.01em !important;
+    }
+    .nav-links a {
+      font-size: 0.83rem !important;
+      letter-spacing: 0 !important;
+    }
+
+    /* ── Buttons — Emil's clean shape + spring ── */
+    .btn-primary {
+      border-radius: var(--ek-r-sm) !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      text-transform: none !important;
+      padding: 11px 22px !important;
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6) !important;
+      background-size: 100% !important;
+      transition: opacity .15s ease, transform .18s var(--ek-spring), box-shadow .2s ease !important;
+    }
+    .btn-primary:hover {
+      opacity: .88 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 12px 32px rgba(59,130,246,.32) !important;
+    }
+    .btn-primary:active { transform: scale(.97) !important; }
+
+    .btn-outline {
+      border-radius: var(--ek-r-sm) !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      text-transform: none !important;
+      transition: background .15s ease, border-color .2s ease, transform .18s var(--ek-spring) !important;
+    }
+    .btn-outline:hover, .btn-outline.active { transform: translateY(-1px) !important; }
+
+    .theme-btn  { border-radius: var(--ek-r-xs) !important; width:38px!important; height:38px!important; }
+    .menu-btn   { border-radius: var(--ek-r-xs) !important; }
+    .mob-close-btn { border-radius: var(--ek-r-xs) !important; }
+    .mob-nav-links a .nav-arrow { border-radius: var(--ek-r-xs) !important; }
+
+    /* ── Mobile nav typography ── */
+    .mob-nav-links a {
+      font-family: 'DM Sans', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 2rem !important;
+      letter-spacing: -0.03em !important;
+    }
+
+    /* ── Hero orbit — tone down, not remove ── */
+    .t-hero-orbit { opacity: .55; }
+    @media (max-width:768px) { .t-hero-orbit { opacity:.28; } }
+    /* Remove scan line on search card */
+    .t-search-card::after { display:none !important; }
+
+    /* ── Search gate ── */
+    #search-gate {
+      min-height: calc(100vh - 112px) !important;
+      padding: 40px 18px 80px !important;
+    }
+
+    /* ── Search card ── */
+    .t-search-card {
+      border-radius: var(--ek-r-lg) !important;
+      padding: clamp(36px,5vw,56px) clamp(28px,5vw,52px) !important;
+      border-color: rgba(99,141,255,.16) !important;
+      box-shadow: 0 48px 100px rgba(0,0,0,.55), 0 0 0 1px rgba(99,141,255,.05), inset 0 1px 0 rgba(255,255,255,.07) !important;
+    }
+    [data-theme="light"] .t-search-card {
+      border-color: rgba(29,78,216,.12) !important;
+      box-shadow: 0 32px 72px rgba(15,28,68,.16), inset 0 1px 0 rgba(255,255,255,.95) !important;
+    }
+
+    /* ── Search eyebrow ── */
+    .t-search-eyebrow {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: .72rem !important;
+      font-weight: 600 !important;
+      letter-spacing: .08em !important;
+      text-transform: uppercase !important;
+      margin-bottom: 20px !important;
+    }
+    .t-search-eyebrow::before { display:none !important; }
+
+    /* ── Search headline — Kowalski typography ── */
+    .t-search-title {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: clamp(2.2rem, 5.5vw, 3.4rem) !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.035em !important;
+      line-height: 1.08 !important;
+      margin-bottom: 16px !important;
+      transform: none !important;
+    }
+    /* Gradient accent word */
+    .t-search-title .ek-grad {
+      background: linear-gradient(135deg, #60a5fa, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    [data-theme="light"] .t-search-title .ek-grad {
+      background: linear-gradient(135deg, #1d4ed8, #4f46e5);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    /* ── Search sub ── */
+    .t-search-sub {
+      font-size: .9rem !important;
+      line-height: 1.65 !important;
+      letter-spacing: -.005em !important;
+      margin-bottom: 28px !important;
+    }
+
+    /* ── Tracking input ── */
+    .t-input-wrap {
+      border-radius: var(--ek-r) !important;
+      box-shadow: none !important;
+      transform: none !important;
+      margin-bottom: 10px !important;
+    }
+    #trackingInput {
+      border-radius: var(--ek-r) !important;
+      font-size: max(16px,.88rem) !important;
+      padding: 15px 15px 15px 46px !important;
+      letter-spacing: .12em !important;
+      background: rgba(0,0,0,.28) !important;
+      border: 1px solid rgba(255,255,255,.1) !important;
+      transition: border-color .2s ease, box-shadow .25s ease !important;
+    }
+    #trackingInput:focus {
+      border-color: rgba(59,130,246,.55) !important;
+      box-shadow: 0 0 0 4px rgba(59,130,246,.1) !important;
+      background: rgba(0,0,0,.32) !important;
+    }
+    [data-theme="light"] #trackingInput {
+      background: rgba(240,244,255,.7) !important;
+      border-color: rgba(5,16,42,.09) !important;
+    }
+    [data-theme="light"] #trackingInput:focus {
+      border-color: rgba(29,78,216,.5) !important;
+      box-shadow: 0 0 0 4px rgba(29,78,216,.08) !important;
+      background: #fff !important;
+    }
+
+    /* ── Search button ── */
+    #search-btn {
+      border-radius: var(--ek-r) !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: .9rem !important;
+      font-weight: 600 !important;
+      letter-spacing: .01em !important;
+      text-transform: none !important;
+      padding: 15px 24px !important;
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6) !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      box-shadow: 0 10px 28px rgba(37,99,235,.38), inset 0 1px 0 rgba(255,255,255,.22) !important;
+      transition: opacity .15s ease, transform .2s var(--ek-spring), box-shadow .2s ease !important;
+    }
+    #search-btn:hover {
+      filter: none !important;
+      opacity: .9 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 18px 44px rgba(37,99,235,.45), inset 0 1px 0 rgba(255,255,255,.28) !important;
+    }
+    #search-btn:active { transform: scale(.98) !important; }
+
+    /* ── Error ── */
+    #error-msg {
+      border-radius: var(--ek-r-sm) !important;
+      font-size: .8rem !important;
+      letter-spacing: .01em !important;
+      text-transform: none !important;
+      font-weight: 500 !important;
+    }
+
+    /* ── Trust strip ── */
+    .t-trust-strip { padding-top: 20px !important; margin-top: 22px !important; gap: 16px !important; }
+    .t-trust-item  { font-size: .72rem !important; letter-spacing: .04em !important; font-weight: 500 !important; }
+
+    /* ── Dashboard ── */
+    #t-dashboard { padding: 32px 20px 96px !important; }
+
+    /* ── Header card ── */
+    .t-hdr-card {
+      border-radius: 16px !important;
+      padding: 32px 36px !important;
+    }
+    .t-hdr-card::before { height: 1px !important; opacity: .65 !important; }
+
+    /* ── Tracking ID — negative tracking ── */
+    .t-tracking-id {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: clamp(1.9rem, 4vw, 2.7rem) !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.03em !important;
+      text-shadow: none !important;
+    }
+
+    /* ── Eyebrow ── */
+    .t-hdr-eyebrow {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: .68rem !important;
+      font-weight: 600 !important;
+      letter-spacing: .1em !important;
+    }
+    .t-hdr-eyebrow::before { width: 12px !important; }
+
+    /* ── Status pill — clean pill shape ── */
+    .t-status-pill {
+      border-radius: 8px !important;
+      font-size: .72rem !important;
+      letter-spacing: .03em !important;
+      text-transform: none !important;
+      font-weight: 600 !important;
+      padding: 7px 14px !important;
+      box-shadow: none !important;
+    }
+
+    /* ── Back button ── */
+    .t-back-btn {
+      border-radius: 8px !important;
+      font-size: .76rem !important;
+      letter-spacing: .02em !important;
+      text-transform: none !important;
+      font-weight: 600 !important;
+      transition: border-color .2s ease, color .2s ease, transform .18s var(--ek-spring) !important;
+    }
+    .t-back-btn:hover { transform: translateY(-1px) !important; }
+
+    /* ── Cards ── */
+    .t-card   { border-radius: 16px !important; }
+    .t-ring-wrap { border-radius: 16px !important; }
+
+    /* ── Card title ── */
+    .t-card-title {
+      font-size: .68rem !important;
+      letter-spacing: .18em !important;
+      font-weight: 700 !important;
+    }
+
+    /* ── Timeline ── */
+    .t-step-content {
+      border-radius: 12px !important;
+      padding: 14px 18px !important;
+    }
+    .t-step-name {
+      font-size: .88rem !important;
+      letter-spacing: -.01em !important;
+      font-weight: 600 !important;
+    }
+    .t-step-loc { font-size: .74rem !important; }
+
+    /* ── Route band + map ── */
+    .t-hero-band { border-radius: 16px !important; }
+    .t-map-card  { border-radius: 16px !important; border-color: rgba(99,141,255,.14) !important; }
+
+    /* ── Ring metric values ── */
+    .t-ring-metric-val {
+      font-size: 1.12rem !important;
+      letter-spacing: -0.02em !important;
+    }
+
+    /* ── Payment method cards ── */
+    .t-pm-card {
+      border-radius: 12px !important;
+      transition: transform .18s var(--ek-spring), box-shadow .2s ease, border-color .2s ease !important;
+    }
+    .t-pm-card:hover  { transform: translateY(-3px) !important; }
+    .t-pm-card:active { transform: scale(.97) !important; }
+
+    /* ── Payment elements ── */
+    .t-pay-panel { border-radius: 12px !important; }
+    .t-pay-invoice-amount {
+      font-size: 1.85rem !important;
+      letter-spacing: -.04em !important;
+      text-shadow: none !important;
+    }
+
+    /* ── Submit button ── */
+    .t-pp-submit-btn {
+      border-radius: 12px !important;
+      font-size: .9rem !important;
+      font-weight: 700 !important;
+      letter-spacing: .01em !important;
+      transition: opacity .15s ease, transform .18s var(--ek-spring) !important;
+    }
+    .t-pp-submit-btn:hover:not(:disabled) {
+      opacity: .9 !important;
+      transform: translateY(-2px) !important;
+    }
+    .t-pp-submit-btn:active:not(:disabled) { transform: scale(.97) !important; }
+
+    /* ── Upload zone ── */
+    .t-pp-upload-zone { border-radius: 12px !important; }
+    .t-pp-src-btn {
+      border-radius: 8px !important;
+      font-size: .76rem !important;
+      font-weight: 600 !important;
+      letter-spacing: .01em !important;
+      transition: background .15s ease, border-color .15s ease, transform .15s var(--ek-spring) !important;
+    }
+    .t-pp-src-btn:hover { transform: translateY(-1px) !important; }
+
+    /* ── Copy btn ── */
+    .t-pp-copy-btn {
+      border-radius: 8px !important;
+      font-size: .72rem !important;
+      letter-spacing: .02em !important;
+      font-weight: 600 !important;
+      transition: background .15s ease, transform .15s var(--ek-spring) !important;
+    }
+    .t-pp-copy-btn:hover { transform: translateY(-1px) !important; }
+
+    /* ── Map fit button ── */
+    .t-map-fit {
+      border-radius: 10px !important;
+      font-size: .7rem !important;
+      letter-spacing: .03em !important;
+      text-transform: none !important;
+      font-weight: 600 !important;
+      transition: background .2s ease, transform .18s var(--ek-spring), box-shadow .2s ease !important;
+    }
+    .t-map-fit:hover { transform: translateY(-2px) !important; }
+
+    /* ── Loader — clean wordmark ── */
+    .loader-wordmark {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 2.8rem !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.04em !important;
+      gap: 0 !important;
+    }
+    .loader-bar { width: 120px !important; }
+
+    /* ── Info list ── */
+    .t-info-val { font-size: .84rem !important; letter-spacing: -.01em !important; }
+    .t-info-key { font-size: .65rem !important; letter-spacing: .16em !important; }
+
+    /* ── Responsive overrides ── */
+    @media (max-width:600px) {
+      .t-hdr-card { padding: 22px 20px !important; }
+      .t-tracking-id { font-size: 1.7rem !important; }
+      #t-dashboard { padding: 20px 14px 72px !important; }
+      .t-search-title { font-size: 2rem !important; }
+    }
+    @media (max-width:480px) {
+      .t-search-card { padding: 28px 20px !important; }
+      .mob-nav-links a { font-size: 1.8rem !important; }
+    }
+
+    /* ── Light mode card refinement ── */
+    [data-theme="light"] .t-hdr-card,
+    [data-theme="light"] .t-card,
+    [data-theme="light"] .t-ring-wrap {
+      background: linear-gradient(165deg,rgba(255,255,255,.96),rgba(247,250,255,.99)) !important;
+      border: 1px solid rgba(29,78,216,.09) !important;
+      box-shadow: 0 16px 40px rgba(15,28,68,.09), inset 0 1px 0 rgba(255,255,255,.95) !important;
+    }
+    [data-theme="light"] .btn-primary {
+      background: linear-gradient(135deg,#1e3a8a,#1d4ed8) !important;
+    }
+    [data-theme="light"] .loader-wordmark { color: #09090b !important; }
   </style>
 </head>
 
@@ -1795,7 +2201,7 @@
       <div id="t-search-wrap">
         <div class="t-search-card t-tilt" id="t-search-card">
           <div class="t-search-eyebrow"><span class="t-eye-dot"></span><i class="fas fa-satellite-dish" style="font-size:11px;"></i> Live Global Tracking</div>
-          <h1 class="t-search-title">Track Your <span>Shipment</span></h1>
+          <h1 class="t-search-title">Track Your <span class="ek-grad">Shipment</span></h1>
           <p class="t-search-sub">Enter your unique tracking code to access real-time status, transit milestones, and delivery details — anywhere on Earth.</p>
 
           <div class="t-input-wrap">
@@ -2049,7 +2455,7 @@
   })();
   </script>
 
-  <script src="./script.js?v=20260611c"></script>
+  <script src="./script.js?v=20260611d"></script>
 
   <!-- Live Chat -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
