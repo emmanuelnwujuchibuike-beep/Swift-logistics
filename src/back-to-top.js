@@ -18,7 +18,7 @@
   function injectCSS() {
     var css = [
       '#sfl-btt{',
-        'position:fixed;bottom:80px;left:18px;',  /* above lang widget space */
+        'position:fixed;bottom:16px;left:16px;',
         'width:44px;height:44px;',
         'z-index:8990;',
         'background:none;border:none;padding:0;cursor:pointer;',
