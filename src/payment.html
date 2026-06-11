@@ -1444,13 +1444,17 @@
     .t-map-fallback i{font-size:2rem;color:var(--t-accent2);opacity:.7;}
     .t-map-fallback p{font:500 .82rem/1.6 'DM Sans';color:var(--t-muted);max-width:280px;}
     /* ── Premium lollipop-pin map markers ──────────────────────────────────
-       anchor:'bottom' — the triangular tail tip sits exactly on the coordinate.
+       anchor:'center' — Mapbox centers the whole element on the coordinate.
+       padding-top = tail height (11px) so the HEAD CENTER is exactly on the
+       coordinate/route — the circle icon sits right on the route line.
+       The tail extends below the coordinate as a decorative ground pointer.
        RULE: zero CSS transform or transition on .t-mp (the root element).
        Mapbox writes transform:translate(x,y) on it every render frame to keep
        it at its coordinate. Any CSS transform on this element interferes and
        causes markers to drift while zooming. Hover effects go on .t-mp-h only.
        Icons are inline SVG — no font-loading dependency, always rendered.  */
-    .t-mp{position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;pointer-events:auto;}
+    .t-mp{position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;pointer-events:auto;
+      padding-top:11px;/* = tail height → head center aligns with anchor:center */}
     /* Circle head */
     .t-mp-h{
       border-radius:50%;display:flex;align-items:center;justify-content:center;
