@@ -946,6 +946,45 @@ function initializeRevealAnimations() {
 }
 
 
+/* ════════════════════════════════════════════════════════════════
+   LIVE TICKER — reads the admin-saved ticker text from site_settings
+   and injects it into every page's .lux-ticker-track element.
+   Falls back to the hardcoded default if the DB is empty/unreachable.
+   ════════════════════════════════════════════════════════════════ */
+(function loadLuxTicker() {
+    const track = document.querySelector('.lux-ticker-track');
+    if (!track) return;
+
+    const ICONS = [
+        'fa-signal','fa-plane-up','fa-ship','fa-box','fa-truck',
+        'fa-globe','fa-shield-check','fa-stamp','fa-location-dot','fa-clock',
+        'fa-box-open','fa-route'
+    ];
+
+    function buildItem(text, icon) {
+        const esc = (s) => String(s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+        const sep = text.indexOf('·');
+        const label = sep >= 0 ? text.slice(0, sep).trim() : text.trim();
+        const val   = sep >= 0 ? text.slice(sep + 1).trim() : '';
+        return `<span class="lti"><i class="fas ${icon} lti-icon"></i>` +
+               `<span class="lti-label">${esc(label)}</span>` +
+               (val ? `<span class="lti-dot">·</span><span class="lti-val">${esc(val)}</span>` : '') +
+               `</span>`;
+    }
+
+    fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+    }).then(r => r.json()).then(rows => {
+        const text = rows && rows[0] && rows[0].value ? rows[0].value.trim() : '';
+        if (!text) return; // keep hardcoded default
+        const items = text.split(/[·•|\n]+/).map(s => s.trim()).filter(Boolean);
+        if (!items.length) return;
+        const doubled = [...items, ...items];
+        track.innerHTML = doubled.map((item, i) => buildItem(item, ICONS[i % ICONS.length])).join('');
+    }).catch(() => {}); // silently keep hardcoded if offline / no row yet
+})();
+
+
 document.addEventListener('DOMContentLoaded', () => {
     // Auto-fill tracking ID from ?id= query param and trigger search
     const params = new URLSearchParams(window.location.search);
