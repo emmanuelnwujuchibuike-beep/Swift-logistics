@@ -1,24 +1,35 @@
 (function () {
   'use strict';
 
-  /* ── Language data ──────────────────────────────────────────────────────── */
+  /* ── 20 languages ───────────────────────────────────────────────────────── */
   var LANGS = [
-    { code: 'en',    label: 'English',    native: 'English',   flag: '🇺🇸' },
-    { code: 'fr',    label: 'French',     native: 'Français',  flag: '🇫🇷' },
-    { code: 'es',    label: 'Spanish',    native: 'Español',   flag: '🇪🇸' },
-    { code: 'de',    label: 'German',     native: 'Deutsch',   flag: '🇩🇪' },
-    { code: 'zh-CN', label: 'Chinese',    native: '中文',       flag: '🇨🇳' },
-    { code: 'ar',    label: 'Arabic',     native: 'العربية',   flag: '🇸🇦' },
-    { code: 'pt',    label: 'Portuguese', native: 'Português', flag: '🇧🇷' },
-    { code: 'ja',    label: 'Japanese',   native: '日本語',     flag: '🇯🇵' },
-    { code: 'ru',    label: 'Russian',    native: 'Русский',   flag: '🇷🇺' },
-    { code: 'it',    label: 'Italian',    native: 'Italiano',  flag: '🇮🇹' },
+    { code: 'en',    label: 'English',    native: 'English',    flag: '🇺🇸' },
+    { code: 'fr',    label: 'French',     native: 'Français',   flag: '🇫🇷' },
+    { code: 'es',    label: 'Spanish',    native: 'Español',    flag: '🇪🇸' },
+    { code: 'de',    label: 'German',     native: 'Deutsch',    flag: '🇩🇪' },
+    { code: 'zh-CN', label: 'Chinese',    native: '中文',        flag: '🇨🇳' },
+    { code: 'ar',    label: 'Arabic',     native: 'العربية',    flag: '🇸🇦' },
+    { code: 'pt',    label: 'Portuguese', native: 'Português',  flag: '🇧🇷' },
+    { code: 'ja',    label: 'Japanese',   native: '日本語',      flag: '🇯🇵' },
+    { code: 'ru',    label: 'Russian',    native: 'Русский',    flag: '🇷🇺' },
+    { code: 'it',    label: 'Italian',    native: 'Italiano',   flag: '🇮🇹' },
+    { code: 'ko',    label: 'Korean',     native: '한국어',      flag: '🇰🇷' },
+    { code: 'nl',    label: 'Dutch',      native: 'Nederlands', flag: '🇳🇱' },
+    { code: 'tr',    label: 'Turkish',    native: 'Türkçe',     flag: '🇹🇷' },
+    { code: 'pl',    label: 'Polish',     native: 'Polski',     flag: '🇵🇱' },
+    { code: 'sv',    label: 'Swedish',    native: 'Svenska',    flag: '🇸🇪' },
+    { code: 'hi',    label: 'Hindi',      native: 'हिन्दी',      flag: '🇮🇳' },
+    { code: 'vi',    label: 'Vietnamese', native: 'Tiếng Việt', flag: '🇻🇳' },
+    { code: 'th',    label: 'Thai',       native: 'ภาษาไทย',    flag: '🇹🇭' },
+    { code: 'id',    label: 'Indonesian', native: 'Bahasa',     flag: '🇮🇩' },
+    { code: 'uk',    label: 'Ukrainian',  native: 'Українська', flag: '🇺🇦' },
   ];
 
   var isOpen     = false;
   var activeLang = LANGS[0];
+  var gtReady    = false;
 
-  /* ── Read active lang from Google Translate cookie ──────────────────────── */
+  /* ── Cookie helpers ─────────────────────────────────────────────────────── */
   function readCookieLang() {
     var m = document.cookie.match(/googtrans=([^;]+)/);
     if (!m) return LANGS[0];
@@ -29,12 +40,29 @@
     }) || LANGS[0];
   }
 
-  /* ── Google Translate bootstrap ─────────────────────────────────────────── */
+  function setGTCookie(code) {
+    var val  = code === 'en' ? '' : '/en/' + code;
+    var host = location.hostname;
+    document.cookie = 'googtrans=' + val + '; path=/;';
+    document.cookie = 'googtrans=' + val + '; path=/; domain=' + host + ';';
+    document.cookie = 'googtrans=' + val + '; path=/; domain=.' + host + ';';
+  }
+
+  function clearGTCookie() {
+    var exp  = 'expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    var host = location.hostname;
+    document.cookie = 'googtrans=; ' + exp + '; path=/;';
+    document.cookie = 'googtrans=; ' + exp + '; path=/; domain=' + host + ';';
+    document.cookie = 'googtrans=; ' + exp + '; path=/; domain=.' + host + ';';
+  }
+
+  /* ── Google Translate ───────────────────────────────────────────────────── */
   window.googleTranslateElementInit = function () {
     new google.translate.TranslateElement(
       { pageLanguage: 'en', autoDisplay: false },
       'sfl-gt-el'
     );
+    gtReady = true;
   };
 
   function loadGT() {
@@ -44,47 +72,58 @@
     document.body.appendChild(d);
 
     var s  = document.createElement('script');
+    /* load immediately, not deferred, so it's ready faster */
     s.src  = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    s.async = true;
     document.head.appendChild(s);
   }
 
+  /* fire the GT select; poll at 100 ms so switch feels instant */
   function execTranslate(code) {
+    var fired = false;
     var attempt = function () {
       var sel = document.querySelector('.goog-te-combo');
-      if (sel) { sel.value = code; sel.dispatchEvent(new Event('change')); return true; }
-      return false;
+      if (sel) {
+        sel.value = code;
+        sel.dispatchEvent(new Event('change'));
+        fired = true;
+      }
     };
-    if (!attempt()) {
+    attempt();
+    if (!fired) {
       var n = 0;
-      var t = setInterval(function () { if (attempt() || ++n > 30) clearInterval(t); }, 300);
+      var t = setInterval(function () {
+        attempt();
+        if (fired || ++n > 40) clearInterval(t);
+      }, 100); /* 100 ms = fast feedback as soon as GT loads */
     }
   }
 
   /* ── CSS ────────────────────────────────────────────────────────────────── */
   function injectCSS() {
     var css = [
-      /* hide Google Translate chrome */
+      /* hide GT chrome */
       '.goog-te-banner-frame,.goog-te-gadget{display:none!important}',
       'body{top:0!important}',
       '.skiptranslate{display:none!important}',
 
-      /* force LTR on widget (safe for Arabic / RTL pages) */
+      /* force LTR even on Arabic/RTL pages */
       '#sfl-lang-overlay,#sfl-lang-tab,#sfl-lang-panel{direction:ltr;}',
 
-      /* overlay */
+      /* ── overlay ─────────────────────────────────────────────── */
       '#sfl-lang-overlay{',
         'position:fixed;inset:0;z-index:9996;',
-        'background:rgba(0,4,16,.54);',
+        'background:rgba(0,4,16,.52);',
         'backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);',
         'opacity:0;pointer-events:none;',
-        'transition:opacity .32s ease;',
+        'transition:opacity .22s ease;',          /* was .32s */
       '}',
       '#sfl-lang-overlay.sfl-lo-on{opacity:1;pointer-events:all;}',
 
       /* ── tab ─────────────────────────────────────────────────── */
       '#sfl-lang-tab{',
-        'position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:9999;',
+        'position:fixed;left:0;top:50%;',
+        'transform:translateY(-50%) translateZ(0);', /* GPU layer */
+        'z-index:9999;',
         'width:40px;padding:14px 0 11px;',
         'display:flex;flex-direction:column;align-items:center;gap:6px;',
         'border-radius:0 15px 15px 0;',
@@ -93,7 +132,8 @@
         'border:1px solid rgba(59,130,246,.3);border-left:2.5px solid #2563eb;',
         'box-shadow:5px 0 30px rgba(37,99,235,.26),0 1px 0 rgba(99,165,250,.1) inset;',
         'cursor:pointer;outline:none;user-select:none;-webkit-user-select:none;',
-        'transition:width .24s cubic-bezier(.4,0,.2,1),border-color .24s,box-shadow .24s,opacity .22s ease;',
+        'will-change:width,opacity;',
+        'transition:width .2s cubic-bezier(.4,0,.2,1),border-color .2s,box-shadow .2s,opacity .18s ease;',
       '}',
       '#sfl-lang-tab:hover{',
         'width:45px;',
@@ -102,16 +142,14 @@
       '}',
       'body.sfl-open #sfl-lang-tab{opacity:0;pointer-events:none;}',
 
-      '.sfl-tab-globe{width:17px;height:17px;color:#93c5fd;transition:color .2s;}',
+      '.sfl-tab-globe{width:17px;height:17px;color:#93c5fd;transition:color .18s;}',
       '#sfl-lang-tab:hover .sfl-tab-globe{color:#bfdbfe;}',
-
       '.sfl-tab-code{',
         'font-size:8px;font-weight:800;letter-spacing:.12em;color:#7dd3fc;',
         'font-family:"JetBrains Mono","Courier New",monospace;',
-        'text-transform:uppercase;line-height:1;transition:color .2s;',
+        'text-transform:uppercase;line-height:1;transition:color .18s;',
       '}',
       '#sfl-lang-tab:hover .sfl-tab-code{color:#bae6fd;}',
-
       '.sfl-tab-dot{',
         'width:4px;height:4px;border-radius:50%;background:#2563eb;',
         'box-shadow:0 0 8px rgba(59,130,246,.9);',
@@ -127,30 +165,31 @@
         'position:fixed;left:0;top:0;bottom:0;z-index:9997;',
         'width:min(270px,88vw);',
         'display:flex;flex-direction:column;',
-        'background:linear-gradient(155deg,rgba(4,11,30,.995) 0%,rgba(1,6,18,1) 100%);',
+        'background:linear-gradient(155deg,rgba(4,11,30,.99) 0%,rgba(1,6,18,1) 100%);',
         'backdrop-filter:blur(32px) saturate(210%);-webkit-backdrop-filter:blur(32px) saturate(210%);',
         'border-right:1px solid rgba(59,130,246,.15);',
         'box-shadow:12px 0 58px rgba(0,0,12,.82),1px 0 0 rgba(59,130,246,.1) inset;',
-        'transform:translateX(-100%);',
-        'transition:transform .38s cubic-bezier(.4,0,.2,1);',
+        'transform:translate3d(-100%,0,0);', /* GPU composited */
+        'will-change:transform;',
+        'transition:transform .28s cubic-bezier(.4,0,.2,1);', /* was .38s */
         'overflow:hidden;',
       '}',
-      '#sfl-lang-panel.sfl-p-on{transform:translateX(0);}',
+      '#sfl-lang-panel.sfl-p-on{transform:translate3d(0,0,0);}',
 
-      /* decorative right-edge glow line */
+      /* right-edge glow line */
       '#sfl-lang-panel::after{',
         'content:"";position:absolute;top:0;right:0;bottom:0;width:1px;pointer-events:none;',
         'background:linear-gradient(180deg,transparent 0%,rgba(59,130,246,.42) 35%,rgba(96,165,250,.62) 50%,rgba(59,130,246,.42) 65%,transparent 100%);',
       '}',
 
       /* header */
-      '.sfl-ph{padding:22px 18px 14px;border-bottom:1px solid rgba(59,130,246,.09);flex-shrink:0;}',
-      '.sfl-ph-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}',
+      '.sfl-ph{padding:20px 18px 13px;border-bottom:1px solid rgba(59,130,246,.09);flex-shrink:0;}',
+      '.sfl-ph-row{display:flex;align-items:center;gap:10px;margin-bottom:11px;}',
       '.sfl-ph-icon{',
-        'width:30px;height:30px;border-radius:8px;flex-shrink:0;',
+        'width:28px;height:28px;border-radius:7px;flex-shrink:0;',
         'background:linear-gradient(135deg,#1d4ed8,#1e3a8a);',
         'display:flex;align-items:center;justify-content:center;',
-        'box-shadow:0 0 16px rgba(37,99,235,.5);',
+        'box-shadow:0 0 14px rgba(37,99,235,.5);',
       '}',
       '.sfl-ph-brand{',
         'font-size:10px;font-weight:800;letter-spacing:.15em;color:#d6e6ff;',
@@ -161,7 +200,7 @@
         'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);',
         'display:flex;align-items:center;justify-content:center;',
         'cursor:pointer;color:#3d4e60;',
-        'transition:background .18s,border-color .18s,color .18s;',
+        'transition:background .15s,border-color .15s,color .15s;',
       '}',
       '.sfl-ph-close:hover{background:rgba(239,68,68,.13);border-color:rgba(239,68,68,.3);color:#f87171;}',
       '.sfl-ph-sub{',
@@ -171,20 +210,23 @@
 
       /* list */
       '.sfl-pl{',
-        'flex:1;overflow-y:auto;padding:5px 0;',
+        'flex:1;overflow-y:auto;padding:4px 0;',
         'scrollbar-width:thin;scrollbar-color:rgba(59,130,246,.16) transparent;',
+        '-webkit-overflow-scrolling:touch;', /* smooth iOS scroll */
       '}',
       '.sfl-pl::-webkit-scrollbar{width:3px;}',
       '.sfl-pl::-webkit-scrollbar-track{background:transparent;}',
       '.sfl-pl::-webkit-scrollbar-thumb{background:rgba(59,130,246,.2);border-radius:3px;}',
 
-      /* lang row button */
+      /* lang row */
       '.sfl-lb{',
-        'width:100%;padding:10px 18px;',
+        'width:100%;padding:9px 18px;',
         'display:flex;align-items:center;gap:12px;',
-        'background:transparent;border:none;border-top:1px solid rgba(59,130,246,.055);',
+        'background:transparent;border:none;border-top:1px solid rgba(59,130,246,.05);',
         'cursor:pointer;text-align:left;',
-        'position:relative;transition:background .17s ease;',
+        'position:relative;',
+        'will-change:background;',
+        'transition:background .12s ease;', /* was .17s */
       '}',
       '.sfl-lb:first-child{border-top:none;}',
       '.sfl-lb::before{',
@@ -192,44 +234,45 @@
         'width:2.5px;border-radius:0 3px 3px 0;',
         'background:linear-gradient(180deg,#60a5fa,#1d4ed8);',
         'transform:scaleY(0);transform-origin:center;',
-        'transition:transform .2s cubic-bezier(.4,0,.2,1);',
+        'will-change:transform;',
+        'transition:transform .14s cubic-bezier(.4,0,.2,1);', /* was .2s */
       '}',
       '.sfl-lb:hover{background:rgba(59,130,246,.055);}',
       '.sfl-lb:hover::before{transform:scaleY(1);}',
       '.sfl-lb.sfl-on{background:rgba(37,99,235,.11);}',
       '.sfl-lb.sfl-on::before{transform:scaleY(1);background:linear-gradient(180deg,#93c5fd,#3b82f6);}',
 
-      '.sfl-lb-f{font-size:19px;line-height:1;flex-shrink:0;}',
+      '.sfl-lb-f{font-size:18px;line-height:1;flex-shrink:0;}',
       '.sfl-lb-t{flex:1;min-width:0;}',
       '.sfl-lb-n{',
-        'display:block;font-size:12px;font-weight:600;color:#b8cde8;',
-        'font-family:"DM Sans",system-ui,sans-serif;line-height:1.3;transition:color .17s;',
+        'display:block;font-size:11.5px;font-weight:600;color:#b8cde8;',
+        'font-family:"DM Sans",system-ui,sans-serif;line-height:1.25;transition:color .12s;',
       '}',
       '.sfl-lb-s{',
-        'display:block;font-size:10px;color:#2e4255;',
-        'font-family:"DM Sans",system-ui,sans-serif;line-height:1.3;transition:color .17s;',
+        'display:block;font-size:9.5px;color:#2e4255;',
+        'font-family:"DM Sans",system-ui,sans-serif;line-height:1.3;transition:color .12s;',
       '}',
       '.sfl-lb:hover .sfl-lb-n,.sfl-lb.sfl-on .sfl-lb-n{color:#ddeeff;}',
       '.sfl-lb:hover .sfl-lb-s{color:#5a7a94;}',
       '.sfl-lb.sfl-on .sfl-lb-s{color:#60a5fa;}',
 
-      /* radio indicator */
+      /* radio */
       '.sfl-lb-r{',
         'width:14px;height:14px;border-radius:50%;flex-shrink:0;',
         'border:1.5px solid rgba(59,130,246,.25);',
         'display:flex;align-items:center;justify-content:center;',
-        'transition:all .18s;',
+        'transition:all .15s;',
       '}',
       '.sfl-lb.sfl-on .sfl-lb-r{background:#2563eb;border-color:#2563eb;}',
       '.sfl-lb-rd{',
         'width:5px;height:5px;border-radius:50%;background:#fff;',
-        'opacity:0;transform:scale(0);transition:all .2s cubic-bezier(.4,0,.2,1);',
+        'opacity:0;transform:scale(0);transition:all .15s cubic-bezier(.4,0,.2,1);',
       '}',
       '.sfl-lb.sfl-on .sfl-lb-rd{opacity:1;transform:scale(1);}',
 
       /* footer */
       '.sfl-pf{',
-        'padding:10px 18px;border-top:1px solid rgba(59,130,246,.07);',
+        'padding:9px 18px;border-top:1px solid rgba(59,130,246,.07);',
         'display:flex;align-items:center;gap:8px;flex-shrink:0;',
       '}',
       '.sfl-pf-l{flex:1;height:1px;background:rgba(59,130,246,.07);}',
@@ -246,13 +289,16 @@
 
   /* ── SVG helpers ────────────────────────────────────────────────────────── */
   function globeSVG(size, stroke) {
-    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>' +
+      '<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>' +
+      '</svg>';
   }
   function closeSVG() {
     return '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   }
 
-  /* ── Inject HTML ────────────────────────────────────────────────────────── */
+  /* ── HTML ───────────────────────────────────────────────────────────────── */
   function injectHTML() {
     /* overlay */
     var ov = document.createElement('div');
@@ -290,9 +336,9 @@
     panel.innerHTML =
       '<div class="sfl-ph">' +
         '<div class="sfl-ph-row">' +
-          '<div class="sfl-ph-icon">' + globeSVG(16, '#60a5fa') + '</div>' +
+          '<div class="sfl-ph-icon">' + globeSVG(15, '#60a5fa') + '</div>' +
           '<span class="sfl-ph-brand">Swift Freight</span>' +
-          '<button class="sfl-ph-close" aria-label="Close language panel">' + closeSVG() + '</button>' +
+          '<button class="sfl-ph-close" aria-label="Close">' + closeSVG() + '</button>' +
         '</div>' +
         '<div class="sfl-ph-sub">Select Language</div>' +
       '</div>' +
@@ -322,38 +368,37 @@
   }
   function panelToggle() { isOpen ? panelClose() : panelOpen(); }
 
-  /* ── Language selection ─────────────────────────────────────────────────── */
+  /* ── Language pick ──────────────────────────────────────────────────────── */
   function onPick(e) {
     var btn = e.target.closest('.sfl-lb');
     if (!btn) return;
     var code = btn.dataset.code;
     var lang = LANGS.find(function (l) { return l.code === code; }) || LANGS[0];
 
+    /* update UI immediately — no delay */
     document.querySelectorAll('.sfl-lb').forEach(function (b) {
       b.classList.remove('sfl-on');
       b.setAttribute('aria-pressed', 'false');
     });
     btn.classList.add('sfl-on');
     btn.setAttribute('aria-pressed', 'true');
-
     document.getElementById('sfl-tc').textContent = code.split('-')[0].toUpperCase();
     activeLang = lang;
 
+    /* close panel immediately */
+    panelClose();
+
+    /* translate after panel is already closing */
     if (code === 'en') {
-      /* clear GT cookie and reload to restore original text */
-      var host = location.hostname;
-      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + host + ';';
-      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + host + ';';
-      setTimeout(function () { location.reload(); }, 280);
+      clearGTCookie();
+      setTimeout(function () { location.reload(); }, 120);
     } else {
+      setGTCookie(code);
       execTranslate(code);
     }
-
-    setTimeout(panelClose, 320);
   }
 
-  /* ── Boot ───────────────────────────────────────────────────────────────── */
+  /* ── Init ───────────────────────────────────────────────────────────────── */
   function init() {
     activeLang = readCookieLang();
     injectCSS();
