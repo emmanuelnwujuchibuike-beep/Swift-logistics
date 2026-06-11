@@ -1444,6 +1444,11 @@
     .t-map-fallback i{font-size:2rem;color:var(--t-accent2);opacity:.7;}
     .t-map-fallback p{font:500 .82rem/1.6 'DM Sans';color:var(--t-muted);max-width:280px;}
     /* ── Map marker base — all markers are circle + icon, anchor:center ── */
+    /* IMPORTANT: never put a CSS `transform` or `transition:transform` on this
+       element. Mapbox writes an inline `transform: translate(x,y)` on it every
+       render frame to keep it pinned to its coordinate — a CSS transform/
+       transition would override or lag that, making markers drift while zooming.
+       Any hover/scale effect goes on the inner <i> icon instead. */
     .t-map-marker{
       position:relative;display:flex;align-items:center;justify-content:center;
       color:#fff;cursor:pointer;border-radius:50%;border:2px solid rgba(255,255,255,.9);
@@ -1451,9 +1456,10 @@
       width:22px;height:22px;font-size:9px;
       background:linear-gradient(145deg,#1e40af,#3b82f6);
       box-shadow:0 0 0 4px rgba(59,130,246,.22),0 3px 12px rgba(0,0,0,.4),0 0 14px rgba(59,130,246,.7);
-      transition:transform .15s,box-shadow .15s;
+      transition:box-shadow .15s;
     }
-    .t-map-marker:hover{transform:scale(1.18);}
+    .t-map-marker i{transition:transform .15s;}
+    .t-map-marker:hover i{transform:scale(1.18);}
 
     /* Pickup / origin — green, large */
     .t-map-marker.origin{
