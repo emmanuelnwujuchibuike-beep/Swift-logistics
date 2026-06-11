@@ -1176,8 +1176,9 @@
     [data-theme="light"] .t-ring-dot.pending { background:rgba(5,16,42,.1); border-color:rgba(5,16,42,.18); }
     [data-theme="light"] .t-step-content.upcoming { border-color:rgba(5,16,42,.04) !important; }
 
-    /* ─── Admin padlock (press-hold 3s) — intentionally invisible ─── */
-    .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; opacity:0; }
+    /* ─── Admin padlock — invisible until 1s hold reveals it ─── */
+    .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; opacity:0; transition:opacity .4s ease; }
+    .admin-padlock-wrap.pad-revealed { opacity:1; }
     .admin-padlock-btn { background:none; border:none; cursor:pointer; padding:0; outline:none; -webkit-tap-highlight-color:transparent; position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center; user-select:none; }
     .admin-padlock-ico { font-size:13px; color:rgba(232,240,254,.24); transition:color .25s, transform .25s; position:relative; z-index:1; pointer-events:none; }
     .admin-padlock-btn:hover .admin-padlock-ico { color:var(--t-accent2); transform:scale(1.12); }
@@ -1936,9 +1937,12 @@
     var ring = document.getElementById('padlockRing');
     if (!btn || !ico || !ring) return;
 
-    var HOLD   = 3000;          // hold duration ms
-    var CIRC   = 2 * Math.PI * 17; // circumference (r=17) ≈ 106.8
+    var wrap   = btn.parentElement;           // .admin-padlock-wrap
+    var HOLD   = 3000;                        // full hold to unlock
+    var REVEAL = 1000;                        // hold before becoming visible
+    var CIRC   = 2 * Math.PI * 17;           // circumference (r=17) ≈ 106.8
     var timer  = null;
+    var revealTimer = null;
     var rafId  = null;
     var t0     = null;
 
@@ -1956,6 +1960,9 @@
       if (timer) return;
       t0 = Date.now();
       rafId = requestAnimationFrame(tick);
+      revealTimer = setTimeout(function() {
+        if (wrap) wrap.classList.add('pad-revealed');
+      }, REVEAL);
       timer = setTimeout(function() {
         timer = null;
         cancelAnimationFrame(rafId);
@@ -1965,9 +1972,12 @@
 
     function cancelHold() {
       if (!timer && t0 === null) return;
-      clearTimeout(timer);      timer = null;
+      clearTimeout(timer);       timer = null;
+      clearTimeout(revealTimer); revealTimer = null;
       cancelAnimationFrame(rafId); rafId = null;
       t0 = null;
+      /* fade wrap back out */
+      if (wrap) wrap.classList.remove('pad-revealed');
       /* snap ring back smoothly */
       ring.style.transition = 'stroke-dashoffset .35s ease, stroke .4s';
       ring.style.strokeDashoffset = CIRC;
