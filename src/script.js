@@ -1102,11 +1102,13 @@ async function initRouteMap(waypoints) {
             return c;
         };
 
-        // Anchor the region on the origin first, then bias every other
-        // location's search toward it — keeps same-named places in-country.
+        // Geocode every waypoint WITHOUT proximity bias so globally prominent
+        // city names (London, Paris, etc.) always resolve to the correct major
+        // city. Proximity biasing toward the origin was causing "London" to
+        // geocode to a small continental-European locality instead of London UK.
         const anchor = await geocode(waypoints[0].q, null);
         const coords = await Promise.all(waypoints.map((w, i) =>
-            i === 0 ? Promise.resolve(anchor) : geocode(w.q, anchor)));
+            i === 0 ? Promise.resolve(anchor) : geocode(w.q, null)));
         let pts = waypoints.map((w, i) => Object.assign({}, w, { coord: coords[i] })).filter(w => w.coord);
         // Drop consecutive duplicate coordinates (e.g. origin === first checkpoint)
         pts = pts.filter((w, i) => i === 0 ||
@@ -1128,8 +1130,12 @@ async function initRouteMap(waypoints) {
             }
             return out;
         };
-        const traveled  = buildPath(pts.slice(0, curIdx + 1));
-        const upcoming  = buildPath(pts.slice(curIdx));
+        // When origin is done (picked up) but no further checkpoint is complete
+        // yet (curIdx=0), still draw origin→step2 as green to show the package
+        // has departed. Otherwise use the last-done index as the split point.
+        const traveledEnd = (curIdx === 0 && pts[0].done && pts.length > 1) ? 2 : curIdx + 1;
+        const traveled    = buildPath(pts.slice(0, traveledEnd));
+        const upcoming    = buildPath(pts.slice(traveledEnd - 1));
         const allCoords = pts.map(p => p.coord);
         const center    = allCoords[Math.floor(allCoords.length / 2)];
         const isLight   = document.documentElement.getAttribute('data-theme') === 'light';
