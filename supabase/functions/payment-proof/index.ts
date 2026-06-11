@@ -61,19 +61,20 @@ Deno.serve(async (req: Request) => {
     const ts            = Date.now();
 
     // ── Upload images to Supabase Storage ──────────────────────
-    const storagePaths: string[] = [];
-    const signedUrls:   string[] = [];
+    const storagePaths:  string[]          = [];
+    // Parallel array: one entry per image (null if upload failed)
+    const imageSignedUrls: (string | null)[] = [];
 
     for (const img of images) {
+      let signedUrl: string | null = null;
       try {
         const bytes    = Uint8Array.from(atob(img.content), c => c.charCodeAt(0));
-        const ext      = img.mimeType.split('/')[1]?.replace('jpeg','jpg') ?? 'jpg';
         const safeName = img.filename.replace(/[^a-z0-9._-]/gi, '_');
         const path     = `${body.trackingId}/${ts}-${safeName}`;
 
         const { error: upErr } = await supabase.storage
           .from(BUCKET)
-          .upload(path, bytes, { contentType: img.mimeType, upsert: false });
+          .upload(path, bytes, { contentType: img.mimeType, upsert: true });
 
         if (!upErr) {
           storagePaths.push(path);
@@ -81,9 +82,10 @@ Deno.serve(async (req: Request) => {
           const { data: su } = await supabase.storage
             .from(BUCKET)
             .createSignedUrl(path, 60 * 60 * 24 * 14);
-          if (su?.signedUrl) signedUrls.push(su.signedUrl);
+          signedUrl = su?.signedUrl ?? null;
         }
       } catch (_) { /* skip failed uploads silently */ }
+      imageSignedUrls.push(signedUrl);
     }
 
     // ── Log submission to payment_submissions table ────────────
@@ -96,6 +98,8 @@ Deno.serve(async (req: Request) => {
 
     // ── Build email parts ──────────────────────────────────────
     const apiKey = Deno.env.get('RESEND_API_KEY');
+    // FROM_EMAIL must be a Resend-verified sender, e.g. "Swift Freight <noreply@yourdomain.com>"
+    // or leave unset to use the Resend shared test address (can only deliver to your own account email).
     const from   = Deno.env.get('FROM_EMAIL') ?? 'Swift Freight Logistics <onboarding@resend.dev>';
     if (!apiKey) return err('RESEND_API_KEY not set', 500);
 
@@ -105,12 +109,12 @@ Deno.serve(async (req: Request) => {
       content:  img.content,
     }));
 
-    // Inline image HTML — use signed URLs when available, fall back to base64
+    // Inline image HTML — use signed URLs when available, fall back to base64 data URL
     const imgHtml = images.length
       ? images.map((img, i) => {
-          const signedSrc = signedUrls[i];
+          const signedSrc = imageSignedUrls[i];   // null if upload failed
           const b64Src    = `data:${img.mimeType};base64,${img.content}`;
-          const src       = signedSrc || b64Src;
+          const src       = signedSrc || b64Src;  // prefer signed URL to keep email small
           return `
           <div style="margin:14px 0;">
             <p style="margin:0 0 7px;font-size:11px;font-weight:700;color:#94a3b8;
@@ -122,7 +126,7 @@ Deno.serve(async (req: Request) => {
             </a>
             ${signedSrc ? `<a href="${esc(signedSrc)}" target="_blank"
                style="display:inline-block;margin-top:6px;font-size:11px;color:#60a5fa;text-decoration:none;">
-               &#128279; View full resolution &rarr;</a>` : ''}
+               &#128279; View full resolution (14 days) &rarr;</a>` : ''}
           </div>`;
         }).join('')
       : `<p style="color:#64748b;font-style:italic;font-size:13px;">No images uploaded.</p>`;
