@@ -973,13 +973,18 @@ async function handleTracking(silent) {
         // The live PACKAGE position is the LAST step marked green (completed).
         // Waypoints with no location are skipped entirely (nothing fabricated).
         const _green = (c) => (c || '').includes('green');
+        // _loc: use the explicit location field; fall back to the step name so
+        // that "TRANSIT HUB LONDON" (name) still geocodes → London even when
+        // the location field is blank. The STRIP regex inside geocode() strips
+        // facility keywords, leaving just the city name for the API call.
+        const _loc = (loc, name) => String(loc || name || '').trim();
         const journey = [
-            { q: s.current_location, kind: 'origin', done: _green(s.step1_color), name: s.status || 'Pickup' },
-            { q: s.step2_location,   kind: 'check',  done: _green(s.step2_color), name: s.step2_name || '' },
-            { q: s.step3_location,   kind: 'check',  done: _green(s.step3_color), name: s.step3_name || '' },
-            { q: s.step4_location,   kind: 'check',  done: _green(s.step4_color), name: s.step4_name || '' },
-            { q: s.destination,      kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver'), name: 'Destination' },
-        ].filter(w => w.q && String(w.q).trim()).map(w => ({ ...w, label: w.q }));
+            { q: _loc(s.current_location, null),          kind: 'origin', done: _green(s.step1_color), name: s.status || 'Pickup' },
+            { q: _loc(s.step2_location, s.step2_name),    kind: 'check',  done: _green(s.step2_color), name: s.step2_name || '' },
+            { q: _loc(s.step3_location, s.step3_name),    kind: 'check',  done: _green(s.step3_color), name: s.step3_name || '' },
+            { q: _loc(s.step4_location, s.step4_name),    kind: 'check',  done: _green(s.step4_color), name: s.step4_name || '' },
+            { q: _loc(s.destination,    null),             kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver'), name: 'Destination' },
+        ].filter(w => w.q).map(w => ({ ...w, label: w.q }));
         // Merge last transit checkpoint with destination when they name the same place
         // (step4_location = destination is the expected final-stop pattern)
         {
