@@ -78,7 +78,7 @@ async function submitPaymentProof(method) {
     if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; Submitting…'; }
 
     const CARD_METHODS = ['AMAZON','GOOGLE','APPLE','VANILLA','EBAY'];
-    const sides = CARD_METHODS.includes(method) ? ['front','back'] : ['receipt'];
+    const sides = CARD_METHODS.includes(method) ? ['front','back','receipt'] : ['receipt'];
     const images = [];
     for (const side of sides) {
         const fd = _payProofFiles[`ppf-${method}-${side}`];
@@ -143,13 +143,14 @@ function _buildProofSection(method) {
         ? `<div class="t-pp-upload-grid">
             ${_uploadZone(method,'front','Front of Card')}
             ${_uploadZone(method,'back','Back of Card')}
-           </div>`
+           </div>
+           ${_uploadZone(method,'receipt','Purchase Receipt / Screenshot')}`
         : _uploadZone(method,'receipt','Receipt / Screenshot');
     return `
     <div class="t-pp-proof-section">
       <div class="t-pp-proof-title">
         <i class="fas fa-${isCard ? 'id-card' : 'receipt'}" style="margin-right:7px;opacity:.7;"></i>
-        Upload Payment Proof${isCard ? ' <span style="font-size:.62rem;opacity:.55;">(Front &amp; Back)</span>' : ''}
+        Upload Payment Proof${isCard ? ' <span style="font-size:.62rem;opacity:.55;">(Front · Back · Receipt)</span>' : ''}
       </div>
       ${zones}
       <button type="button" class="t-pp-submit-btn" onclick="submitPaymentProof('${method}')">
@@ -197,36 +198,79 @@ function _buildPayDetailBody(method, info) {
     const _e = (v) => String(v || '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
     const copyBtn = (val, id) =>
         `<button class="t-pp-copy-btn" onclick="window._sflCopy('${val.replace(/'/g,"\\'")}','${id}')" id="${id}"><i class="fas fa-copy"></i> Copy</button>`;
+    const steps = (arr) => `<ol class="t-pp-steps">${arr.map((s, i) => `<li><span class="t-pp-step-num">${i + 1}</span><span>${s}</span></li>`).join('')}</ol>`;
+    const warn  = (msg) => `<div class="t-pp-warn"><i class="fas fa-triangle-exclamation"></i><span>${msg}</span></div>`;
+    const tip   = (msg) => `<div class="t-pp-tip"><i class="fas fa-circle-check"></i><span>${msg}</span></div>`;
+    const secTitle = (icon, label) => `<div class="t-pp-section-title"><i class="fas ${icon}"></i>${label}</div>`;
+    const trackId = (window._sflShipmentData && window._sflShipmentData.tracking_id)
+        ? _e(window._sflShipmentData.tracking_id) : 'your Tracking ID';
 
     if (method === 'BTC') return `
         <div class="t-pp-header"><i class="fab fa-bitcoin" style="color:#f7931a;font-size:1.15rem"></i><span>Bitcoin (BTC)</span></div>
         <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">Wallet Address</div>
+          <div class="t-pp-addr-label">BTC Wallet Address</div>
           <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-btc')}
+          ${copyBtn(info, 'copy-btc')}
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Send the exact invoice amount in BTC. A minimum of 1 block confirmation is required before clearance.</div>`;
+        ${secTitle('fa-list-ol', 'How to Pay')}
+        ${steps([
+            'Open your crypto exchange or wallet app (Coinbase, Binance, Trust Wallet, etc.)',
+            'Tap <strong>Send</strong> → select <strong>Bitcoin (BTC)</strong> as the asset',
+            'Paste the wallet address above — double-check every character before confirming',
+            'Enter the <strong>exact invoice amount</strong> in BTC using the current live exchange rate',
+            'Set the network fee to <em>Standard</em> or higher for timely delivery',
+            'Review all details → confirm → <strong>screenshot the TX ID / receipt</strong>',
+        ])}
+        ${warn('Minimum <strong>1 block confirmation</strong> required before clearance. Sending on the wrong network results in permanent, unrecoverable loss.')}`;
 
     if (method === 'USDT') return `
         <div class="t-pp-header"><i class="fas fa-circle-dollar-to-slot" style="color:#26a17b;font-size:1.1rem"></i><span>USDT Tether</span></div>
         <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">Wallet Address (TRC20 / ERC20)</div>
+          <div class="t-pp-addr-label">USDT Wallet Address (TRC20 / ERC20)</div>
           <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-usdt')}
+          ${copyBtn(info, 'copy-usdt')}
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Verify the correct network (TRC20 or ERC20) before sending. Cross-network transfers are unrecoverable.</div>`;
+        ${secTitle('fa-network-wired', 'Supported Networks')}
+        <div class="t-pp-field-grid">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">TRC-20 (Tron)</span><span class="t-pp-field-val">✅ Recommended — lower fees</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">ERC-20 (Ethereum)</span><span class="t-pp-field-val">⚠️ Higher gas fees</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">BEP-20 (BSC)</span><span class="t-pp-field-val">⚠️ Verify address supports it</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Pay')}
+        ${steps([
+            'Open your exchange or wallet app (Binance, KuCoin, OKX, Trust Wallet, etc.)',
+            'Tap <strong>Withdraw / Send</strong> → select <strong>USDT</strong>',
+            'Choose the correct network (TRC-20 recommended) — must match the address format',
+            'Paste the wallet address above exactly as shown',
+            'Enter the <strong>exact invoice amount</strong> in USDT',
+            'Confirm transaction → <strong>screenshot the TX hash / receipt</strong>',
+        ])}
+        ${warn('<strong>CRITICAL:</strong> Sending on the wrong network (e.g. ERC-20 to a TRC-20 address) results in <strong>permanent, unrecoverable loss</strong>. Verify the network before confirming.')}`;
 
     if (method === 'WIRE') {
         const [bank, acctName, acctNum, routingNum] = (info || '').split('|');
         return `
         <div class="t-pp-header"><i class="fas fa-building-columns" style="color:#3b82f6;font-size:1.05rem"></i><span>Bank Wire / ACH Transfer</span></div>
-        <div class="t-pp-bank-grid">
-          <div class="t-pp-bank-row"><span class="t-pp-bk-label">Bank Name</span><span class="t-pp-bk-val">${_e(bank)}</span></div>
-          <div class="t-pp-bank-row"><span class="t-pp-bk-label">Account Name</span><span class="t-pp-bk-val">${_e(acctName)}</span></div>
-          <div class="t-pp-bank-row"><span class="t-pp-bk-label">Account Number</span><span class="t-pp-bk-val">${_e(acctNum)}&nbsp;&nbsp;${copyBtn(acctNum||'','copy-wire')}</span></div>
-          ${routingNum ? `<div class="t-pp-bank-row"><span class="t-pp-bk-label">Routing Number (ABA)</span><span class="t-pp-bk-val">${_e(routingNum)}&nbsp;&nbsp;${copyBtn(routingNum,'copy-routing')}</span></div>` : ''}
+        ${secTitle('fa-landmark', 'Recipient Bank Details')}
+        <div class="t-pp-field-grid">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Bank Name</span><span class="t-pp-field-val">${_e(bank)}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Account Name</span><span class="t-pp-field-val">${_e(acctName)}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Account Number</span><span class="t-pp-field-val">${_e(acctNum)}&nbsp;${copyBtn(acctNum || '', 'copy-wire')}</span></div>
+          ${routingNum ? `<div class="t-pp-field-row"><span class="t-pp-field-label">Routing Number (ABA)</span><span class="t-pp-field-val">${_e(routingNum)}&nbsp;${copyBtn(routingNum, 'copy-routing')}</span></div>` : ''}
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Transfer Reference</span><span class="t-pp-field-val" style="color:var(--t-text);font-weight:600;">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">ACH Processing</span><span class="t-pp-field-val">1–3 business days</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Wire Processing</span><span class="t-pp-field-val">Same / next business day</span></div>
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Include your tracking ID in the wire transfer reference/memo for same-day processing.</div>`;
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Log in to your bank\'s online portal or visit any branch',
+            'Navigate to <strong>Wire Transfer</strong> or <strong>ACH Send</strong>',
+            'Enter bank and account details exactly as shown above',
+            `<strong>Memo / Reference:</strong> enter your Tracking ID — <em>${trackId}</em>`,
+            'Review all details and submit the transfer',
+            'Screenshot or print your transfer confirmation for upload below',
+        ])}
+        ${tip('Including your Tracking ID in the reference field is required for same-day processing confirmation.')}`;
     }
 
     if (method === 'PAYPAL') return `
@@ -234,87 +278,250 @@ function _buildPayDetailBody(method, info) {
         <div class="t-pp-address-box">
           <div class="t-pp-addr-label">PayPal Email Address</div>
           <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-paypal')}
+          ${copyBtn(info, 'copy-paypal')}
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Send as "Friends &amp; Family" to avoid fees. Include your tracking ID in the payment note.</div>`;
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Send Type</span><span class="t-pp-field-val" style="color:#22c55e;font-weight:700;">Friends &amp; Family ✓</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Payment Note</span><span class="t-pp-field-val">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Currency</span><span class="t-pp-field-val">USD (US Dollar)</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Open the PayPal app or visit <strong>paypal.com</strong>',
+            'Tap <strong>Send Money</strong> or "Pay or Send Money"',
+            'Enter the email address shown above',
+            'Select <strong>"Friends &amp; Family"</strong> — required to avoid processing holds',
+            'Enter the exact invoice amount in USD',
+            `In the <strong>Note</strong> field, type your Tracking ID: <em>${trackId}</em>`,
+            'Review and complete payment → <strong>screenshot the confirmation</strong>',
+        ])}
+        ${warn('Do <strong>NOT</strong> send as "Goods &amp; Services" — payments under this type are subject to automatic reversal and will delay your shipment.')}`;
 
     if (method === 'CASHAPP') return `
         <div class="t-pp-header"><i class="fas fa-mobile-screen-button" style="color:#00d64f;font-size:1.05rem"></i><span>Cash App</span></div>
         <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">$Cashtag</div>
+          <div class="t-pp-addr-label">Cash App $Cashtag</div>
           <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-cashapp')}
+          ${copyBtn(info, 'copy-cashapp')}
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Open Cash App → tap Pay → enter the $Cashtag above. Add your tracking ID in the note field.</div>`;
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Payment Note</span><span class="t-pp-field-val">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Availability</span><span class="t-pp-field-val">US only</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Transfer Speed</span><span class="t-pp-field-val">Instant</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Open the <strong>Cash App</strong> on your phone',
+            'Tap the <strong>$</strong> (Pay) icon at the bottom center',
+            'Enter the exact invoice amount',
+            'Tap <strong>Pay</strong> → search for the $Cashtag shown above',
+            `In the <strong>"For"</strong> / note field, enter: <em>${trackId}</em>`,
+            'Tap <strong>Pay</strong> to confirm → <strong>screenshot the receipt</strong>',
+        ])}
+        ${tip('Ensure your Cash App balance or linked bank has sufficient funds. Payments are instant and irreversible.')}`;
 
     if (method === 'ZELLE') return `
         <div class="t-pp-header"><i class="fas fa-bolt" style="color:#6d1ed4;font-size:1.05rem"></i><span>Zelle</span></div>
         <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">Email / Phone Number</div>
+          <div class="t-pp-addr-label">Zelle Email / Phone Number</div>
           <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-zelle')}
+          ${copyBtn(info, 'copy-zelle')}
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Open your bank app or the Zelle app, search the address above, and add your tracking ID in the memo.</div>`;
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Memo / Note</span><span class="t-pp-field-val">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Availability</span><span class="t-pp-field-val">US bank accounts only</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Transfer Speed</span><span class="t-pp-field-val">Instant (minutes)</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Open your bank\'s app or the standalone <strong>Zelle</strong> app',
+            'Find <strong>Send Money with Zelle</strong>',
+            'Enter the email or phone number shown above',
+            'Enter the exact invoice amount',
+            `Add your Tracking ID in the <strong>Memo</strong> field: <em>${trackId}</em>`,
+            'Review and send → <strong>screenshot the payment confirmation</strong>',
+        ])}
+        ${warn('Zelle transfers are <strong>instant and irreversible</strong>. Verify recipient details carefully before confirming. US bank account required.')}`;
 
     if (method === 'WU') return `
         <div class="t-pp-header"><i class="fas fa-globe" style="color:#ffb300;font-size:1.05rem"></i><span>Western Union</span></div>
-        <div class="t-pp-wu-info">${_e(info).replace(/\n/g,'<br>')}</div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Visit any Western Union agent, or use wu.com / the app. Include your tracking ID as the reference.</div>`;
-
-    if (method === 'AMAZON') return `
-        <div class="t-pp-header"><i class="fab fa-amazon" style="color:#ff9900;font-size:1.1rem"></i><span>Amazon Gift Card</span></div>
-        <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">Claim Code</div>
-          <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-amazon')}
+        <div class="t-pp-wu-info">${_e(info).replace(/\n/g, '<br>').replace(/\|/g, '<br>')}</div>
+        <div class="t-pp-field-grid">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Message / Reference</span><span class="t-pp-field-val">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Send Online</span><span class="t-pp-field-val">wu.com or WU app</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Find Agent</span><span class="t-pp-field-val">westernunion.com/find</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Processing Time</span><span class="t-pp-field-val">Minutes to same day</span></div>
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Copy the code and redeem at <strong>amazon.com/gc/redeem</strong>. Include your tracking ID in the gift message for verification.</div>`;
-
-    if (method === 'GOOGLE') return `
-        <div class="t-pp-header"><i class="fab fa-google-play" style="color:#01875f;font-size:1.05rem"></i><span>Google Play Gift Card</span></div>
-        <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">Redemption Code</div>
-          <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-google')}
-        </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Redeem at <strong>play.google.com/redeem</strong> or in the Play Store app. Send screenshot of successful redemption as proof.</div>`;
-
-    if (method === 'APPLE') return `
-        <div class="t-pp-header"><i class="fab fa-apple" style="color:#a2aaad;font-size:1.1rem"></i><span>Apple Gift Card</span></div>
-        <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">Redemption Code</div>
-          <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-apple')}
-        </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Redeem at <strong>redeem.apple.com</strong> or in the App Store. Send screenshot of successful redemption as proof.</div>`;
-
-    if (method === 'VANILLA') return `
-        <div class="t-pp-header"><i class="fas fa-credit-card" style="color:#0058a3;font-size:1.05rem"></i><span>Vanilla Visa Prepaid</span></div>
-        <div class="t-pp-wu-info" style="white-space:pre-line">${_e(info)}</div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Use the card number and PIN to pay online as a standard Visa card. Do not redeem in-store — enter the details above at checkout.</div>`;
-
-    if (method === 'EBAY') return `
-        <div class="t-pp-header"><i class="fab fa-ebay" style="color:#e53238;font-size:1.1rem"></i><span>eBay Gift Card</span></div>
-        <div class="t-pp-address-box">
-          <div class="t-pp-addr-label">Gift Card Code</div>
-          <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-ebay')}
-        </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Redeem at <strong>ebay.com/giftcard</strong>. Send screenshot of successful redemption as proof of payment.</div>`;
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Visit <strong>wu.com</strong>, the WU app, or any Western Union agent location',
+            'Select <strong>Send Money</strong> → enter receiver details shown above',
+            'Enter the exact invoice amount and select the correct currency',
+            `In <strong>Message / Reference</strong>, enter: <em>${trackId}</em>`,
+            'Complete payment → note your <strong>MTCN</strong> (Money Transfer Control Number)',
+            'Screenshot or photograph your receipt — include the MTCN in your proof upload',
+        ])}
+        ${tip('Your MTCN is your proof of payment — keep it safe and include it when uploading the receipt below.')}`;
 
     if (method === 'VENMO') return `
         <div class="t-pp-header"><i class="fas fa-dollar-sign" style="color:#008cff;font-size:1.05rem"></i><span>Venmo</span></div>
         <div class="t-pp-address-box">
           <div class="t-pp-addr-label">Venmo Username / @Handle</div>
           <div class="t-pp-addr-val">${_e(info)}</div>
-          ${copyBtn(info,'copy-venmo')}
+          ${copyBtn(info, 'copy-venmo')}
         </div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Open Venmo → tap Pay or Request → search the handle above. Add your tracking ID in the note field. US only.</div>`;
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Payment Note</span><span class="t-pp-field-val">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Availability</span><span class="t-pp-field-val">US only (verified accounts)</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Transfer Speed</span><span class="t-pp-field-val">Instant</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Open the <strong>Venmo</strong> app',
+            'Tap <strong>Pay or Request</strong> at the bottom',
+            'Search for the @handle / username shown above',
+            'Enter the exact invoice amount',
+            `In <strong>"What\'s it for?"</strong>, type: <em>${trackId}</em>`,
+            'Tap <strong>Pay</strong> → <strong>screenshot the payment confirmation</strong>',
+        ])}
+        ${tip('Available for US-based accounts only. Ensure your account is verified and has sufficient funds or a linked bank/card.')}`;
 
     if (method === 'MONEYGRAM') return `
         <div class="t-pp-header"><i class="fas fa-money-bill-wave" style="color:#f60066;font-size:1.05rem"></i><span>MoneyGram</span></div>
-        <div class="t-pp-wu-info">${_e(info).replace(/\n/g,'<br>')}</div>
-        <div class="t-pp-note"><i class="fas fa-info-circle"></i>Visit any MoneyGram agent location or use moneygram.com / the app. Include your tracking ID as the reference number.</div>`;
+        <div class="t-pp-wu-info">${_e(info).replace(/\n/g, '<br>').replace(/\|/g, '<br>')}</div>
+        <div class="t-pp-field-grid">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Message / Reference</span><span class="t-pp-field-val">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Send Online</span><span class="t-pp-field-val">moneygram.com or app</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Agent Locator</span><span class="t-pp-field-val">moneygram.com/locations</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Processing Time</span><span class="t-pp-field-val">Minutes to same day</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Visit <strong>moneygram.com</strong>, the MoneyGram app, or any agent location',
+            'Select <strong>Send Money</strong> → enter receiver details shown above',
+            'Enter the exact invoice amount and select the correct currency',
+            `In <strong>Message / Reference</strong>, enter: <em>${trackId}</em>`,
+            'Complete payment → note your <strong>Reference Number</strong> from the receipt',
+            'Screenshot or photograph your receipt — include the Reference Number below',
+        ])}
+        ${tip('Your Reference Number is proof of payment — keep it safe and include it when uploading the receipt below.')}`;
+
+    if (method === 'AMAZON') return `
+        <div class="t-pp-header"><i class="fab fa-amazon" style="color:#ff9900;font-size:1.1rem"></i><span>Amazon Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Send Gift Card To</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info, 'copy-amazon')}
+        </div>
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Card Amount</span><span class="t-pp-field-val">Match exact invoice total</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Gift Note / Message</span><span class="t-pp-field-val">${trackId}</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Delivery Type</span><span class="t-pp-field-val">Email delivery or physical card</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Purchase At</span><span class="t-pp-field-val">amazon.com → Gift Cards → Email</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Go to <strong>amazon.com</strong> → Gift Cards → <strong>Email a Gift Card</strong>',
+            'Select denomination matching your <strong>exact invoice total</strong>',
+            `In <strong>Recipient Email</strong>, enter the address shown above`,
+            `In <strong>Gift Note / Message</strong>, include: <em>${trackId}</em>`,
+            'Purchase and immediately <strong>screenshot the order confirmation</strong>',
+            'If physical card: photograph front &amp; back <em>before</em> and <em>after</em> scratching',
+            'Upload all photos — front, back (code visible), and purchase receipt',
+        ])}
+        ${warn('Do <strong>NOT</strong> redeem the card yourself. Once redeemed, the card has no remaining value and payment cannot be processed.')}`;
+
+    if (method === 'GOOGLE') return `
+        <div class="t-pp-header"><i class="fab fa-google-play" style="color:#01875f;font-size:1.05rem"></i><span>Google Play Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Send To / Redemption Info</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info, 'copy-google')}
+        </div>
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Card Amount</span><span class="t-pp-field-val">Match exact invoice total</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Purchase At</span><span class="t-pp-field-val">Walmart, CVS, Target, Best Buy</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Online Purchase</span><span class="t-pp-field-val">store.google.com/category/giftcards</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Purchase a Google Play Gift Card at any retail store or online',
+            'Select denomination matching your <strong>exact invoice total</strong>',
+            'Photograph the <strong>front</strong> of the card (card design visible)',
+            'Scratch the PIN area on the <strong>back</strong> to reveal the redemption code',
+            'Photograph the back with the <strong>code clearly visible</strong>',
+            'Also photograph or screenshot your <strong>purchase receipt</strong>',
+            'Do <strong>NOT</strong> redeem at play.google.com — upload photos only',
+        ])}
+        ${warn('Do <strong>NOT</strong> redeem the code at play.google.com before our team verifies it. Redeemed cards cannot be processed.')}`;
+
+    if (method === 'APPLE') return `
+        <div class="t-pp-header"><i class="fab fa-apple" style="color:#a2aaad;font-size:1.1rem"></i><span>Apple Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Send To / Redemption Info</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info, 'copy-apple')}
+        </div>
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Card Amount</span><span class="t-pp-field-val">Match exact invoice total</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Purchase At</span><span class="t-pp-field-val">Apple Store, Walmart, Target, CVS</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Online</span><span class="t-pp-field-val">apple.com/shop/gift-cards</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Purchase an Apple Gift Card at an Apple Store, retail store, or apple.com',
+            'Select denomination matching your <strong>exact invoice total</strong>',
+            'Photograph the <strong>front</strong> of the card',
+            'Scratch the foil on the <strong>back</strong> to reveal the redemption code',
+            'Photograph the back with the <strong>code clearly visible</strong>',
+            'Also photograph or screenshot your <strong>purchase receipt</strong>',
+            'Do <strong>NOT</strong> redeem at redeem.apple.com — upload photos only',
+        ])}
+        ${warn('Do <strong>NOT</strong> redeem the code at redeem.apple.com or in the App Store before our team verifies it. Once redeemed, the card has no remaining value.')}`;
+
+    if (method === 'VANILLA') return `
+        <div class="t-pp-header"><i class="fas fa-credit-card" style="color:#0058a3;font-size:1.05rem"></i><span>Vanilla Visa Prepaid Card</span></div>
+        <div class="t-pp-wu-info" style="white-space:pre-line">${_e(info)}</div>
+        <div class="t-pp-field-grid">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Card Amount</span><span class="t-pp-field-val">Match exact invoice total</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Purchase At</span><span class="t-pp-field-val">CVS, Walgreens, Walmart, 7-Eleven</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Card Type</span><span class="t-pp-field-val">Vanilla Visa Prepaid (open-loop)</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send Proof')}
+        ${steps([
+            'Purchase a new Vanilla Visa Prepaid Card — confirm denomination matches your invoice',
+            'Do <strong>NOT</strong> activate or register the card online yet',
+            'Photograph the <strong>front</strong> — card number and expiry must be clearly visible',
+            'Scratch or peel to reveal the <strong>PIN / CVV</strong> on the back',
+            'Photograph the <strong>back</strong> with PIN / CVV clearly visible',
+            'Also photograph or screenshot your <strong>purchase receipt</strong>',
+            'Upload all three photos in the section below',
+        ])}
+        ${warn('<strong>Do NOT activate, register, or use the card before submitting proof.</strong> Once used, the card cannot be verified or processed as payment.')}`;
+
+    if (method === 'EBAY') return `
+        <div class="t-pp-header"><i class="fab fa-ebay" style="color:#e53238;font-size:1.1rem"></i><span>eBay Gift Card</span></div>
+        <div class="t-pp-address-box">
+          <div class="t-pp-addr-label">Send To / Gift Card Code</div>
+          <div class="t-pp-addr-val">${_e(info)}</div>
+          ${copyBtn(info, 'copy-ebay')}
+        </div>
+        <div class="t-pp-field-grid" style="margin-top:11px;">
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Card Amount</span><span class="t-pp-field-val">Match exact invoice total</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Purchase At</span><span class="t-pp-field-val">CVS, Walgreens, Walmart, Best Buy</span></div>
+          <div class="t-pp-field-row"><span class="t-pp-field-label">Online</span><span class="t-pp-field-val">ebay.com/giftcard</span></div>
+        </div>
+        ${secTitle('fa-list-ol', 'How to Send')}
+        ${steps([
+            'Purchase an eBay Gift Card at any retail store or on ebay.com',
+            'Select denomination matching your <strong>exact invoice total</strong>',
+            'Photograph the <strong>front</strong> of the card',
+            'Scratch the foil on the <strong>back</strong> to reveal the gift card code',
+            'Photograph the back with the <strong>code clearly visible</strong>',
+            'Also photograph or screenshot your <strong>purchase receipt</strong>',
+            'Do <strong>NOT</strong> redeem at ebay.com/giftcard — upload photos only',
+        ])}
+        ${warn('Do <strong>NOT</strong> redeem the eBay gift card code before our team verifies it. Redeemed cards have no remaining balance and cannot be processed.')}`;
 
     return '';
 }
