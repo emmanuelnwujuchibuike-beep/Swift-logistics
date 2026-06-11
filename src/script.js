@@ -1411,15 +1411,11 @@ function initializeRevealAnimations() {
    Falls back to the hardcoded default if the DB is empty/unreachable.
    ════════════════════════════════════════════════════════════════ */
 (function loadLuxTicker() {
-    const track = document.querySelector('.lux-ticker-track');
-    if (!track) return;
-
     const ICONS = [
         'fa-signal','fa-plane-up','fa-ship','fa-box','fa-truck',
         'fa-globe','fa-shield-check','fa-stamp','fa-location-dot','fa-clock',
         'fa-box-open','fa-route'
     ];
-
     function buildItem(text, icon) {
         const esc = (s) => String(s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
         const sep = text.indexOf('·');
@@ -1430,17 +1426,25 @@ function initializeRevealAnimations() {
                (val ? `<span class="lti-dot">·</span><span class="lti-val">${esc(val)}</span>` : '') +
                `</span>`;
     }
-
-    fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
-        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
-    }).then(r => r.json()).then(rows => {
-        const text = rows && rows[0] && rows[0].value ? rows[0].value.trim() : '';
-        if (!text) return; // keep hardcoded default
-        const items = text.split(/[·•|\n]+/).map(s => s.trim()).filter(Boolean);
-        if (!items.length) return;
-        const doubled = [...items, ...items];
-        track.innerHTML = doubled.map((item, i) => buildItem(item, ICONS[i % ICONS.length])).join('');
-    }).catch(() => {}); // silently keep hardcoded if offline / no row yet
+    let _last = null;
+    function refresh() {
+        const track = document.querySelector('.lux-ticker-track');
+        if (!track) return;
+        fetch(SUPABASE_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+        }).then(r => r.json()).then(rows => {
+            const text = rows && rows[0] && rows[0].value ? rows[0].value.trim() : '';
+            if (text === _last) return;
+            _last = text;
+            if (!text) return;
+            const items = text.split(/[·•|\n]+/).map(s => s.trim()).filter(Boolean);
+            if (!items.length) return;
+            const doubled = [...items, ...items];
+            track.innerHTML = doubled.map((item, i) => buildItem(item, ICONS[i % ICONS.length])).join('');
+        }).catch(() => {});
+    }
+    refresh();
+    setInterval(refresh, 10000);
 })();
 
 

@@ -100,3 +100,57 @@
     });
   }
 })();
+
+/* ══════════════════════════════════════════════════════════════
+   LIVE TICKER — fetches admin-saved text from site_settings and
+   injects it into .lux-ticker-track on every page that loads
+   cinematic.js. Polls every 10 s so edits appear without refresh.
+══════════════════════════════════════════════════════════════ */
+(function () {
+  var SB_URL  = 'https://oltbgccsceipedoadgka.supabase.co';
+  var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sdGJnY2NzY2VpcGVkb2FkZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjY0NTQsImV4cCI6MjA5NjQwMjQ1NH0.Q5uoDXqlxBl-FxiISbp5bR3NLDsEL4iOMYVbVugwv94';
+
+  var ICONS = ['fa-signal','fa-plane-up','fa-ship','fa-box','fa-truck',
+               'fa-globe','fa-shield-check','fa-stamp','fa-location-dot',
+               'fa-clock','fa-box-open','fa-route'];
+
+  function esc(s) {
+    return String(s).replace(/[<>&"]/g, function(c) {
+      return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];
+    });
+  }
+
+  function buildItem(text, icon) {
+    var sep   = text.indexOf('·');
+    var label = sep >= 0 ? text.slice(0, sep).trim() : text.trim();
+    var val   = sep >= 0 ? text.slice(sep + 1).trim() : '';
+    return '<span class="lti"><i class="fas ' + icon + ' lti-icon"></i>' +
+           '<span class="lti-label">' + esc(label) + '</span>' +
+           (val ? '<span class="lti-dot">·</span><span class="lti-val">' + esc(val) + '</span>' : '') +
+           '</span>';
+  }
+
+  var _lastText = null;
+
+  function refreshTicker() {
+    var track = document.querySelector('.lux-ticker-track');
+    if (!track) return;
+    fetch(SB_URL + '/rest/v1/site_settings?key=eq.ticker&select=value', {
+      headers: { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON }
+    }).then(function(r) { return r.json(); }).then(function(rows) {
+      var text = (rows && rows[0] && rows[0].value) ? rows[0].value.trim() : '';
+      if (text === _lastText) return;
+      _lastText = text;
+      if (!text) return;
+      var items = text.split(/[·•|\n]+/).map(function(s){ return s.trim(); }).filter(Boolean);
+      if (!items.length) return;
+      var doubled = items.concat(items);
+      track.innerHTML = doubled.map(function(item, i) {
+        return buildItem(item, ICONS[i % ICONS.length]);
+      }).join('');
+    }).catch(function() {});
+  }
+
+  refreshTicker();
+  setInterval(refreshTicker, 10000);
+})();
