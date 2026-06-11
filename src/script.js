@@ -1008,7 +1008,7 @@ async function handleTracking(silent) {
                     { _lc.kind = 'dest'; _lc.name = 'Destination'; journey.splice(journey.indexOf(_dw), 1); }
             }
         }
-        initRouteMap(journey);
+        initRouteMap(journey, pct);
 
         // Live sync — reflect admin dashboard edits without a manual reload
         if (!silent) startShipmentPoll(trackingNo, JSON.stringify(s));
@@ -1063,7 +1063,7 @@ function startShipmentPoll(trackingNo, baselineJSON) {
    Geocodes free-text locations at runtime. Any failure falls back to
    the hero route line.  waypoints: [{ q, label, kind, done }]
    ════════════════════════════════════════════════════════════════ */
-async function initRouteMap(waypoints) {
+async function initRouteMap(waypoints, analysisPct) {
     const mapEl    = document.getElementById('t-route-map');
     const fallback = document.getElementById('t-map-fallback');
     if (!mapEl) return;
@@ -1237,13 +1237,14 @@ async function initRouteMap(waypoints) {
             addPin(dest.coord, 't-mp dest', MP_ICO.dest, 'ARRIVAL',
                 `<b>Destination</b><span>${escMap(dest.label || '')}</span>`, [0, -24]);
 
-            // Completion percentage — pill label at midpoint of dashed (upcoming) route
-            const pct = pts.length > 1 ? Math.round((traveledEnd - 1) / (pts.length - 1) * 100) : 0;
-            if (pct > 0 && pct < 100 && upcoming.length > 1) {
+            // Completion percentage — use same value as shipment analysis ring
+            const mapPct = typeof analysisPct === 'number' ? analysisPct
+                : (pts.length > 1 ? Math.round((traveledEnd - 1) / (pts.length - 1) * 100) : 0);
+            if (mapPct > 0 && mapPct < 100 && upcoming.length > 1) {
                 const midCoord = upcoming[Math.floor(upcoming.length / 2)];
                 const pctEl = document.createElement('div');
                 pctEl.className = 't-route-pct';
-                pctEl.textContent = pct + '% Complete';
+                pctEl.textContent = mapPct + '% Complete';
                 new mapboxgl.Marker({ element: pctEl, anchor: 'center' }).setLngLat(midCoord).addTo(map);
             }
 
