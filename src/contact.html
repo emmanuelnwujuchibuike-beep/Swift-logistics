@@ -368,7 +368,7 @@
       position: fixed; inset: 0; z-index: 250;
       background: var(--nav-drop-bg);
       backdrop-filter: blur(40px) saturate(1.8); -webkit-backdrop-filter: blur(40px) saturate(1.8);
-      overflow-y: auto; opacity: 0; pointer-events: none;
+      overflow-y: auto; overflow-x: hidden; opacity: 0; pointer-events: none;
       transition: opacity .5s cubic-bezier(.76,0,.24,1); display: none;
     }
     #mobile-nav.open { opacity: 1; pointer-events: all; }
