@@ -1204,64 +1204,37 @@ async function initRouteMap(waypoints) {
                 dest:    `<svg viewBox="0 0 24 24" width="17" height="15" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z"/></svg>`,
             };
 
-            const lastIdx = pts.length - 1;
-            const mkShort = (str, max = 14) => { const t = String(str || '').trim(); return t.length > max ? t.slice(0, max - 1) + '…' : t; };
-
-            // All markers use anchor:'center' + offset:[0,4.5] so the HEAD CENTER
-            // sits exactly on the geographic coordinate at every zoom level.
-            pts.forEach((w, i) => {
-                const el = document.createElement('div');
-                let cls = 't-mp', icon = MP_ICO.check, pinLabel = '', popTitle = '', popSub = '';
-                let popOff = [0, -19];
-
-                if (i === 0) {
-                    cls += ' origin';  icon = MP_ICO.origin;
-                    pinLabel = 'PICKUP';
-                    popTitle = escMap(w.name || 'Pickup');
-                    popSub   = escMap(w.label || '');
-                    popOff   = [0, -24];
-                } else if (i === lastIdx) {
-                    cls += ' dest';    icon = MP_ICO.dest;
-                    pinLabel = 'ARRIVAL';
-                    popTitle = 'Destination';
-                    popSub   = escMap(w.label || '');
-                    popOff   = [0, -24];
-                } else if (i === curIdx) {
-                    cls += ' current'; icon = MP_ICO.current;
-                    pinLabel = 'PACKAGE';
-                    popTitle = escMap(w.name || 'Package Location');
-                    popSub   = escMap(w.label || '');
-                    popOff   = [0, -29];
-                } else if (w.done || i < curIdx) {
-                    cls += ' done';    icon = MP_ICO.done;
-                    pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint');
-                    popSub   = escMap(w.label || '') + ' · Completed';
-                    popOff   = [0, -20];
-                } else {
-                    cls += ' check';   icon = MP_ICO.check;
-                    pinLabel = mkShort(w.name || w.label);
-                    popTitle = escMap(w.name || 'Checkpoint');
-                    popSub   = escMap(w.label || '') + ' · Upcoming';
-                    popOff   = [0, -19];
-                }
-
-                el.className = cls;
+            const addPin = (coord, cls, icon, label, popHtml, popOff) => {
+                const el = document.createElement('div'); el.className = cls;
                 const h = document.createElement('div'); h.className = 't-mp-h'; h.innerHTML = icon;
                 const t = document.createElement('div'); t.className = 't-mp-t';
                 el.appendChild(h); el.appendChild(t);
-                if (pinLabel) {
-                    const lbl = document.createElement('span'); lbl.className = 't-mk-label';
-                    lbl.textContent = pinLabel; el.appendChild(lbl);
-                }
-
-                const popup = new mapboxgl.Popup({ offset: popOff, closeButton: false, className: 't-map-popup' })
-                    .setHTML(`<b>${popTitle}</b>${popSub ? `<span>${popSub}</span>` : ''}`);
-                // offset:[0,4.5] = (tail 11 − margin 2) / 2 — puts head center
-                // exactly on coordinate, zoom-invariant (screen pixels, not geo).
+                if (label) { const lbl = document.createElement('span'); lbl.className = 't-mk-label'; lbl.textContent = label; el.appendChild(lbl); }
                 new mapboxgl.Marker({ element: el, anchor: 'center', offset: [0, 4.5] })
-                    .setLngLat(w.coord).setPopup(popup).addTo(map);
-            });
+                    .setLngLat(coord)
+                    .setPopup(new mapboxgl.Popup({ offset: popOff, closeButton: false, className: 't-map-popup' }).setHTML(popHtml))
+                    .addTo(map);
+            };
+
+            // PICKUP — origin pin
+            const orig = pts[0];
+            addPin(orig.coord, 't-mp origin', MP_ICO.origin, 'PICKUP',
+                `<b>${escMap(orig.name || 'Pickup')}</b><span>${escMap(orig.label || '')}</span>`, [0, -24]);
+
+            // DESTINATION — final pin
+            const dest = pts[pts.length - 1];
+            addPin(dest.coord, 't-mp dest', MP_ICO.dest, 'ARRIVAL',
+                `<b>Destination</b><span>${escMap(dest.label || '')}</span>`, [0, -24]);
+
+            // Completion percentage — pill label at midpoint of dashed (upcoming) route
+            const pct = pts.length > 1 ? Math.round((traveledEnd - 1) / (pts.length - 1) * 100) : 0;
+            if (pct > 0 && pct < 100 && upcoming.length > 1) {
+                const midCoord = upcoming[Math.floor(upcoming.length / 2)];
+                const pctEl = document.createElement('div');
+                pctEl.className = 't-route-pct';
+                pctEl.textContent = pct + '% Complete';
+                new mapboxgl.Marker({ element: pctEl, anchor: 'center' }).setLngLat(midCoord).addTo(map);
+            }
 
             // Frame the whole journey clearly (near top-down), animate in
             const b = new mapboxgl.LngLatBounds(allCoords[0], allCoords[0]);
