@@ -1443,29 +1443,70 @@
       text-align:center;padding:24px;background:linear-gradient(165deg,rgba(10,18,42,.9),rgba(6,12,30,.95));}
     .t-map-fallback i{font-size:2rem;color:var(--t-accent2);opacity:.7;}
     .t-map-fallback p{font:500 .82rem/1.6 'DM Sans';color:var(--t-muted);max-width:280px;}
-    .t-map-marker{position:relative;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;
-      width:13px;height:13px;border-radius:50%;background:#60a5fa;border:2px solid #fff;
-      box-shadow:0 0 0 4px rgba(59,130,246,.24),0 0 12px rgba(59,130,246,.8);}
-    .t-map-marker.origin{width:28px;height:28px;font-size:11px;background:linear-gradient(145deg,#15803d,#22c55e);
-      box-shadow:0 0 0 5px rgba(34,197,94,.22),0 4px 14px rgba(0,0,0,.45),0 0 16px rgba(34,197,94,.8);}
-    .t-map-marker.done{width:12px;height:12px;background:#22c55e;border-color:rgba(255,255,255,.85);box-shadow:0 0 0 3px rgba(34,197,94,.2),0 0 8px rgba(34,197,94,.55);}
-    .t-map-marker.check{width:11px;height:11px;background:#64748b;border-color:rgba(255,255,255,.6);box-shadow:0 0 0 3px rgba(100,116,139,.16);}
-    .t-map-marker.dest{width:28px;height:28px;font-size:11px;background:linear-gradient(145deg,#1d4ed8,#3b82f6);
-      box-shadow:0 0 0 5px rgba(59,130,246,.2),0 4px 14px rgba(0,0,0,.45),0 0 16px rgba(59,130,246,.7);}
-    .t-map-marker.current{width:38px;height:38px;font-size:14px;background:linear-gradient(145deg,#1d4ed8,#3b82f6);border:3px solid #fff;
-      box-shadow:0 0 0 6px rgba(59,130,246,.22),0 6px 20px rgba(0,0,0,.55),0 0 24px rgba(59,130,246,.95);}
-    .t-map-marker.pulse{animation:t-marker-pulse 2.1s ease-in-out infinite;}
-    @keyframes t-marker-pulse{0%,100%{box-shadow:0 0 0 6px rgba(59,130,246,.22),0 6px 20px rgba(0,0,0,.55),0 0 24px rgba(59,130,246,.95)}50%{box-shadow:0 0 0 15px rgba(59,130,246,.05),0 6px 20px rgba(0,0,0,.55),0 0 34px rgba(59,130,246,1)}}
+    /* ── Map marker base — all markers are circle + icon, anchor:center ── */
+    .t-map-marker{
+      position:relative;display:flex;align-items:center;justify-content:center;
+      color:#fff;cursor:pointer;border-radius:50%;border:2px solid rgba(255,255,255,.9);
+      /* default (fallback) — should always be overridden by a variant below */
+      width:22px;height:22px;font-size:9px;
+      background:linear-gradient(145deg,#1e40af,#3b82f6);
+      box-shadow:0 0 0 4px rgba(59,130,246,.22),0 3px 12px rgba(0,0,0,.4),0 0 14px rgba(59,130,246,.7);
+      transition:transform .15s,box-shadow .15s;
+    }
+    .t-map-marker:hover{transform:scale(1.18);}
 
-    /* Persistent marker labels (Pickup / Package / Destination) */
-    .t-mk-label{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none;
-      font:800 .56rem/1 'DM Sans';letter-spacing:.1em;text-transform:uppercase;
-      padding:4px 9px;border-radius:99px;background:rgba(4,9,28,.88);border:1px solid rgba(99,141,255,.35);color:#dbe7ff;
-      box-shadow:0 5px 14px rgba(0,0,0,.45);}
-    .t-map-marker.origin .t-mk-label{border-color:rgba(34,197,94,.45);color:#a7f3c8;}
+    /* Pickup / origin — green, large */
+    .t-map-marker.origin{
+      width:32px;height:32px;font-size:13px;
+      background:linear-gradient(145deg,#15803d,#22c55e);border:2px solid rgba(255,255,255,.95);
+      box-shadow:0 0 0 5px rgba(34,197,94,.22),0 4px 16px rgba(0,0,0,.5),0 0 20px rgba(34,197,94,.85);}
+
+    /* Completed checkpoint — green, medium */
+    .t-map-marker.done{
+      width:26px;height:26px;font-size:10px;
+      background:linear-gradient(145deg,#166534,#22c55e);border:2px solid rgba(255,255,255,.9);
+      box-shadow:0 0 0 4px rgba(34,197,94,.18),0 3px 12px rgba(0,0,0,.45),0 0 14px rgba(34,197,94,.7);}
+
+    /* Upcoming checkpoint — steel-blue, medium */
+    .t-map-marker.check{
+      width:24px;height:24px;font-size:9px;
+      background:linear-gradient(145deg,#334155,#475569);border:2px solid rgba(255,255,255,.7);
+      box-shadow:0 0 0 3px rgba(100,116,139,.2),0 3px 10px rgba(0,0,0,.4),0 0 10px rgba(100,116,139,.4);}
+
+    /* Destination / arrival — blue, large */
+    .t-map-marker.dest{
+      width:32px;height:32px;font-size:12px;
+      background:linear-gradient(145deg,#1d4ed8,#3b82f6);border:2px solid rgba(255,255,255,.95);
+      box-shadow:0 0 0 5px rgba(59,130,246,.2),0 4px 16px rgba(0,0,0,.5),0 0 20px rgba(59,130,246,.8);}
+
+    /* Live package position — blue, largest, pulsing */
+    .t-map-marker.current{
+      width:40px;height:40px;font-size:15px;
+      background:linear-gradient(145deg,#1d4ed8,#2563eb);border:3px solid #fff;
+      box-shadow:0 0 0 6px rgba(59,130,246,.22),0 6px 22px rgba(0,0,0,.55),0 0 28px rgba(59,130,246,.95);}
+
+    .t-map-marker.pulse{animation:t-marker-pulse 2.1s ease-in-out infinite;}
+    @keyframes t-marker-pulse{
+      0%,100%{box-shadow:0 0 0 6px rgba(59,130,246,.22),0 6px 22px rgba(0,0,0,.55),0 0 28px rgba(59,130,246,.95)}
+      50%{box-shadow:0 0 0 16px rgba(59,130,246,.04),0 6px 22px rgba(0,0,0,.55),0 0 38px rgba(59,130,246,1)}}
+
+    /* ── Persistent pill labels below every marker ─────────────── */
+    .t-mk-label{
+      position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+      white-space:nowrap;pointer-events:none;
+      font:800 .55rem/1 'DM Sans';letter-spacing:.1em;text-transform:uppercase;
+      padding:4px 9px;border-radius:99px;
+      background:rgba(4,9,28,.9);border:1px solid rgba(99,141,255,.3);color:#dbe7ff;
+      box-shadow:0 4px 14px rgba(0,0,0,.55);}
+    .t-map-marker.origin  .t-mk-label{border-color:rgba(34,197,94,.5); color:#a7f3c8;}
+    .t-map-marker.done    .t-mk-label{border-color:rgba(34,197,94,.35);color:#bbf7d0;}
     .t-map-marker.current .t-mk-label{border-color:rgba(96,165,250,.55);color:#cfe0ff;}
-    [data-theme="light"] .t-mk-label{background:rgba(255,255,255,.95);color:#0f1f44;border-color:rgba(29,78,216,.3);}
-    [data-theme="light"] .t-map-marker.origin .t-mk-label{color:#15803d;}
+    .t-map-marker.dest    .t-mk-label{border-color:rgba(59,130,246,.45);color:#bfdbfe;}
+    .t-map-marker.check   .t-mk-label{border-color:rgba(148,163,184,.35);color:#cbd5e1;}
+    [data-theme="light"] .t-mk-label{background:rgba(255,255,255,.96);color:#0f1f44;border-color:rgba(29,78,216,.28);}
+    [data-theme="light"] .t-map-marker.origin  .t-mk-label{color:#15803d;border-color:rgba(21,128,61,.4);}
+    [data-theme="light"] .t-map-marker.done    .t-mk-label{color:#166534;border-color:rgba(22,101,52,.35);}
+    [data-theme="light"] .t-map-marker.check   .t-mk-label{color:#475569;border-color:rgba(71,85,105,.3);}
 
     /* "Fit Route" button */
     .t-map-fit{position:absolute;bottom:14px;right:14px;z-index:4;display:inline-flex;align-items:center;gap:7px;cursor:pointer;

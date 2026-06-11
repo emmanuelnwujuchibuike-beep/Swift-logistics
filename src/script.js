@@ -974,11 +974,11 @@ async function handleTracking(silent) {
         // Waypoints with no location are skipped entirely (nothing fabricated).
         const _green = (c) => (c || '').includes('green');
         const journey = [
-            { q: s.current_location, kind: 'origin', done: _green(s.step1_color) },
-            { q: s.step2_location,   kind: 'check',  done: _green(s.step2_color) },
-            { q: s.step3_location,   kind: 'check',  done: _green(s.step3_color) },
-            { q: s.step4_location,   kind: 'check',  done: _green(s.step4_color) },
-            { q: s.destination,      kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver') },
+            { q: s.current_location, kind: 'origin', done: _green(s.step1_color), name: s.status || 'Pickup' },
+            { q: s.step2_location,   kind: 'check',  done: _green(s.step2_color), name: s.step2_name || '' },
+            { q: s.step3_location,   kind: 'check',  done: _green(s.step3_color), name: s.step3_name || '' },
+            { q: s.step4_location,   kind: 'check',  done: _green(s.step4_color), name: s.step4_name || '' },
+            { q: s.destination,      kind: 'dest',   done: (s.status || '').toLowerCase().includes('deliver'), name: 'Destination' },
         ].filter(w => w.q && String(w.q).trim()).map(w => ({ ...w, label: w.q }));
         initRouteMap(journey);
 
@@ -1167,24 +1167,55 @@ async function initRouteMap(waypoints) {
                     paint:{ 'line-color':'#22c55e', 'line-width':3.6, 'line-opacity':1 } });
             }
 
-            // Markers: PICKUP (step 1) · checkpoints · PACKAGE (live) · DESTINATION
+            // Markers: PICKUP · transit checkpoints · PACKAGE (live) · DESTINATION
+            // anchor:'center' pins each marker's exact center dot on its coordinate at every zoom level.
             const lastIdx = pts.length - 1;
+            const mkShort = (s, max = 14) => { const t = String(s || '').trim(); return t.length > max ? t.slice(0, max - 1) + '…' : t; };
+
             pts.forEach((w, i) => {
                 const el = document.createElement('div');
-                let cls = 't-map-marker', label = '', icon = '', title = '';
-                if (i === 0)                   { cls += ' origin'; label = 'Pickup'; icon = '<i class="fas fa-location-dot"></i>'; title = 'Picked up'; }
-                else if (i === lastIdx)        { cls += ' dest';   label = 'Destination'; icon = '<i class="fas fa-flag-checkered"></i>'; title = 'Destination'; }
-                else if (i === curIdx)         { cls += ' current pulse'; label = 'Package'; icon = '<i class="fas fa-box"></i>'; title = 'Package is here'; }
-                else if (w.done || i < curIdx) { cls += ' done'; title = 'Completed'; }
-                else                           { cls += ' check'; title = 'Upcoming'; }
-                el.className = cls;
-                el.innerHTML = icon + (label ? '<span class="t-mk-label">' + escMap(label) + '</span>' : '');
+                let cls = 't-map-marker';
+                let icon = '', pinLabel = '', popTitle = '', popSub = '';
 
-                const sub   = w.label ? '<span>' + escMap(w.label) + '</span>' : '';
-                const popup = new mapboxgl.Popup({ offset: 20, closeButton: false, className: 't-map-popup' })
-                    .setHTML('<b>' + title + '</b>' + sub);
-                // anchor:'center' keeps the marker pinned exactly on its coordinate at every zoom level
-                new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat(w.coord).setPopup(popup).addTo(map);
+                if (i === 0) {
+                    cls     += ' origin';
+                    icon     = '<i class="fas fa-location-dot"></i>';
+                    pinLabel = 'PICKUP';
+                    popTitle = escMap(w.name || 'Pickup');
+                    popSub   = escMap(w.label || '');
+                } else if (i === lastIdx) {
+                    cls     += ' dest';
+                    icon     = '<i class="fas fa-flag-checkered"></i>';
+                    pinLabel = 'ARRIVAL';
+                    popTitle = 'Destination';
+                    popSub   = escMap(w.label || '');
+                } else if (i === curIdx) {
+                    cls     += ' current pulse';
+                    icon     = '<i class="fas fa-box"></i>';
+                    pinLabel = 'PACKAGE';
+                    popTitle = escMap(w.name || 'Package Location');
+                    popSub   = escMap(w.label || '');
+                } else if (w.done || i < curIdx) {
+                    cls     += ' done';
+                    icon     = '<i class="fas fa-circle-check"></i>';
+                    pinLabel = mkShort(w.name || w.label);
+                    popTitle = escMap(w.name || 'Checkpoint');
+                    popSub   = escMap(w.label || '') + ' &middot; Completed';
+                } else {
+                    cls     += ' check';
+                    icon     = '<i class="fas fa-location-pin"></i>';
+                    pinLabel = mkShort(w.name || w.label);
+                    popTitle = escMap(w.name || 'Checkpoint');
+                    popSub   = escMap(w.label || '') + ' &middot; Upcoming';
+                }
+
+                el.className = cls;
+                el.innerHTML = icon + (pinLabel ? `<span class="t-mk-label">${escMap(pinLabel)}</span>` : '');
+
+                const popup = new mapboxgl.Popup({ offset: 22, closeButton: false, className: 't-map-popup' })
+                    .setHTML(`<b>${popTitle}</b>${popSub ? `<span>${popSub}</span>` : ''}`);
+                new mapboxgl.Marker({ element: el, anchor: 'center' })
+                    .setLngLat(w.coord).setPopup(popup).addTo(map);
             });
 
             // Frame the whole journey clearly (near top-down), animate in
