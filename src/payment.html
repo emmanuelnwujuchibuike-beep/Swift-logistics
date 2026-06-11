@@ -1169,8 +1169,8 @@
     [data-theme="light"] .t-ring-dot.pending { background:rgba(5,16,42,.1); border-color:rgba(5,16,42,.18); }
     [data-theme="light"] .t-step-content.upcoming { border-color:rgba(5,16,42,.04) !important; }
 
-    /* ─── Admin padlock (press-hold 3s) ─── */
-    .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; }
+    /* ─── Admin padlock (press-hold 3s) — intentionally invisible ─── */
+    .admin-padlock-wrap { display:flex; justify-content:center; padding-top:18px; opacity:0; }
     .admin-padlock-btn { background:none; border:none; cursor:pointer; padding:0; outline:none; -webkit-tap-highlight-color:transparent; position:relative; width:40px; height:40px; display:flex; align-items:center; justify-content:center; user-select:none; }
     .admin-padlock-ico { font-size:13px; color:rgba(232,240,254,.24); transition:color .25s, transform .25s; position:relative; z-index:1; pointer-events:none; }
     .admin-padlock-btn:hover .admin-padlock-ico { color:var(--t-accent2); transform:scale(1.12); }
