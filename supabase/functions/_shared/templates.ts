@@ -898,100 +898,430 @@ export function paymentConfirmedEmail(d: PaymentConfirmedData): { subject: strin
   const receipt = d.receiptNumber || `RCP-${d.trackingId.replace('SFL-','')}`;
   const paidAt  = d.paidAt || new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
 
-  const body = `
-    ${contextPill('&#10003; Payment Confirmed')}
-    ${statusHero('&#10003;', 'Payment Confirmed', 'Your shipment is fully cleared and proceeding on schedule', '#22c55e')}
-    ${greeting(d.name)}
-    ${bodyText('Your payment has been verified and recorded. Your shipment is now fully cleared and will proceed without interruption to its destination.')}
+  const html = `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="color-scheme" content="dark light">
+  <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+  <style>
+    @media only screen and (max-width:600px){
+      .em-card{width:100%!important;border-radius:0!important}
+      .em-ship-col,.em-pay-col{display:block!important;width:100%!important;}
+      .em-ship-col{border-right:none!important;border-bottom:1px solid rgba(34,197,94,.1)!important}
+      .em-meta-cell{display:block!important;width:50%!important;float:left;box-sizing:border-box;}
+      .em-hdr-right{display:block!important;text-align:left!important;margin-top:12px!important}
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background:#030b17;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
-    <!-- Receipt card -->
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;">
-      <tr>
-        <td style="padding:26px 28px;background:rgba(34,197,94,.07);
-                   border:1px solid rgba(34,197,94,.28);border-top:4px solid #22c55e;
-                   border-radius:0 10px 10px 10px;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-              <td>
-                <p style="margin:0 0 4px;font-size:8px;letter-spacing:.38em;text-transform:uppercase;
-                   color:rgba(34,197,94,.6);font-family:Arial,Helvetica,sans-serif;">RECEIPT NUMBER</p>
-                <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:16px;
-                   font-weight:700;color:#22c55e;letter-spacing:.1em;">${esc(receipt)}</p>
-              </td>
-              <td align="right" valign="top">
-                <span style="display:inline-block;padding:6px 14px;
-                       background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);
-                       border-radius:99px;font-size:9px;letter-spacing:.18em;font-weight:700;
-                       color:#22c55e;font-family:Arial,Helvetica,sans-serif;">&#10003; CLEARED</span>
-              </td>
-            </tr>
-          </table>
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-                 style="margin-top:14px;border-top:1px solid rgba(34,197,94,.15);">
-            <tr>
-              <td style="padding-top:10px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-                         color:rgba(167,139,250,.4);font-family:Arial,Helvetica,sans-serif;">Date Issued</td>
-              <td align="right" style="padding-top:10px;font-size:12px;color:rgba(224,231,255,.7);
-                         font-family:Arial,Helvetica,sans-serif;">${esc(paidAt)}</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;opacity:0;color:transparent;height:0;width:0;font-size:1px;">
+  Payment confirmed for ${esc(d.trackingId)} — receipt ${esc(receipt)} issued. Your shipment is cleared.&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+</div>
 
-    ${d.amountPaid ? `
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;">
-      <tr>
-        <td align="center" style="padding:26px;background:rgba(34,197,94,.05);
-                           border:1px solid rgba(34,197,94,.18);border-radius:8px;">
-          <p style="margin:0 0 7px;font-size:8px;letter-spacing:.38em;text-transform:uppercase;
-             color:rgba(34,197,94,.5);font-family:Arial,Helvetica,sans-serif;">AMOUNT PAID</p>
-          <p style="margin:0;font-size:38px;font-weight:900;color:#22c55e;letter-spacing:.02em;
-             font-family:Arial,Helvetica,sans-serif;">${esc(d.amountPaid)}</p>
-        </td>
-      </tr>
-    </table>` : ''}
+<table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
+       style="background:#030b17;min-height:100vh;">
+<tr><td align="center" valign="top" style="padding:48px 16px 80px;">
 
-    ${trackingBox(d.trackingId, '#22c55e')}
+  <!-- Eyebrow -->
+  <table role="presentation" width="600" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin-bottom:16px;">
+    <tr><td align="center">
+      <p style="margin:0;font-size:8px;letter-spacing:.48em;text-transform:uppercase;
+         font-family:Arial,Helvetica,sans-serif;color:rgba(34,197,94,.3);">
+        Swift Freight Logistics &nbsp;&bull;&nbsp; Official Receipt
+      </p>
+    </td></tr>
+  </table>
 
-    ${infoTable([
-      infoRow('Recipient',     d.name),
-      infoRow('Tracking ID',   d.trackingId),
-      infoRow('Destination',   d.destination   ?? ''),
-      infoRow('Package',       d.packageDetails ?? ''),
-      infoRow('Est. Delivery', d.eta            ?? ''),
-    ].join(''))}
+  <!-- RECEIPT CARD -->
+  <table role="presentation" class="em-card" width="600" border="0" cellpadding="0" cellspacing="0"
+         style="max-width:600px;width:100%;background:#030b17;border:1px solid rgba(34,197,94,.2);border-radius:12px;overflow:hidden;">
 
-    ${divider()}
-    ${contextPill('&#9670; What Happens Next')}
-    ${nextSteps([
-      'Your payment has been verified and logged in the Swift Freight system.',
-      'Your shipment is fully cleared and will resume transit immediately on the scheduled route.',
-      'Live checkpoint updates will be sent at every stage of the journey.',
-      `Expect delivery by <strong style="color:#eef2ff;">${esc(d.eta || 'your scheduled date')}</strong> — track anytime via your tracking ID.`,
-    ])}
+    <!-- ══ HEADER ══ -->
+    <tr>
+      <td style="background:#040d1a;border-bottom:1px solid rgba(34,197,94,.1);padding:22px 30px;">
+        <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td valign="middle">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td valign="middle" style="padding-right:12px;">
+                    <span style="font-size:26px;font-weight:900;letter-spacing:.1em;
+                          font-family:Arial,Helvetica,sans-serif;color:#22c55e;">SFL</span>
+                  </td>
+                  <td valign="middle" width="1" style="background:rgba(34,197,94,.18);width:1px;padding:0 0 0 12px;">&zwnj;</td>
+                  <td valign="middle" style="padding-left:13px;">
+                    <p style="margin:0 0 2px;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+                       font-family:Arial,Helvetica,sans-serif;color:rgba(224,231,255,.75);">SWIFT FREIGHT LOGISTICS</p>
+                    <p style="margin:0;font-size:7px;letter-spacing:.11em;text-transform:uppercase;
+                       font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.34);">
+                      Certified International Carrier &middot; Est. 1999
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td class="em-hdr-right" valign="middle" align="right">
+              <p style="margin:0 0 6px;font-size:7px;letter-spacing:.26em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);">PAYMENT RECEIPT</p>
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto;">
+                <tr>
+                  <td style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.22);
+                             border-radius:6px;padding:7px 13px;">
+                    <p style="margin:0 0 3px;font-size:6px;letter-spacing:.17em;text-transform:uppercase;
+                       font-family:Arial,Helvetica,sans-serif;color:rgba(34,197,94,.44);">RECEIPT NO.</p>
+                    <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:12px;
+                       font-weight:700;color:#22c55e;letter-spacing:.06em;">${esc(receipt)}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
 
-    ${journeySteps([
-      { icon: '&#10003;', label: 'Registered', active: true  },
-      { icon: '&#10003;', label: 'Cleared',    active: true  },
-      { icon: '&#8594;',  label: 'In Transit', active: true  },
-      { icon: '&#11044;', label: 'Delivered',  active: false },
-    ])}
+    <!-- ══ CONFIRMATION BAND ══ -->
+    <tr>
+      <td style="background:linear-gradient(90deg,#15803d 0%,#166534 55%,#14532d 100%);padding:12px 30px;">
+        <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td valign="middle">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td valign="middle" style="padding-right:9px;">
+                    <span style="font-size:14px;color:#bbf7d0;">&#10003;</span>
+                  </td>
+                  <td valign="middle" style="padding-right:9px;">
+                    <span style="font-size:13px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;
+                          font-family:Arial,Helvetica,sans-serif;color:#fff;">PAYMENT CONFIRMED</span>
+                  </td>
+                  <td valign="middle" style="padding-right:9px;">
+                    <span style="font-size:11px;color:rgba(187,247,208,.35);">&middot;</span>
+                  </td>
+                  <td valign="middle">
+                    <span style="font-size:9px;color:rgba(187,247,208,.68);font-family:Arial,Helvetica,sans-serif;">
+                      Shipment fully cleared &amp; proceeding on schedule
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td align="right" valign="middle">
+              <span style="display:inline-block;padding:4px 10px;background:rgba(255,255,255,.12);
+                     border:1px solid rgba(255,255,255,.2);border-radius:99px;font-size:6px;
+                     letter-spacing:.16em;font-weight:700;color:#fff;font-family:Arial,Helvetica,sans-serif;">
+                VERIFIED
+              </span>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
 
-    ${ctaButton(url, 'Track My Shipment Live', '#22c55e')}
-    <p style="font-size:11px;color:rgba(199,210,254,.28);margin:0;text-align:center;line-height:1.9;
-       font-family:Arial,Helvetica,sans-serif;">
-      This email is your official receipt — please keep it for your records.<br>
-      Support: <a href="mailto:swiftfreightlogix@gmail.com"
-        style="color:rgba(34,197,94,.5);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">
-        swiftfreightlogix@gmail.com
-      </a>
-    </p>`;
+    <!-- ══ META ROW ══ -->
+    <tr>
+      <td style="border-bottom:1px solid rgba(34,197,94,.08);">
+        <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td class="em-meta-cell" width="25%" style="padding:13px 15px;border-right:1px solid rgba(34,197,94,.06);">
+              <p style="margin:0 0 4px;font-size:6px;letter-spacing:.17em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);">DATE ISSUED</p>
+              <p style="margin:0;font-size:10px;font-weight:600;font-family:Arial,Helvetica,sans-serif;
+                 color:rgba(224,231,255,.82);">${esc(paidAt)}</p>
+            </td>
+            <td class="em-meta-cell" width="25%" style="padding:13px 15px;border-right:1px solid rgba(34,197,94,.06);">
+              <p style="margin:0 0 4px;font-size:6px;letter-spacing:.17em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);">TRACKING NUMBER</p>
+              <p style="margin:0;font-size:9px;font-weight:600;font-family:'Courier New',Courier,monospace;
+                 color:rgba(224,231,255,.82);letter-spacing:.04em;">${esc(d.trackingId)}</p>
+            </td>
+            <td class="em-meta-cell" width="25%" style="padding:13px 15px;border-right:1px solid rgba(34,197,94,.06);">
+              <p style="margin:0 0 4px;font-size:6px;letter-spacing:.17em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);">SERVICE</p>
+              <p style="margin:0;font-size:10px;font-weight:600;font-family:Arial,Helvetica,sans-serif;
+                 color:rgba(224,231,255,.82);">Freight Logistics</p>
+            </td>
+            <td class="em-meta-cell" width="25%" style="padding:13px 15px;">
+              <p style="margin:0 0 4px;font-size:6px;letter-spacing:.17em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);">STATUS</p>
+              <p style="margin:0;">
+                <span style="display:inline-block;padding:3px 8px;background:rgba(34,197,94,.1);
+                       border:1px solid rgba(34,197,94,.28);border-radius:99px;font-size:7px;
+                       letter-spacing:.1em;font-weight:700;color:#22c55e;font-family:Arial,Helvetica,sans-serif;">
+                  &#10003; CLEARED
+                </span>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ BODY: 2-column ══ -->
+    <tr>
+      <td style="border-bottom:1px solid rgba(34,197,94,.08);">
+        <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <!-- LEFT: Shipment Details -->
+            <td class="em-ship-col" width="56%" valign="top"
+                style="padding:22px 26px;border-right:1px solid rgba(34,197,94,.08);">
+              <p style="margin:0 0 11px;font-size:6px;letter-spacing:.2em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);
+                 padding-bottom:8px;border-bottom:1px solid rgba(124,58,237,.08);">SHIPMENT DETAILS</p>
+              <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:7px 10px 7px 0;font-size:7px;letter-spacing:.09em;text-transform:uppercase;
+                     color:rgba(167,139,250,.4);width:34%;border-bottom:1px solid rgba(124,58,237,.06);
+                     font-family:Arial,Helvetica,sans-serif;vertical-align:top;white-space:nowrap;">Recipient</td>
+                  <td style="padding:7px 0;font-size:11px;color:rgba(224,231,255,.82);
+                     border-bottom:1px solid rgba(124,58,237,.06);font-family:Arial,Helvetica,sans-serif;
+                     word-break:break-word;">${esc(d.name)}</td>
+                </tr>
+                ${d.destination ? `<tr>
+                  <td style="padding:7px 10px 7px 0;font-size:7px;letter-spacing:.09em;text-transform:uppercase;
+                     color:rgba(167,139,250,.4);width:34%;border-bottom:1px solid rgba(124,58,237,.06);
+                     font-family:Arial,Helvetica,sans-serif;vertical-align:top;white-space:nowrap;">Destination</td>
+                  <td style="padding:7px 0;font-size:11px;color:rgba(224,231,255,.82);
+                     border-bottom:1px solid rgba(124,58,237,.06);font-family:Arial,Helvetica,sans-serif;
+                     word-break:break-word;">${esc(d.destination)}</td>
+                </tr>` : ''}
+                ${d.packageDetails ? `<tr>
+                  <td style="padding:7px 10px 7px 0;font-size:7px;letter-spacing:.09em;text-transform:uppercase;
+                     color:rgba(167,139,250,.4);width:34%;border-bottom:1px solid rgba(124,58,237,.06);
+                     font-family:Arial,Helvetica,sans-serif;vertical-align:top;white-space:nowrap;">Package</td>
+                  <td style="padding:7px 0;font-size:11px;color:rgba(224,231,255,.82);
+                     border-bottom:1px solid rgba(124,58,237,.06);font-family:Arial,Helvetica,sans-serif;
+                     word-break:break-word;">${esc(d.packageDetails)}</td>
+                </tr>` : ''}
+                ${d.eta ? `<tr>
+                  <td style="padding:7px 10px 7px 0;font-size:7px;letter-spacing:.09em;text-transform:uppercase;
+                     color:rgba(167,139,250,.4);width:34%;font-family:Arial,Helvetica,sans-serif;
+                     vertical-align:top;white-space:nowrap;">Est. Delivery</td>
+                  <td style="padding:7px 0;font-size:11px;color:#22c55e;font-weight:600;
+                     font-family:Arial,Helvetica,sans-serif;">${esc(d.eta)}</td>
+                </tr>` : ''}
+              </table>
+            </td>
+            <!-- RIGHT: Payment Summary -->
+            <td class="em-pay-col" width="44%" valign="top" style="padding:22px 20px;">
+              <p style="margin:0 0 11px;font-size:6px;letter-spacing:.2em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);
+                 padding-bottom:8px;border-bottom:1px solid rgba(124,58,237,.08);">PAYMENT SUMMARY</p>
+              <!-- Amount card -->
+              <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
+                     style="margin-bottom:13px;background:rgba(34,197,94,.06);
+                            border:1px solid rgba(34,197,94,.18);border-radius:8px;">
+                <tr>
+                  <td style="padding:15px 12px;" align="center">
+                    <p style="margin:0 0 5px;font-size:6px;letter-spacing:.16em;text-transform:uppercase;
+                       font-family:Arial,Helvetica,sans-serif;color:rgba(34,197,94,.52);">TOTAL AMOUNT PAID</p>
+                    <p style="margin:0 0 5px;font-size:26px;font-weight:900;color:#22c55e;letter-spacing:.02em;
+                       font-family:Arial,Helvetica,sans-serif;">${esc(d.amountPaid || '—')}</p>
+                    <p style="margin:0;font-size:8px;color:rgba(34,197,94,.52);
+                       font-family:Arial,Helvetica,sans-serif;">&#10003; Payment Verified &amp; Cleared</p>
+                  </td>
+                </tr>
+              </table>
+              <!-- Payment key/value rows -->
+              <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:5px 0;font-size:7px;text-transform:uppercase;letter-spacing:.07em;
+                     color:rgba(167,139,250,.38);font-family:Arial,Helvetica,sans-serif;
+                     border-bottom:1px solid rgba(124,58,237,.06);">Reference</td>
+                  <td align="right" style="padding:5px 0;font-size:8px;font-weight:600;
+                     color:rgba(224,231,255,.76);font-family:'Courier New',Courier,monospace;
+                     border-bottom:1px solid rgba(124,58,237,.06);">${esc(receipt)}</td>
+                </tr>
+                <tr>
+                  <td style="padding:5px 0;font-size:7px;text-transform:uppercase;letter-spacing:.07em;
+                     color:rgba(167,139,250,.38);font-family:Arial,Helvetica,sans-serif;
+                     border-bottom:1px solid rgba(124,58,237,.06);">Date</td>
+                  <td align="right" style="padding:5px 0;font-size:8px;font-weight:600;
+                     color:rgba(224,231,255,.76);font-family:Arial,Helvetica,sans-serif;
+                     border-bottom:1px solid rgba(124,58,237,.06);">${esc(paidAt)}</td>
+                </tr>
+                <tr>
+                  <td style="padding:5px 0;font-size:7px;text-transform:uppercase;letter-spacing:.07em;
+                     color:rgba(167,139,250,.38);font-family:Arial,Helvetica,sans-serif;
+                     border-bottom:1px solid rgba(124,58,237,.06);">Currency</td>
+                  <td align="right" style="padding:5px 0;font-size:8px;font-weight:600;
+                     color:rgba(224,231,255,.76);font-family:Arial,Helvetica,sans-serif;
+                     border-bottom:1px solid rgba(124,58,237,.06);">USD</td>
+                </tr>
+                <tr>
+                  <td style="padding:5px 0;font-size:7px;text-transform:uppercase;letter-spacing:.07em;
+                     color:rgba(167,139,250,.38);font-family:Arial,Helvetica,sans-serif;">Clearance</td>
+                  <td align="right" style="padding:5px 0;font-size:8px;font-weight:600;
+                     color:#22c55e;font-family:Arial,Helvetica,sans-serif;">Approved</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ WHAT HAPPENS NEXT ══ -->
+    <tr>
+      <td style="padding:20px 26px;border-bottom:1px solid rgba(34,197,94,.08);">
+        <p style="margin:0 0 16px;font-size:6px;letter-spacing:.2em;text-transform:uppercase;
+           font-family:Arial,Helvetica,sans-serif;color:rgba(167,139,250,.36);
+           padding-bottom:8px;border-bottom:1px solid rgba(124,58,237,.08);">WHAT HAPPENS NEXT</p>
+        <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="22%" align="center" style="padding:0 3px;">
+              <p style="margin:0 auto 6px;width:34px;height:34px;background:rgba(34,197,94,.08);
+                 border:1px solid rgba(34,197,94,.26);border-radius:50%;font-size:13px;font-weight:900;
+                 color:#22c55e;line-height:34px;text-align:center;font-family:Arial,Helvetica,sans-serif;">01</p>
+              <p style="margin:0;font-size:8px;color:rgba(199,210,254,.46);line-height:1.5;
+                 font-family:Arial,Helvetica,sans-serif;text-align:center;">Payment verified &amp; recorded</p>
+            </td>
+            <td align="center" valign="top" style="padding-top:17px;width:4%;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr><td height="1" width="18" style="height:1px;width:18px;line-height:1px;font-size:0;
+                    background:rgba(34,197,94,.14);">&zwnj;</td></tr>
+              </table>
+            </td>
+            <td width="22%" align="center" style="padding:0 3px;">
+              <p style="margin:0 auto 6px;width:34px;height:34px;background:rgba(34,197,94,.08);
+                 border:1px solid rgba(34,197,94,.26);border-radius:50%;font-size:13px;font-weight:900;
+                 color:#22c55e;line-height:34px;text-align:center;font-family:Arial,Helvetica,sans-serif;">02</p>
+              <p style="margin:0;font-size:8px;color:rgba(199,210,254,.46);line-height:1.5;
+                 font-family:Arial,Helvetica,sans-serif;text-align:center;">Shipment cleared for transit</p>
+            </td>
+            <td align="center" valign="top" style="padding-top:17px;width:4%;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr><td height="1" width="18" style="height:1px;width:18px;line-height:1px;font-size:0;
+                    background:rgba(34,197,94,.14);">&zwnj;</td></tr>
+              </table>
+            </td>
+            <td width="22%" align="center" style="padding:0 3px;">
+              <p style="margin:0 auto 6px;width:34px;height:34px;background:rgba(34,197,94,.08);
+                 border:1px solid rgba(34,197,94,.26);border-radius:50%;font-size:13px;font-weight:900;
+                 color:#22c55e;line-height:34px;text-align:center;font-family:Arial,Helvetica,sans-serif;">03</p>
+              <p style="margin:0;font-size:8px;color:rgba(199,210,254,.46);line-height:1.5;
+                 font-family:Arial,Helvetica,sans-serif;text-align:center;">Live updates at every checkpoint</p>
+            </td>
+            <td align="center" valign="top" style="padding-top:17px;width:4%;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr><td height="1" width="18" style="height:1px;width:18px;line-height:1px;font-size:0;
+                    background:rgba(34,197,94,.14);">&zwnj;</td></tr>
+              </table>
+            </td>
+            <td width="22%" align="center" style="padding:0 3px;">
+              <p style="margin:0 auto 6px;width:34px;height:34px;background:rgba(34,197,94,.08);
+                 border:1px solid rgba(34,197,94,.26);border-radius:50%;font-size:13px;font-weight:900;
+                 color:#22c55e;line-height:34px;text-align:center;font-family:Arial,Helvetica,sans-serif;">04</p>
+              <p style="margin:0;font-size:8px;color:rgba(199,210,254,.46);line-height:1.5;
+                 font-family:Arial,Helvetica,sans-serif;text-align:center;">
+                Delivered by ${esc(d.eta || 'scheduled date')}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ BARCODE STRIP ══ -->
+    <tr>
+      <td style="background:rgba(0,0,0,.22);border-bottom:1px solid rgba(34,197,94,.05);padding:12px 26px 8px;">
+        <div style="height:34px;line-height:0;font-size:0;
+             background-image:repeating-linear-gradient(
+               to right,
+               rgba(34,197,94,.46) 0,rgba(34,197,94,.46) 2px,transparent 2px,transparent 3px,
+               rgba(34,197,94,.46) 3px,rgba(34,197,94,.46) 4px,transparent 4px,transparent 7px,
+               rgba(34,197,94,.46) 7px,rgba(34,197,94,.46) 10px,transparent 10px,transparent 11px,
+               rgba(34,197,94,.46) 11px,rgba(34,197,94,.46) 12px,transparent 12px,transparent 14px,
+               rgba(34,197,94,.46) 14px,rgba(34,197,94,.46) 16px,transparent 16px,transparent 19px,
+               rgba(34,197,94,.46) 19px,rgba(34,197,94,.46) 20px,transparent 20px,transparent 22px,
+               rgba(34,197,94,.46) 22px,rgba(34,197,94,.46) 25px,transparent 25px,transparent 27px,
+               rgba(34,197,94,.46) 27px,rgba(34,197,94,.46) 28px,transparent 28px,transparent 31px,
+               rgba(34,197,94,.46) 31px,rgba(34,197,94,.46) 33px,transparent 33px,transparent 34px,
+               rgba(34,197,94,.46) 34px,rgba(34,197,94,.46) 36px,transparent 36px,transparent 40px
+             );margin-bottom:5px;">&zwnj;</div>
+        <p style="margin:0;font-size:7px;color:rgba(34,197,94,.4);letter-spacing:.1em;text-align:center;
+           font-family:'Courier New',Courier,monospace;">${esc(d.trackingId)}</p>
+      </td>
+    </tr>
+
+    <!-- ══ FOOTER ROW ══ -->
+    <tr>
+      <td style="background:#020810;padding:12px 26px;">
+        <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td valign="middle">
+              <p style="margin:0 0 2px;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+                 font-family:Arial,Helvetica,sans-serif;color:rgba(224,231,255,.26);">SWIFT FREIGHT LOGISTICS</p>
+              <p style="margin:0;font-size:7px;color:rgba(167,139,250,.18);letter-spacing:.05em;
+                 font-family:Arial,Helvetica,sans-serif;">
+                swiftfreightlogix@gmail.com &middot; swiftfreightlogix.netlify.app
+              </p>
+            </td>
+            <td align="right" valign="middle">
+              <p style="margin:0;font-size:7px;color:rgba(167,139,250,.18);letter-spacing:.04em;
+                 font-family:Arial,Helvetica,sans-serif;">Official receipt &mdash; retain for your records</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+  </table><!-- /receipt card -->
+
+  <!-- Track CTA -->
+  <table role="presentation" width="600" border="0" cellpadding="0" cellspacing="0"
+         style="max-width:600px;margin-top:22px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="background:linear-gradient(135deg,#15803d 0%,#166534 60%,#14532d 100%);
+                       border-radius:7px;" align="center">
+              <a href="${url}" target="_blank"
+                 style="display:inline-block;padding:14px 42px;color:#fff;font-size:10px;font-weight:700;
+                        letter-spacing:.22em;text-transform:uppercase;text-decoration:none;
+                        font-family:Arial,Helvetica,sans-serif;">
+                TRACK SHIPMENT LIVE &nbsp;&#8594;
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Email footer links -->
+  <table role="presentation" width="600" border="0" cellpadding="0" cellspacing="0"
+         style="max-width:600px;margin-top:20px;">
+    <tr>
+      <td align="center">
+        <p style="margin:0 0 8px;font-size:10px;color:rgba(199,210,254,.16);line-height:2.4;
+           font-family:Arial,Helvetica,sans-serif;">
+          <a href="${SITE}" style="color:rgba(34,197,94,.32);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">swiftfreightlogix.netlify.app</a>
+          &nbsp;&bull;&nbsp;
+          <a href="${SITE}/payment.html" style="color:rgba(34,197,94,.32);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">Track Shipment</a>
+          &nbsp;&bull;&nbsp;
+          <a href="mailto:swiftfreightlogix@gmail.com" style="color:rgba(34,197,94,.32);text-decoration:none;font-family:Arial,Helvetica,sans-serif;">Contact Support</a>
+        </p>
+        <p style="margin:0;font-size:7px;color:rgba(199,210,254,.09);letter-spacing:.14em;
+           text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">
+          Official receipt &nbsp;&bull;&nbsp; Please retain for your records
+        </p>
+      </td>
+    </tr>
+  </table>
+
+</td></tr>
+</table>
+</body>
+</html>`;
 
   return {
     subject: `[CLEARED] Payment Confirmed — ${d.trackingId} | Swift Freight`,
-    html:    base('#22c55e', '#4ade80', 'Payment Receipt', body,
-                  `Payment confirmed for ${d.trackingId}. Your shipment is cleared and proceeding on schedule.`),
+    html,
   };
 }
 
