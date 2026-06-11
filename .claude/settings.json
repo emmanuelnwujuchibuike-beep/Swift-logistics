@@ -38,7 +38,15 @@
       "Bash(Get-Content \"c:\\\\Users\\\\u\\\\OneDrive\\\\Documents\\\\logistics site\\\\src\\\\luxury-upgrade.css\")",
       "Bash(Measure-Object -Line)",
       "PowerShell(\\(Get-Content \"c:\\\\Users\\\\u\\\\OneDrive\\\\Documents\\\\logistics site\\\\src\\\\luxury-upgrade.css\" | Measure-Object -Line\\).Lines)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(git checkout *)",
+      "Bash(git merge *)",
+      "Bash(git stash *)",
+      "Bash(python3 -c ' *)",
+      "Bash(python -c ' *)",
+      "Bash(node --check cinematic.js)",
+      "Bash(node -e \"const fs=require\\('fs'\\);var c=fs.readFileSync\\('admin.html','utf8'\\);console.log\\('admin.html lines:', c.split\\('\\\\n'\\).length\\); console.log\\('chars:', c.length\\);\")",
+      "Bash(node --check chat.js)"
     ],
     "additionalDirectories": [
       "c:\\Users\\u\\.claude\\projects\\c--Users-u-OneDrive-Documents-logistics-site\\memory",

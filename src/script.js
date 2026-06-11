@@ -63,12 +63,14 @@ function _clearPayUpload(id) {
     const preview = document.getElementById('preview-' + id);
     const empty   = document.getElementById('empty-'   + id);
     const change  = document.getElementById('change-'  + id);
-    const input   = document.getElementById(id);
+    const cam     = document.getElementById(id + '-cam');
+    const gal     = document.getElementById(id + '-gal');
     if (preview) { preview.src = ''; preview.style.display = 'none'; }
     if (empty)   empty.style.display  = 'flex';
     if (change)  change.style.display = 'none';
     if (zone)    zone.classList.remove('has-file');
-    if (input)   input.value = '';
+    if (cam)     cam.value = '';
+    if (gal)     gal.value = '';
 }
 
 async function submitPaymentProof(method) {
@@ -120,18 +122,27 @@ async function submitPaymentProof(method) {
 function _uploadZone(method, side, label) {
     const id = `ppf-${method}-${side}`;
     return `
-    <div class="t-pp-upload-zone" id="zone-${id}" onclick="document.getElementById('${id}').click()">
+    <div class="t-pp-upload-zone" id="zone-${id}">
       <div class="t-pp-upload-empty" id="empty-${id}">
-        <i class="fas fa-cloud-arrow-up" style="font-size:1.5rem;opacity:.55;margin-bottom:7px;display:block;"></i>
-        <span style="font-size:.78rem;font-weight:600;">${label}</span>
-        <small style="font-size:.66rem;opacity:.5;margin-top:3px;display:block;">Click or drop · JPG PNG HEIC</small>
+        <i class="fas fa-cloud-arrow-up" style="font-size:1.5rem;opacity:.55;margin-bottom:6px;display:block;"></i>
+        <span style="font-size:.78rem;font-weight:600;margin-bottom:9px;display:block;">${label}</span>
+        <div class="t-pp-src-btns">
+          <button type="button" class="t-pp-src-btn" onclick="document.getElementById('${id}-cam').click()">
+            <i class="fas fa-camera"></i> Camera
+          </button>
+          <button type="button" class="t-pp-src-btn" onclick="document.getElementById('${id}-gal').click()">
+            <i class="fas fa-images"></i> Gallery
+          </button>
+        </div>
       </div>
       <img id="preview-${id}" class="t-pp-upload-preview" style="display:none;" alt="preview">
       <button type="button" class="t-pp-upload-clear" id="change-${id}" style="display:none;"
               onclick="event.stopPropagation();_clearPayUpload('${id}')">
         <i class="fas fa-xmark"></i>
       </button>
-      <input type="file" id="${id}" accept="image/*" style="display:none"
+      <input type="file" id="${id}-cam" accept="image/*" capture="environment" style="display:none"
+             onchange="_onPayUpload(this,'${id}')">
+      <input type="file" id="${id}-gal" accept="image/*" style="display:none"
              onchange="_onPayUpload(this,'${id}')">
     </div>`;
 }
