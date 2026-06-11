@@ -1475,6 +1475,10 @@ async function loadShipments() {
     document.getElementById('sidebar-count').textContent = allShipments.length;
     dot.classList.add('ok');
     lbl.textContent = 'Connected';
+    // Detect if shipments_public view is missing payment columns (view not rebuilt after DB schema update)
+    if (allShipments.length > 0 && !('paypal_email' in allShipments[0])) {
+      setTimeout(() => toast('⚠️ Payment columns missing from the DB view — payment methods will appear as unchecked. Go to Settings → Database Setup SQL, copy the SQL, and run it in Supabase → SQL Editor to fix.', 'error'), 800);
+    }
   } catch (e) {
     clearTimeout(timer);
     console.error('[SFL] loadShipments:', e);
@@ -1813,6 +1817,10 @@ document.getElementById('update-btn').addEventListener('click', async () => {
        <strong>${editId}</strong> updated.${emailType !== 'none' ? ' Notification email sent.' : ' No email sent.'}`
     );
     toast(editId + ' updated!', 'success');
+    // Update in-memory record immediately so re-opening edit shows correct checkmarks
+    // even while the DB view is being rebuilt
+    const _mi = allShipments.findIndex(s => s.tracking_id === editId);
+    if (_mi >= 0) Object.assign(allShipments[_mi], updates);
     loadShipments();
   } catch (e) {
     showInline('update-result', 'error', '<i class="fas fa-circle-xmark" style="margin-right:7px"></i>' + e.message);
