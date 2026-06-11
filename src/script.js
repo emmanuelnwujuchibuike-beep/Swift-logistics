@@ -936,18 +936,18 @@ function renderEliteStep(name, loc, label, icon, colorClass, idx) {
     }
 
     // ── Icon color / style per state ─────────────────────────
-    // Solid colored circles so icons are always clearly visible
-    const iconColor  = state === 'upcoming' ? 'rgba(232,240,254,.35)' : '#fff';
+    // All steps show colored icons — upcoming steps use a dimmed version of the color
+    const iconColor  = '#fff';
     const iconBg     = isGreen  ? '#22c55e'
         : isRed   ? '#ef4444'
         : isAmber ? '#f59e0b'
         : state === 'active'   ? col
-        : 'rgba(255,255,255,.07)';
+        : `${col}55`;      // upcoming: ~33% opacity of the step color
     const iconBorder = isGreen  ? 'rgba(34,197,94,.6)'
         : isRed   ? 'rgba(239,68,68,.6)'
         : isAmber ? 'rgba(245,158,11,.5)'
         : state === 'active'   ? `${col}cc`
-        : 'rgba(255,255,255,.12)';
+        : `${col}66`;      // upcoming: dimmed border matching color
 
     return `
     <div class="t-step" style="animation-delay:${delay}s;">

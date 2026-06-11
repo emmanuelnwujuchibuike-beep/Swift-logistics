@@ -1783,6 +1783,24 @@ function openEdit(tid) {
   _setEdit('u-service',  s.service_type);
   _setEdit('u-priority', s.priority);
   _setEdit('u-pkg',      s.package_details);
+  // Pre-fill status, location, ETA, amount, notes
+  _setEdit('u-status',    s.status);
+  _setEdit('u-location',  s.current_location);
+  _setEdit('u-eta',       s.eta);
+  _setEdit('u-paystatus', s.payment_status);
+  _setEdit('u-amount',    s.amount_due);
+  _setEdit('u-notes',     s.notes);
+  // Pre-fill step colors and step 2-4 names/locations
+  _setEdit('u-s1color',  s.step1_color);
+  _setEdit('u-s2name',   s.step2_name);
+  _setEdit('u-s2loc',    s.step2_location);
+  _setEdit('u-s2color',  s.step2_color);
+  _setEdit('u-s3name',   s.step3_name);
+  _setEdit('u-s3loc',    s.step3_location);
+  _setEdit('u-s3color',  s.step3_color);
+  _setEdit('u-s4name',   s.step4_name);
+  _setEdit('u-s4loc',    s.step4_location);
+  _setEdit('u-s4color',  s.step4_color);
   // Reset all payment panels
   document.querySelectorAll('[data-panel^="u-panel-"]').forEach(card => {
     card.classList.remove('pm-active');
