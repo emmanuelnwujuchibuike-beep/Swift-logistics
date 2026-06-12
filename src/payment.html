@@ -1439,6 +1439,65 @@
       font:600 .74rem/1.5 'DM Sans';color:var(--t-muted);}
     .t-route-eta b{color:var(--t-accent2);}
 
+    /* ════════════ DELIVERY CONFIRMED BANNER ════════════ */
+    .t-delivered-banner{
+      position:relative;overflow:hidden;border-radius:22px;margin-bottom:20px;
+      background:linear-gradient(160deg,rgba(16,185,129,.1),rgba(34,197,94,.07),rgba(5,150,105,.04));
+      border:1px solid rgba(34,197,94,.22);border-top:3px solid #22c55e;
+      padding:36px 32px 32px;text-align:center;}
+    [data-theme="light"] .t-delivered-banner{
+      background:linear-gradient(160deg,rgba(22,163,74,.06),rgba(34,197,94,.04));
+      border-color:rgba(22,163,74,.22);border-top-color:#16a34a;}
+    .t-dlv-burst{
+      position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+      width:220px;height:220px;border-radius:50%;
+      background:radial-gradient(circle,rgba(34,197,94,.18) 0%,transparent 70%);
+      pointer-events:none;}
+    .t-dlv-check-circle{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:72px;height:72px;border-radius:50%;margin-bottom:18px;
+      background:linear-gradient(145deg,#14532d,#16a34a,#22c55e);
+      box-shadow:0 0 0 12px rgba(34,197,94,.1),0 0 38px rgba(34,197,94,.45);}
+    .t-dlv-check-circle i{font-size:28px;color:#fff;}
+    .t-dlv-eyebrow{
+      font:700 .62rem/1 'DM Sans';letter-spacing:.32em;text-transform:uppercase;
+      color:rgba(134,239,172,.45);margin:0 0 8px;}
+    .t-dlv-title{
+      font:900 1.6rem/1.15 'DM Sans';letter-spacing:.03em;text-transform:uppercase;
+      color:#d1fae5;margin:0 0 8px;}
+    [data-theme="light"] .t-dlv-title{color:#14532d;}
+    .t-dlv-sub{
+      font:400 .85rem/1.65 'DM Sans';color:rgba(134,239,172,.55);margin:0 0 28px;}
+    [data-theme="light"] .t-dlv-sub{color:rgba(22,101,52,.6);}
+    /* Email form */
+    .t-dlv-form-wrap{
+      background:rgba(255,255,255,.03);border:1px solid rgba(34,197,94,.16);
+      border-radius:14px;padding:22px 24px;max-width:420px;margin:0 auto;text-align:left;}
+    [data-theme="light"] .t-dlv-form-wrap{background:rgba(255,255,255,.7);border-color:rgba(22,163,74,.2);}
+    .t-dlv-form-label{
+      font:700 .65rem/1 'DM Sans';letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(134,239,172,.5);margin:0 0 10px;display:block;}
+    [data-theme="light"] .t-dlv-form-label{color:rgba(22,101,52,.6);}
+    .t-dlv-row{display:flex;gap:8px;}
+    .t-dlv-input{
+      flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(34,197,94,.22);
+      border-radius:9px;padding:11px 14px;color:var(--t-text);font:400 .85rem/1 'DM Sans';
+      outline:none;transition:border-color .2s;}
+    .t-dlv-input:focus{border-color:rgba(34,197,94,.55);}
+    [data-theme="light"] .t-dlv-input{background:rgba(255,255,255,.9);border-color:rgba(22,163,74,.3);}
+    .t-dlv-btn{
+      flex-shrink:0;padding:11px 20px;border:none;border-radius:9px;cursor:pointer;
+      background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;
+      font:700 .72rem/1 'DM Sans';letter-spacing:.12em;text-transform:uppercase;
+      box-shadow:0 6px 20px rgba(34,197,94,.32);transition:opacity .2s,transform .15s;}
+    .t-dlv-btn:hover{opacity:.88;transform:translateY(-1px);}
+    .t-dlv-btn:disabled{opacity:.5;cursor:default;transform:none;}
+    .t-dlv-status{
+      margin-top:10px;font:500 .76rem/1.5 'DM Sans';min-height:1.2em;}
+    .t-dlv-status.ok{color:#4ade80;}
+    .t-dlv-status.er{color:#f87171;}
+    [data-theme="light"] .t-dlv-status.ok{color:#16a34a;}
+
     /* ════════════ 3D ROUTE MAP ════════════ */
     .t-map-card{border-radius:20px;margin-bottom:18px;overflow:hidden;
       background:linear-gradient(165deg,rgba(10,18,42,.66),rgba(6,12,30,.82));
@@ -1523,6 +1582,12 @@
       background:linear-gradient(145deg,#1d4ed8,#3b82f6);
       box-shadow:0 0 0 5px rgba(59,130,246,.2),0 4px 18px rgba(0,0,0,.5),0 0 22px rgba(59,130,246,.8);}
     .t-mp.dest .t-mp-t{border-top-color:#3b82f6;}
+    /* DELIVERED — green destination pin (overrides blue when journey is complete) */
+    .t-mp.dest.done .t-mp-h{
+      background:linear-gradient(145deg,#15803d,#22c55e);
+      box-shadow:0 0 0 5px rgba(34,197,94,.22),0 4px 18px rgba(0,0,0,.5),0 0 24px rgba(34,197,94,.9);}
+    .t-mp.dest.done .t-mp-t{border-top-color:#22c55e;}
+    .t-mp.dest.done .t-mk-label{border-color:rgba(34,197,94,.65);color:#a7f3c8;}
 
     /* ── Pill labels (appear below the tail tip = just below the coordinate) */
     .t-mk-label{
@@ -1553,6 +1618,36 @@
       box-shadow:0 4px 16px rgba(37,99,235,.35);}
     [data-theme="light"] .t-route-pct{
       background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.5);color:#1d4ed8;}
+
+    /* Reached checkpoint pill — floats above each done transit waypoint */
+    .t-route-ckpt{
+      display:flex;align-items:center;
+      background:rgba(34,197,94,.16);backdrop-filter:blur(6px);
+      border:1.5px solid rgba(34,197,94,.7);
+      color:#86efac;
+      font:700 .62rem/1 'DM Sans';letter-spacing:.06em;text-transform:uppercase;
+      padding:4px 10px;border-radius:99px;
+      white-space:nowrap;cursor:pointer;
+      box-shadow:0 4px 14px rgba(34,197,94,.28);}
+    [data-theme="light"] .t-route-ckpt{
+      background:rgba(21,128,61,.1);border-color:rgba(21,128,61,.5);color:#166534;}
+    .t-route-ckpt-delivered{
+      font-size:.72rem;padding:6px 14px;
+      border-color:rgba(34,197,94,.9);
+      box-shadow:0 4px 20px rgba(34,197,94,.45);}
+
+    /* Upcoming/pending checkpoint pill — floats below each not-yet-done transit step */
+    .t-route-ckpt-pending{
+      display:flex;align-items:center;
+      background:rgba(148,163,184,.12);backdrop-filter:blur(6px);
+      border:1.5px solid rgba(148,163,184,.5);
+      color:#94a3b8;
+      font:700 .62rem/1 'DM Sans';letter-spacing:.06em;text-transform:uppercase;
+      padding:4px 10px;border-radius:99px;
+      white-space:nowrap;cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,.28);}
+    [data-theme="light"] .t-route-ckpt-pending{
+      background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.4);color:#475569;}
 
     /* "Fit Route" button */
     .t-map-fit{position:absolute;bottom:14px;right:14px;z-index:4;display:inline-flex;align-items:center;gap:7px;cursor:pointer;

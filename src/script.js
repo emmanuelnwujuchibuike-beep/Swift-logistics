@@ -737,6 +737,26 @@ async function handleTracking(silent) {
         dashboard.innerHTML = `
 <div class="t-dash-inner">
 
+  ${pct >= 100 ? `
+  <!-- ── DELIVERY CONFIRMED BANNER ──────────────────────────── -->
+  <div class="t-delivered-banner t-fade-up t-d1" id="t-dlv-banner">
+    <div class="t-dlv-burst"></div>
+    <div class="t-dlv-check-circle"><i class="fas fa-circle-check"></i></div>
+    <div class="t-dlv-eyebrow">Mission Accomplished</div>
+    <div class="t-dlv-title">Package Delivered</div>
+    <div class="t-dlv-sub">Your shipment has been successfully delivered to its destination.<br>Thank you for choosing Swift Freight Logistics.</div>
+    <div class="t-dlv-form-wrap" id="t-dlv-form-wrap">
+      <label class="t-dlv-form-label">Send delivery confirmation email</label>
+      <div class="t-dlv-row">
+        <input class="t-dlv-input" id="t-dlv-email" type="email" placeholder="Enter recipient email…" autocomplete="email"/>
+        <button class="t-dlv-btn" id="t-dlv-send-btn" type="button">
+          <i class="fas fa-paper-plane" style="margin-right:6px;"></i>Send
+        </button>
+      </div>
+      <div class="t-dlv-status" id="t-dlv-status"></div>
+    </div>
+  </div>` : ''}
+
   <!-- ── HERO BAND (id · status · origin→dest route) ──────── -->
   <div class="t-hero-band t-fade-up t-d1">
     <div class="t-hero-band-top">
@@ -1197,6 +1217,65 @@ ${isPaid ? `
         }
         initRouteMap(journey, pct);
 
+        // Delivery confirmation email (only when 100% complete)
+        if (pct >= 100) {
+            const sentKey  = 'sfl_dlv_sent_' + (s.tracking_id || '');
+            const prevSent = localStorage.getItem(sentKey);
+            const sendBtn  = document.getElementById('t-dlv-send-btn');
+            const emailInp = document.getElementById('t-dlv-email');
+            const statusEl = document.getElementById('t-dlv-status');
+            if (sendBtn && emailInp && statusEl) {
+                if (prevSent) {
+                    emailInp.value       = prevSent;
+                    emailInp.disabled    = true;
+                    sendBtn.disabled     = true;
+                    statusEl.className   = 't-dlv-status ok';
+                    statusEl.innerHTML   = '<i class="fas fa-circle-check" style="margin-right:5px;"></i>Confirmation already sent to ' + prevSent;
+                } else {
+                    sendBtn.addEventListener('click', async function () {
+                        const email = emailInp.value.trim();
+                        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                            statusEl.className   = 't-dlv-status er';
+                            statusEl.textContent = 'Please enter a valid email address.';
+                            return;
+                        }
+                        sendBtn.disabled     = true;
+                        statusEl.className   = 't-dlv-status';
+                        statusEl.textContent = 'Sending…';
+                        try {
+                            const res = await fetch('https://oltbgccsceipedoadgka.supabase.co/functions/v1/delivery-confirmation', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email,
+                                    trackingId:     s.tracking_id,
+                                    name:           s.name,
+                                    destination:    s.destination,
+                                    origin:         s.current_location,
+                                    senderName:     s.senders_name,
+                                    packageDetails: s.package_details,
+                                    serviceType:    s.service_type,
+                                }),
+                            });
+                            const data = await res.json();
+                            if (data.success) {
+                                localStorage.setItem(sentKey, email);
+                                emailInp.disabled  = true;
+                                statusEl.className = 't-dlv-status ok';
+                                statusEl.innerHTML = '<i class="fas fa-circle-check" style="margin-right:5px;"></i>Confirmation sent to ' + email;
+                            } else {
+                                throw new Error(data.error || 'Send failed');
+                            }
+                        } catch (e) {
+                            sendBtn.disabled     = false;
+                            statusEl.className   = 't-dlv-status er';
+                            statusEl.textContent = 'Failed to send. Please try again.';
+                        }
+                    });
+                }
+            }
+        }
+
         // Receipt email sender (closes over shipment data `s`)
         if (isPaid) {
             window.sflSendReceipt = async function () {
@@ -1375,12 +1454,17 @@ async function initRouteMap(waypoints, analysisPct) {
             }
             return out;
         };
-        // When origin is done (picked up) but no further checkpoint is complete
-        // yet (curIdx=0), still draw origin→step2 as green to show the package
-        // has departed. Otherwise use the last-done index as the split point.
-        const traveledEnd = (curIdx === 0 && pts[0].done && pts.length > 1) ? 2 : curIdx + 1;
-        const traveled    = buildPath(pts.slice(0, traveledEnd));
-        const upcoming    = buildPath(pts.slice(traveledEnd - 1));
+        // Split the full interpolated path at exactly analysisPct % so the green
+        // line tracks the completion percentage directly (not waypoint-to-waypoint).
+        // At 100 % the green line reaches ARRIVAL; at 0 % only origin is shown.
+        const fullPath = buildPath(pts);
+        const nFull    = fullPath.length;
+        const aPct     = typeof analysisPct === 'number' ? Math.max(0, Math.min(100, analysisPct)) : 0;
+        const splitIdx = aPct >= 100 ? nFull
+                       : aPct <= 0   ? 1
+                       : Math.max(2, Math.round(nFull * aPct / 100));
+        const traveled = fullPath.slice(0, Math.min(splitIdx, nFull));
+        const upcoming = splitIdx < nFull ? fullPath.slice(Math.max(0, splitIdx - 1)) : [];
         const allCoords = pts.map(p => p.coord);
         const center    = allCoords[Math.floor(allCoords.length / 2)];
         const isLight   = document.documentElement.getAttribute('data-theme') === 'light';
@@ -1428,6 +1512,20 @@ async function initRouteMap(waypoints, analysisPct) {
                     paint:{ 'line-color':'#ffffff', 'line-width':6, 'line-opacity':0.22 } });
                 map.addLayer({ id:'sfl-tr-line', type:'line', source:'sfl-tr', layout:{ 'line-cap':'round' },
                     paint:{ 'line-color':'#22c55e', 'line-width':3.6, 'line-opacity':1 } });
+
+                // Glowing circular tip at the end of the green line (100 % only)
+                if (aPct >= 100 && traveled.length > 0) {
+                    const tipCoord = traveled[traveled.length - 1];
+                    map.addSource('sfl-tip', { type:'geojson', data:{ type:'Feature', geometry:{ type:'Point', coordinates: tipCoord } } });
+                    map.addLayer({ id:'sfl-tip-halo', type:'circle', source:'sfl-tip',
+                        paint:{ 'circle-radius':14, 'circle-color':'#22c55e', 'circle-opacity':0.18, 'circle-blur':0.6 } });
+                    map.addLayer({ id:'sfl-tip-ring', type:'circle', source:'sfl-tip',
+                        paint:{ 'circle-radius':9, 'circle-color':'#22c55e', 'circle-opacity':0.35,
+                                'circle-stroke-width':2, 'circle-stroke-color':'#86efac', 'circle-stroke-opacity':0.7 } });
+                    map.addLayer({ id:'sfl-tip-dot', type:'circle', source:'sfl-tip',
+                        paint:{ 'circle-radius':5, 'circle-color':'#22c55e', 'circle-opacity':1,
+                                'circle-stroke-width':2.5, 'circle-stroke-color':'#ffffff', 'circle-stroke-opacity':0.9 } });
+                }
             }
 
             // Markers: PICKUP · transit checkpoints · PACKAGE (live) · ARRIVAL
@@ -1461,21 +1559,56 @@ async function initRouteMap(waypoints, analysisPct) {
             addPin(orig.coord, 't-mp origin', MP_ICO.origin, 'PICKUP',
                 `<b>${escMap(orig.name || 'Pickup')}</b><span>${escMap(orig.label || '')}</span>`, [0, -24]);
 
-            // DESTINATION — final pin
+            // DESTINATION — green DELIVERED pill at 100%, pending pill otherwise
             const dest = pts[pts.length - 1];
-            addPin(dest.coord, 't-mp dest', MP_ICO.dest, 'ARRIVAL',
-                `<b>Destination</b><span>${escMap(dest.label || '')}</span>`, [0, -24]);
-
-            // Completion percentage — use same value as shipment analysis ring
-            const mapPct = typeof analysisPct === 'number' ? analysisPct
-                : (pts.length > 1 ? Math.round((traveledEnd - 1) / (pts.length - 1) * 100) : 0);
-            if (mapPct > 0 && mapPct < 100 && upcoming.length > 1) {
-                const midCoord = upcoming[Math.floor(upcoming.length / 2)];
-                const pctEl = document.createElement('div');
-                pctEl.className = 't-route-pct';
-                pctEl.textContent = mapPct + '% Complete';
-                new mapboxgl.Marker({ element: pctEl, anchor: 'center' }).setLngLat(midCoord).addTo(map);
+            if (aPct >= 100) {
+                const delivEl = document.createElement('div');
+                delivEl.className = 't-route-ckpt t-route-ckpt-delivered';
+                delivEl.innerHTML = '<i class="fas fa-circle-check" style="font-size:14px;margin-right:7px;flex-shrink:0;"></i>DELIVERED';
+                new mapboxgl.Marker({ element: delivEl, anchor: 'bottom', offset: [0, -6] })
+                    .setLngLat(dest.coord)
+                    .setPopup(new mapboxgl.Popup({ offset: [0, -14], closeButton: false, className: 't-map-popup' })
+                        .setHTML('<b>Delivered</b><span>' + escMap(dest.label || '') + '</span>'))
+                    .addTo(map);
+            } else if (dest.name) {
+                const lbl = dest.name.length > 22 ? dest.name.slice(0, 20) + '…' : dest.name;
+                const pendEl = document.createElement('div');
+                pendEl.className = 't-route-ckpt-pending';
+                pendEl.innerHTML = '<i class="fas fa-clock" style="font-size:8px;margin-right:5px;flex-shrink:0;"></i>UPCOMING · ' + escMap(lbl);
+                new mapboxgl.Marker({ element: pendEl, anchor: 'top', offset: [0, 6] })
+                    .setLngLat(dest.coord)
+                    .setPopup(new mapboxgl.Popup({ offset: [0, 14], closeButton: false, className: 't-map-popup' })
+                        .setHTML('<b>' + escMap(dest.name) + '</b><span>' + escMap(dest.label || '') + '</span>'))
+                    .addTo(map);
             }
+
+            // Checkpoint labels for every transit step:
+            //   done  → green pill above the green line ("STEP NAME")
+            //   !done → gray  pill below the dashed line ("UPCOMING · STEP NAME")
+            pts.forEach((pt, i) => {
+                if (i === 0 || i === pts.length - 1) return; // origin + dest handled above
+                if (!pt.name) return;
+                const lbl = pt.name.length > 22 ? pt.name.slice(0, 20) + '…' : pt.name;
+                const el = document.createElement('div');
+                if (pt.done) {
+                    el.className = 't-route-ckpt';
+                    el.innerHTML = '<i class="fas fa-circle-check" style="font-size:8px;margin-right:5px;flex-shrink:0;"></i>' + escMap(lbl);
+                    new mapboxgl.Marker({ element: el, anchor: 'bottom', offset: [0, -6] })
+                        .setLngLat(pt.coord)
+                        .setPopup(new mapboxgl.Popup({ offset: [0, -14], closeButton: false, className: 't-map-popup' })
+                            .setHTML('<b>' + escMap(pt.name) + '</b><span>' + escMap(pt.label || '') + '</span>'))
+                        .addTo(map);
+                } else {
+                    el.className = 't-route-ckpt-pending';
+                    el.innerHTML = '<i class="fas fa-clock" style="font-size:8px;margin-right:5px;flex-shrink:0;"></i>UPCOMING · ' + escMap(lbl);
+                    new mapboxgl.Marker({ element: el, anchor: 'top', offset: [0, 6] })
+                        .setLngLat(pt.coord)
+                        .setPopup(new mapboxgl.Popup({ offset: [0, 14], closeButton: false, className: 't-map-popup' })
+                            .setHTML('<b>' + escMap(pt.name) + '</b><span>' + escMap(pt.label || '') + '</span>'))
+                        .addTo(map);
+                }
+            });
+
 
             // Frame the whole journey clearly (near top-down), animate in
             const b = new mapboxgl.LngLatBounds(allCoords[0], allCoords[0]);

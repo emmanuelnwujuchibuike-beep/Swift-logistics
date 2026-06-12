@@ -412,6 +412,190 @@ function routeCard(origin: string, destination: string): string {
   </table>`;
 }
 
+// ── Template 0: Delivery Confirmed ────────────────────────────────────────
+
+export interface DeliveryConfirmedData {
+  name:            string;
+  trackingId:      string;
+  destination?:    string;
+  origin?:         string;
+  senderName?:     string;
+  packageDetails?: string;
+  serviceType?:    string;
+  deliveredAt?:    string;
+}
+
+export function deliveryConfirmedEmail(d: DeliveryConfirmedData): { subject: string; html: string } {
+  const url         = trackingUrl(d.trackingId);
+  const fn          = esc(d.name.split(' ')[0] || d.name);
+  const deliveredAt = d.deliveredAt
+    || new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const dest        = d.destination || 'Your Destination';
+
+  const body = `
+
+    <!-- Delivery confirmed pill (green) -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+      <tr>
+        <td style="padding:9px 22px;background:rgba(34,197,94,.1);
+                   border:1px solid rgba(34,197,94,.32);border-radius:99px;">
+          <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.18em;
+             color:rgba(134,239,172,.95);font-family:Arial,Helvetica,sans-serif;
+             text-transform:uppercase;">&#10003; &nbsp;Delivery Confirmed</p>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Hero: large green checkmark circle -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 38px;">
+      <tr>
+        <td align="center" style="padding:42px 28px 36px;
+           background:linear-gradient(160deg,rgba(16,185,129,.09),rgba(34,197,94,.06),rgba(5,150,105,.04));
+           border:1px solid rgba(34,197,94,.2);border-top:4px solid #22c55e;
+           border-radius:0 14px 14px 14px;">
+
+          <table role="presentation" border="0" cellpadding="0" cellspacing="0"
+                 style="margin:0 auto 22px;">
+            <tr>
+              <td align="center" valign="middle"
+                  style="width:80px;height:80px;border-radius:50%;
+                         background:linear-gradient(145deg,#14532d,#16a34a,#22c55e);
+                         box-shadow:0 0 0 12px rgba(34,197,94,.1),0 0 40px rgba(34,197,94,.45);">
+                <p style="margin:0;font-size:42px;line-height:80px;color:#fff;
+                   font-family:Arial,Helvetica,sans-serif;font-weight:900;">&#10003;</p>
+              </td>
+            </tr>
+          </table>
+
+          <p style="margin:0 0 6px;font-size:9px;font-weight:700;letter-spacing:.55em;
+             text-transform:uppercase;color:rgba(134,239,172,.4);
+             font-family:Arial,Helvetica,sans-serif;">Swift Freight Logistics</p>
+          <p style="margin:0 0 10px;font-size:24px;font-weight:900;letter-spacing:.06em;
+             text-transform:uppercase;color:#d1fae5;font-family:Arial,Helvetica,sans-serif;">
+            Package Delivered
+          </p>
+          <p style="margin:0 0 12px;font-size:13px;color:rgba(134,239,172,.55);letter-spacing:.02em;
+             font-family:Arial,Helvetica,sans-serif;">
+            Successfully arrived at &nbsp;<strong style="color:rgba(134,239,172,.88);">${esc(dest)}</strong>
+          </p>
+          <p style="margin:0;display:inline-block;padding:5px 18px;
+             background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.28);
+             border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.12em;
+             text-transform:uppercase;color:rgba(134,239,172,.65);
+             font-family:Arial,Helvetica,sans-serif;">
+            ${esc(deliveredAt)}
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Greeting -->
+    <p style="font-size:15px;color:rgba(199,210,254,.6);margin:0 0 14px;line-height:1.85;
+       font-family:Arial,Helvetica,sans-serif;">
+      Dear <strong style="color:#eef2ff;">${fn}</strong>,
+    </p>
+    <p style="font-size:14px;color:rgba(199,210,254,.52);margin:0 0 10px;line-height:1.9;
+       font-family:Arial,Helvetica,sans-serif;">
+      We are delighted to confirm that your shipment has been
+      <strong style="color:rgba(134,239,172,.78);">successfully delivered</strong>
+      and has arrived safely at its destination.
+      Thank you for entrusting Swift Freight Logistics with your package — it has been an absolute privilege to serve you.
+    </p>
+    <p style="font-size:14px;color:rgba(199,210,254,.42);margin:0 0 34px;line-height:1.9;
+       font-family:Arial,Helvetica,sans-serif;">
+      Please inspect your package upon receipt. If anything appears damaged or incorrect,
+      contact our support team immediately so we can resolve it without delay.
+    </p>
+
+    <!-- Tracking ID (green) -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 8px;">
+      <tr>
+        <td style="padding:24px 28px 26px;
+                   background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(16,185,129,.07));
+                   border:1px solid rgba(34,197,94,.22);border-radius:10px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:8px;letter-spacing:.38em;text-transform:uppercase;
+             color:rgba(134,239,172,.4);font-family:Arial,Helvetica,sans-serif;">TRACKING NUMBER</p>
+          <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:27px;
+             font-weight:900;color:#4ade80;letter-spacing:.18em;">${esc(d.trackingId)}</p>
+          <p style="margin:0;font-size:10px;color:rgba(134,239,172,.32);letter-spacing:.06em;
+             font-family:Arial,Helvetica,sans-serif;text-transform:uppercase;">
+            Status: &nbsp;<span style="color:#22c55e;font-weight:800;">&#9679;&nbsp; Delivered</span>
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Shipment details -->
+    ${infoTable([
+      infoRow('Recipient',       d.name),
+      infoRow('Sender',          d.senderName    || ''),
+      infoRow('Origin',          d.origin        || ''),
+      infoRow('Destination',     d.destination   || ''),
+      infoRow('Package Details', d.packageDetails || ''),
+      infoRow('Service',         d.serviceType   || 'Swift Freight International Logistics'),
+      infoRow('Delivered On',    deliveredAt),
+    ].join(''))}
+
+    <!-- Route card -->
+    ${routeCard(d.origin || 'Origin', d.destination || 'Destination')}
+
+    <!-- Journey tracker — all steps green -->
+    <p style="font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+       color:rgba(134,239,172,.38);margin:32px 0 14px;font-family:Arial,Helvetica,sans-serif;">
+      Journey Completed
+    </p>
+    ${journeySteps([
+      { icon:'&#10003;', label:'Registered',  active:true },
+      { icon:'&#10003;', label:'Picked Up',   active:true },
+      { icon:'&#10003;', label:'In Transit',  active:true },
+      { icon:'&#10003;', label:'Delivered',   active:true },
+    ])}
+
+    <!-- Green CTA -->
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:36px auto 28px;">
+      <tr>
+        <td style="background:linear-gradient(135deg,#14532d 0%,#16a34a 50%,#22c55e 100%);
+                   border-radius:8px;box-shadow:0 12px 40px rgba(34,197,94,.38);" align="center">
+          <a href="${url}" target="_blank"
+             style="display:inline-block;padding:18px 52px;color:#fff;font-size:11px;font-weight:700;
+                    letter-spacing:.28em;text-transform:uppercase;text-decoration:none;
+                    font-family:Arial,Helvetica,sans-serif;">
+            View Delivery Details &nbsp;&#8594;
+          </a>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Support note -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+      <tr>
+        <td style="padding:18px 22px;background:rgba(34,197,94,.04);
+                   border:1px solid rgba(34,197,94,.12);border-left:3px solid #22c55e;
+                   border-radius:0 8px 8px 0;">
+          <p style="margin:0;font-size:13px;line-height:1.85;color:rgba(199,210,254,.5);
+             font-family:Arial,Helvetica,sans-serif;">
+            Questions about your delivery? Our team is available 24&#47;7 at&nbsp;
+            <a href="mailto:swiftfreightlogix@gmail.com"
+               style="color:rgba(134,239,172,.68);text-decoration:none;">swiftfreightlogix@gmail.com</a>
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    ${divider()}
+
+    <p style="margin:0;font-size:12px;color:rgba(199,210,254,.25);line-height:2;
+       font-family:Arial,Helvetica,sans-serif;text-align:center;">
+      Thank you for choosing Swift Freight Logistics.
+    </p>`;
+
+  return {
+    subject: `&#9989; Package Delivered — ${d.trackingId}`,
+    html: base('#22c55e', '#4ade80', 'Delivery Confirmed', body,
+      `${fn}, your package ${d.trackingId} has been successfully delivered to ${dest}. Thank you for choosing Swift Freight Logistics.`),
+  };
+}
+
 // ── Template 1: Shipment Registered ───────────────────────────────────────
 
 export interface ShipmentRegisteredData {

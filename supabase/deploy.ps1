@@ -32,7 +32,8 @@ supabase functions deploy payment-proof     --project-ref $projectRef
 supabase functions deploy package-confirm   --project-ref $projectRef
 supabase functions deploy chat-notify       --project-ref $projectRef
 supabase functions deploy update-setting    --project-ref $projectRef
-supabase functions deploy admin-auth        --project-ref $projectRef
+supabase functions deploy admin-auth           --project-ref $projectRef
+supabase functions deploy delivery-confirmation --project-ref $projectRef
 
 Write-Host "`n✓ All done! Functions are live." -ForegroundColor Green
 Write-Host "  Base URL: https://$projectRef.supabase.co/functions/v1/" -ForegroundColor Gray
