@@ -1255,6 +1255,7 @@ ${isPaid ? `
                                     senderName:     s.senders_name,
                                     packageDetails: s.package_details,
                                     serviceType:    s.service_type,
+                                    proofImageUrl:  s.step4_image_url || undefined,
                                 }),
                             });
                             const data = await res.json();

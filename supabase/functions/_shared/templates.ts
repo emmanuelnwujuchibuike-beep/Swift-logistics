@@ -412,6 +412,25 @@ function routeCard(origin: string, destination: string): string {
   </table>`;
 }
 
+// ── Shared: Proof image block ──────────────────────────────────────────────
+function proofImageBlock(url: string, label = 'Photo Evidence'): string {
+  return `
+    <p style="font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+       color:rgba(167,139,250,.4);margin:28px 0 10px;font-family:Arial,Helvetica,sans-serif;">
+      ${label}
+    </p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
+      <tr>
+        <td style="padding:6px;background:rgba(255,255,255,.03);
+                   border:1px solid rgba(255,255,255,.1);border-radius:14px;">
+          <img src="${url}" alt="${label}" width="100%"
+               style="display:block;width:100%;max-width:100%;border-radius:10px;
+                      object-fit:cover;line-height:1;" />
+        </td>
+      </tr>
+    </table>`;
+}
+
 // ── Template 0: Delivery Confirmed ────────────────────────────────────────
 
 export interface DeliveryConfirmedData {
@@ -423,6 +442,7 @@ export interface DeliveryConfirmedData {
   packageDetails?: string;
   serviceType?:    string;
   deliveredAt?:    string;
+  proofImageUrl?:  string;
 }
 
 export function deliveryConfirmedEmail(d: DeliveryConfirmedData): { subject: string; html: string } {
@@ -538,6 +558,9 @@ export function deliveryConfirmedEmail(d: DeliveryConfirmedData): { subject: str
 
     <!-- Route card -->
     ${routeCard(d.origin || 'Origin', d.destination || 'Destination')}
+
+    <!-- Proof image -->
+    ${d.proofImageUrl ? proofImageBlock(d.proofImageUrl, 'Delivery Photo') : ''}
 
     <!-- Journey tracker — all steps green -->
     <p style="font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
@@ -750,11 +773,12 @@ export function quoteReceivedEmail(d: QuoteReceivedData): { subject: string; htm
 // ── Template 3: Location Update ───────────────────────────────────────────
 
 export interface LocationUpdateData {
-  name:         string;
-  trackingId:   string;
-  newLocation:  string;
-  status?:      string;
-  eta?:         string;
+  name:           string;
+  trackingId:     string;
+  newLocation:    string;
+  status?:        string;
+  eta?:           string;
+  proofImageUrl?: string;
 }
 
 export function locationUpdateEmail(d: LocationUpdateData): { subject: string; html: string } {
@@ -784,6 +808,7 @@ export function locationUpdateEmail(d: LocationUpdateData): { subject: string; h
       infoRow('Tracking ID',   d.trackingId),
       infoRow('Est. Delivery', d.eta ?? ''),
     ].join(''))}
+    ${d.proofImageUrl ? proofImageBlock(d.proofImageUrl, 'Checkpoint Photo') : ''}
     ${ctaButton(url, 'View Full Timeline', '#06b6d4')}`;
 
   return {
@@ -1003,6 +1028,7 @@ export interface DeliveredData {
   trackingId:        string;
   deliveryDate?:     string;
   deliveryLocation?: string;
+  proofImageUrl?:    string;
 }
 
 export function deliveredEmail(d: DeliveredData): { subject: string; html: string } {
@@ -1042,6 +1068,7 @@ export function deliveredEmail(d: DeliveredData): { subject: string; html: strin
       infoRow('Tracking ID',  d.trackingId),
       infoRow('Delivered To', d.deliveryLocation ?? ''),
     ].join(''))}
+    ${d.proofImageUrl ? proofImageBlock(d.proofImageUrl, 'Delivery Photo') : ''}
     ${divider()}
     <p style="font-size:14px;color:rgba(199,210,254,.45);margin:0 0 18px;text-align:center;
        line-height:1.95;font-family:Arial,Helvetica,sans-serif;">

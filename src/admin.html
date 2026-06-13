@@ -148,6 +148,23 @@ tbody td:first-child{color:var(--text);font-family:'JetBrains Mono';font-size:.7
 .form-actions{display:flex;align-items:center;gap:12px;padding-top:8px;flex-wrap:wrap}
 .grule{height:1px;background:var(--border);margin:20px 0}
 .step-block{border:1px solid var(--border);border-radius:5px;padding:18px 20px;background:rgba(255,255,255,.02);margin-bottom:12px}
+/* ── Image upload slots ── */
+.img-upload-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:4px}
+.img-slot{border:1.5px dashed rgba(99,102,241,.3);border-radius:10px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;background:rgba(255,255,255,.015);transition:border-color .2s,background .2s;cursor:pointer;position:relative;}
+.img-slot:hover,.img-slot.has-img{border-color:rgba(99,102,241,.6);background:rgba(99,102,241,.04);}
+.img-slot-lbl{font:700 .6rem/1 'JetBrains Mono';letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);text-align:center;}
+.img-slot-ico{font-size:20px;color:rgba(99,102,241,.5);}
+.img-slot-hint{font:400 .6rem/1.4 'DM Sans';color:var(--muted2);text-align:center;}
+.img-slot input[type=file]{display:none;}
+.img-slot-preview{width:100%;border-radius:7px;overflow:hidden;display:none;position:relative;}
+.img-slot-preview img{width:100%;display:block;border-radius:7px;max-height:110px;object-fit:cover;}
+.img-slot-preview .img-slot-rm{position:absolute;top:4px;right:4px;background:rgba(239,68,68,.85);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.img-slot-badge{font:700 .58rem/1 'DM Sans';letter-spacing:.18em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:rgba(134,239,172,.7);display:none;}
+.img-slot.uploading .img-slot-ico{animation:spin .8s linear infinite;}
+.img-slot.has-img .img-slot-preview{display:block;}
+.img-slot.has-img .img-slot-badge{display:inline-block;}
+.img-slot.has-img .img-slot-ico,.img-slot.has-img .img-slot-hint{display:none;}
+@keyframes spin{to{transform:rotate(360deg);}}
 .step-block:last-child{margin-bottom:0}
 .step-block-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:nowrap;overflow:hidden}
 .step-num{width:26px;height:26px;border-radius:50%;background:rgba(var(--accent-rgb),.12);border:1px solid var(--aborder);display:flex;align-items:center;justify-content:center;font:700 .72rem/1 'JetBrains Mono';color:var(--accent);flex-shrink:0}
@@ -967,6 +984,53 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
               <div class="f-group"><label>Colour</label><select id="u-s4color" class="f-select"><option value="">Keep</option><option value="text-green-500">🟢 Green — Completed</option><option value="text-blue-500">🔵 Blue — In Transit</option><option value="text-amber-500">🟡 Amber — Pending</option><option value="text-red-500">🔴 Red — On Hold</option><option value="text-purple-500">🟣 Purple — Special</option><option value="text-cyan-500">🔷 Cyan — In Flight</option></select></div>
             </div>
           </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title"><i class="fas fa-camera"></i> Photo Evidence <span style="font:400 .62rem 'DM Sans';color:var(--muted2);letter-spacing:.06em;margin-left:6px;text-transform:none;">— uploaded photos appear in checkpoint &amp; delivery emails</span></div>
+          <div class="img-upload-row" id="u-img-upload-row">
+            <!-- Step 1 slot -->
+            <div class="img-slot" id="u-slot-s1" onclick="document.getElementById('u-img-s1-file').click()">
+              <input type="file" id="u-img-s1-file" accept="image/*" onchange="handleImgUpload(this,'s1')">
+              <input type="hidden" id="u-s1img-url">
+              <i class="fas fa-upload img-slot-ico"></i>
+              <div class="img-slot-lbl">Step 1 / Location</div>
+              <div class="img-slot-hint">Checkpoint photo</div>
+              <div class="img-slot-preview"><img id="u-prev-s1" src="" alt="Step 1"><button class="img-slot-rm" onclick="clearImgSlot(event,'s1')"><i class="fas fa-times"></i></button></div>
+              <span class="img-slot-badge">&#10003; Uploaded</span>
+            </div>
+            <!-- Step 2 slot -->
+            <div class="img-slot" id="u-slot-s2" onclick="document.getElementById('u-img-s2-file').click()">
+              <input type="file" id="u-img-s2-file" accept="image/*" onchange="handleImgUpload(this,'s2')">
+              <input type="hidden" id="u-s2img-url">
+              <i class="fas fa-upload img-slot-ico"></i>
+              <div class="img-slot-lbl">Step 2</div>
+              <div class="img-slot-hint">Checkpoint photo</div>
+              <div class="img-slot-preview"><img id="u-prev-s2" src="" alt="Step 2"><button class="img-slot-rm" onclick="clearImgSlot(event,'s2')"><i class="fas fa-times"></i></button></div>
+              <span class="img-slot-badge">&#10003; Uploaded</span>
+            </div>
+            <!-- Step 3 slot -->
+            <div class="img-slot" id="u-slot-s3" onclick="document.getElementById('u-img-s3-file').click()">
+              <input type="file" id="u-img-s3-file" accept="image/*" onchange="handleImgUpload(this,'s3')">
+              <input type="hidden" id="u-s3img-url">
+              <i class="fas fa-upload img-slot-ico"></i>
+              <div class="img-slot-lbl">Step 3</div>
+              <div class="img-slot-hint">Checkpoint photo</div>
+              <div class="img-slot-preview"><img id="u-prev-s3" src="" alt="Step 3"><button class="img-slot-rm" onclick="clearImgSlot(event,'s3')"><i class="fas fa-times"></i></button></div>
+              <span class="img-slot-badge">&#10003; Uploaded</span>
+            </div>
+            <!-- Step 4 / Proof slot -->
+            <div class="img-slot" id="u-slot-s4" onclick="document.getElementById('u-img-s4-file').click()">
+              <input type="file" id="u-img-s4-file" accept="image/*" onchange="handleImgUpload(this,'s4')">
+              <input type="hidden" id="u-s4img-url">
+              <i class="fas fa-shield-halved img-slot-ico" style="color:rgba(34,197,94,.6)"></i>
+              <div class="img-slot-lbl">Step 4 / Proof</div>
+              <div class="img-slot-hint">Delivery proof photo</div>
+              <div class="img-slot-preview"><img id="u-prev-s4" src="" alt="Proof"><button class="img-slot-rm" onclick="clearImgSlot(event,'s4')"><i class="fas fa-times"></i></button></div>
+              <span class="img-slot-badge">&#10003; Uploaded</span>
+            </div>
+          </div>
+          <div id="u-img-upload-status" style="margin-top:10px;font-size:.72rem;color:var(--muted2);min-height:1.2em;"></div>
         </div>
 
         <div class="form-card">
@@ -1807,6 +1871,17 @@ function openEdit(tid) {
   _setEdit('u-s4name',   s.step4_name);
   _setEdit('u-s4loc',    s.step4_location);
   _setEdit('u-s4color',  s.step4_color);
+  // Pre-fill image slots with any existing URLs
+  ['s1','s2','s3','s4'].forEach(step => {
+    const col = `step${step.slice(1)}_image_url`;
+    const url = s[`step${step.slice(1)}_image_url`];
+    const slot  = document.getElementById(`u-slot-${step}`);
+    const urlEl = document.getElementById(`u-${step}img-url`);
+    const prevEl = document.getElementById(`u-prev-${step}`);
+    if (urlEl) urlEl.value = url || '';
+    if (url && slot && prevEl) { prevEl.src = url; slot.classList.add('has-img'); }
+    else if (slot) slot.classList.remove('has-img');
+  });
   // Reset all payment panels
   document.querySelectorAll('[data-panel^="u-panel-"]').forEach(card => {
     card.classList.remove('pm-active');
@@ -1880,6 +1955,11 @@ document.getElementById('update-btn').addEventListener('click', async () => {
   if (v('u-s4name'))    updates.step4_name       = v('u-s4name');
   if (v('u-s4loc'))     updates.step4_location   = v('u-s4loc');
   if (v('u-s4color'))   updates.step4_color      = v('u-s4color');
+  // Image evidence URLs
+  if (v('u-s1img-url')) updates.step1_image_url  = v('u-s1img-url');
+  if (v('u-s2img-url')) updates.step2_image_url  = v('u-s2img-url');
+  if (v('u-s3img-url')) updates.step3_image_url  = v('u-s3img-url');
+  if (v('u-s4img-url')) updates.step4_image_url  = v('u-s4img-url');
   // Payment methods — send ANY field that has a value, regardless of the
   // panel's active UI state. (The old code only read panels flagged
   // pm-panel-active, which silently dropped methods whose toggle state
@@ -1921,6 +2001,57 @@ document.getElementById('update-btn').addEventListener('click', async () => {
     btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save &amp; Send Notification';
   }
 });
+
+/* ═══ IMAGE UPLOAD ═══ */
+const IMG_BUCKET = 'shipment-images';
+
+async function handleImgUpload(input, step) {
+  const file = input.files[0];
+  if (!file || !supabase) return;
+  if (!editId) { toast('Open a shipment first.', 'error'); input.value = ''; return; }
+
+  const slot   = document.getElementById(`u-slot-${step}`);
+  const urlEl  = document.getElementById(`u-${step}img-url`);
+  const prevEl = document.getElementById(`u-prev-${step}`);
+  const status = document.getElementById('u-img-upload-status');
+
+  slot.classList.add('uploading');
+  if (status) status.textContent = `Uploading ${step.toUpperCase()} photo…`;
+
+  try {
+    const ext  = file.name.split('.').pop() || 'jpg';
+    const path = `${editId}/${step}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from(IMG_BUCKET)
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if (upErr) throw upErr;
+
+    const { data: urlData } = supabase.storage.from(IMG_BUCKET).getPublicUrl(path);
+    const publicUrl = urlData.publicUrl;
+
+    urlEl.value = publicUrl;
+    prevEl.src  = publicUrl;
+    slot.classList.remove('uploading');
+    slot.classList.add('has-img');
+    if (status) { status.textContent = `✓ ${step.toUpperCase()} photo uploaded`; status.style.color = 'rgba(134,239,172,.7)'; }
+    toast(`Step ${step.slice(1)} photo uploaded.`, 'success');
+  } catch (e) {
+    slot.classList.remove('uploading');
+    if (status) { status.textContent = 'Upload failed: ' + e.message; status.style.color = 'rgba(248,113,113,.8)'; }
+    toast('Image upload failed: ' + e.message, 'error');
+  }
+  input.value = '';
+}
+
+function clearImgSlot(event, step) {
+  event.stopPropagation();
+  const slot   = document.getElementById(`u-slot-${step}`);
+  const urlEl  = document.getElementById(`u-${step}img-url`);
+  const prevEl = document.getElementById(`u-prev-${step}`);
+  if (urlEl)  urlEl.value = '';
+  if (prevEl) prevEl.src  = '';
+  if (slot)   slot.classList.remove('has-img');
+}
 
 /* ═══ SETTINGS ═══ */
 // Credentials are managed via Netlify Environment Variables — no local storage of secrets

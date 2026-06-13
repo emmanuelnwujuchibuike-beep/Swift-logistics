@@ -56,7 +56,7 @@ Deno.serve(async (req: Request) => {
     // Fetch existing record for customer info
     const { data: rows, error: fetchErr } = await supabase
       .from('shipments')
-      .select('customer_email, name, destination, tracking_id, amount_due, btc_address, usdt_address, bank_name, account_name, bank_number, routing_number, paypal_email, cashapp_tag, zelle_id, western_union_info, venmo_tag, moneygram_info, amazon_gc_info, google_gc_info, apple_gc_info, vanilla_gc_info, ebay_gc_info')
+      .select('customer_email, name, destination, tracking_id, amount_due, btc_address, usdt_address, bank_name, account_name, bank_number, routing_number, paypal_email, cashapp_tag, zelle_id, western_union_info, venmo_tag, moneygram_info, amazon_gc_info, google_gc_info, apple_gc_info, vanilla_gc_info, ebay_gc_info, step1_image_url, step2_image_url, step3_image_url, step4_image_url')
       .eq('tracking_id', body.trackingId)
       .limit(1);
 
@@ -91,9 +91,10 @@ Deno.serve(async (req: Request) => {
         case 'location-update':
           emailPayload = locationUpdateEmail({
             name, trackingId,
-            newLocation: String(updates.current_location ?? ''),
-            status:      String(updates.status           ?? ''),
-            eta:         String(updates.eta              ?? ''),
+            newLocation:    String(updates.current_location ?? ''),
+            status:         String(updates.status           ?? ''),
+            eta:            String(updates.eta              ?? ''),
+            proofImageUrl:  String(updates.step1_image_url  ?? shipment.step1_image_url ?? '') || undefined,
           }); break;
 
         case 'payment-required':
@@ -134,6 +135,7 @@ Deno.serve(async (req: Request) => {
             name, trackingId,
             deliveryDate:     new Date().toLocaleDateString('en-GB', { dateStyle: 'long' }),
             deliveryLocation: String(shipment.destination ?? ''),
+            proofImageUrl:    String(updates.step4_image_url ?? shipment.step4_image_url ?? '') || undefined,
           }); break;
       }
 

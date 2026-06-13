@@ -16,9 +16,10 @@ Deno.serve(async (req: Request) => {
       senderName?:      string;
       packageDetails?:  string;
       serviceType?:     string;
+      proofImageUrl?:   string;
     };
 
-    const { email, trackingId, name, destination, origin, senderName, packageDetails, serviceType } = body;
+    const { email, trackingId, name, destination, origin, senderName, packageDetails, serviceType, proofImageUrl } = body;
     if (!email || !trackingId) return err('Missing required fields: email, trackingId');
 
     const deliveredAt = new Date().toLocaleDateString('en-US', {
@@ -34,6 +35,7 @@ Deno.serve(async (req: Request) => {
       packageDetails,
       serviceType,
       deliveredAt,
+      proofImageUrl,
     });
 
     const result = await sendEmail({ to: email, subject, html });
